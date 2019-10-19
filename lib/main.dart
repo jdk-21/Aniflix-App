@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bmnav/bmnav.dart' as bmnav;
+import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 
 void main() {
@@ -27,12 +27,12 @@ class MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext ctx) {
-    var bar = Aniflixbar(this, index);
+    var bar = AniflixNavigationbar(this, index);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Aniflix'),),
-      body: PageStorage(child: bar.currentScreen, bucket: bucket),
-      bottomNavigationBar: bar.getNavBar()
+      appBar: AniflixAppbar(),
+      body: PageStorage(child: AniflixNavigationbar.currentScreen, bucket: bucket),
+      bottomNavigationBar: bar
     );
   }
 }
