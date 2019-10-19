@@ -5,31 +5,23 @@ import '../screens/subbox.dart';
 import '../screens/animelist.dart';
 import '../../main.dart';
 
-class Aniflixbar {
-  int currentTab;
-  Widget currentScreen;
-  BottomNav nav;
+class AniflixNavigationbar extends BottomNav{
+  static int currentTab = 0;
+  static Widget currentScreen = getScreens()[0];
 
-  Aniflixbar(MainWidgetState state, int index){
+  AniflixNavigationbar(MainWidgetState state, int index):super(index: index,
+    onTap: (i) {
+      state.changePage(i);
+    },
+    items: getItems(),
+    color: Colors.black,
+    iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
+    labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),){
     currentTab = index;
-    currentScreen = getScreens()[index];
-    nav = BottomNav(
-      index: currentTab,
-      onTap: (i) {
-        state.changePage(i);
-      },
-      items: getItems(),
-      color: Colors.black,
-      iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
-      labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),
-    );
+    currentScreen = getScreens()[currentTab];
   }
 
-  getNavBar(){
-    return nav;
-  }
-
-  getScreens(){
+  static getScreens(){
     return [
       Home(),
       SubBox(),
@@ -37,7 +29,7 @@ class Aniflixbar {
     ];
   }
 
-  getItems(){
+  static getItems(){
     return [
       BottomNavItem(Icons.home, label: 'Home'),
       BottomNavItem(Icons.subscriptions, label: 'Abos'),
