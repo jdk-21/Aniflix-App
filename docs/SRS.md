@@ -1,5 +1,29 @@
 # AniflixApp - Software Requirements Specification
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+  * [1.1 Purpose](#11-purpose)
+  * [1.2 Scope](#12-scope)
+  * [1.3 Definitions, Acronyms, and Abbreviations](#13-definitions--acronyms--and-abbreviations)
+  * [1.4 References](#14-references)
+  * [1.5 Overview](#15-overview)
+- [2. Overall Description](#2-overall-description)
+  * [2.1 Vision](#21-vision)
+  * [2.2 Use Case Diagram](#22-use-case-diagram)
+- [3. Specific Requirements](#3-specific-requirements)
+  * [3.1 Functionality](#31-functionality)
+  * [3.2 Usability](#32-usability)
+  * [3.3 Reliability](#33-reliability)
+  * [3.4 Performance](#34-performance)
+  * [3.5 Supportability](#35-supportability)
+  * [3.6 Design Constraints](#36-design-constraints)
+  * [3.7 On-line User Documentation and Help System Requirements](#37-on-line-user-documentation-and-help-system-requirements)
+  * [3.8 Purchased Components](#38-purchased-components)
+  * [3.9 Interfaces](#39-interfaces)
+- [4. Supporting Information](#4-supporting-information)
+  * [4.1 Appendices](#41-Appendices)
+
 ## 1. Introduction
 ### 1.1 Purpose
 The purpose of this document is to give a general overview over the AniflixApp project. It explains our vision and provide information about the features the app will contain.
@@ -44,12 +68,13 @@ Our idea is to develop an app for the aniflix.tv website. It will be used to wat
 The app will be developed with google's programming language dart and their toolkit flutter. With an API provided by the website developers we will get the data we need to show the animes in the app.
 Ideas for future features will be a MySite for ever user but for now we have to wait for an OK of the main developers of the website. 
 
+### 2.2 Use Case Diagram
 The following picture shows the overall use case diagram of our software:
 ![OUCD]
 
 
 ## 3. Specific Requirements
-### 3.1 Functionality - App
+### 3.1 Functionality
 #### 3.1.1 Create Account
 You will be able to create your own account on the website to get access to all features aniflix provides.
 
