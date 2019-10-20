@@ -21,6 +21,9 @@
   * [3.7 On-line User Documentation and Help System Requirements](#37-on-line-user-documentation-and-help-system-requirements)
   * [3.8 Purchased Components](#38-purchased-components)
   * [3.9 Interfaces](#39-interfaces)
+  * [3.10 Licensing Requirements](#310-licensing-requirements)
+  * [3.11 Legal, Copyright and other Notices](#311-legal-copyright-and-other notices)
+  * [3.12 Applicable Standards](#312-applicable-standards)
 - [4. Supporting Information](#4-supporting-information)
   * [4.1 Appendices](#41-Appendices)
 
