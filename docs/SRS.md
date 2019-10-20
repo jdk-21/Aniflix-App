@@ -22,7 +22,7 @@
   * [3.8 Purchased Components](#38-purchased-components)
   * [3.9 Interfaces](#39-interfaces)
   * [3.10 Licensing Requirements](#310-licensing-requirements)
-  * [3.11 Legal, Copyright and other Notices](#311-legal-copyright-and-other notices)
+  * [3.11 Legal, Copyright and other Notices](#311-legal-copyright-and-other-notices)
   * [3.12 Applicable Standards](#312-applicable-standards)
 - [4. Supporting Information](#4-supporting-information)
   * [4.1 Appendices](#41-Appendices)
@@ -59,7 +59,7 @@ In this section definitions and explanations of acronyms and abbreviations are l
 |---------------------------------------------------|---------------|
 | [AniflixApp Blog](https://aniflixapp.wordpress.com/) | 17.10.2019 |
 | [ANiflixApp Git](https://github.com/d0mmi/Aniflix-App) | 17.10.2019 |
-| [Ouverall Use Case Diagramm](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UCD_1_2.png)| 19.10.2017 |
+| [Overall Use Case Diagramm](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UCD_1_2.png)| 19.10.2017 |
 
 ### 1.5 Overview
 The following chapters are about our vision and perspective, the software requirements, the demands we have and
