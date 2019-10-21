@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../slider/carousel/AnimeCarousel.dart';
-import '../../datatypes/component_data/slider/SliderData.dart';
+import '../slider/SliderElement.dart';
 
 class Home extends StatelessWidget {
   //Text('Home', style: TextStyle(fontSize: 24.0))
@@ -10,21 +10,21 @@ class Home extends StatelessWidget {
       padding: EdgeInsets.only(top: 10),
         child: Column(children: [
       AnimeCarousel([
-        SliderData(
+        SliderElement(
             name: "Vinland Saga",
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
-        SliderData(
+        SliderElement(
             name: "Fairy Gone",
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
       ]),
       AnimeCarousel([
-        SliderData(
+        SliderElement(
             name: "Vinland Saga",
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
-        SliderData(
+        SliderElement(
             name: "Fairy Gone",
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
