@@ -3,9 +3,11 @@ import '../SliderElement.dart';
 
 class AnimeCarousel extends CarouselSlider{
 
-  AnimeCarousel(List<SliderElement> data):super(
-    aspectRatio: 200/110,
+  AnimeCarousel(List<SliderElement> data, {double size = 0.6}):super(
+    aspectRatio: 200/110 / size,
     items: data,
+    enlargeCenterPage: true,
+    viewportFraction: size
   );
 
 }

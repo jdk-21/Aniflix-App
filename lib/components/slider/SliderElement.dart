@@ -9,11 +9,12 @@ class SliderElement extends Container {
 
   SliderElement({this.name, this.description, this.image, this.onTap})
       : super(
+            margin: EdgeInsets.only(left: 3,right: 3),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(image), fit: BoxFit.fill)),
             child: Container(
-              margin: EdgeInsets.all(25),
+              margin: EdgeInsets.all(10),
               child: Stack(
                 children: [
                   (name != "")

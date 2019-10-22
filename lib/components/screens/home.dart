@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
       Container(
         child: AnimeCarousel([
           SliderElement(
-              name: "Vinland Sagaaaaaaaaaaaaaaa",
+              name: "Vinland Saga",
               description: "Gestern",
               image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
           SliderElement(
