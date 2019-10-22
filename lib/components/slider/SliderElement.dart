@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../custom/text/highlighted_text_box.dart';
 
 class SliderElement extends Container {
   Function onTap;
@@ -8,12 +9,24 @@ class SliderElement extends Container {
 
   SliderElement({this.name, this.description, this.image, this.onTap})
       : super(
-    child: Stack(
-      children: [
-        Image.network(image),
-        Padding(padding: EdgeInsets.only(left: 10, top: 130), child: Text(name,style: TextStyle(color: Colors.white, backgroundColor: Colors.black))),
-        Padding(padding: EdgeInsets.only(left: 250, top: 10), child: Text(description,style: TextStyle(color: Colors.white, backgroundColor: Colors.black)))
-      ],
-    ),
-  );
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(image), fit: BoxFit.fill)),
+            child: Container(
+              margin: EdgeInsets.all(25),
+              child: Stack(
+                children: [
+                  (name != "")
+                      ? Align(
+                          alignment: AlignmentDirectional.bottomStart,
+                          child: HighlightedTextBox(name))
+                      : Align(alignment: AlignmentDirectional.bottomStart),
+                  (description != "")
+                      ? Align(
+                          alignment: AlignmentDirectional.topEnd,
+                          child: HighlightedTextBox(description))
+                      : Align(alignment: AlignmentDirectional.topEnd),
+                ],
+              ),
+            ));
 }

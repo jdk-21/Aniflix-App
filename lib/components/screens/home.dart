@@ -7,9 +7,21 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 25),
         child: Column(children: [
-      AnimeCarousel([
+      Container(
+        child: AnimeCarousel([
+          SliderElement(
+              name: "Vinland Sagaaaaaaaaaaaaaaa",
+              description: "Gestern",
+              image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
+          SliderElement(
+              name: "Fairy Gone",
+              description: "Gestern",
+              image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
+        ]),
+      ),
+      /*AnimeCarousel([
         SliderElement(
             name: "Vinland Saga",
             description: "Gestern",
@@ -18,17 +30,7 @@ class Home extends StatelessWidget {
             name: "Fairy Gone",
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
-      ]),
-      AnimeCarousel([
-        SliderElement(
-            name: "Vinland Saga",
-            description: "Gestern",
-            image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
-        SliderElement(
-            name: "Fairy Gone",
-            description: "Gestern",
-            image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
-      ])
+      ])*/
     ]));
   }
 }

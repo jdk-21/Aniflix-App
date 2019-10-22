@@ -4,7 +4,7 @@ import '../SliderElement.dart';
 class AnimeCarousel extends CarouselSlider{
 
   AnimeCarousel(List<SliderElement> data):super(
-    aspectRatio: 16/9,
+    aspectRatio: 200/110,
     items: data,
   );
 
