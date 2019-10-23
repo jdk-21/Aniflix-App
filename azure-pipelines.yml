@@ -18,7 +18,3 @@ steps:
   inputs:
     target: 'apk'
     projectDirectory: '.'
-- task: FlutterBuild@0
-  inputs:
-    target: 'ios'
-    projectDirectory: '.'
