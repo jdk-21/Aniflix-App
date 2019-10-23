@@ -11,9 +11,6 @@ pool:
 
 steps:
 - task: FlutterInstall@0
-  inputs:
-    channel: 'dev'
-    version: 'latest'
 - task: FlutterBuild@0
   inputs:
     target: 'apk'
