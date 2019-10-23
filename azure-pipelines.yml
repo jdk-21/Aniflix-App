@@ -10,9 +10,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: install-flutter-sdk@0
-  inputs:
-    channel: 'stable'
 - task: FlutterBuild@0
   inputs:
     target: 'apk'
