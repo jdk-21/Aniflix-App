@@ -17,12 +17,12 @@ class SliderElement extends Container {
               margin: EdgeInsets.all(10),
               child: Stack(
                 children: [
-                  (name != "")
+                  (name != "" && name != null)
                       ? Align(
                           alignment: AlignmentDirectional.bottomStart,
                           child: HighlightedTextBox(name))
                       : Align(alignment: AlignmentDirectional.bottomStart),
-                  (description != "")
+                  (description != "" && description != null)
                       ? Align(
                           alignment: AlignmentDirectional.topEnd,
                           child: HighlightedTextBox(description))
