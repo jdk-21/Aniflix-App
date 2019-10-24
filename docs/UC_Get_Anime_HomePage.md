@@ -6,18 +6,18 @@
 The app will send a request to the server to get the lists of animes that will be shown on the homepage. The server will return a list of the recently watched animes, of the new epsiodes uploaded to aniflix, of the new anime releases on aniflix and a list of animes you could like based on your recently watched animes.
 
 ## 1.2 Mockup
-[Mockup](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Mockups/UC_Get_Animes_Homepage.png)
+![Mockup](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Mockups/UC_Get_Animes_Homepage.png)
 
 ## 1.3 Screenshot
 
-[Homepage filled with the different lists](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Screenshot_HomePage.jpg)
+![Homepage filled with the different lists](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Screenshot_HomePage.jpg)
 
 # 2. Flow of Events
 
 ## 2.1 Basic Flow
 
 ### Activity Diagram
-[Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagram_get_homepage_anime.png)
+![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagram_get_homepage_anime.png)
 
 ### .feature File
 
