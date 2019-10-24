@@ -81,14 +81,18 @@ The following picture shows the overall use case diagram of our software:
 #### 3.1.1 Create Account
 You will be able to create your own account on the website to get access to all features aniflix provides.
 
-#### 3.1.2 Home Page
-The home page shows you your last watched animes, new released episodes and some animes you could like based on your watched animes.
+#### 3.1.2 Get animes on Home Page
+The home page shows you your last watched animes, new released episodes and some animes you could like based on your watched animes. This lists of animes will be provided by an API.
 
-#### 3.1.3 Anime list
-The anime list shows you all animes the site provides.
+	- [Use Case: Get animes on homepage](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC_Get_Anime_HomePage.md)
 
-#### 3.1.4 Subscription box
-Here you will see all new episodes of the animes you subscribed to.
+#### 3.1.3 See all animes provided by aniflix.tv
+Shows you all animes the site provides.
+
+#### 3.1.4 See subscribed animes
+Here you will see all new episodes of the animes you subscribed to. It is based on your user which give us a list of your subscribed animes.
+
+	- [Use Case: See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC_See_sub_box.md)
 
 #### 3.1.5 Anime Site
 The anime site shows all episodes of the selected anime you want to watch. You get a description of the anime and the possibility to subscribe or review the anime.
