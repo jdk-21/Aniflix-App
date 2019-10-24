@@ -26,8 +26,7 @@ Feature: Get anime on homepage
 	Scenario: Show discover animes | Show airing episodes | SHow new animes | Show continue episodes
 	Given: I requested the animes with the "Request anime" activity
 	When: I opened the homepage
-	And: I get the list with the requested animes back
-	Then: The list will be visualized on the homepage and "Request anime" activity will be closed
+	Then: I get a list with the requested animes and the list will be visualized on the homepage and "Request anime" activity will be closed
 	
 
 ## 2.2 Alternative Flows
