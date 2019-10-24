@@ -10,7 +10,6 @@ You open the subscription box and send a request to the system which will search
 
 ## 1.3 Screenshot
 
-![Homepage filled with the different lists](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Screenshot_HomePage.jpg)
 
 # 2. Flow of Events
 
