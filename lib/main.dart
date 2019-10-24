@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
@@ -32,7 +33,15 @@ class MainWidgetState extends State<MainWidget> {
     return Scaffold(
       appBar: AniflixAppbar(),
       body: PageStorage(child: AniflixNavigationbar.currentScreen, bucket: bucket),
-      bottomNavigationBar: bar
+      bottomNavigationBar: bar,
+      floatingActionButton: (index == 0)? FloatingActionButton(
+        backgroundColor: Colors.red,
+        onPressed: showChat,
+        child: Icon(Icons.chat),
+      ) : null,
     );
+  }
+  showChat(){
+
   }
 }
