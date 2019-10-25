@@ -7,8 +7,24 @@ import './components/navigationbars/mainbar.dart';
 
 void main() {
   ThemeManager manager = ThemeManager.getInstance();
-  manager.addNewTheme(new CustomTheme("Dark Theme", Color.fromRGBO(15, 15, 19, 1),
-      Colors.black, Colors.black, Colors.white, Colors.white, Colors.white));
+  manager.addNewThemes([
+    CustomTheme(
+      "Dark Theme",
+      Color.fromRGBO(15, 15, 19, 1),
+      Colors.black,
+      Colors.black,
+      Colors.white,
+      Colors.white,
+      Colors.white),
+  CustomTheme(
+      "Light Theme",
+      Colors.white,
+      Colors.white,
+      Colors.white,
+      Colors.black,
+      Colors.black,
+      Colors.black),]);
+
   manager.setActualTheme(0);
   runApp(MaterialApp(
     title: 'Aniflix App',
@@ -26,9 +42,10 @@ class MainWidgetState extends State<MainWidget> {
 
   final PageStorageBucket bucket = PageStorageBucket();
   int index = 0;
-  changePage(int i){
+
+  changePage(int i) {
     setState(() {
-        index = i;
+      index = i;
     });
   }
 
@@ -38,16 +55,18 @@ class MainWidgetState extends State<MainWidget> {
 
     return Scaffold(
       appBar: AniflixAppbar(ctx),
-      body: PageStorage(child: AniflixNavigationbar.currentScreen, bucket: bucket),
+      body: PageStorage(
+          child: AniflixNavigationbar.currentScreen, bucket: bucket),
       bottomNavigationBar: bar,
-      floatingActionButton: (index == 0)? FloatingActionButton(
+      floatingActionButton: (index == 0) ? FloatingActionButton(
         backgroundColor: Colors.red,
         onPressed: showChat,
-        child: Icon(Icons.chat),
+        child: Icon(Icons.chat,color: Colors.white,),
       ) : null,
     );
   }
-  showChat(){
+
+  showChat() {
 
   }
 }
