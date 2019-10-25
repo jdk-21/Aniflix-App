@@ -17,31 +17,32 @@ class MainWidget extends StatefulWidget {
 }
 
 class MainWidgetState extends State<MainWidget> {
-
   final PageStorageBucket bucket = PageStorageBucket();
+
   int index = 0;
-  changePage(int i){
+
+  changePage(int i) {
     setState(() {
-        index = i;
+      index = i;
     });
   }
 
+
   @override
   Widget build(BuildContext ctx) {
-    var bar = AniflixNavigationbar(this, index);
-
     return Scaffold(
       appBar: AniflixAppbar(),
-      body: PageStorage(child: AniflixNavigationbar.currentScreen, bucket: bucket),
-      bottomNavigationBar: bar,
-      floatingActionButton: (index == 0)? FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: showChat,
-        child: Icon(Icons.chat),
-      ) : null,
+      body: ScreenManager.getInstance().currentScreen,
+      bottomNavigationBar: AniflixNavigationbar(this, index),
+      floatingActionButton: (index == 0)
+          ? FloatingActionButton(
+              backgroundColor: Colors.red,
+              onPressed: showChat,
+              child: Icon(Icons.chat),
+            )
+          : null,
     );
   }
-  showChat(){
 
-  }
+  showChat() {}
 }

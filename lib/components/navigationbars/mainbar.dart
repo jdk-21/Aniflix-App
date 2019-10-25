@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
@@ -5,31 +6,48 @@ import '../screens/subbox.dart';
 import '../screens/animelist.dart';
 import '../../main.dart';
 
-class AniflixNavigationbar extends BottomNav{
-  static int currentTab = 0;
-  static Widget currentScreen = getScreens()[0];
+class ScreenManager {
+  static ScreenManager instance;
+  int currentTab;
+  Widget currentScreen;
+  List<Widget> screens;
 
-  AniflixNavigationbar(MainWidgetState state, int index):super(index: index,
-    onTap: (i) {
-      state.changePage(i);
-    },
-    items: getItems(),
-    color: Colors.black,
-    iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
-    labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),){
-    currentTab = index;
-    currentScreen = getScreens()[currentTab];
-  }
-
-  static getScreens(){
-    return [
+  ScreenManager() {
+    currentTab = 0;
+    screens = [
       Home(),
       SubBox(),
       AnimeList()
     ];
+    currentScreen = getScreens()[currentTab];
   }
 
-  static getItems(){
+  getScreens() {
+    return screens;
+  }
+
+  static ScreenManager getInstance() {
+    if (instance == null) {
+      instance = ScreenManager();
+    }
+    return instance;
+  }
+}
+
+class AniflixNavigationbar extends BottomNav {
+  AniflixNavigationbar(MainWidgetState state, int index)
+      : super(
+          index: index,
+          onTap: (i) {
+            state.changePage(i);
+          },
+          items: getItems(),
+          color: Colors.black,
+          iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
+          labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),
+        );
+
+  static getItems() {
     return [
       BottomNavItem(Icons.home, label: 'Home'),
       BottomNavItem(Icons.subscriptions, label: 'Abos'),
