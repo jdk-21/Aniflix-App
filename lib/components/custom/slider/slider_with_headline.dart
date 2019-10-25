@@ -6,8 +6,8 @@ import '../../slider/SliderElement.dart';
 class HeadlineSlider extends Container {
   String title;
   List<SliderElement> elements;
-
-  HeadlineSlider(this.title, this.elements)
+  double aspectRatio;
+  HeadlineSlider(this.title, this.elements,{this.aspectRatio = 200/110, double size = 0.6})
       : super(
     padding: EdgeInsets.only(bottom: 20),
             child: Column(children: [
@@ -22,6 +22,6 @@ class HeadlineSlider extends Container {
               fontSize: 20,
             ),
           )),
-          AnimeCarousel(elements),
+          AnimeCarousel(elements,aspectRatio: aspectRatio, size: size),
         ]));
 }

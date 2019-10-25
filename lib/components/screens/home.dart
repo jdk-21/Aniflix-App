@@ -12,50 +12,31 @@ class Homedata{
 }
 
 class Home extends StatelessWidget {
-  Future<List<SliderElement>> airings;
-
+  Future<Homedata> homedata;
   Home(){
-    this.airings = APIManager.getAirings();
+    this.homedata = APIManager.getHomeData();
   }
 
   @override
   Widget build(BuildContext ctx) {
-    return Container(child: FutureBuilder<List<SliderElement>>(
-      future: airings,
+    return Container(child: FutureBuilder<Homedata>(
+      future: homedata,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
               color: Color.fromRGBO(15, 15, 19, 1),
               child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                HeadlineSlider("Neue Folgen", snapshot.data),
-                HeadlineSlider("Neu auf Aniflix", [
-                  SliderElement(
-                      name: "Vinland Saga",
-                      description: "",
-                      image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
-                  SliderElement(
-                      name: "Fairy Gone",
-                      description: "",
-                      image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
-                ]),
-                HeadlineSlider("Entdecken", [
-                  SliderElement(
-                      name: "Vinland Saga",
-                      description: "",
-                      image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
-                  SliderElement(
-                      name: "Fairy Gone",
-                      description: "",
-                      image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
-                ]),
+                HeadlineSlider("Neue Folgen", snapshot.data.airings),
+                HeadlineSlider("Neu auf Aniflix", snapshot.data.newshows, aspectRatio: 200/300, size: 0.4,),
+                HeadlineSlider("Entdecken", snapshot.data.discover, aspectRatio: 200/300, size: 0.4,),
                 HeadlineSlider("Weitersehen", [
                   SliderElement(
                       name: "Vinland Saga",
-                      description: "S01E02",
+                      description: "Work in Progress!",
                       image: "https://www2.aniflix.tv/storage/1561791773-2.jpg"),
                   SliderElement(
                       name: "Fairy Gone",
-                      description: "S02E01",
+                      description: "Work in Progress!",
                       image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
                 ]),
               ]));
