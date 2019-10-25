@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
 
+class Homedata{
+  List<SliderElement> airings;
+  List<SliderElement> newshows;
+  List<SliderElement> discover;
+
+  Homedata(this.airings,this.newshows,this.discover);
+}
+
 class Home extends StatelessWidget {
   Future<List<SliderElement>> airings;
 

@@ -2,9 +2,9 @@ class Hoster {
   int id;
   String name;
   String logo;
-  DateTime created_at;
-  DateTime updated_at;
-  DateTime deleted_at;
+  String created_at;
+  String updated_at;
+  String deleted_at;
   int preferred;
 
   Hoster(this.id, this.name, this.logo, this.created_at, this.deleted_at,
@@ -15,9 +15,9 @@ class Hoster {
         json["id"],
         json["name"],
         json["logo"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
-        DateTime.parse(json["deleted_at"]),
+        json["created_at"],
+        json["updated_at"],
+        json["deleted_at"],
         json["preferred"]);
   }
 }

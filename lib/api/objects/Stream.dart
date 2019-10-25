@@ -9,9 +9,9 @@ class AnimeStream {
   int user_id;
   String link;
   String lang;
-  DateTime created_at;
-  DateTime updated_at;
-  DateTime deleted_at;
+  String created_at;
+  String updated_at;
+  String deleted_at;
   Hoster hoster;
   User user;
 
@@ -38,15 +38,15 @@ class AnimeStream {
         json["user_id"],
         json["link"],
         json["lang"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
-        DateTime.parse(json["deleted_at"]),
+        json["created_at"],
+        json["updated_at"],
+        json["deleted_at"],
         Hoster.fromJson(json["hoster"]),
         User.fromJson(json["user"]));
   }
 
-  static List<AnimeStream> getStreams(List<Map<String, dynamic>> json) {
-    List<AnimeStream> streams;
+  static List<AnimeStream> getStreams(List<dynamic> json) {
+    List<AnimeStream> streams = [];
     for (var entry in json) {
       streams.add(AnimeStream.fromJson(entry));
     }

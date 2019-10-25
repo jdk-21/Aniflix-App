@@ -9,10 +9,10 @@ class Episode {
   int number;
   int season_id;
   int user_id;
-  DateTime created_at;
-  DateTime updated_at;
-  DateTime deleted_at;
-  double avgVotes;
+  String created_at;
+  String updated_at;
+  String deleted_at;
+  String avgVotes;
   int hasReports;
   List<AnimeStream> streams;
   Season season;
@@ -38,9 +38,9 @@ class Episode {
         json["number"],
         json["season_id"],
         json["user_id"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
-        DateTime.parse(json["deleted_at"]),
+        json["created_at"],
+        json["updated_at"],
+        json["deleted_at"],
         json["avgVotes"],
         json["hasReports"],
         AnimeStream.getStreams(json["streams"]),

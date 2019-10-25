@@ -8,12 +8,12 @@ class Show {
   String cover_landscape_original;
   String cover_portrait;
   String visible_since;
-  DateTime created_at;
-  DateTime updated_at;
-  DateTime deleted_at;
+  String created_at;
+  String updated_at;
+  String deleted_at;
   int howManyAbos;
   int seasonCount;
-  double rating;
+  String rating;
   int airing;
 
   Show(
@@ -45,12 +45,13 @@ class Show {
         json["cover_landscape_original"],
         json["cover_portrait"],
         json["visible_since"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
-        DateTime.parse(json["deleted_at"]),
+        json["created_at"],
+        json["updated_at"],
+        json["deleted_at"],
         json["howManyAbos"],
         json["seasonCount"],
-        json["rating"],
-        json["airing"]);
+        json["rating"].toString(),
+        json["airing"]
+    );
   }
 }

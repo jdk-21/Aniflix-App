@@ -5,9 +5,9 @@ class Season {
   int number;
   int show_id;
   String type;
-  DateTime created_at;
-  DateTime updated_at;
-  DateTime deleted_at;
+  String created_at;
+  String updated_at;
+  String deleted_at;
   int length;
   Show show;
 
@@ -20,10 +20,11 @@ class Season {
         json["number"],
         json["show_id"],
         json["type"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
-        DateTime.parse(json["deleted_at"]),
+        json["created_at"],
+        json["updated_at"],
+        json["deleted_at"],
         json["length"],
-        Show.fromJson(json["show"]));
+        Show.fromJson(json["show"])
+    );
   }
 }
