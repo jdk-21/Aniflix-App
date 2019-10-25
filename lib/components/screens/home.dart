@@ -6,9 +6,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      color: Color.fromRGBO(15, 15, 19, 1),
+      color: Theme.of(ctx).backgroundColor,
         child: ListView(padding: EdgeInsets.only(top: 10), children: [
-      HeadlineSlider("Neue Folgen", [
+      HeadlineSlider("Neue Folgen", ctx, [
         SliderElement(
             name: "Vinland Saga",
             description: "Gestern",
@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
             description: "Gestern",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
       ]),
-      HeadlineSlider("Neu auf Aniflix", [
+      HeadlineSlider("Neu auf Aniflix", ctx, [
         SliderElement(
             name: "Vinland Saga",
             description: "",
@@ -28,7 +28,7 @@ class Home extends StatelessWidget {
             description: "",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
       ]),
-      HeadlineSlider("Entdecken", [
+      HeadlineSlider("Entdecken", ctx, [
         SliderElement(
             name: "Vinland Saga",
             description: "",
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
             description: "",
             image: "https://www2.aniflix.tv/storage/1555840247-2.jpg")
       ]),
-      HeadlineSlider("Weitersehen", [
+      HeadlineSlider("Weitersehen", ctx, [
         SliderElement(
             name: "Vinland Saga",
             description: "S01E02",

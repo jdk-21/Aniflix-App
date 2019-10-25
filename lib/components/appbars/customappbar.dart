@@ -15,18 +15,22 @@ class AniflixAppbar extends AppBar {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {},
+            color: Colors.white,
           ),
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {},
+            color: Colors.white,
           ),
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () {},
+            color: Colors.white,
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {},
+            color: Colors.white,
           ),
 
         ]);

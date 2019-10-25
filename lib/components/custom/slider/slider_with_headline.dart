@@ -7,7 +7,7 @@ class HeadlineSlider extends Container {
   String title;
   List<SliderElement> elements;
 
-  HeadlineSlider(this.title, this.elements)
+  HeadlineSlider(this.title, BuildContext ctx, this.elements)
       : super(
     padding: EdgeInsets.only(bottom: 20),
             child: Column(children: [
@@ -17,7 +17,8 @@ class HeadlineSlider extends Container {
               child: Text(
             title,
             style: TextStyle(
-              color: Colors.white,
+              //text color
+              color: Theme.of(ctx).textTheme.title.color,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
