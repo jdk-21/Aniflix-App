@@ -1,4 +1,5 @@
-import 'package:aniflix_app/Themes/Theme%20Manager.dart';
+import 'package:aniflix_app/Themes/Theme.dart';
+import 'package:aniflix_app/Themes/ThemeManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './components/appbars/customappbar.dart';
@@ -6,10 +7,13 @@ import './components/navigationbars/mainbar.dart';
 
 void main() {
   ThemeManager manager = ThemeManager.getInstance();
+  manager.addNewTheme(new CustomTheme("Dark Theme", Color.fromRGBO(15, 15, 19, 1),
+      Colors.black, Colors.black, Colors.white, Colors.white, Colors.white));
+  manager.setActualTheme(0);
   runApp(MaterialApp(
     title: 'Aniflix App',
     home: MainWidget(),
-    theme: new ThemeManager().getActualThemeData(),
+    theme: manager.getActualThemeData(),
   ));
 }
 
@@ -33,7 +37,7 @@ class MainWidgetState extends State<MainWidget> {
     var bar = AniflixNavigationbar(this, index, ctx);
 
     return Scaffold(
-      appBar: AniflixAppbar(),
+      appBar: AniflixAppbar(ctx),
       body: PageStorage(child: AniflixNavigationbar.currentScreen, bucket: bucket),
       bottomNavigationBar: bar,
       floatingActionButton: (index == 0)? FloatingActionButton(

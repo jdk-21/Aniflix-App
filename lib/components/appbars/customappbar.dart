@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AniflixAppbar extends AppBar {
-  AniflixAppbar()
+  AniflixAppbar(BuildContext ctx)
       : super(title: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -15,22 +15,22 @@ class AniflixAppbar extends AppBar {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {},
-            color: Colors.white,
+            color: Theme.of(ctx).primaryIconTheme.color,
           ),
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {},
-            color: Colors.white,
+            color: Theme.of(ctx).primaryIconTheme.color,
           ),
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () {},
-            color: Colors.white,
+            color: Theme.of(ctx).primaryIconTheme.color,
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {},
-            color: Colors.white,
+            color: Theme.of(ctx).primaryIconTheme.color,
           ),
 
         ]);

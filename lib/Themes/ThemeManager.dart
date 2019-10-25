@@ -3,14 +3,10 @@ import 'package:aniflix_app/Themes/Theme.dart';
 
 class ThemeManager {
   static ThemeManager instance;
-  List<CustomTheme> Themes;
+  List<CustomTheme> Themes = new List<CustomTheme>();
   CustomTheme actualTheme;
 
-  ThemeManager() {
-    addNewTheme(new CustomTheme("Dark Theme", Color.fromRGBO(200, 15, 19, 1),
-        Colors.yellow, Colors.yellow, Colors.blue, Colors.green, Colors.blue));
-    setActualTheme(0);
-  }
+  ThemeManager();
 
   static getInstance(){
     if(instance == null){

@@ -17,7 +17,6 @@ class HeadlineSlider extends Container {
               child: Text(
             title,
             style: TextStyle(
-              //text color
               color: Theme.of(ctx).textTheme.title.color,
               fontWeight: FontWeight.bold,
               fontSize: 20,
