@@ -8,22 +8,26 @@ import '../../main.dart';
 
 class ScreenManager {
   static ScreenManager instance;
-  int currentTab;
-  Widget currentScreen;
-  List<Widget> screens;
+  int _currentTab;
+  List<Widget> _screens;
 
   ScreenManager() {
-    currentTab = 0;
-    screens = [
+    _currentTab = 0;
+    _screens = [
       Home(),
       SubBox(),
       AnimeList()
     ];
-    currentScreen = getScreens()[currentTab];
   }
 
   getScreens() {
-    return screens;
+    return _screens;
+  }
+  setCurrentTab(int i) {
+    this._currentTab = i;
+  }
+  getCurrentScreen() {
+    return getScreens()[_currentTab];;
   }
 
   static ScreenManager getInstance() {
@@ -40,6 +44,7 @@ class AniflixNavigationbar extends BottomNav {
           index: index,
           onTap: (i) {
             state.changePage(i);
+            ScreenManager.getInstance().setCurrentTab(i);
           },
           items: getItems(),
           color: Colors.black,

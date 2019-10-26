@@ -42,7 +42,7 @@ class APIManager {
         var json = jsonDecode(response.body) as List;
         for(var entry in json){
           var ep = Episode.fromJson(entry);
-          airings.add(SliderElement(name: ep.season.show.name, description: ep.updated_at,image: "https://www2.aniflix.tv/storage/" + ep.season.show.cover_landscape));
+          airings.add(SliderElement(name: ep.season.show.name + " S" + ep.season.number.toString() + "E"+ep.number.toString(), description: ep.updated_at,image: "https://www2.aniflix.tv/storage/" + ep.season.show.cover_landscape));
         }
       }
 

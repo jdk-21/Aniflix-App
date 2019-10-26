@@ -32,7 +32,7 @@ class MainWidgetState extends State<MainWidget> {
   Widget build(BuildContext ctx) {
     return Scaffold(
       appBar: AniflixAppbar(),
-      body: ScreenManager.getInstance().currentScreen,
+      body: ScreenManager.getInstance().getCurrentScreen(),
       bottomNavigationBar: AniflixNavigationbar(this, index),
       floatingActionButton: (index == 0)
           ? FloatingActionButton(
