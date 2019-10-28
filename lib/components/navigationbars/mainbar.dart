@@ -44,6 +44,7 @@ class AniflixNavigationbar extends BottomNav {
             state.changePage(i);
             ScreenManager.getInstance().setCurrentTab(i);
           },
+          items: getItems(),
           color: Theme.of(ctx).bottomAppBarTheme.color,
           iconStyle: IconStyle(
               color: Theme.of(ctx).primaryIconTheme.color,
