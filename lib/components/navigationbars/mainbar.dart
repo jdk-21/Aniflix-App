@@ -16,7 +16,7 @@ class AniflixNavigationbar extends BottomNav{
     items: getItems(),
     color: Theme.of(ctx).bottomAppBarTheme.color,
     iconStyle: IconStyle(color: Theme.of(ctx).primaryIconTheme.color, onSelectColor: Theme.of(ctx).accentIconTheme.color),
-    labelStyle: LabelStyle(textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color)),){
+    labelStyle: LabelStyle(textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),onSelectTextStyle: TextStyle(color: Theme.of(ctx).accentIconTheme.color)),){
     currentTab = index;
     currentScreen = getScreens()[currentTab];
   }

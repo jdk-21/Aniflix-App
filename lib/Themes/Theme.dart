@@ -1,25 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
-  String ThemeName;
+  String themeName;
   Color mainbarColor;
   Color appbarColor;
   Color screenBackgroundColor;
   Color unselectedIconColor;
   Color selectedIconColor;
+  Color chatButtonColor;
   Color textColor;
 
   CustomTheme(
-      this.ThemeName,
+      {this.themeName,
       this.screenBackgroundColor,
       this.mainbarColor,
       this.appbarColor,
       this.unselectedIconColor,
       this.selectedIconColor,
-      this.textColor);
+      this.chatButtonColor,
+      this.textColor});
 
   String getThemeName() {
-    return ThemeName;
+    return themeName;
   }
 
   Color getMainbarColor() {
@@ -42,18 +45,22 @@ class CustomTheme {
     return selectedIconColor;
   }
 
+  Color getChatButtonColor() {
+    return this.chatButtonColor;
+  }
+
   Color getTextColor() {
     return textColor;
   }
 
-  ThemeData getThemeData(){
+  ThemeData getThemeData() {
     return new ThemeData(
-      textTheme: TextTheme(title: TextStyle(color: this.textColor)),
-      appBarTheme: AppBarTheme(color: this.appbarColor),
-      bottomAppBarTheme: BottomAppBarTheme(color: this.mainbarColor),
-      backgroundColor: this.screenBackgroundColor,
-      primaryIconTheme: IconThemeData(color: this.selectedIconColor),
-      accentIconTheme: IconThemeData(color: this.unselectedIconColor),
-    );
+        textTheme: TextTheme(title: TextStyle(color: this.textColor)),
+        appBarTheme: AppBarTheme(color: this.appbarColor),
+        bottomAppBarTheme: BottomAppBarTheme(color: this.mainbarColor),
+        backgroundColor: this.screenBackgroundColor,
+        accentIconTheme: IconThemeData(color: this.selectedIconColor),
+        primaryIconTheme: IconThemeData(color: this.unselectedIconColor),
+        iconTheme: IconThemeData(color: this.chatButtonColor));
   }
 }
