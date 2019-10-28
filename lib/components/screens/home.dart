@@ -1,4 +1,3 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
@@ -24,12 +23,12 @@ class Home extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-              color: Color.fromRGBO(15, 15, 19, 1),
+              color: Theme.of(ctx).backgroundColor,
               child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                HeadlineSlider("Neue Folgen", snapshot.data.airings),
-                HeadlineSlider("Neu auf Aniflix", snapshot.data.newshows, aspectRatio: 200/300, size: 0.4,),
-                HeadlineSlider("Entdecken", snapshot.data.discover, aspectRatio: 200/300, size: 0.4,),
-                HeadlineSlider("Weitersehen", [
+                HeadlineSlider("Neue Folgen",ctx, snapshot.data.airings),
+                HeadlineSlider("Neu auf Aniflix",ctx, snapshot.data.newshows, aspectRatio: 200/300, size: 0.4,),
+                HeadlineSlider("Entdecken",ctx, snapshot.data.discover, aspectRatio: 200/300, size: 0.4,),
+                HeadlineSlider("Weitersehen",ctx, [
                   SliderElement(
                       name: "Vinland Saga",
                       description: "Work in Progress!",

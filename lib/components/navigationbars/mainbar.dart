@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
@@ -39,17 +38,17 @@ class ScreenManager {
 }
 
 class AniflixNavigationbar extends BottomNav {
-  AniflixNavigationbar(MainWidgetState state, int index)
+  AniflixNavigationbar(MainWidgetState state, int index, BuildContext ctx)
       : super(
           index: index,
           onTap: (i) {
             state.changePage(i);
             ScreenManager.getInstance().setCurrentTab(i);
           },
-          items: getItems(),
-          color: Colors.black,
-          iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
-          labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),
+          color: Theme.of(ctx).bottomAppBarTheme.color,
+          iconStyle: IconStyle(color: Theme.of(ctx).primaryIconTheme.color, onSelectColor: Theme.of(ctx).accentIconTheme.color),
+          labelStyle: LabelStyle(textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),onSelectTextStyle: TextStyle(color: Theme.of(ctx).accentIconTheme.color)),){
+    
         );
 
   static getItems() {

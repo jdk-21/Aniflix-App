@@ -1,16 +1,9 @@
 # aniflix_app
+[![Build Status](https://dev.azure.com/aniflix/Aniflix%20App/_apis/build/status/d0mmi.Aniflix-App?branchName=master)](https://dev.azure.com/aniflix/Aniflix%20App/_build/latest?definitionId=1&branchName=master)
 
 App for Aniflix
 
-## Getting Started
+## Links
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Visit the Aniflix Website: https://www2.aniflix.tv/
+- Visit our Blog: https://aniflixapp.wordpress.com/

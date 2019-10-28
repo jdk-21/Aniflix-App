@@ -1,13 +1,16 @@
+import 'package:aniflix_app/Themes/ThemeManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 
 void main() {
+  ThemeManager manager = ThemeManager.getInstance();
+  manager.setActualTheme(0);
   runApp(MaterialApp(
     title: 'Aniflix App',
     home: MainWidget(),
-    theme: ThemeData(primaryColor: Colors.black),
+    theme: manager.getActualThemeData(),
   ));
 }
 
@@ -17,8 +20,8 @@ class MainWidget extends StatefulWidget {
 }
 
 class MainWidgetState extends State<MainWidget> {
-  final PageStorageBucket bucket = PageStorageBucket();
 
+  final PageStorageBucket bucket = PageStorageBucket();
   int index = 0;
 
   changePage(int i) {
@@ -27,22 +30,25 @@ class MainWidgetState extends State<MainWidget> {
     });
   }
 
-
   @override
   Widget build(BuildContext ctx) {
+    var bar = AniflixNavigationbar(this, index, ctx);
+
     return Scaffold(
       appBar: AniflixAppbar(),
       body: ScreenManager.getInstance().getCurrentScreen(),
       bottomNavigationBar: AniflixNavigationbar(this, index),
       floatingActionButton: (index == 0)
           ? FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: showChat,
-              child: Icon(Icons.chat),
-            )
-          : null,
+        backgroundColor: Theme.of(ctx).iconTheme.color,
+        onPressed: showChat,
+        child: Icon(Icons.chat,color: Colors.white,),
+      )
+          : null
     );
   }
 
-  showChat() {}
+  showChat() {
+
+  }
 }
