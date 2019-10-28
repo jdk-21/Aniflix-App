@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
+import '../../api/APIManager.dart';
 
 class Homedata{
   List<SliderElement> airings;

@@ -20,7 +20,6 @@ class MainWidget extends StatefulWidget {
 }
 
 class MainWidgetState extends State<MainWidget> {
-
   final PageStorageBucket bucket = PageStorageBucket();
   int index = 0;
 
@@ -35,20 +34,20 @@ class MainWidgetState extends State<MainWidget> {
     var bar = AniflixNavigationbar(this, index, ctx);
 
     return Scaffold(
-      appBar: AniflixAppbar(),
-      body: ScreenManager.getInstance().getCurrentScreen(),
-      bottomNavigationBar: AniflixNavigationbar(this, index),
-      floatingActionButton: (index == 0)
-          ? FloatingActionButton(
-        backgroundColor: Theme.of(ctx).iconTheme.color,
-        onPressed: showChat,
-        child: Icon(Icons.chat,color: Colors.white,),
-      )
-          : null
-    );
+        appBar: AniflixAppbar(ctx),
+        body: ScreenManager.getInstance().getCurrentScreen(),
+        bottomNavigationBar: AniflixNavigationbar(this, index,ctx),
+        floatingActionButton: (index == 0)
+            ? FloatingActionButton(
+                backgroundColor: Theme.of(ctx).iconTheme.color,
+                onPressed: showChat,
+                child: Icon(
+                  Icons.chat,
+                  color: Colors.white,
+                ),
+              )
+            : null);
   }
 
-  showChat() {
-
-  }
+  showChat() {}
 }

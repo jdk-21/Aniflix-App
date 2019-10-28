@@ -12,21 +12,20 @@ class ScreenManager {
 
   ScreenManager() {
     _currentTab = 0;
-    _screens = [
-      Home(),
-      SubBox(),
-      AnimeList()
-    ];
+    _screens = [Home(), SubBox(), AnimeList()];
   }
 
   getScreens() {
     return _screens;
   }
+
   setCurrentTab(int i) {
     this._currentTab = i;
   }
+
   getCurrentScreen() {
-    return getScreens()[_currentTab];;
+    return getScreens()[_currentTab];
+    ;
   }
 
   static ScreenManager getInstance() {
@@ -46,9 +45,13 @@ class AniflixNavigationbar extends BottomNav {
             ScreenManager.getInstance().setCurrentTab(i);
           },
           color: Theme.of(ctx).bottomAppBarTheme.color,
-          iconStyle: IconStyle(color: Theme.of(ctx).primaryIconTheme.color, onSelectColor: Theme.of(ctx).accentIconTheme.color),
-          labelStyle: LabelStyle(textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),onSelectTextStyle: TextStyle(color: Theme.of(ctx).accentIconTheme.color)),){
-    
+          iconStyle: IconStyle(
+              color: Theme.of(ctx).primaryIconTheme.color,
+              onSelectColor: Theme.of(ctx).accentIconTheme.color),
+          labelStyle: LabelStyle(
+              textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),
+              onSelectTextStyle:
+                  TextStyle(color: Theme.of(ctx).accentIconTheme.color)),
         );
 
   static getItems() {
