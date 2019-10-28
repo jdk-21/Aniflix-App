@@ -13,7 +13,7 @@ void main() {
       Color.fromRGBO(15, 15, 19, 1),
       Colors.black,
       Colors.black,
-      Colors.white,
+      Colors.red,
       Colors.white,
       Colors.white),
   CustomTheme(
@@ -21,7 +21,7 @@ void main() {
       Colors.white,
       Colors.white,
       Colors.white,
-      Colors.black,
+      Colors.red,
       Colors.black,
       Colors.black),]);
 
