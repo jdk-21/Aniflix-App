@@ -5,31 +5,56 @@ import '../screens/subbox.dart';
 import '../screens/animelist.dart';
 import '../../main.dart';
 
-class AniflixNavigationbar extends BottomNav{
-  static int currentTab = 0;
-  static Widget currentScreen = getScreens()[0];
+class ScreenManager {
+  static ScreenManager instance;
+  int _currentTab;
+  List<Widget> _screens;
 
-  AniflixNavigationbar(MainWidgetState state, int index):super(index: index,
-    onTap: (i) {
-      state.changePage(i);
-    },
-    items: getItems(),
-    color: Colors.black,
-    iconStyle: IconStyle(color: Colors.white, onSelectColor: Colors.red),
-    labelStyle: LabelStyle(textStyle: TextStyle(color: Colors.white)),){
-    currentTab = index;
-    currentScreen = getScreens()[currentTab];
+  ScreenManager() {
+    _currentTab = 0;
+    _screens = [Home(), SubBox(), AnimeList()];
   }
 
-  static getScreens(){
-    return [
-      Home(),
-      SubBox(),
-      AnimeList()
-    ];
+  getScreens() {
+    return _screens;
   }
 
-  static getItems(){
+  setCurrentTab(int i) {
+    this._currentTab = i;
+  }
+
+  getCurrentScreen() {
+    return getScreens()[_currentTab];
+    ;
+  }
+
+  static ScreenManager getInstance() {
+    if (instance == null) {
+      instance = ScreenManager();
+    }
+    return instance;
+  }
+}
+
+class AniflixNavigationbar extends BottomNav {
+  AniflixNavigationbar(MainWidgetState state, int index, BuildContext ctx)
+      : super(
+          index: index,
+          onTap: (i) {
+            state.changePage(i);
+            ScreenManager.getInstance().setCurrentTab(i);
+          },
+          color: Theme.of(ctx).bottomAppBarTheme.color,
+          iconStyle: IconStyle(
+              color: Theme.of(ctx).primaryIconTheme.color,
+              onSelectColor: Theme.of(ctx).accentIconTheme.color),
+          labelStyle: LabelStyle(
+              textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),
+              onSelectTextStyle:
+                  TextStyle(color: Theme.of(ctx).accentIconTheme.color)),
+        );
+
+  static getItems() {
     return [
       BottomNavItem(Icons.home, label: 'Home'),
       BottomNavItem(Icons.subscriptions, label: 'Abos'),
