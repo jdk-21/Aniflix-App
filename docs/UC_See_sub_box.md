@@ -6,7 +6,7 @@
 You open the subscription box and send a request to the system which will search your subscribed animes based on your user and returns a list of the newest episodes of your subscribed animes.
 
 ## 1.2 Mockup
-![Mockup](https://raw.githubusercontent.com/d0mmi/Aniflix-App/UC_Get_Anime_Homepage/docs/Mockups/UC_Get_Animes_in_SubBox.png)
+![Mockup](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/Mockups/UC_Get_Animes_in_SubBox.png)
 
 ## 1.3 Screenshot
 
@@ -16,7 +16,7 @@ You open the subscription box and send a request to the system which will search
 ## 2.1 Basic Flow
 
 ### Activity Diagram
-![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/UC_Get_Anime_Homepage/docs/activity_diagramm_see_subscribed_anime.png)
+![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagramm_see_subscribed_anime.png)
 
 ### .feature File
 
