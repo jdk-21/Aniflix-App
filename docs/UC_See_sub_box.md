@@ -20,6 +20,7 @@ You open the subscription box and send a request to the system which will search
 
 ### .feature File
 
+<<<<<<< Updated upstream
 Feature: Get subscribed animes
 	
 	Scenario: Show subscription box
@@ -29,6 +30,9 @@ Feature: Get subscribed animes
 	And: I requested my subscrbed animes
 	Then: I get a list with the newest episodes of my subscribed animes sorted by their release dates
 	
+=======
+![.feature file](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/test_driver/features/subbox.feature)
+>>>>>>> Stashed changes
 
 ## 2.2 Alternative Flows
 n/a
@@ -48,7 +52,11 @@ The main preconditions for this use case are:
 
 The main postconditions for this use case are:
 
+<<<<<<< Updated upstream
  - Their will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
+=======
+ - There will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
+>>>>>>> Stashed changes
 
 # 6. Function Points
 (n/a)

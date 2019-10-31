@@ -21,6 +21,7 @@ The app will send a request to the server to get the lists of animes that will b
 
 ### .feature File
 
+<<<<<<< Updated upstream
 Feature: Get anime on homepage
 	
 	Scenario: Show discover animes | Show airing episodes | SHow new animes | Show continue episodes
@@ -28,6 +29,9 @@ Feature: Get anime on homepage
 	When: I opened the homepage
 	Then: I get a list with the requested animes and the list will be visualized on the homepage and "Request anime" activity will be closed
 	
+=======
+![.feature file](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/test_driver/features/homepage.feature)
+>>>>>>> Stashed changes
 
 ## 2.2 Alternative Flows
 n/a
@@ -45,7 +49,11 @@ The main preconditions for this use case are:
 
 The main postconditions for this use case are:
 
+<<<<<<< Updated upstream
  - The home page shows the different lists returned by the server.
+=======
+ - The home page shows the different lists returned by the API.
+>>>>>>> Stashed changes
 
 # 6. Function Points
 (n/a)
