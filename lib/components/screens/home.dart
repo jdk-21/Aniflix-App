@@ -19,7 +19,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext ctx) {
-    return Container(child: FutureBuilder<Homedata>(
+    return Container(
+      key: Key("home_screen"),
+      child: FutureBuilder<Homedata>(
       future: homedata,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
