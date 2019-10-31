@@ -21,15 +21,6 @@ The app will send a request to the server to get the lists of animes that will b
 
 ### .feature File
 
-<<<<<<< Updated upstream
-Feature: Get anime on homepage
-	
-	Scenario: Show discover animes | Show airing episodes | SHow new animes | Show continue episodes
-	Given: I requested the animes with the "Request anime" activity
-	When: I opened the homepage
-	Then: I get a list with the requested animes and the list will be visualized on the homepage and "Request anime" activity will be closed
-	
-=======
 ![.feature file](../docs/feature%20files/feature%20getHomeVideos.PNG)
 
 ## 2.2 Alternative Flows
