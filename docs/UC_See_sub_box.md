@@ -31,8 +31,8 @@ Feature: Get subscribed animes
 	Then: I get a list with the newest episodes of my subscribed animes sorted by their release dates
 	
 =======
-![.feature file](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/test_driver/features/subbox.feature)
->>>>>>> Stashed changes
+![.feature file](../docs/feature%20files/feature%20subscribedAnimes.PNG)
+
 
 ## 2.2 Alternative Flows
 n/a

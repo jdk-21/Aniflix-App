@@ -30,8 +30,7 @@ Feature: Get anime on homepage
 	Then: I get a list with the requested animes and the list will be visualized on the homepage and "Request anime" activity will be closed
 	
 =======
-![.feature file](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/test_driver/features/homepage.feature)
->>>>>>> Stashed changes
+![.feature file](../docs/feature%20files/feature%20getHomeVideos.PNG)
 
 ## 2.2 Alternative Flows
 n/a
