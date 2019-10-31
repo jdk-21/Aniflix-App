@@ -21,7 +21,7 @@ The user will be able to switch between the different main pages with button cli
 ![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagram_click_button_in_navigation_bar.png)
 
 ### .feature File
-![.feature file](./docs/feature%20files/feature%20nav.PNG)
+![.feature file](../docs/feature%20files/feature%20nav.PNG)
 
 ## 2.2 Alternative Flows
 n/a
