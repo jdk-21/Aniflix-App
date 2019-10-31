@@ -3,6 +3,9 @@ import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
 import '../screens/subbox.dart';
 import '../screens/animelist.dart';
+import '../screens/settings.dart';
+import '../screens/login.dart';
+import '../screens/register.dart';
 import '../../main.dart';
 
 class ScreenManager {
@@ -10,9 +13,9 @@ class ScreenManager {
   int _currentTab;
   List<Widget> _screens;
 
-  ScreenManager() {
+  ScreenManager(MainWidgetState state) {
     _currentTab = 0;
-    _screens = [Home(), SubBox(), AnimeList()];
+    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(), Register()];
   }
 
   getScreens() {
@@ -28,9 +31,9 @@ class ScreenManager {
     ;
   }
 
-  static ScreenManager getInstance() {
+  static ScreenManager getInstance(MainWidgetState state) {
     if (instance == null) {
-      instance = ScreenManager();
+      instance = ScreenManager(state);
     }
     return instance;
   }
@@ -42,7 +45,7 @@ class AniflixNavigationbar extends BottomNav {
           index: index,
           onTap: (i) {
             state.changePage(i);
-            ScreenManager.getInstance().setCurrentTab(i);
+            ScreenManager.getInstance(state).setCurrentTab(i);
           },
           items: getItems(),
           color: Theme.of(ctx).bottomAppBarTheme.color,

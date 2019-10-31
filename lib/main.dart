@@ -1,4 +1,5 @@
-import 'package:aniflix_app/Themes/ThemeManager.dart';
+import 'package:aniflix_app/Themes/themeManager.dart';
+import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './components/appbars/customappbar.dart';
@@ -34,8 +35,8 @@ class MainWidgetState extends State<MainWidget> {
     var bar = AniflixNavigationbar(this, index, ctx);
 
     return Scaffold(
-        appBar: AniflixAppbar(ctx),
-        body: ScreenManager.getInstance().getCurrentScreen(),
+        appBar: AniflixAppbar(this, ctx),
+        body: ScreenManager.getInstance(this).getCurrentScreen(),
         bottomNavigationBar: AniflixNavigationbar(this, index,ctx),
         floatingActionButton: (index == 0)
             ? FloatingActionButton(
