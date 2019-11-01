@@ -8,6 +8,11 @@ class Register extends StatelessWidget {
 
   Register(this.state);
 
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwortController = TextEditingController();
+  final passwortWiederholenController = TextEditingController();
+
   @override
   Widget build(BuildContext ctx) {
     return new Container(
@@ -33,6 +38,8 @@ class Register extends StatelessWidget {
                   ])),
               SizedBox(height: 30),
               TextField(
+                controller: usernameController,
+                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
                 decoration: InputDecoration(
                     hintText: "Username",
                     hintStyle:
@@ -43,6 +50,8 @@ class Register extends StatelessWidget {
               ),
               SizedBox(height: 30),
               TextField(
+                controller: emailController,
+                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
                 decoration: InputDecoration(
                     hintText: "E-Mail",
                     hintStyle:
@@ -53,6 +62,8 @@ class Register extends StatelessWidget {
               ),
               SizedBox(height: 30),
               TextField(
+                controller: passwortController,
+                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
                 obscureText: true,
                 decoration: InputDecoration(
                     hintText: "Passwort",
@@ -64,6 +75,8 @@ class Register extends StatelessWidget {
               ),
               SizedBox(height: 30),
               TextField(
+                controller: passwortWiederholenController,
+                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
                 obscureText: true,
                 decoration: InputDecoration(
                     hintText: "Passwort wiederholen",
@@ -84,6 +97,7 @@ class Register extends StatelessWidget {
                     onPressed: () {
                       state.changePage(0);
                       ScreenManager.getInstance(state).setCurrentTab(0);
+                      resetTextController();
                     },
                   )),
               Align(
@@ -94,11 +108,19 @@ class Register extends StatelessWidget {
                   onPressed: () {
                     state.changePage(4);
                     ScreenManager.getInstance(state).setCurrentTab(4);
+                    resetTextController();
                   },
                 ),
               )
             ])
           ])),
     );
+  }
+
+  void resetTextController(){
+    usernameController.clear();
+    emailController.clear();
+    passwortController.clear();
+    passwortWiederholenController.clear();
   }
 }

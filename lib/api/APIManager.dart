@@ -88,7 +88,7 @@ class APIManager {
     return http.get('https://www2.aniflix.tv/api/' + query);
   }
 
-  static Future<http.Response> _postRequest(String query) {
-    return http.post('https://www2.aniflix.tv/api/' + query);
+  static Future<http.Response> _postRequest(String query, bodyObject) {
+    return http.post('https://www2.aniflix.tv/api/' + query, body: json.encode(bodyObject));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,8 +6,9 @@ import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
   MainWidgetState state;
-
   Login(this.state);
+  final emailController = TextEditingController();
+  final passwortController = TextEditingController();
 
   @override
   Widget build(BuildContext ctx) {
@@ -34,25 +36,27 @@ class Login extends StatelessWidget {
                   ])),
               SizedBox(height: 30),
               TextField(
-                decoration: InputDecoration(
-                    hintText: "E-Mail",
-                    hintStyle:
-                        TextStyle(color: Theme.of(ctx).hintColor, fontSize: 15),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(ctx).hintColor))),
-              ),
+                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      hintText: "E-Mail",
+                      hintStyle: TextStyle(
+                          color: Theme.of(ctx).hintColor, fontSize: 15),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Theme.of(ctx).hintColor)))),
               SizedBox(height: 30),
               TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    hintText: "Passwort",
-                    hintStyle:
-                        TextStyle(color: Theme.of(ctx).hintColor, fontSize: 15),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(ctx).hintColor))),
-              ),
+                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  controller: passwortController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      hintText: "Passwort",
+                      hintStyle: TextStyle(
+                          color: Theme.of(ctx).hintColor, fontSize: 15),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Theme.of(ctx).hintColor)))),
               SizedBox(height: 30),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +64,7 @@ class Login extends StatelessWidget {
                     Theme(
                       child: Checkbox(
                         onChanged: (newValue) {
-                          angemeldetBleiben = newValue;
+                            angemeldetBleiben = newValue;
                         },
                         value: angemeldetBleiben,
                       ),
@@ -85,6 +89,7 @@ class Login extends StatelessWidget {
                     onPressed: () {
                       state.changePage(0);
                       ScreenManager.getInstance(state).setCurrentTab(0);
+                      resetTextController();
                     },
                   )),
               Align(
@@ -95,11 +100,17 @@ class Login extends StatelessWidget {
                   onPressed: () {
                     state.changePage(5);
                     ScreenManager.getInstance(state).setCurrentTab(5);
+                    resetTextController();
                   },
                 ),
               )
             ])
           ])),
     );
+  }
+
+  void resetTextController(){
+    emailController.clear();
+    passwortController.clear();
   }
 }
