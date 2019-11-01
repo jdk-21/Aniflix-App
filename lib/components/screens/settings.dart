@@ -1,4 +1,4 @@
-import 'package:aniflix_app/Themes/themeManager.dart';
+import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -67,23 +67,25 @@ class Settings extends StatelessWidget {
           Container(
               padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
               color: Theme.of(ctx).backgroundColor,
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween ,children: [
-                Text("Theme",
-                    style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 35,
-                    fontWeight: FontWeight.normal)),
-                Theme(
-                    data: Theme.of(ctx).copyWith(canvasColor: Theme.of(ctx).backgroundColor),
-                  child: DropdownButton<int>(
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color, fontSize: 20),
-                  items: manager.getThemeNames(),
-                  onChanged: (newValue) {
-                      manager.setActualTheme(newValue);
-                  },
-                  value: manager.actualThemeIndex,
-                )
-                )])),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Theme",
+                        style: TextStyle(
+                            color: Theme.of(ctx).textTheme.title.color,
+                            fontSize: 35,
+                            fontWeight: FontWeight.normal)),
+                    Theme(
+                        data: Theme.of(ctx).copyWith(
+                            canvasColor: Theme.of(ctx).backgroundColor),
+                        child: DropdownButton<int>(
+                          style: TextStyle(color: Theme.of(ctx).textTheme.title.color,fontSize: 20),
+                          items: manager.getThemeNames(),
+                          onChanged: (newValue) {},
+                          value: manager.actualThemeIndex,
+                          hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
+                        ))
+                  ])),
           FlatButton(
             onPressed: () {
               state.changePage(4);

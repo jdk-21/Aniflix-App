@@ -15,7 +15,7 @@ class ScreenManager {
 
   ScreenManager(MainWidgetState state) {
     _currentTab = 0;
-    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(), Register()];
+    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(state), Register(state)];
   }
 
   getScreens() {
@@ -28,7 +28,6 @@ class ScreenManager {
 
   getCurrentScreen() {
     return getScreens()[_currentTab];
-    ;
   }
 
   static ScreenManager getInstance(MainWidgetState state) {
