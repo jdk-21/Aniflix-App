@@ -1,4 +1,3 @@
-import 'package:aniflix_app/Themes/themeManager.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
