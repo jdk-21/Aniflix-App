@@ -5,7 +5,7 @@ class HighlightedTextBox extends Container {
       : super(
           padding: EdgeInsets.all(5),
           decoration: new BoxDecoration(
-              color: Colors.black,
+              color: Color.fromRGBO(15, 15, 19, 1),
               borderRadius: new BorderRadius.all(const Radius.circular(40.0))),
           child: Text(text, style: TextStyle(color: Colors.white)),
         );

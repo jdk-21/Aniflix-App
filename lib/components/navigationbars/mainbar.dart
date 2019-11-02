@@ -1,22 +1,30 @@
+import 'package:aniflix_app/components/screens/favoriten.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
+import 'package:aniflix_app/components/screens/verlauf.dart';
+import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
 import '../screens/subbox.dart';
 import '../screens/animelist.dart';
+import '../screens/settings.dart';
+import '../screens/login.dart';
+import '../screens/register.dart';
 import '../../main.dart';
 
 class ScreenManager {
   static ScreenManager instance;
   int _currentTab;
-  List<Widget> _screens;
+  MainWidgetState _state;
 
-  ScreenManager() {
+  ScreenManager(MainWidgetState state) {
     _currentTab = 0;
-    _screens = [Home(), SubBox(), AnimeList()];
+    _state = state;
   }
 
+
   getScreens() {
-    return _screens;
+    return [Home(), SubBox(), AnimeList(), Settings(_state), Login(_state), Register(_state), Profil(), Verlauf(), Watchlist(), Favoriten()];
   }
 
   setCurrentTab(int i) {
@@ -25,26 +33,23 @@ class ScreenManager {
 
   getCurrentScreen() {
     return getScreens()[_currentTab];
-    ;
   }
 
-  static ScreenManager getInstance() {
+  static ScreenManager getInstance(MainWidgetState state) {
     if (instance == null) {
-      instance = ScreenManager();
+      instance = ScreenManager(state);
     }
     return instance;
   }
 }
 
 class AniflixNavigationbar extends BottomNav {
-  int index;
-
-  AniflixNavigationbar(MainWidgetState state, this.index, BuildContext ctx)
+  AniflixNavigationbar(MainWidgetState state, int index, BuildContext ctx)
       : super(
           index: index,
           onTap: (i) {
             state.changePage(i);
-            ScreenManager.getInstance().setCurrentTab(i);
+            ScreenManager.getInstance(state).setCurrentTab(i);
           },
           items: getItems(),
           color: Theme.of(ctx).bottomAppBarTheme.color,
@@ -64,7 +69,7 @@ class AniflixNavigationbar extends BottomNav {
       BottomNavItem(Icons.list, label: 'Alle'),
     ];
   }
-
+  
   @override
   BottomNavState createState() => AniflixNavState();
 }

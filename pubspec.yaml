@@ -19,6 +19,7 @@ environment:
 dependencies:
   bmnav:
   http:
+  url_launcher:
   flutter:
     sdk: flutter
 
@@ -27,6 +28,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   carousel_slider: ^1.3.0
   flutter_gherkin:
+
 
 dev_dependencies:
   flutter_test:
