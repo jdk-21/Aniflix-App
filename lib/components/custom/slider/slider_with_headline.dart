@@ -9,6 +9,7 @@ class HeadlineSlider extends Container {
   double aspectRatio;
   HeadlineSlider(this.title, BuildContext ctx, this.elements,{this.aspectRatio = 200/110, double size = 0.6})
       : super(
+    key: Key(title.replaceAll(" ", "_").toLowerCase()),
     padding: EdgeInsets.only(bottom: 20),
             child: Column(children: [
           Container(
