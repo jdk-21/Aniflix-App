@@ -2,6 +2,7 @@ import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
@@ -15,15 +16,16 @@ import '../../main.dart';
 class ScreenManager {
   static ScreenManager instance;
   int _currentTab;
-  List<Widget> _screens;
+  MainWidgetState _state;
 
   ScreenManager(MainWidgetState state) {
     _currentTab = 0;
-    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(state), Register(state), Profil(), Verlauf(), Watchlist(), Favoriten()];
+    _state = state;
   }
 
+
   getScreens() {
-    return _screens;
+    return [Home(), SubBox(), AnimeList(), Settings(_state), Login(_state), Register(_state), Profil(), Verlauf(), Watchlist(), Favoriten()];
   }
 
   setCurrentTab(int i) {

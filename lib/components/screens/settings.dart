@@ -98,7 +98,7 @@ class Settings extends StatelessWidget {
                           hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
                         ))
                   ])),
-          FlatButton(
+          /*FlatButton(
             onPressed: () {
               state.changePage(4);
               ScreenManager.getInstance(state).setCurrentTab(4);
@@ -112,7 +112,7 @@ class Settings extends StatelessWidget {
                         fontSize: 35,
                         fontWeight: FontWeight.normal))),
             color: Theme.of(ctx).backgroundColor,
-          ),
+          ),*/
         ],
       ),
     );

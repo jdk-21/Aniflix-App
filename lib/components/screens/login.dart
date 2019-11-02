@@ -1,12 +1,16 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
+import 'package:aniflix_app/api/objects/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatelessWidget {
   MainWidgetState state;
+
   Login(this.state);
+
   final emailController = TextEditingController();
   final passwortController = TextEditingController();
 
@@ -64,7 +68,7 @@ class Login extends StatelessWidget {
                     Theme(
                       child: Checkbox(
                         onChanged: (newValue) {
-                            angemeldetBleiben = newValue;
+                          angemeldetBleiben = newValue;
                         },
                         value: angemeldetBleiben,
                       ),
@@ -86,10 +90,15 @@ class Login extends StatelessWidget {
                     borderSide:
                         BorderSide(color: Theme.of(ctx).textTheme.title.color),
                     child: Text("Login"),
-                    onPressed: () {
-                      state.changePage(0);
-                      ScreenManager.getInstance(state).setCurrentTab(0);
-                      resetTextController();
+                    onPressed: () async {
+                      var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
+                      if(response.hasError()){
+                        showErrorDialog(ctx,response.error);
+                      }else{
+                        state.changePage(0);
+                        ScreenManager.getInstance(state).setCurrentTab(0);
+                        resetTextController();
+                      }
                     },
                   )),
               Align(
@@ -98,8 +107,9 @@ class Login extends StatelessWidget {
                   textColor: Theme.of(ctx).textTheme.title.color,
                   child: Text("Noch keinen Account?"),
                   onPressed: () {
-                    state.changePage(5);
-                    ScreenManager.getInstance(state).setCurrentTab(5);
+                    _launchURL();
+                    //state.changePage(5);
+                    //ScreenManager.getInstance(state).setCurrentTab(5);
                     resetTextController();
                   },
                 ),
@@ -108,9 +118,36 @@ class Login extends StatelessWidget {
           ])),
     );
   }
-
-  void resetTextController(){
+  _launchURL() async {
+    const url = 'https://www2.aniflix.tv/register';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  void resetTextController() {
     emailController.clear();
     passwortController.clear();
+  }
+  void showErrorDialog(BuildContext ctx, String message){
+    showDialog(
+      context: ctx,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Error"),
+          content: new Text(message),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

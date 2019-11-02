@@ -19,6 +19,7 @@ environment:
 dependencies:
   bmnav:
   http:
+  url_launcher:
   flutter:
     sdk: flutter
 
