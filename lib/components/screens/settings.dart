@@ -17,7 +17,10 @@ class Settings extends StatelessWidget {
       child: ListView(
         children: [
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              state.changePage(6);
+              ScreenManager.getInstance(state).setCurrentTab(6);
+            },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
                 alignment: Alignment.centerLeft,
@@ -29,7 +32,10 @@ class Settings extends StatelessWidget {
             color: Theme.of(ctx).backgroundColor,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              state.changePage(7);
+              ScreenManager.getInstance(state).setCurrentTab(7);
+            },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
                 alignment: Alignment.centerLeft,
@@ -41,7 +47,10 @@ class Settings extends StatelessWidget {
             color: Theme.of(ctx).backgroundColor,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              state.changePage(8);
+              ScreenManager.getInstance(state).setCurrentTab(8);
+            },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
                 alignment: Alignment.centerLeft,
@@ -53,7 +62,10 @@ class Settings extends StatelessWidget {
             color: Theme.of(ctx).backgroundColor,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              state.changePage(9);
+              ScreenManager.getInstance(state).setCurrentTab(9);
+            },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
                 alignment: Alignment.centerLeft,
@@ -81,7 +93,7 @@ class Settings extends StatelessWidget {
                         child: DropdownButton<int>(
                           style: TextStyle(color: Theme.of(ctx).textTheme.title.color,fontSize: 20),
                           items: manager.getThemeNames(),
-                          onChanged: (newValue) {},
+                          onChanged: (newValue) {manager.setActualTheme(newValue);},
                           value: manager.actualThemeIndex,
                           hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
                         ))

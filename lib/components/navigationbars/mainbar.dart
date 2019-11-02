@@ -1,3 +1,7 @@
+import 'package:aniflix_app/components/screens/favoriten.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
+import 'package:aniflix_app/components/screens/verlauf.dart';
+import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
@@ -15,7 +19,7 @@ class ScreenManager {
 
   ScreenManager(MainWidgetState state) {
     _currentTab = 0;
-    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(state), Register(state)];
+    _screens = [Home(), SubBox(), AnimeList(), Settings(state), Login(state), Register(state), Profil(), Verlauf(), Watchlist(), Favoriten()];
   }
 
   getScreens() {
