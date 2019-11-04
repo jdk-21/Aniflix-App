@@ -1,10 +1,11 @@
+import 'package:aniflix_app/components/navigationbars/mainbar.dart';
+import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
 class AniflixAppbar extends AppBar {
-  AniflixAppbar(BuildContext ctx)
-      : super(title: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
+  AniflixAppbar(MainWidgetState state, BuildContext ctx)
+      : super(
+      title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Image.asset(
           'assets/images/logo.png',
           fit: BoxFit.contain,
@@ -12,30 +13,28 @@ class AniflixAppbar extends AppBar {
         )
       ]),
       actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-            color: Theme.of(ctx).primaryIconTheme.color,
-          ),
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {},
-            color: Theme.of(ctx).primaryIconTheme.color,
-          ),
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () {
-
-
-
-            },
-            color: Theme.of(ctx).primaryIconTheme.color,
-          ),
-          IconButton(
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {},
+          color: Theme.of(ctx).primaryIconTheme.color,
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {},
+          color: Theme.of(ctx).primaryIconTheme.color,
+        ),
+        IconButton(
+          icon: Icon(Icons.calendar_today),
+          onPressed: () {},
+          color: Theme.of(ctx).primaryIconTheme.color,
+        ),
+        IconButton(
             icon: Icon(Icons.person),
-            onPressed: () {},
-            color: Theme.of(ctx).primaryIconTheme.color,
-          ),
-
-        ]);
+            onPressed: () {
+              state.changePage(3);
+              ScreenManager.getInstance(state).setCurrentTab(3);
+            },
+            color: Theme.of(ctx).primaryIconTheme.color
+        ),
+      ]);
 }

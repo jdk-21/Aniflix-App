@@ -1,14 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:aniflix_app/Themes/Theme.dart';
+import 'package:aniflix_app/Themes/theme.dart';
 
 class ThemeManager {
   static ThemeManager instance;
   List<CustomTheme> Themes = new List<CustomTheme>();
   CustomTheme actualTheme;
+  int actualThemeIndex;
 
   ThemeManager();
 
-  static getInstance() {
+  static ThemeManager getInstance() {
     if (instance == null) {
       instance = ThemeManager();
       instance.addNewThemes([
@@ -44,8 +46,17 @@ class ThemeManager {
     return instance;
   }
 
+  List<DropdownMenuItem<int>> getThemeNames() {
+    List<DropdownMenuItem<int>> namelist = [];
+    for (int l = 0; l < Themes.length; l++) {
+      namelist.add(DropdownMenuItem(value: l, child: Text(Themes.elementAt(l).themeName)));
+    }
+    return namelist;
+  }
+
   void setActualTheme(int index) {
     this.actualTheme = Themes.elementAt(index);
+    this.actualThemeIndex = index;
   }
 
   void addNewTheme(CustomTheme i) {
@@ -61,4 +72,5 @@ class ThemeManager {
   ThemeData getActualThemeData() {
     return actualTheme.getThemeData();
   }
+
 }

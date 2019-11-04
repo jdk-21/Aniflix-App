@@ -47,8 +47,10 @@ class AnimeStream {
 
   static List<AnimeStream> getStreams(List<dynamic> json) {
     List<AnimeStream> streams = [];
-    for (var entry in json) {
-      streams.add(AnimeStream.fromJson(entry));
+    if(json != null){
+      for (var entry in json) {
+        streams.add(AnimeStream.fromJson(entry));
+      }
     }
     return streams;
   }

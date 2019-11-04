@@ -61,6 +61,7 @@ class CustomTheme {
         backgroundColor: this.screenBackgroundColor,
         accentIconTheme: IconThemeData(color: this.selectedIconColor),
         primaryIconTheme: IconThemeData(color: this.unselectedIconColor),
-        iconTheme: IconThemeData(color: this.chatButtonColor));
+        iconTheme: IconThemeData(color: this.chatButtonColor),
+        hintColor: this.textColor.withOpacity(0.65));
   }
 }
