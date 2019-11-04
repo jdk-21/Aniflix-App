@@ -24,7 +24,11 @@ class AniflixAppbar extends AppBar {
           ),
           IconButton(
             icon: Icon(Icons.calendar_today),
-            onPressed: () {},
+            onPressed: () {
+
+
+
+            },
             color: Theme.of(ctx).primaryIconTheme.color,
           ),
           IconButton(
