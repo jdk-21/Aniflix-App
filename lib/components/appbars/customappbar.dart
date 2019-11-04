@@ -25,7 +25,10 @@ class AniflixAppbar extends AppBar {
         ),
         IconButton(
           icon: Icon(Icons.calendar_today),
-          onPressed: () {},
+          onPressed: () {
+            state.changePage(10);
+            ScreenManager.getInstance(state).setCurrentTab(10);
+          },
           color: Theme.of(ctx).primaryIconTheme.color,
         ),
         IconButton(

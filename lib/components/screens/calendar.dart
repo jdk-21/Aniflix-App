@@ -1,24 +1,28 @@
 import 'package:aniflix_app/api/objects/CalendarShow.dart';
 import 'package:flutter/material.dart';
+import '../../main.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
 import '../../api/APIManager.dart';
+import 'package:aniflix_app/main.dart';
 
 class Calendar extends StatelessWidget {
+
+  MainWidgetState state;
+
   Future<List<CalendarShow>> calendarData;
 
-  List<SliderElement> monday;
-  List<SliderElement> tuesday;
-  List<SliderElement> wednesday;
-  List<SliderElement> thursday;
-  List<SliderElement> friday;
-  List<SliderElement> saturday;
-  List<SliderElement> sunday;
+  List<SliderElement> monday = [];
+  List<SliderElement> tuesday = [];
+  List<SliderElement> wednesday = [];
+  List<SliderElement> thursday= [];
+  List<SliderElement> friday= [];
+  List<SliderElement> saturday= [];
+  List<SliderElement> sunday= [];
 
-  Calendar() {
+  Calendar(this.state) {
     this.calendarData = APIManager.getCalendarData();
   }
-
 
   @override
   Widget build(BuildContext ctx) {
