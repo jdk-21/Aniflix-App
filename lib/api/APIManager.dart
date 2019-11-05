@@ -5,7 +5,7 @@ import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/News.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
-import 'package:aniflix_app/api/objects/RegisterResponse.dart';
+import 'package:aniflix_app/api/objects/SubEpisode.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
@@ -38,6 +38,18 @@ class APIManager {
       }
     }
     return elements;
+  }
+  static Future<List<SubEpisode>> getSubData() async {
+    List<SubEpisode> episodes = [];
+    var response = await _authGetRequest("abos/abos/0",login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        episodes.add(SubEpisode.fromJson(entry));
+      }
+    }
+    return episodes;
   }
 
   static Future<List<SliderElement>> getAirings() async {
@@ -156,5 +168,13 @@ class APIManager {
     };
     return http.post('https://www2.aniflix.tv/api/' + query,
         body: bodyObject, headers: headers);
+  }
+
+  static Future<http.Response> _authGetRequest(
+      String query, LoginResponse user) {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    return http.get('https://www2.aniflix.tv/api/' + query, headers: headers);
   }
 }
