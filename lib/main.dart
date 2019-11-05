@@ -4,15 +4,43 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
+import './components/screens/login.dart';
 
 void main() {
   ThemeManager manager = ThemeManager.getInstance();
   manager.setActualTheme(0);
-  runApp(MaterialApp(
-    title: 'Aniflix App',
-    home: MainWidget(),
-    theme: manager.getActualThemeData(),
-  ));
+  runApp(App());
+}
+
+
+class App extends StatefulWidget {
+  App({Key key,}) :
+
+        super(key: key);
+
+  @override
+  _AppState createState() => new _AppState();
+
+  static void setTheme(BuildContext context, int i) {
+    _AppState state = context.ancestorStateOfType(TypeMatcher<_AppState>());
+    var manager = ThemeManager.getInstance();
+    manager.setActualTheme(i);
+    state.setState(() {
+      state._theme = manager.getActualThemeData();
+    });
+  }
+}
+
+class _AppState extends State<App> {
+  ThemeData _theme = ThemeManager.getInstance().getActualThemeData();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Aniflix App',
+      home: MainWidget(),
+      theme: _theme,
+    );
+  }
 }
 
 class MainWidget extends StatefulWidget {
@@ -22,10 +50,12 @@ class MainWidget extends StatefulWidget {
 
 class MainWidgetState extends State<MainWidget> {
   final PageStorageBucket bucket = PageStorageBucket();
-  int index = 0;
+  StatelessWidget _screen;
+  int index;
 
-  changePage(int i) {
+  changePage(StatelessWidget screen, int i) {
     setState(() {
+      _screen = screen;
       index = i;
     });
   }
@@ -36,7 +66,7 @@ class MainWidgetState extends State<MainWidget> {
     if(APIManager.login != null){
       return Scaffold(
           appBar: AniflixAppbar(this, ctx),
-          body: ScreenManager.getInstance(this).getCurrentScreen(),
+          body: _screen,
           bottomNavigationBar: AniflixNavigationbar(this, index,ctx),
           floatingActionButton: (index == 0)
               ? FloatingActionButton(
@@ -49,7 +79,7 @@ class MainWidgetState extends State<MainWidget> {
           )
               : null);
     }else{
-      return Scaffold(body: ScreenManager.getInstance(this).getScreens()[4]);
+      return Scaffold(body: Login(this));
     }
 
   }

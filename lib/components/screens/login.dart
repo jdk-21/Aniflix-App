@@ -5,6 +5,7 @@ import 'package:aniflix_app/api/objects/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import './home.dart';
 
 class Login extends StatelessWidget {
   MainWidgetState state;
@@ -95,8 +96,7 @@ class Login extends StatelessWidget {
                       if(response.hasError()){
                         showErrorDialog(ctx,response.error);
                       }else{
-                        state.changePage(0);
-                        ScreenManager.getInstance(state).setCurrentTab(0);
+                        state.changePage(Home(),0);
                         resetTextController();
                       }
                     },
