@@ -1,3 +1,5 @@
+import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +7,17 @@ import '../screens/calendar.dart';
 import '../screens/settings.dart';
 
 class AniflixAppbar extends AppBar {
+
+  String avatar;
+
+  static getAvatar () async {
+    User user = await APIManager.getUser();
+    return user.avatar;
+  }
+
   AniflixAppbar(MainWidgetState state, BuildContext ctx)
-      : super(
+    :super(
+
       title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Image.asset(
           'assets/images/logo.png',
@@ -33,7 +44,7 @@ class AniflixAppbar extends AppBar {
           color: Theme.of(ctx).primaryIconTheme.color,
         ),
         IconButton(
-            icon: Icon(Icons.person),
+            icon: /*Icon(Icons.person),*/Image.asset(getAvatar()),
             onPressed: () {
               state.changePage(Settings(state),3);
             },
