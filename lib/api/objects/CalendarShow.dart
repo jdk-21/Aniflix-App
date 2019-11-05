@@ -16,4 +16,14 @@ class CalendarShow {
   factory CalendarShow.fromJson(Map<String, dynamic> json) {
     return CalendarShow(json["id"], json["show_id"], json["season"], json["day"], json["details"], json["created_at"], json["updated_at"], json["deleted_at"], Show.fromJson(json["show"]));
   }
+
+  static List<CalendarShow> getCalendarShows(List<dynamic> json) {
+    List<CalendarShow> calendarshows = [];
+    if(json != null){
+      for (var entry in json) {
+        calendarshows.add(CalendarShow.fromJson(entry));
+      }
+    }
+    return calendarshows;
+  }
 }

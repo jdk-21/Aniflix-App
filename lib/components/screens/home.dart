@@ -31,7 +31,7 @@ class Home extends StatelessWidget {
           return Container(
               color: Theme.of(ctx).backgroundColor,
               child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                HeadlineSlider("Weitersehen",ctx, snapshot.data.continues),
+                (snapshot.data.continues.length > 0)?HeadlineSlider("Weitersehen",ctx, snapshot.data.continues):Container(),
                 HeadlineSlider("Neue Folgen",ctx, snapshot.data.airings),
                 HeadlineSlider("Neu auf Aniflix",ctx, snapshot.data.newshows, aspectRatio: 200/300, size: 0.4,),
                 HeadlineSlider("Entdecken",ctx, snapshot.data.discover, aspectRatio: 200/300, size: 0.4,),

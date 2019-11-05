@@ -1,3 +1,4 @@
+import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
@@ -24,7 +25,7 @@ class ScreenManager {
 
 
   getScreens() {
-    return [Home(), SubBox(), AnimeList(), Settings(_state), Login(_state), Register(_state), Profil(), Verlauf(), Watchlist(), Favoriten()];
+    return [Home(), SubBox(), AnimeList(), Settings(_state), Login(_state), Register(_state), Profil(), Verlauf(), Watchlist(), Favoriten(), Calendar(_state)];
   }
 
   setCurrentTab(int i) {
