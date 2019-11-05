@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:aniflix_app/api/objects/CalendarShow.dart';
+import 'package:aniflix_app/api/objects/CalendarDay.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/News.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
@@ -27,14 +27,14 @@ class APIManager {
     return news;
   }
 
-  static Future<List<CalendarShow>> getCalendarData() async {
-    List<CalendarShow> elements = [];
+  static Future<List<CalendarDay>> getCalendarData() async {
+    List<CalendarDay> elements = [];
     var response = await _getRequest("airing");
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
-        elements.add(CalendarShow.fromJson(entry));
+        elements.add(CalendarDay.fromJson(entry));
       }
     }
     return elements;
