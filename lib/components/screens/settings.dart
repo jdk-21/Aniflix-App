@@ -3,6 +3,10 @@ import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
+import './profil.dart';
+import './verlauf.dart';
+import './watchlist.dart';
+import './favoriten.dart';
 
 class Settings extends StatelessWidget {
   MainWidgetState state;
@@ -18,8 +22,7 @@ class Settings extends StatelessWidget {
         children: [
           FlatButton(
             onPressed: () {
-              state.changePage(6);
-              ScreenManager.getInstance(state).setCurrentTab(6);
+              state.changePage(Profil(),6);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -33,8 +36,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(7);
-              ScreenManager.getInstance(state).setCurrentTab(7);
+              state.changePage(Verlauf(),7);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -48,8 +50,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(8);
-              ScreenManager.getInstance(state).setCurrentTab(8);
+              state.changePage(Watchlist(),8);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -63,8 +64,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(9);
-              ScreenManager.getInstance(state).setCurrentTab(9);
+              state.changePage(Favoriten(),9);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -93,7 +93,9 @@ class Settings extends StatelessWidget {
                         child: DropdownButton<int>(
                           style: TextStyle(color: Theme.of(ctx).textTheme.title.color,fontSize: 20),
                           items: manager.getThemeNames(),
-                          onChanged: (newValue) {manager.setActualTheme(newValue);},
+                          onChanged: (newValue) {
+                            App.setTheme(ctx, newValue);
+                            },
                           value: manager.actualThemeIndex,
                           hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
                         ))

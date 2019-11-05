@@ -95,8 +95,6 @@ class Register extends StatelessWidget {
                         BorderSide(color: Theme.of(ctx).textTheme.title.color),
                     child: Text("Registrieren"),
                     onPressed: () {
-                      state.changePage(0);
-                      ScreenManager.getInstance(state).setCurrentTab(0);
                       resetTextController();
                     },
                   )),
@@ -106,8 +104,6 @@ class Register extends StatelessWidget {
                   textColor: Theme.of(ctx).textTheme.title.color,
                   child: Text("Schon einen Account?"),
                   onPressed: () {
-                    state.changePage(4);
-                    ScreenManager.getInstance(state).setCurrentTab(4);
                     resetTextController();
                   },
                 ),

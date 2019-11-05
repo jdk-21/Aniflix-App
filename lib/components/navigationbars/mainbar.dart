@@ -13,44 +13,24 @@ import '../screens/login.dart';
 import '../screens/register.dart';
 import '../../main.dart';
 
-class ScreenManager {
-  static ScreenManager instance;
-  int _currentTab;
-  MainWidgetState _state;
-
-  ScreenManager(MainWidgetState state) {
-    _currentTab = 0;
-    _state = state;
-  }
-
-
-  getScreens() {
-    return [Home(), SubBox(), AnimeList(), Settings(_state), Login(_state), Register(_state), Profil(), Verlauf(), Watchlist(), Favoriten(), Calendar(_state)];
-  }
-
-  setCurrentTab(int i) {
-    this._currentTab = i;
-  }
-
-  getCurrentScreen() {
-    return getScreens()[_currentTab];
-  }
-
-  static ScreenManager getInstance(MainWidgetState state) {
-    if (instance == null) {
-      instance = ScreenManager(state);
-    }
-    return instance;
-  }
-}
-
 class AniflixNavigationbar extends BottomNav {
   AniflixNavigationbar(MainWidgetState state, int index, BuildContext ctx)
       : super(
           index: index,
           onTap: (i) {
-            state.changePage(i);
-            ScreenManager.getInstance(state).setCurrentTab(i);
+            switch(i){
+              case 0:
+                state.changePage(Home(),i);
+                break;
+              case 1:
+                state.changePage(SubBox(),i);
+                break;
+              case 2:
+                state.changePage(AnimeList(),i);
+                break;
+              default:
+                break;
+            }
           },
           items: getItems(),
           color: Theme.of(ctx).bottomAppBarTheme.color,
@@ -94,6 +74,7 @@ class AniflixNavState extends BottomNavState {
 
             return AniflixNavItem(
               key: ValueKey(b.label),
+              selected: selected,
               icon: b.icon,
               iconSize:
                   selected ? iconStyle.getSelectedSize() : iconStyle.getSize(),
@@ -132,6 +113,7 @@ class AniflixNavState extends BottomNavState {
 
 class AniflixNavItem extends BMNavItem {
   Key key;
+  bool selected;
 
   AniflixNavItem(
       {IconData icon,
@@ -140,7 +122,8 @@ class AniflixNavItem extends BMNavItem {
       void Function() onTap,
       Color color,
       TextStyle textStyle,
-      this.key})
+      this.key,
+      this.selected})
       : super(
             icon: icon,
             iconSize: iconSize,
@@ -156,8 +139,8 @@ class AniflixNavItem extends BMNavItem {
       child: Padding(
           padding: getPadding(),
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Icon(icon, size: iconSize, color: color),
-            label != null ? Text(label, style: textStyle) : Container()
+            Icon(icon, size: iconSize, color: (selected)?Theme.of(context).accentIconTheme.color : Theme.of(context).primaryIconTheme.color),
+            label != null ? Text(label, style: TextStyle(color: (selected)?Theme.of(context).accentIconTheme.color : Theme.of(context).primaryIconTheme.color)) : Container()
           ])),
       highlightColor: Theme.of(context).highlightColor,
       splashColor: Theme.of(context).splashColor,

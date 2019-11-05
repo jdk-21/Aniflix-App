@@ -42,6 +42,7 @@ class ThemeManager {
             textColor: Color.fromRGBO(0, 150, 255, 1),
             chatButtonColor: Color.fromRGBO(0, 150, 255, 1))
       ]);
+      instance.setActualTheme(0);
     }
     return instance;
   }

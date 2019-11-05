@@ -1,6 +1,8 @@
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
+import '../screens/calendar.dart';
+import '../screens/settings.dart';
 
 class AniflixAppbar extends AppBar {
   AniflixAppbar(MainWidgetState state, BuildContext ctx)
@@ -26,16 +28,14 @@ class AniflixAppbar extends AppBar {
         IconButton(
           icon: Icon(Icons.calendar_today),
           onPressed: () {
-            state.changePage(10);
-            ScreenManager.getInstance(state).setCurrentTab(10);
+            state.changePage(Calendar(state),10);
           },
           color: Theme.of(ctx).primaryIconTheme.color,
         ),
         IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              state.changePage(3);
-              ScreenManager.getInstance(state).setCurrentTab(3);
+              state.changePage(Settings(state),3);
             },
             color: Theme.of(ctx).primaryIconTheme.color
         ),
