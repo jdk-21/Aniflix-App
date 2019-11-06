@@ -3,7 +3,6 @@ import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './profil.dart';
 import './verlauf.dart';
@@ -25,7 +24,7 @@ class Settings extends StatelessWidget {
         children: [
           FlatButton(
             onPressed: () {
-              state.changePage(Profil(),6);
+              state.changePage(Profil(), 6);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -39,7 +38,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Verlauf(),7);
+              state.changePage(Verlauf(), 7);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -53,7 +52,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Watchlist(),8);
+              state.changePage(Watchlist(), 8);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -67,7 +66,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Favoriten(),9);
+              state.changePage(Favoriten(), 9);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -94,24 +93,52 @@ class Settings extends StatelessWidget {
                         data: Theme.of(ctx).copyWith(
                             canvasColor: Theme.of(ctx).backgroundColor),
                         child: DropdownButton<int>(
-                          style: TextStyle(color: Theme.of(ctx).textTheme.title.color,fontSize: 20),
+                          style: TextStyle(
+                              color: Theme.of(ctx).textTheme.title.color,
+                              fontSize: 20),
                           items: manager.getThemeNames(),
                           onChanged: (newValue) async {
                             App.setTheme(ctx, newValue);
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setInt("actualTheme", manager.actualThemeIndex);
-                            },
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setInt(
+                                "actualTheme", manager.actualThemeIndex);
+                          },
                           value: manager.actualThemeIndex,
-                          hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
+                          hint: Text(
+                            manager.actualTheme.getThemeName(),
+                            style: TextStyle(
+                                color: Theme.of(ctx).textTheme.title.color),
+                          ),
                         ))
                   ])),
           FlatButton(
-            onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove("access_token");
-              prefs.remove("token_type");
-              APIManager.login = null;
-              state.changePage(Login(state), 0);
+            onPressed: () {
+              showDialog(
+                  context: ctx,
+                  builder: (BuildContext ctx) {
+                    return AlertDialog(
+                      content: Text("Möchtest du dich wirklich ausloggen?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Nein"),
+                          onPressed: () {Navigator.of(ctx).pop();},
+                        ),
+                        FlatButton(
+                          child: Text("Ja"),
+                          onPressed: () async {
+                            Navigator.of(ctx).pop();
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.remove("access_token");
+                            prefs.remove("token_type");
+                            APIManager.login = null;
+                            state.changePage(Login(state), 0);
+                          },
+                        )
+                      ],
+                    );
+                  });
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
