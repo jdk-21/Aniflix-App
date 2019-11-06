@@ -118,14 +118,20 @@ class Settings extends StatelessWidget {
                   context: ctx,
                   builder: (BuildContext ctx) {
                     return AlertDialog(
-                      content: Text("Möchtest du dich wirklich ausloggen?"),
+                      backgroundColor: Theme.of(ctx).backgroundColor,
+                      contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                      content: Text("Wirklich ausloggen?"),
                       actions: <Widget>[
                         FlatButton(
-                          child: Text("Nein"),
-                          onPressed: () {Navigator.of(ctx).pop();},
+                          color: Colors.red,
+                          child: Text("Abbrechen", style: TextStyle(color: Colors.white),),
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
                         ),
                         FlatButton(
-                          child: Text("Ja"),
+                          color: Colors.green,
+                          child: Text("Ausloggen", style: TextStyle(color: Colors.white),),
                           onPressed: () async {
                             Navigator.of(ctx).pop();
                             SharedPreferences prefs =
