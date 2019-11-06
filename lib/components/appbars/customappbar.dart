@@ -8,16 +8,8 @@ import '../screens/settings.dart';
 
 class AniflixAppbar extends AppBar {
 
-  String avatar;
-
-  static getAvatar () async {
-    User user = await APIManager.getUser();
-    return user.avatar;
-  }
-
   AniflixAppbar(MainWidgetState state, BuildContext ctx)
-    :super(
-
+      : super(
       title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Image.asset(
           'assets/images/logo.png',
@@ -29,26 +21,77 @@ class AniflixAppbar extends AppBar {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () {},
-          color: Theme.of(ctx).primaryIconTheme.color,
+          color: Theme
+              .of(ctx)
+              .primaryIconTheme
+              .color,
         ),
         IconButton(
           icon: Icon(Icons.notifications),
           onPressed: () {},
-          color: Theme.of(ctx).primaryIconTheme.color,
+          color: Theme
+              .of(ctx)
+              .primaryIconTheme
+              .color,
         ),
         IconButton(
           icon: Icon(Icons.calendar_today),
           onPressed: () {
-            state.changePage(Calendar(state),10);
+            state.changePage(Calendar(state), 10);
           },
-          color: Theme.of(ctx).primaryIconTheme.color,
+          color: Theme
+              .of(ctx)
+              .primaryIconTheme
+              .color,
         ),
-        IconButton(
-            icon: /*Icon(Icons.person),*/Image.asset(getAvatar()),
+        FutureBuilder<User>(
+          future: APIManager.getUser(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return IconButton(
+                  icon: new Container(
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image:  NetworkImage(
+                                "https://www2.aniflix.tv/storage/" + snapshot.data.avatar,
+                              ),
+                          )
+                      )),
+
+                  onPressed: () {
+                    state.changePage(Settings(state), 3);
+                  },
+                  color: Theme
+                      .of(ctx)
+                      .primaryIconTheme
+                      .color);
+            } else if (snapshot.hasError) {
+              return IconButton(
+                  icon: Icon(Icons.person),
+                  onPressed: () {
+                    state.changePage(Settings(state), 3);
+                  },
+                  color: Theme.of(ctx).primaryIconTheme
+                      .
+                  color
+              );
+            }
+
+            // By default, show a loading spinner.
+            return IconButton(
+            icon: Icon(Icons.person),
             onPressed: () {
-              state.changePage(Settings(state),3);
+            state.changePage(Settings(state), 3);
             },
-            color: Theme.of(ctx).primaryIconTheme.color
+            color: Theme.of(ctx).primaryIconTheme
+            .
+            color
+            );
+
+          },
         ),
+
       ]);
 }
