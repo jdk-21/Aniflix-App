@@ -1,12 +1,15 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/navigationbars/mainbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './profil.dart';
 import './verlauf.dart';
 import './watchlist.dart';
 import './favoriten.dart';
+import './login.dart';
 
 class Settings extends StatelessWidget {
   MainWidgetState state;
@@ -93,28 +96,33 @@ class Settings extends StatelessWidget {
                         child: DropdownButton<int>(
                           style: TextStyle(color: Theme.of(ctx).textTheme.title.color,fontSize: 20),
                           items: manager.getThemeNames(),
-                          onChanged: (newValue) {
+                          onChanged: (newValue) async {
                             App.setTheme(ctx, newValue);
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setInt("actualTheme", manager.actualThemeIndex);
                             },
                           value: manager.actualThemeIndex,
                           hint: Text(manager.actualTheme.getThemeName(), style: TextStyle(color: Theme.of(ctx).textTheme.title.color),),
                         ))
                   ])),
-          /*FlatButton(
-            onPressed: () {
-              state.changePage(4);
-              ScreenManager.getInstance(state).setCurrentTab(4);
+          FlatButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove("access_token");
+              prefs.remove("token_type");
+              APIManager.login = null;
+              state.changePage(Login(state), 0);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Login/Logout",
+                child: Text("Logout",
                     style: TextStyle(
                         color: Theme.of(ctx).textTheme.title.color,
                         fontSize: 35,
                         fontWeight: FontWeight.normal))),
             color: Theme.of(ctx).backgroundColor,
-          ),*/
+          ),
         ],
       ),
     );
