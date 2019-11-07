@@ -1,22 +1,25 @@
+import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 import './components/screens/login.dart';
 
-void main() {
+void main() async {
   ThemeManager manager = ThemeManager.getInstance();
-  manager.setActualTheme(0);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  manager.setActualTheme(prefs.getInt("actualTheme") ?? 0);
   runApp(App());
 }
 
-
 class App extends StatefulWidget {
-  App({Key key,}) :
-
-        super(key: key);
+  App({
+    Key key,
+  }) : super(key: key);
 
   @override
   _AppState createState() => new _AppState();
@@ -33,6 +36,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   ThemeData _theme = ThemeManager.getInstance().getActualThemeData();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,6 +57,12 @@ class MainWidgetState extends State<MainWidget> {
   StatelessWidget _screen;
   int index;
 
+  Future<SharedPreferences> sharedPreferencesData;
+
+  MainWidgetState() {
+    this.sharedPreferencesData = SharedPreferences.getInstance();
+  }
+
   changePage(StatelessWidget screen, int i) {
     setState(() {
       _screen = screen;
@@ -63,25 +73,55 @@ class MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext ctx) {
     var bar = AniflixNavigationbar(this, index, ctx);
-    if(APIManager.login != null){
+    if (APIManager.login == null) {
+      return FutureBuilder<SharedPreferences>(
+          future: sharedPreferencesData,
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              if (snapshot.data.getString("access_token") != null &&
+                  snapshot.data.getString("token_type") != null) {
+                APIManager.login = LoginResponse(
+                    snapshot.data.getString("access_token"),
+                    snapshot.data.getString("token_type"),
+                    null);
+              }
+            }
+            if (APIManager.login != null) {
+              _screen = Home(this);
+              return Scaffold(
+                  appBar: AniflixAppbar(this, ctx),
+                  body: _screen,
+                  bottomNavigationBar: AniflixNavigationbar(this, index, ctx),
+                  floatingActionButton: (index == 0)
+                      ? FloatingActionButton(
+                          backgroundColor: Theme.of(ctx).iconTheme.color,
+                          onPressed: showChat,
+                          child: Icon(
+                            Icons.chat,
+                            color: Colors.white,
+                          ),
+                        )
+                      : null);
+            } else {
+              return Scaffold(body: Login(this));
+            }
+          });
+    } else {
       return Scaffold(
           appBar: AniflixAppbar(this, ctx),
           body: _screen,
-          bottomNavigationBar: AniflixNavigationbar(this, index,ctx),
+          bottomNavigationBar: AniflixNavigationbar(this, index, ctx),
           floatingActionButton: (index == 0)
               ? FloatingActionButton(
-            backgroundColor: Theme.of(ctx).iconTheme.color,
-            onPressed: showChat,
-            child: Icon(
-              Icons.chat,
-              color: Colors.white,
-            ),
-          )
+                  backgroundColor: Theme.of(ctx).iconTheme.color,
+                  onPressed: showChat,
+                  child: Icon(
+                    Icons.chat,
+                    color: Colors.white,
+                  ),
+                )
               : null);
-    }else{
-      return Scaffold(body: Login(this));
     }
-
   }
 
   showChat() {}

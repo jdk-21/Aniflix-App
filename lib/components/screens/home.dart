@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
 import '../../api/APIManager.dart';
-import '../navigationbars/mainbar.dart';
-import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import '../../main.dart';
 
 class Homedata{
   List<SliderElement> continues;
@@ -16,8 +15,8 @@ class Homedata{
 
 class Home extends StatelessWidget {
   Future<Homedata> homedata;
-  Home(){
-    this.homedata = APIManager.getHomeData();
+  Home(MainWidgetState state){
+    this.homedata = APIManager.getHomeData(state);
   }
 
   @override

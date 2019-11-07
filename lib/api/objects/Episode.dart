@@ -32,6 +32,7 @@ class Episode {
       this.season);
 
   factory Episode.fromJson(Map<String, dynamic> json) {
+    if(json == null) return null;
     return Episode(
         json["id"],
         json["name"],
@@ -45,5 +46,16 @@ class Episode {
         json["hasReports"],
         AnimeStream.getStreams(json["streams"]),
         Season.fromJson(json["season"]));
+  }
+
+  static List<Episode> getEpisodes(List<dynamic> json) {
+    List<Episode> episodes = [];
+    if(json != null){
+      for (var entry in json) {
+        var episode = Episode.fromJson(entry);
+        if (episode != null) episodes.add(episode);
+      }
+    }
+    return episodes;
   }
 }
