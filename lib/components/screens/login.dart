@@ -95,7 +95,7 @@ class Login extends StatelessWidget {
                       if(response.hasError()){
                         showErrorDialog(ctx,response.error);
                       }else{
-                        state.changePage(Home(),0);
+                        state.changePage(Home(state),0);
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setString("access_token", response.access_token);
                         prefs.setString("token_type", response.token_type);

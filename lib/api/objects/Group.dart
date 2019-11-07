@@ -6,7 +6,7 @@ class Group {
   String created_at;
   String updated_at;
   String deleted_at;
-  Pivot pivot;
+  UserPivot pivot;
 
   Group(this.id, this.name, this.created_at, this.updated_at, this.deleted_at,
       this.pivot);
@@ -18,7 +18,7 @@ class Group {
         json["created_at"],
         json["updated_at"],
         json["deleted_at"],
-        Pivot.fromJson(json["pivot"]));
+        UserPivot.fromJson(json["pivot"]));
   }
 
   static List<Group> getGroups(List<dynamic> json) {

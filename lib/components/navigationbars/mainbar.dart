@@ -20,7 +20,7 @@ class AniflixNavigationbar extends BottomNav {
           onTap: (i) {
             switch(i){
               case 0:
-                state.changePage(Home(),i);
+                state.changePage(Home(state),i);
                 break;
               case 1:
                 state.changePage(SubBox(),i);
