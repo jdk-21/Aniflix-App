@@ -96,7 +96,7 @@ class Login extends StatelessWidget {
                       if(response.hasError()){
                         showErrorDialog(ctx,response.error);
                       }else{
-                        state.changePage(Home(),0);
+                        state.changePage(Home(state),0);
                         resetTextController();
                       }
                     },

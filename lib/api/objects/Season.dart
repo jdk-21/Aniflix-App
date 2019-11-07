@@ -15,6 +15,7 @@ class Season {
       this.updated_at, this.deleted_at, this.length, this.show);
 
   factory Season.fromJson(Map<String, dynamic> json) {
+    if(json == null) return null;
     return Season(
         json["id"],
         json["number"],

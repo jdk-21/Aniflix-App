@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/api/objects/CalendarDay.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/News.dart';
@@ -8,7 +9,9 @@ import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/api/objects/RegisterResponse.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
+import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
+import './objects/Anime.dart';
 import 'package:http/http.dart' as http;
 
 class APIManager {
@@ -63,7 +66,7 @@ class APIManager {
     return airings;
   }
 
-  static Future<List<SliderElement>> getNewShows() async {
+  static Future<List<SliderElement>> getNewShows(MainWidgetState state) async {
     List<SliderElement> newshows = [];
     var response = await _getRequest("show/new/0");
 
@@ -73,7 +76,11 @@ class APIManager {
         var show = Show.fromJson(entry);
         newshows.add(SliderElement(
             name: show.name,
-            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait));
+            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
+          onTap: () {
+            state.changePage(AnimeScreen(show.url), 10);
+          },
+        ));
       }
     }
 
@@ -95,6 +102,17 @@ class APIManager {
     }
 
     return discover;
+  }
+  static Future<Anime> getAnime(String name) async {
+    Anime anime;
+    var response = await _authGetRequest("show/"+name,login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      anime = Anime.fromJson(json);
+    }
+
+    return anime;
   }
 
   static Future<List<SliderElement>> getContinue() async {
@@ -120,10 +138,10 @@ class APIManager {
     return continues;
   }
 
-  static Future<Homedata> getHomeData() async {
+  static Future<Homedata> getHomeData(MainWidgetState state) async {
     var continues = await getContinue();
     var airings = await getAirings();
-    var newShows = await getNewShows();
+    var newShows = await getNewShows(state);
     var discover = await getDiscover();
     return Homedata(continues,airings, newShows, discover);
   }
@@ -156,5 +174,13 @@ class APIManager {
     };
     return http.post('https://www2.aniflix.tv/api/' + query,
         body: bodyObject, headers: headers);
+  }
+
+  static Future<http.Response> _authGetRequest(
+      String query, LoginResponse user) {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    return http.get('https://www2.aniflix.tv/api/' + query, headers: headers);
   }
 }
