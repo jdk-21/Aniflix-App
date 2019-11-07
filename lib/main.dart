@@ -87,7 +87,7 @@ class MainWidgetState extends State<MainWidget> {
               }
             }
             if (APIManager.login != null) {
-              _screen = Home();
+              _screen = Home(this);
               return Scaffold(
                   appBar: AniflixAppbar(this, ctx),
                   body: _screen,
