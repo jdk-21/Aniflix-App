@@ -29,13 +29,16 @@ class AnimeScreen extends StatelessWidget {
                   Row(children: [
                     Image.network("https://www2.aniflix.tv/storage/"+anime.cover_portrait,width: 100,height: 150,),
                     Column(children: [
+                      //Flexible(child:
                       Text(anime.name,style: TextStyle(
                         color: Theme.of(ctx).textTheme.title.color,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        ),
-                        overflow: TextOverflow.ellipsis
                       ),
+                          overflow: TextOverflow.ellipsis
+                      ),
+                      //),
+
                       Text("Score: " + anime.rating,style: TextStyle(
                         color: Theme.of(ctx).textTheme.title.color,
                         fontSize: 20,

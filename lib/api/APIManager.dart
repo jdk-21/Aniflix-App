@@ -87,7 +87,7 @@ class APIManager {
     return newshows;
   }
 
-  static Future<List<SliderElement>> getDiscover() async {
+  static Future<List<SliderElement>> getDiscover(MainWidgetState state) async {
     List<SliderElement> discover = [];
     var response = await _getRequest("show/discover/0");
 
@@ -97,7 +97,10 @@ class APIManager {
         var show = Show.fromJson(entry);
         discover.add(SliderElement(
             name: show.name,
-            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait));
+            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
+          onTap: () {
+            state.changePage(AnimeScreen(show.url), 10);
+          },));
       }
     }
 
@@ -142,7 +145,7 @@ class APIManager {
     var continues = await getContinue();
     var airings = await getAirings();
     var newShows = await getNewShows(state);
-    var discover = await getDiscover();
+    var discover = await getDiscover(state);
     return Homedata(continues,airings, newShows, discover);
   }
 
