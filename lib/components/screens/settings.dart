@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,9 @@ class Settings extends StatelessWidget {
       color: Theme.of(ctx).backgroundColor,
       child: ListView(
         children: [
+          FlatButton(onPressed: (){
+            state.changePage(EpisodeScreen(state), 6);
+          },child: Text("Episode"),),
           FlatButton(
             onPressed: () {
               state.changePage(Profil(), 6);
