@@ -1,11 +1,10 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
-import 'package:aniflix_app/components/navigationbars/mainbar.dart';
-import 'package:aniflix_app/api/objects/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatelessWidget {
   MainWidgetState state;
@@ -17,7 +16,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext ctx) {
-    bool angemeldetBleiben = false;
+    //bool angemeldetBleiben = false;
     return new Container(
       color: Theme.of(ctx).backgroundColor,
       child: Padding(
@@ -63,7 +62,7 @@ class Login extends StatelessWidget {
                           borderSide:
                               BorderSide(color: Theme.of(ctx).hintColor)))),
               SizedBox(height: 30),
-              Row(
+              /*Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Theme(
@@ -83,7 +82,7 @@ class Login extends StatelessWidget {
                           TextStyle(color: Theme.of(ctx).textTheme.title.color),
                     )
                   ]),
-              SizedBox(height: 15),
+              SizedBox(height: 15),*/
               Align(
                   alignment: Alignment.center,
                   child: OutlineButton(
@@ -96,7 +95,10 @@ class Login extends StatelessWidget {
                       if(response.hasError()){
                         showErrorDialog(ctx,response.error);
                       }else{
-                        state.changePage(Home(state),0);
+                        state.changePage(Home(),0);
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setString("access_token", response.access_token);
+                        prefs.setString("token_type", response.token_type);
                         resetTextController();
                       }
                     },
