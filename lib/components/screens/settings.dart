@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
