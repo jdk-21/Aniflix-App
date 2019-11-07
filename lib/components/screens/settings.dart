@@ -23,9 +23,6 @@ class Settings extends StatelessWidget {
       color: Theme.of(ctx).backgroundColor,
       child: ListView(
         children: [
-          FlatButton(onPressed: (){
-            state.changePage(EpisodeScreen(state), 6);
-          },child: Text("Episode"),),
           FlatButton(
             onPressed: () {
               state.changePage(Profil(), 6);
