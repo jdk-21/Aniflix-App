@@ -6,7 +6,7 @@ import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/News.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
-import 'package:aniflix_app/api/objects/RegisterResponse.dart';
+import 'package:aniflix_app/api/objects/SubEpisode.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
@@ -41,6 +41,18 @@ class APIManager {
       }
     }
     return elements;
+  }
+  static Future<List<SubEpisode>> getSubData() async {
+    List<SubEpisode> episodes = [];
+    var response = await _authGetRequest("abos/abos/0",login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        episodes.add(SubEpisode.fromJson(entry));
+      }
+    }
+    return episodes;
   }
 
   static Future<List<SliderElement>> getAirings() async {
