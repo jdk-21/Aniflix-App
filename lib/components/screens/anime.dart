@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../api/objects/Anime.dart';
+import '../../api/objects/anime/Anime.dart';
 import '../../api/APIManager.dart';
 
 class AnimeScreen extends StatelessWidget {

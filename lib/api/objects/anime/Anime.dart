@@ -1,7 +1,7 @@
-import './Genre.dart';
-import './AnimeSeason.dart';
-import './Vote.dart';
-import './Airing.dart';
+import 'Genre.dart';
+import 'AnimeSeason.dart';
+import 'Vote.dart';
+import '../Airing.dart';
 
 class Anime {
   int id;

@@ -30,6 +30,7 @@ class AnimeStream {
       this.user);
 
   factory AnimeStream.fromJson(Map<String, dynamic> json) {
+    if(json == null) return null;
     return AnimeStream(
         json["id"],
         json["streamable_type"],

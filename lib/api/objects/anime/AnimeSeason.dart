@@ -1,4 +1,4 @@
-import './Episode.dart';
+import '../Episode.dart';
 class AnimeSeason {
   int id;
   int number;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../api/APIManager.dart';
-import '../../api/objects/SubEpisode.dart';
+import '../../api/objects/subbox/SubEpisode.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
 

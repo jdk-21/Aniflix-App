@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/main.dart';
-import 'package:aniflix_app/api/objects/CalendarDay.dart';
+import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
-import 'package:aniflix_app/api/objects/News.dart';
+import 'package:aniflix_app/api/objects/news/News.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
-import 'package:aniflix_app/api/objects/SubEpisode.dart';
+import 'package:aniflix_app/api/objects/subbox/SubEpisode.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
-import './objects/Anime.dart';
+import 'objects/anime/Anime.dart';
 import 'package:http/http.dart' as http;
 
 class APIManager {
@@ -55,7 +57,7 @@ class APIManager {
     return episodes;
   }
 
-  static Future<List<SliderElement>> getAirings() async {
+  static Future<List<SliderElement>> getAirings(MainWidgetState state) async {
     List<SliderElement> airings = [];
     var response = await _getRequest("show/airing/0");
 
@@ -71,7 +73,10 @@ class APIManager {
                 ep.number.toString(),
             description: ep.updated_at,
             image: "https://www2.aniflix.tv/storage/" +
-                ep.season.show.cover_landscape));
+                ep.season.show.cover_landscape,
+            onTap: () {
+              state.changePage(EpisodeScreen(state,ep.season.show.url,ep.season.number,ep.number), 10);
+            }));
       }
     }
 
@@ -129,8 +134,19 @@ class APIManager {
 
     return anime;
   }
+  static Future<EpisodeInfo> getEpisode(String name,int season, int number) async {
+    EpisodeInfo episode;
+    var response = await _authGetRequest("episode/show/"+name+"/season/"+season.toString()+"/episode/"+number.toString(),login);
 
-  static Future<List<SliderElement>> getContinue() async {
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      episode = EpisodeInfo.fromJson(json);
+    }
+
+    return episode;
+  }
+
+  static Future<List<SliderElement>> getContinue(MainWidgetState state) async {
     List<SliderElement> continues = [];
     var response = await _authPostRequest("show/continue", login);
 
@@ -146,7 +162,10 @@ class APIManager {
                 ep.number.toString(),
             description: ep.updated_at,
             image: "https://www2.aniflix.tv/storage/" +
-                ep.season.show.cover_landscape));
+                ep.season.show.cover_landscape,
+            onTap: () {
+              state.changePage(EpisodeScreen(state,ep.season.show.url,ep.season.number,ep.number), 10);
+            }));
       }
     }
 
@@ -154,8 +173,8 @@ class APIManager {
   }
 
   static Future<Homedata> getHomeData(MainWidgetState state) async {
-    var continues = await getContinue();
-    var airings = await getAirings();
+    var continues = await getContinue(state);
+    var airings = await getAirings(state);
     var newShows = await getNewShows(state);
     var discover = await getDiscover(state);
     return Homedata(continues,airings, newShows, discover);

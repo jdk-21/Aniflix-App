@@ -1,4 +1,4 @@
-import './Stream.dart';
+import '../Stream.dart';
 class SubEpisode{
   int id;
   String name;
