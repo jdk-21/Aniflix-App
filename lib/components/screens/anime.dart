@@ -43,13 +43,14 @@ class AnimeScreen extends StatelessWidget {
                               width: 100,
                               height: 150,
                             ),
-                              Column(
+                            Expanded(
+                              child: Column(
                                 children: [
                                   Text(
                                     anime.name,
                                     style: TextStyle(
                                       color:
-                                          Theme.of(ctx).textTheme.title.color,
+                                      Theme.of(ctx).textTheme.title.color,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
@@ -60,7 +61,7 @@ class AnimeScreen extends StatelessWidget {
                                     "Score: " + anime.rating,
                                     style: TextStyle(
                                       color:
-                                          Theme.of(ctx).textTheme.title.color,
+                                      Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -72,7 +73,7 @@ class AnimeScreen extends StatelessWidget {
                                             : "Not Airing"),
                                     style: TextStyle(
                                       color:
-                                          Theme.of(ctx).textTheme.title.color,
+                                      Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -81,13 +82,14 @@ class AnimeScreen extends StatelessWidget {
                                     "Episoden: " + episodeCount.toString(),
                                     style: TextStyle(
                                       color:
-                                          Theme.of(ctx).textTheme.title.color,
+                                      Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
                                   )
                                 ],
                               ),
+                            )
                           ],
                         ),
                         Container(
