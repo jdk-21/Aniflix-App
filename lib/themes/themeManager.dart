@@ -50,7 +50,8 @@ class ThemeManager {
   List<DropdownMenuItem<int>> getThemeNames() {
     List<DropdownMenuItem<int>> namelist = [];
     for (int l = 0; l < Themes.length; l++) {
-      namelist.add(DropdownMenuItem(value: l, child: Text(Themes.elementAt(l).themeName)));
+      namelist.add(DropdownMenuItem(
+          value: l, child: Text(Themes.elementAt(l).themeName)));
     }
     return namelist;
   }
@@ -73,5 +74,4 @@ class ThemeManager {
   ThemeData getActualThemeData() {
     return actualTheme.getThemeData();
   }
-
 }

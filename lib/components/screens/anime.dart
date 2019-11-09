@@ -1,81 +1,230 @@
+import 'package:aniflix_app/api/objects/AnimeSeason.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../api/objects/Anime.dart';
 import '../../api/APIManager.dart';
+import 'package:expandable/expandable.dart';
+import 'package:aniflix_app/api/objects/Episode.dart';
+
 
 class AnimeScreen extends StatelessWidget {
   Future<Anime> anime;
-  AnimeScreen(String name){
+
+  AnimeScreen(String name) {
     this.anime = APIManager.getAnime(name);
   }
 
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      key: Key("anime_screen"),
-      child: FutureBuilder<Anime>(
-        future: anime,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var anime = snapshot.data;
-            var episodeCount = 0;
-            if(anime.seasons != null){
-              for(var season in anime.seasons){
-                episodeCount += season.length;
+        key: Key("anime_screen"),
+        child: FutureBuilder<Anime>(
+          future: anime,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var anime = snapshot.data;
+              var episodeCount = 0;
+              if (anime.seasons != null) {
+                for (var season in anime.seasons) {
+                  episodeCount += season.length;
+                }
               }
+              int actualSeason = 0;
+              return Container(
+                  color: Theme.of(ctx).backgroundColor,
+                  child: ListView(
+                      padding: EdgeInsets.only(top: 10, left: 5),
+                      children: [
+                        Row(
+                          children: [
+                            Image.network(
+                              "https://www2.aniflix.tv/storage/" +
+                                  anime.cover_portrait,
+                              width: 100,
+                              height: 150,
+                            ),
+                              Column(
+                                children: [
+                                  Text(
+                                    anime.name,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    "Score: " + anime.rating,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Text(
+                                    "Status: " +
+                                        ((anime.airing != null)
+                                            ? "Airing"
+                                            : "Not Airing"),
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Text(
+                                    "Episoden: " + episodeCount.toString(),
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  )
+                                ],
+                              ),
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: ExpandablePanel(
+                            header: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Beschreibung",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .title
+                                          .color,
+                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                )),
+                            headerAlignment:
+                                ExpandablePanelHeaderAlignment.center,
+                            collapsed: Text(
+                              anime.description,
+                              maxLines: 5,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).textTheme.title.color,
+                                  fontSize: 15),
+                            ),
+                            expanded: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  anime.description,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .title
+                                          .color,
+                                      fontSize: 15),
+                                  softWrap: true,
+                                )),
+                            tapHeaderToExpand: true,
+                            hasIcon: true,
+                            iconColor: Theme.of(ctx).primaryIconTheme.color,
+                            tapBodyToCollapse: true,
+                          ),
+                        ),
+                        Container(
+                            padding: EdgeInsets.only(top: 10, right: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                OutlineButton(
+                                  onPressed: () {},
+                                  child: Text(anime.subscribed.contains("true")
+                                      ? "Deabonnieren"
+                                      : "Abonnieren"),
+                                  textColor: anime.subscribed.contains("true")
+                                      ? Theme.of(ctx).primaryIconTheme.color
+                                      : Theme.of(ctx).accentIconTheme.color,
+                                  borderSide: BorderSide(
+                                      color: anime.subscribed.contains("true")
+                                          ? Theme.of(ctx).primaryIconTheme.color
+                                          : Theme.of(ctx)
+                                              .accentIconTheme
+                                              .color),
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(anime.watchlist.contains("true")
+                                        ? Icons.playlist_add_check
+                                        : Icons.playlist_add),
+                                    color: anime.favorite.contains("false")
+                                        ? Theme.of(ctx).primaryIconTheme.color
+                                        : Theme.of(ctx).accentIconTheme.color),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                        anime.favorite.contains("true")
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: anime.favorite.contains("false")
+                                            ? Theme.of(ctx)
+                                                .primaryIconTheme
+                                                .color
+                                            : Theme.of(ctx)
+                                                .accentIconTheme
+                                                .color)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.assessment,
+                                      color:
+                                          Theme.of(ctx).primaryIconTheme.color,
+                                    )),
+                                Theme(
+                                    data: Theme.of(ctx).copyWith(
+                                        canvasColor:
+                                            Theme.of(ctx).backgroundColor),
+                                    child: DropdownButton<int>(
+                                      style: TextStyle(
+                                          color: Theme.of(ctx)
+                                              .textTheme
+                                              .title
+                                              .color,
+                                          fontSize: 15),
+                                      items: GetSeasonsAsDropdownList(
+                                              anime.seasonCount, anime.seasons)
+                                          .getItems(),
+                                      onChanged: (newValue) {
+                                        actualSeason = newValue;
+                                      },
+                                      value: (actualSeason == null)
+                                          ? null
+                                          : actualSeason,
+                                      hint: Text(
+                                        "Seasons",
+                                        style: TextStyle(
+                                            color: Theme.of(ctx)
+                                                .textTheme
+                                                .title
+                                                .color),
+                                      ),
+                                    ))
+                              ],
+                            )),
+                      ]));
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
             }
-            return Container(
-                color: Theme.of(ctx).backgroundColor,
-                child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                  Row(children: [
-                    Image.network("https://www2.aniflix.tv/storage/"+anime.cover_portrait,width: 100,height: 150,),
-                    Column(children: [
-                      //Flexible(child:
-                      Text(anime.name,style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                          overflow: TextOverflow.ellipsis
-                      ),
-                      //),
-
-                      Text("Score: " + anime.rating,style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 20,
-                      ),
-                        textAlign: TextAlign.left,),
-                      Text("Status: " + ((anime.airing != null) ? "Airing":"Not Airing"),style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 20,
-                      ),
-                        textAlign: TextAlign.left,),
-                      Text("Episoden: " + episodeCount.toString(),style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 20,
-                      ),
-                        textAlign: TextAlign.left,)
-                    ],)
-                  ],),
-                     Text(anime.description,overflow: TextOverflow.clip,style: TextStyle(
-                      color: Theme.of(ctx).textTheme.title.color,
-                      fontSize: 20,
-                    ),),
-
-                ]));
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          // By default, show a loading spinner.
-          return CircularProgressIndicator();
-        },
-      )
-    );
-
+            // By default, show a loading spinner.
+            return CircularProgressIndicator();
+          },
+        ));
   }
 }
 
-class AnimeInfo extends Container{
+class AnimeInfo extends Container {
   Anime anime;
+
   AnimeInfo(this.anime);
 
   @override
@@ -85,8 +234,7 @@ class AnimeInfo extends Container{
   }
 }
 
-class AnimeDescription extends Container{
-
+class AnimeDescription extends Container {
   String description;
 
   AnimeDescription(this.description);
@@ -96,5 +244,22 @@ class AnimeDescription extends Container{
     // TODO: implement build
     return super.build(context);
   }
+}
 
+class GetSeasonsAsDropdownList {
+  int seasonCount;
+  List<AnimeSeason> seasons;
+
+  GetSeasonsAsDropdownList(this.seasonCount, this.seasons);
+
+  List<DropdownMenuItem<int>> getItems() {
+    List<DropdownMenuItem<int>> namelist = [];
+    for (int l = 0; l < seasonCount; l++) {
+      namelist.add(DropdownMenuItem(
+          value: l,
+          child:
+              Text("Season " + (seasons.elementAt(l).number).toString())));
+    }
+    return namelist;
+  }
 }
