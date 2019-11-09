@@ -213,6 +213,9 @@ class AnimeScreen extends StatelessWidget {
                                     ))
                               ],
                             )),
+                        Column(
+                            children: EpisodeList().getEpisodesAsList(ctx,
+                                actualSeason == null ? null : anime.seasons.elementAt(actualSeason).episodes))
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -263,5 +266,66 @@ class GetSeasonsAsDropdownList {
               Text("Season " + (seasons.elementAt(l).number).toString())));
     }
     return namelist;
+  }
+}
+
+class EpisodeList extends Container {
+  EpisodeList() : super();
+
+  List<Widget> getEpisodesAsList(BuildContext ctx, List<Episode> episodes) {
+    if(episodes == null){
+      return [];
+    }
+    List<Widget> episodeList = [
+      Container(
+        padding: EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text("Episodes",
+                style: TextStyle(
+                    color: Theme.of(ctx).textTheme.title.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
+            Icon(
+              Icons.thumbs_up_down,
+              color: Theme.of(ctx).primaryIconTheme.color,size: 30,
+            )
+          ],
+        ),
+      )
+    ];
+    for (int v = 0; v < episodes.length; v++) {
+      var actualEpisode = episodes.elementAt(v);
+      episodeList.add(Container(
+          decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(
+                      width: 1,
+                      color: Theme.of(ctx).hintColor,
+                      style: BorderStyle.solid))),
+          child: FlatButton(padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                    actualEpisode.number.toString() + ". " + actualEpisode.name,
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.title.color,
+                        fontSize: 15,fontWeight: FontWeight.normal)),
+                Text(
+                    (double.parse(actualEpisode.avgVotes) * 100)
+                        .round()
+                        .toString() +
+                        "%",
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.title.color,
+                        fontSize: 20, fontWeight: FontWeight.normal))
+              ],
+            ),
+            onPressed: () {},)
+      ));
+    }
+    return episodeList;
   }
 }
