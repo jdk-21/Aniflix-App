@@ -90,7 +90,7 @@ class APIManager {
             name: show.name,
             image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: () {
-            state.changePage(AnimeScreen(show.url), 10);
+            state.changePage(AnimeScreen(show.url, state), 10);
           },
         ));
       }
@@ -111,7 +111,7 @@ class APIManager {
             name: show.name,
             image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: () {
-            state.changePage(AnimeScreen(show.url), 10);
+            state.changePage(AnimeScreen(show.url, state), 10);
           },));
       }
     }

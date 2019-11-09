@@ -1,4 +1,6 @@
 import 'package:aniflix_app/api/objects/AnimeSeason.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
+import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../api/objects/Anime.dart';
@@ -7,10 +9,28 @@ import 'package:expandable/expandable.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
 
 
-class AnimeScreen extends StatelessWidget {
-  Future<Anime> anime;
+class AnimeScreen extends StatefulWidget {
+  var name;
+  MainWidgetState state;
 
-  AnimeScreen(String name) {
+  AnimeScreen(this.name, this.state);
+
+  @override
+  AnimeScreenState createState() => AnimeScreenState(name, state);
+}
+
+class AnimeScreenState extends State<AnimeScreen>{
+  MainWidgetState state;
+  Future<Anime> anime;
+  String _isSubscribed;
+
+  toggleSubButton(String isSubscribed){
+    setState(() {
+      _isSubscribed = isSubscribed;
+    });
+  }
+
+  AnimeScreenState(String name, this.state) {
     this.anime = APIManager.getAnime(name);
   }
 
@@ -140,7 +160,7 @@ class AnimeScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 OutlineButton(
-                                  onPressed: () {},
+                                  onPressed: () {anime.subscribed.contains("true") ? toggleSubButton("false") : toggleSubButton("true");},
                                   child: Text(anime.subscribed.contains("true")
                                       ? "Deabonnieren"
                                       : "Abonnieren"),
@@ -214,7 +234,7 @@ class AnimeScreen extends StatelessWidget {
                               ],
                             )),
                         Column(
-                            children: EpisodeList().getEpisodesAsList(ctx,
+                            children: EpisodeList().getEpisodesAsList(ctx, state,
                                 actualSeason == null ? null : anime.seasons.elementAt(actualSeason).episodes))
                       ]));
             } else if (snapshot.hasError) {
@@ -272,7 +292,7 @@ class GetSeasonsAsDropdownList {
 class EpisodeList extends Container {
   EpisodeList() : super();
 
-  List<Widget> getEpisodesAsList(BuildContext ctx, List<Episode> episodes) {
+  List<Widget> getEpisodesAsList(BuildContext ctx, MainWidgetState state, List<Episode> episodes) {
     if(episodes == null){
       return [];
     }
@@ -323,7 +343,7 @@ class EpisodeList extends Container {
                         fontSize: 20, fontWeight: FontWeight.normal))
               ],
             ),
-            onPressed: () {},)
+            onPressed: () {state.changePage(EpisodeScreen(state), 6);},)
       ));
     }
     return episodeList;
