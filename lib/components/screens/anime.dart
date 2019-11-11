@@ -8,7 +8,6 @@ import '../../api/APIManager.dart';
 import 'package:expandable/expandable.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
 
-
 class AnimeScreen extends StatefulWidget {
   var name;
   MainWidgetState state;
@@ -19,14 +18,35 @@ class AnimeScreen extends StatefulWidget {
   AnimeScreenState createState() => AnimeScreenState(name, state);
 }
 
-class AnimeScreenState extends State<AnimeScreen>{
+class AnimeScreenState extends State<AnimeScreen> {
   MainWidgetState state;
   Future<Anime> anime;
-  String _isSubscribed;
+  bool _isSubscribed;
+  int _actualSeason;
+  bool _isInWatchlist;
+  bool _isFavorite;
 
-  toggleSubButton(String isSubscribed){
+  toggleSubButton(bool isSubscribed) {
     setState(() {
-      _isSubscribed = isSubscribed;
+      this._isSubscribed = isSubscribed;
+    });
+  }
+
+  changeSeason(int newSeason) {
+    setState(() {
+      this._actualSeason = newSeason;
+    });
+  }
+
+  addToWatchlist(bool newValue) {
+    setState(() {
+      this._isInWatchlist = newValue;
+    });
+  }
+
+  addAsFavorite() {
+    setState(() {
+      this._isFavorite = !this._isFavorite;
     });
   }
 
@@ -49,7 +69,9 @@ class AnimeScreenState extends State<AnimeScreen>{
                   episodeCount += season.length;
                 }
               }
-              int actualSeason = 0;
+              _isSubscribed = anime.subscribed == "true";
+              _isInWatchlist = anime.watchlist == "true";
+              _isFavorite = anime.favorite == "true";
               return Container(
                   color: Theme.of(ctx).backgroundColor,
                   child: ListView(
@@ -70,7 +92,7 @@ class AnimeScreenState extends State<AnimeScreen>{
                                     anime.name,
                                     style: TextStyle(
                                       color:
-                                      Theme.of(ctx).textTheme.title.color,
+                                          Theme.of(ctx).textTheme.title.color,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
@@ -81,7 +103,7 @@ class AnimeScreenState extends State<AnimeScreen>{
                                     "Score: " + anime.rating,
                                     style: TextStyle(
                                       color:
-                                      Theme.of(ctx).textTheme.title.color,
+                                          Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -93,7 +115,7 @@ class AnimeScreenState extends State<AnimeScreen>{
                                             : "Not Airing"),
                                     style: TextStyle(
                                       color:
-                                      Theme.of(ctx).textTheme.title.color,
+                                          Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -102,7 +124,7 @@ class AnimeScreenState extends State<AnimeScreen>{
                                     "Episoden: " + episodeCount.toString(),
                                     style: TextStyle(
                                       color:
-                                      Theme.of(ctx).textTheme.title.color,
+                                          Theme.of(ctx).textTheme.title.color,
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -124,7 +146,8 @@ class AnimeScreenState extends State<AnimeScreen>{
                                           .textTheme
                                           .title
                                           .color,
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 )),
                             headerAlignment:
                                 ExpandablePanelHeaderAlignment.center,
@@ -160,40 +183,46 @@ class AnimeScreenState extends State<AnimeScreen>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 OutlineButton(
-                                  onPressed: () {anime.subscribed.contains("true") ? toggleSubButton("false") : toggleSubButton("true");},
-                                  child: Text(anime.subscribed.contains("true")
+                                  onPressed: () {
+                                    toggleSubButton(!_isSubscribed);
+                                        },
+                                  child: Text(_isSubscribed
                                       ? "Deabonnieren"
                                       : "Abonnieren"),
-                                  textColor: anime.subscribed.contains("true")
+                                  textColor: _isSubscribed
                                       ? Theme.of(ctx).primaryIconTheme.color
                                       : Theme.of(ctx).accentIconTheme.color,
                                   borderSide: BorderSide(
-                                      color: anime.subscribed.contains("true")
+                                      color: _isSubscribed
                                           ? Theme.of(ctx).primaryIconTheme.color
                                           : Theme.of(ctx)
                                               .accentIconTheme
                                               .color),
                                 ),
                                 IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(anime.watchlist.contains("true")
+                                    onPressed: () {
+                                      addToWatchlist(!_isInWatchlist);
+                                    },
+                                    icon: Icon(_isInWatchlist
                                         ? Icons.playlist_add_check
                                         : Icons.playlist_add),
-                                    color: anime.favorite.contains("false")
-                                        ? Theme.of(ctx).primaryIconTheme.color
-                                        : Theme.of(ctx).accentIconTheme.color),
+                                    color: _isInWatchlist
+                                        ? Theme.of(ctx).accentIconTheme.color
+                                        : Theme.of(ctx).primaryIconTheme.color),
                                 IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                        anime.favorite.contains("true")
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: anime.favorite.contains("false")
-                                            ? Theme.of(ctx)
-                                                .primaryIconTheme
-                                                .color
-                                            : Theme.of(ctx)
+                                    onPressed: () {
+                                      addAsFavorite();
+                                    },
+                                    icon: _isFavorite
+                                        ? Icon(
+                                            Icons.star,
+                                            color: Theme.of(ctx)
                                                 .accentIconTheme
+                                                .color,
+                                          )
+                                        : Icon(Icons.star_border,
+                                            color: Theme.of(ctx)
+                                                .primaryIconTheme
                                                 .color)),
                                 IconButton(
                                     onPressed: () {},
@@ -217,11 +246,11 @@ class AnimeScreenState extends State<AnimeScreen>{
                                               anime.seasonCount, anime.seasons)
                                           .getItems(),
                                       onChanged: (newValue) {
-                                        actualSeason = newValue;
+                                        changeSeason(newValue);
                                       },
-                                      value: (actualSeason == null)
+                                      value: (_actualSeason == null)
                                           ? null
-                                          : actualSeason,
+                                          : _actualSeason,
                                       hint: Text(
                                         "Seasons",
                                         style: TextStyle(
@@ -234,8 +263,14 @@ class AnimeScreenState extends State<AnimeScreen>{
                               ],
                             )),
                         Column(
-                            children: EpisodeList().getEpisodesAsList(ctx, state,
-                                actualSeason == null ? null : anime.seasons.elementAt(actualSeason).episodes))
+                            children: EpisodeList().getEpisodesAsList(
+                                ctx,
+                                state,
+                                (_actualSeason == null || anime.seasons == null)
+                                    ? null
+                                    : anime.seasons
+                                        .elementAt(_actualSeason)
+                                        .episodes))
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -282,8 +317,7 @@ class GetSeasonsAsDropdownList {
     for (int l = 0; l < seasonCount; l++) {
       namelist.add(DropdownMenuItem(
           value: l,
-          child:
-              Text("Season " + (seasons.elementAt(l).number).toString())));
+          child: Text("Season " + (seasons.elementAt(l).number).toString())));
     }
     return namelist;
   }
@@ -292,60 +326,102 @@ class GetSeasonsAsDropdownList {
 class EpisodeList extends Container {
   EpisodeList() : super();
 
-  List<Widget> getEpisodesAsList(BuildContext ctx, MainWidgetState state, List<Episode> episodes) {
-    if(episodes == null){
+  List<Widget> getEpisodesAsList(
+      BuildContext ctx, MainWidgetState state, List<Episode> episodes) {
+    if (episodes == null) {
       return [];
-    }
-    List<Widget> episodeList = [
-      Container(
-        padding: EdgeInsets.all(5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("Episodes",
-                style: TextStyle(
-                    color: Theme.of(ctx).textTheme.title.color,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20)),
-            Icon(
-              Icons.thumbs_up_down,
-              color: Theme.of(ctx).primaryIconTheme.color,size: 30,
-            )
-          ],
-        ),
-      )
-    ];
-    for (int v = 0; v < episodes.length; v++) {
-      var actualEpisode = episodes.elementAt(v);
-      episodeList.add(Container(
+    } else {
+      List<Widget> episodeList = [
+        Container(
+          padding: EdgeInsets.all(5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("Episodes",
+                  style: TextStyle(
+                      color: Theme.of(ctx).textTheme.title.color,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)),
+              Icon(
+                Icons.thumbs_up_down,
+                color: Theme.of(ctx).primaryIconTheme.color,
+                size: 30,
+              )
+            ],
+          ),
+        )
+      ];
+      for (int v = 0; v < episodes.length; v++) {
+        var actualEpisode = episodes.elementAt(v);
+        bool ger = false;
+        bool jap = false;
+        for(var stream in actualEpisode.streams){
+          if(stream.lang == "SUB"){
+            jap = true;
+          }else if(stream.lang == "DUB"){
+            ger = true;
+          }
+          if(jap && ger)break;
+        }
+        var image;
+        if(ger && jap){
+          image = Image.asset('assets/images/gerjap.png', scale: 10);
+        }
+        else if(ger){
+          image = Image.asset('assets/images/ger.png', scale: 50);
+        }else if(jap){
+          image = Image.asset('assets/images/jap.png', scale: 50);
+        }
+        episodeList.add(Container(
           decoration: BoxDecoration(
               border: Border(
                   top: BorderSide(
                       width: 1,
                       color: Theme.of(ctx).hintColor,
                       style: BorderStyle.solid))),
-          child: FlatButton(padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+          child: FlatButton(
+            padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                Expanded(
+                    child: Row(
+                  children: <Widget>[
+                    image,
+                    SizedBox(width: 5,),
+                    Text(
+                      actualEpisode == null ? "---" : actualEpisode.number.toString() + ". ",
+                      style: TextStyle(
+                          color: Theme.of(ctx).textTheme.title.color,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Expanded(
+                        child: Text(
+                      actualEpisode == null ? "---" : actualEpisode.name,
+                      style: TextStyle(
+                          color: Theme.of(ctx).textTheme.title.color,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal),
+                      softWrap: true,
+                    ))
+                  ],
+                )),
                 Text(
-                    actualEpisode.number.toString() + ". " + actualEpisode.name,
+                    actualEpisode.avgVotes == null ? "" : (double.parse(actualEpisode.avgVotes) * 100).round().toString() + "%",
                     style: TextStyle(
                         color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 15,fontWeight: FontWeight.normal)),
-                Text(
-                    (double.parse(actualEpisode.avgVotes) * 100)
-                        .round()
-                        .toString() +
-                        "%",
-                    style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 20, fontWeight: FontWeight.normal))
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal))
               ],
             ),
-            onPressed: () {state.changePage(EpisodeScreen(state), 6);},)
-      ));
+            onPressed: () {
+              state.changePage(EpisodeScreen(state), 6);
+            },
+          ),
+        ));
+      }
+      return episodeList;
     }
-    return episodeList;
   }
 }
