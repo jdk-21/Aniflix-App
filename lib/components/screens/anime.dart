@@ -25,6 +25,7 @@ class AnimeScreenState extends State<AnimeScreen> {
   int _actualSeason;
   bool _isInWatchlist;
   bool _isFavorite;
+  bool _useData;
 
   toggleSubButton(bool isSubscribed) {
     setState(() {
@@ -69,9 +70,12 @@ class AnimeScreenState extends State<AnimeScreen> {
                   episodeCount += season.length;
                 }
               }
-              _isSubscribed = anime.subscribed == "true";
-              _isInWatchlist = anime.watchlist == "true";
-              _isFavorite = anime.favorite == "true";
+              if(_useData == null){
+                _isSubscribed = anime.subscribed == "true";
+                _isInWatchlist = anime.watchlist == "true";
+                _isFavorite = anime.favorite == "true";
+                _useData = true;
+              }
               return Container(
                   color: Theme.of(ctx).backgroundColor,
                   child: ListView(
