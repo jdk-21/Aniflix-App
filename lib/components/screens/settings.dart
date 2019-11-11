@@ -63,7 +63,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(ctx).textTheme.title.color,
                         fontSize: 35,
                         fontWeight: FontWeight.normal))),
-            color: Theme.of(ctx).backgroundColor,
+            color: Theme.of(ctx).backgroundColor
           ),
           FlatButton(
             onPressed: () {

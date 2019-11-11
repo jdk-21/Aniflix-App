@@ -54,7 +54,7 @@ class MainWidget extends StatefulWidget {
 
 class MainWidgetState extends State<MainWidget> {
   final PageStorageBucket bucket = PageStorageBucket();
-  StatelessWidget _screen;
+  Widget _screen;
   int index;
 
   Future<SharedPreferences> sharedPreferencesData;
@@ -63,7 +63,7 @@ class MainWidgetState extends State<MainWidget> {
     this.sharedPreferencesData = SharedPreferences.getInstance();
   }
 
-  changePage(StatelessWidget screen, int i) {
+  changePage(Widget screen, int i) {
     setState(() {
       _screen = screen;
       index = i;
