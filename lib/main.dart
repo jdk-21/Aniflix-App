@@ -48,6 +48,7 @@ class _AppState extends State<App> {
 }
 
 class MainWidget extends StatefulWidget {
+  static MainWidgetState of (BuildContext ctx) => ctx.ancestorStateOfType(const TypeMatcher<MainWidgetState>());
   @override
   MainWidgetState createState() => MainWidgetState();
 }

@@ -1,4 +1,4 @@
-import 'package:aniflix_app/api/objects/AnimeSeason.dart';
+import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -273,8 +273,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 (_actualSeason == null || anime.seasons == null)
                                     ? null
                                     : anime.seasons
-                                        .elementAt(_actualSeason)
-                                        .episodes))
+                                        .elementAt(_actualSeason), anime))
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -331,7 +330,8 @@ class EpisodeList extends Container {
   EpisodeList() : super();
 
   List<Widget> getEpisodesAsList(
-      BuildContext ctx, MainWidgetState state, List<Episode> episodes) {
+      BuildContext ctx, MainWidgetState state, AnimeSeason season, Anime anime) {
+    var episodes = season == null ? null : season.episodes;
     if (episodes == null) {
       return [];
     } else {
@@ -420,7 +420,7 @@ class EpisodeList extends Container {
               ],
             ),
             onPressed: () {
-              state.changePage(EpisodeScreen(state), 6);
+              state.changePage(EpisodeScreen(state, anime.url, season.number, actualEpisode.number), 6);
             },
           ),
         ));
