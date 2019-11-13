@@ -1,13 +1,12 @@
 import 'package:aniflix_app/api/APIManager.dart';
-import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
-import 'package:aniflix_app/components/screens/subbox.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 
 class EpisodeScreen extends StatefulWidget {
   MainWidgetState state;
@@ -27,9 +26,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   MainWidgetState mainState;
   Future<EpisodeInfo> episodedata;
   List<String> languages = [];
+  List<AnimeStream> _links = [];
   int _language;
   int _hoster;
+  String _stream = null;
   List<DropdownMenuItem<int>> _streams;
+  List<String> _hosters = [];
   bool _isReported;
   List<String> possibleVotes = [null, "+", "-"];
   String _actualVote;
@@ -39,8 +41,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
       this._language = language;
-      this._streams =
-          GetStreamsAsDropdownList(streams, language, languages).getItems();
+      var dl = GetStreamsAsDropdownList(streams, language, languages);
+      this._streams = dl.getItems();
       changeHoster(0);
     });
   }
@@ -48,6 +50,19 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   changeHoster(int hoster) {
     setState(() {
       this._hoster = hoster;
+      updateStream();
+    });
+  }
+
+  updateStream() {
+    setState(() {
+      for (var stream in _links) {
+        if (_hosters[_hoster] == stream.hoster.name &&
+            languages[_language] == stream.lang) {
+          this._stream = stream.link;
+          return;
+        }
+      }
     });
   }
 
@@ -114,6 +129,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               if (!languages.contains(stream.lang)) {
                 languages.add(stream.lang);
               }
+              if (!_hosters.contains(stream.hoster.name)) {
+                _hosters.add(stream.hoster.name);
+              }
             }
             var formated_date = DateTime.parse(episode.created_at);
             _isReported =
@@ -122,6 +140,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             if (_numberOfDownVotes == null || _numberOfUpVotes == null) {
               _numberOfDownVotes = 0;
               _numberOfUpVotes = 0;
+              _links = episode.streams;
               for (var votes in episode.votes) {
                 if (votes.value == 0) {
                   _numberOfDownVotes = _numberOfDownVotes + 1;
@@ -133,6 +152,15 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 _actualVote = possibleVotes.elementAt(2);
               } else if (episode.voted == 1) {
                 _actualVote = possibleVotes.elementAt(1);
+              }
+            }
+
+            if(_stream == null){
+              for (var stream in _links) {
+                if (_hosters[0] == stream.hoster.name &&
+                    languages[0] == stream.lang) {
+                  this._stream = stream.link;
+                }
               }
             }
             return Container(
@@ -236,12 +264,19 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
-                      child: Text("Player",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Theme.of(ctx).textTheme.title.color,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20)),
+                      child: (_hosters[_hoster] == "Anistream")
+                          ? InAppWebView(
+                              initialHeaders: {},
+                              initialOptions: {},
+                              onWebViewCreated:
+                                  (InAppWebViewController controller) {
+                                controller.loadUrl(_stream);
+                              })
+                          : Center(
+                              child: IconButton(
+                                  icon: Icon(Icons.play_circle_outline),
+                                  onPressed: () =>
+                                      ChromeSafariBrowser(null).open(_stream))),
                       decoration: BoxDecoration(
                           border: Border.all(
                               style: BorderStyle.solid,
@@ -409,14 +444,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
 class GetStreamsAsDropdownList {
   List<AnimeStream> hosters;
+  List<DropdownMenuItem<int>> namelist = [];
+  List<AnimeStream> streams = [];
   List<String> languages;
   int language;
 
-  GetStreamsAsDropdownList(this.hosters, this.language, this.languages);
-
-  List<DropdownMenuItem<int>> getItems() {
-    List<DropdownMenuItem<int>> namelist = [];
-    List<AnimeStream> streams = [];
+  GetStreamsAsDropdownList(this.hosters, this.language, this.languages) {
     int l = 0;
     for (var hoster in hosters) {
       if (hoster.lang == languages.elementAt(language) &&
@@ -428,7 +461,22 @@ class GetStreamsAsDropdownList {
       namelist.add(DropdownMenuItem(value: l, child: Text(stream.hoster.name)));
       l++;
     }
+  }
+
+  List<DropdownMenuItem<int>> getItems() {
     return namelist;
+  }
+
+  List<String> getHosters() {
+    List<String> list = [];
+    for (var stream in streams) {
+      list.add(stream.hoster.name);
+    }
+    return list;
+  }
+
+  List<AnimeStream> getStreams() {
+    return hosters;
   }
 }
 

@@ -3,6 +3,8 @@ import '../../api/APIManager.dart';
 import '../../api/objects/subbox/SubEpisode.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
+import '../../main.dart';
+import './episode.dart';
 
 class SubBox extends StatelessWidget {
   Future<List<SubEpisode>> episodes;
@@ -56,7 +58,10 @@ class SubBox extends StatelessWidget {
                         name: episodes[i].show_name + " E" +
                             episodes[i].episode_number.toString() + "S" +
                             episodes[i].season_number.toString(), image: "https://www2.aniflix.tv/storage/" +
-                            episodes[i].cover_landscape);
+                            episodes[i].cover_landscape,
+                    onTap:() => 
+                      MainWidget.of(ctx).changePage(EpisodeScreen(MainWidget.of(ctx),episodes[i].show_url,episodes[i].season_number,episodes[i].episode_number), 10)
+                    );
                     lists[j].add(element);
                     break;
                   }
