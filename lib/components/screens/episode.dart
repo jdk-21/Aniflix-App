@@ -10,7 +10,6 @@ import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 
 class EpisodeScreen extends StatefulWidget {
   MainWidgetState state;
-
   String name;
   int season;
   int number;
@@ -104,6 +103,21 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
+  updateEpisodeData(String name, int season, int number){
+    setState(() {
+      this.episodedata = APIManager.getEpisode(name, season, number);
+      this.languages = [];
+      this._links = [];
+      this._language = null;
+      this._hoster = null;
+      this._hosters = [];
+      this._isReported = null;
+      this._actualVote = null;
+      this._numberOfUpVotes = null;
+      this._numberOfDownVotes = null;
+    });
+  }
+
   int startState(List<AnimeStream> streams, EpisodeInfo episode) {
     _language = 0;
     _streams =
@@ -155,7 +169,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if(_stream == null){
+            if (_stream == null) {
               for (var stream in _links) {
                 if (_hosters[0] == stream.hoster.name &&
                     languages[0] == stream.lang) {
@@ -179,13 +193,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                 ),
                                 color: Theme.of(ctx).textTheme.title.color,
                                 onPressed: () {
-                                  mainState.changePage(
-                                      EpisodeScreen(
-                                          mainState,
-                                          episode.season.show.url,
-                                          episode.season.number,
-                                          episode.number - 1),
-                                      6);
+                                  updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number - 1));
                                 },
                               )
                             : IconButton(
@@ -250,13 +258,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               : Theme.of(ctx).backgroundColor,
                           onPressed: (episode.next != "")
                               ? () {
-                                  mainState.changePage(
-                                      EpisodeScreen(
-                                          mainState,
-                                          episode.season.show.url,
-                                          episode.season.number,
-                                          (episode.number + 1)),
-                                      1);
+                            updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number + 1));
                                 }
                               : () {},
                         ),
