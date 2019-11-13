@@ -24,4 +24,16 @@ class Vote {
         json["deleted_at"],
     );
   }
+
+  static List<Vote> getVotes(List<dynamic> json) {
+    List<Vote> votes = [];
+    if(json != null){
+      for (var entry in json) {
+        var vote = Vote.fromJson(entry);
+        if(vote != null) votes.add(vote);
+      }
+    }
+    return votes;
+  }
+
 }

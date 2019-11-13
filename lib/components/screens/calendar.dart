@@ -1,4 +1,4 @@
-import 'package:aniflix_app/api/objects/CalendarDay.dart';
+import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../slider/SliderElement.dart';
