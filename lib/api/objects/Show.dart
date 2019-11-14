@@ -54,4 +54,14 @@ class Show {
         json["airing"]
     );
   }
+  static List<Show> getShows(List<dynamic> json) {
+    List<Show> shows = [];
+    if(json != null){
+      for (var entry in json) {
+        var genre = Show.fromJson(entry);
+        if(genre != null)shows.add(genre);
+      }
+    }
+    return shows;
+  }
 }
