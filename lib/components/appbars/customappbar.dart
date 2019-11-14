@@ -5,6 +5,7 @@ import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import '../screens/calendar.dart';
 import '../screens/settings.dart';
+import '../screens/news.dart';
 
 class AniflixAppbar extends AppBar {
 
@@ -28,7 +29,7 @@ class AniflixAppbar extends AppBar {
         ),
         IconButton(
           icon: Icon(Icons.notifications),
-          onPressed: () {},
+          onPressed: () {state.changePage(NewsPage(), 6);},
           color: Theme
               .of(ctx)
               .primaryIconTheme
