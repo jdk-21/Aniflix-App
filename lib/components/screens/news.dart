@@ -16,7 +16,7 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext ctx) {
     return Container(
       color: Theme.of(ctx).backgroundColor,
-        key: Key("notification_screen"),
+        key: Key("news_screen"),
         child: FutureBuilder<List<News>>(
             future: news,
             builder: (context, snapshot) {

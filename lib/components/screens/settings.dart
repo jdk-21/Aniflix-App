@@ -20,6 +20,7 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext ctx) {
     ThemeManager manager = ThemeManager.getInstance();
     return Container(
+      key: Key("settings_screen"),
       color: Theme.of(ctx).backgroundColor,
       child: ListView(
         children: [
