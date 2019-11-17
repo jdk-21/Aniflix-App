@@ -26,7 +26,7 @@ class AniflixNavigationbar extends BottomNav {
                 state.changePage(SubBox(),i);
                 break;
               case 2:
-                state.changePage(AnimeList(),i);
+                state.changePage(AnimeList(state),i);
                 break;
               default:
                 break;
