@@ -74,7 +74,7 @@ class Anime {
         json["rating"].toString(),
         Airing.fromJson(json["airing"]),
         AnimeSeason.getSeasons(json["seasons"]),
-        null//Genre.getGenres(json["genres"])
+        Genre.getGenres(json["genres"])
     );
   }
 }

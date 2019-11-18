@@ -1,5 +1,8 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
+import 'package:aniflix_app/components/custom/text/highlighted_text_box.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
+import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
+import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,8 @@ class AnimeScreen extends StatefulWidget {
 class AnimeScreenState extends State<AnimeScreen> {
   MainWidgetState state;
   Future<Anime> anime;
+  List<TextboxSliderElement> test = [];
+  List<String> genreNames = [];
   bool _isSubscribed;
   int _actualSeason;
   bool _isInWatchlist;
@@ -70,11 +75,19 @@ class AnimeScreenState extends State<AnimeScreen> {
                   episodeCount += season.length;
                 }
               }
-              if(_useData == null){
+              if (_useData == null) {
                 _isSubscribed = anime.subscribed == "true";
                 _isInWatchlist = anime.watchlist == "true";
                 _isFavorite = anime.favorite == "true";
                 _useData = true;
+              }
+              if (snapshot.data.genres != null) {
+                for (var genre in snapshot.data.genres) {
+                  if(!genreNames.contains(genre.name)){
+                    genreNames.add(genre.name);
+                    test.add(TextboxSliderElement(genre.name));
+                  }
+                }
               }
               return Container(
                   color: Theme.of(ctx).backgroundColor,
@@ -138,8 +151,9 @@ class AnimeScreenState extends State<AnimeScreen> {
                             )
                           ],
                         ),
+                        SizedBox(height: 10,),
+                        test.length < 1 ? SizedBox(height: 0,) : TextboxCarousel(test),
                         Container(
-                          padding: EdgeInsets.only(top: 10),
                           child: ExpandablePanel(
                             header: Align(
                                 alignment: Alignment.centerLeft,
@@ -189,7 +203,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 OutlineButton(
                                   onPressed: () {
                                     toggleSubButton(!_isSubscribed);
-                                        },
+                                  },
                                   child: Text(_isSubscribed
                                       ? "Deabonnieren"
                                       : "Abonnieren"),
@@ -272,8 +286,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 state,
                                 (_actualSeason == null || anime.seasons == null)
                                     ? null
-                                    : anime.seasons
-                                        .elementAt(_actualSeason), anime))
+                                    : anime.seasons.elementAt(_actualSeason),
+                                anime))
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -329,8 +343,8 @@ class GetSeasonsAsDropdownList {
 class EpisodeList extends Container {
   EpisodeList() : super();
 
-  List<Widget> getEpisodesAsList(
-      BuildContext ctx, MainWidgetState state, AnimeSeason season, Anime anime) {
+  List<Widget> getEpisodesAsList(BuildContext ctx, MainWidgetState state,
+      AnimeSeason season, Anime anime) {
     var episodes = season == null ? null : season.episodes;
     if (episodes == null) {
       return [];
@@ -359,21 +373,20 @@ class EpisodeList extends Container {
         var actualEpisode = episodes.elementAt(v);
         bool ger = false;
         bool jap = false;
-        for(var stream in actualEpisode.streams){
-          if(stream.lang == "SUB"){
+        for (var stream in actualEpisode.streams) {
+          if (stream.lang == "SUB") {
             jap = true;
-          }else if(stream.lang == "DUB"){
+          } else if (stream.lang == "DUB") {
             ger = true;
           }
-          if(jap && ger)break;
+          if (jap && ger) break;
         }
         var image;
-        if(ger && jap){
+        if (ger && jap) {
           image = Image.asset('assets/images/gerjap.png', scale: 10);
-        }
-        else if(ger){
+        } else if (ger) {
           image = Image.asset('assets/images/ger.png', scale: 50);
-        }else if(jap){
+        } else if (jap) {
           image = Image.asset('assets/images/jap.png', scale: 50);
         }
         episodeList.add(Container(
@@ -392,9 +405,13 @@ class EpisodeList extends Container {
                     child: Row(
                   children: <Widget>[
                     image,
-                    SizedBox(width: 5,),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Text(
-                      actualEpisode == null ? "---" : actualEpisode.number.toString() + ". ",
+                      actualEpisode == null
+                          ? "---"
+                          : actualEpisode.number.toString() + ". ",
                       style: TextStyle(
                           color: Theme.of(ctx).textTheme.title.color,
                           fontSize: 15,
@@ -412,7 +429,12 @@ class EpisodeList extends Container {
                   ],
                 )),
                 Text(
-                    actualEpisode.avgVotes == null ? "" : (double.parse(actualEpisode.avgVotes) * 100).round().toString() + "%",
+                    actualEpisode.avgVotes == null
+                        ? ""
+                        : (double.parse(actualEpisode.avgVotes) * 100)
+                                .round()
+                                .toString() +
+                            "%",
                     style: TextStyle(
                         color: Theme.of(ctx).textTheme.title.color,
                         fontSize: 20,
@@ -420,7 +442,10 @@ class EpisodeList extends Container {
               ],
             ),
             onPressed: () {
-              state.changePage(EpisodeScreen(state, anime.url, season.number, actualEpisode.number), 6);
+              state.changePage(
+                  EpisodeScreen(
+                      state, anime.url, season.number, actualEpisode.number),
+                  6);
             },
           ),
         ));
