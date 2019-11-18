@@ -171,24 +171,26 @@ class AnimeListState extends State<AnimeList> {
               for (var show in genre.shows) {
                 if (show.airing == 1) {
                   showsAsSlider.add(SliderElement(
-                    image: "https://www2.aniflix.tv/storage/" +
-                        show.cover_portrait,
-                    name: show.name,
-                    onTap: (){state.changePage(AnimeScreen(show.url, state), 7);}
-                  ));
+                      image: "https://www2.aniflix.tv/storage/" +
+                          show.cover_portrait,
+                      name: show.name,
+                      onTap: () {
+                        state.changePage(AnimeScreen(show.url, state), 7);
+                      }));
                 }
               }
             } else {
               for (var show in genre.shows) {
                 showsAsSlider.add(SliderElement(
-                  image:
-                      "https://www2.aniflix.tv/storage/" + show.cover_portrait,
-                  name: show.name,
-                  onTap: (){state.changePage(AnimeScreen(show.url, state), 7);}
-                ));
+                    image: "https://www2.aniflix.tv/storage/" +
+                        show.cover_portrait,
+                    name: show.name,
+                    onTap: () {
+                      state.changePage(AnimeScreen(show.url, state), 7);
+                    }));
               }
             }
-            if(showsAsSlider.length >= 1){
+            if (showsAsSlider.length >= 1) {
               sortedList.add(HeadlineSlider(genre.name, ctx, showsAsSlider,
                   aspectRatio: 200 / 300, size: 0.4));
             }
