@@ -1,6 +1,8 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
+import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:expandable/expandable.dart';
@@ -128,6 +130,15 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   EpisodeScreenState(this.mainState, String name, int season, int number) {
     this.episodedata = APIManager.getEpisode(name, season, number);
+  }
+
+  getCommentsAsContainers(List<Comment> comments){
+    List<CommentContainer> containers = [];
+    for(var comment in comments){
+      CommentContainer cont = CommentContainer(comment);
+      containers.add(cont);
+    }
+    return containers;
   }
 
   @override
@@ -424,7 +435,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               color: Theme.of(ctx).textTheme.title.color),
                         ),
                       ),
-                      expanded: Text(""),
+                      expanded:
+                          Column(
+                            children:
+                              getCommentsAsContainers(episode.comments)
+                          ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
                       tapBodyToCollapse: true,

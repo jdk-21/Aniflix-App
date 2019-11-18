@@ -5,20 +5,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CommentContainer extends StatefulWidget {
-
   Comment comment;
 
-  CommentContainer(Comment comment){
+  CommentContainer(Comment comment) {
     this.comment = comment;
   }
 
   @override
-  CommentContainerState createState() =>
-      CommentContainerState(this.comment);
+  CommentContainerState createState() => CommentContainerState(this.comment);
 }
 
-class CommentContainerState extends State<CommentContainer>{
-
+class CommentContainerState extends State<CommentContainer> {
   String text;
   User user;
   List<SubComment> subComments = [];
@@ -30,12 +27,13 @@ class CommentContainerState extends State<CommentContainer>{
   int _numberOfUpVotes;
   int _numberOfDownVotes;
 
-  CommentContainerState(Comment comment){
+  CommentContainerState(Comment comment) {
     this.text = comment.text;
     this.user = comment.user;
     this.subComments = comment.comments;
     this.votes = comment.votes;
     this.voted = comment.voted;
+    this.createdAt = comment.created_at;
   }
 
   makeUpVote() {
@@ -73,19 +71,50 @@ class CommentContainerState extends State<CommentContainer>{
   @override
   Widget build(BuildContext ctx) {
     return Container(
-        color: Theme.of(ctx).backgroundColor,
-        child:
+      color: Theme.of(ctx).backgroundColor,
+      child: Row(children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            (user.avatar == null)
+                ? Icon(Icons.person)
+                : Image.network(
+                    "https://www2.aniflix.tv/storage/" + user.avatar)
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          textDirection: TextDirection.ltr,
+          children: [
+           Row(
+             children: [
+               Text(
+                 user.name + " ",
+                 style: TextStyle(color: Colors.white, fontSize: 12.0),
+               ),
+               (this.createdAt != null)
+               ?Text(
+                 this.createdAt,
+                 style: TextStyle(color: Colors.white, fontSize: 9.0)
+               )
+                   :Text(
+                 "",
+                   style: TextStyle(color: Colors.white, fontSize: 10.0)
+               )
+
+             ],
+           ),
             Row(
               children: [
-                Row(
-                  children: [
-                    Image.network("https://www2.aniflix.tv/storage/" + user.avatar)
-                  ],
-                ),
-                Row(
-                  children: [
-
-                  ],
-                )));
-
+                Text(
+                  this.text,
+                  style: TextStyle(color: Colors.white, fontSize: 12.0),
+                )
+              ],
+            )
+          ],
+        )
+      ]),
+    );
+  }
 }
