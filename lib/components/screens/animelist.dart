@@ -30,11 +30,20 @@ class AnimeListState extends State<AnimeList> {
   List<String> filterCriteria = ["Genre", "A - Z", "Bewertung", "Abos"];
   bool _onlyAiring = false;
   int _actualFilterCriteria;
+  List<Widget> sortedGenre = [];
+  List<Widget> sortedAZ = [];
+  List<Widget> sortedBewertung = [];
+  List<Widget> sortedAbos = [];
+  List<Widget> sortedGenreAiring = [];
+  List<Widget> sortedAZAiring = [];
+  List<Widget> sortedBewertungAiring = [];
+  List<Widget> sortedAbosAiring = [];
   List<Widget> _actualSortedAnimeList = [];
 
   changeCheckbox() {
     setState(() {
       _onlyAiring = !_onlyAiring;
+      updateAnimeList(_actualFilterCriteria);
     });
   }
 
@@ -44,10 +53,22 @@ class AnimeListState extends State<AnimeList> {
     });
   }
 
-  updateAnimeList(ctx, state, allShows, allShowsWithGenres) {
+  updateAnimeList(filterCriteria) {
     setState(() {
-      _actualSortedAnimeList =
-          getAllAnimeAsSortedList(ctx, state, allShows, allShowsWithGenres);
+      switch(filterCriteria){
+        case 0: {
+          _actualSortedAnimeList = _onlyAiring ? sortedGenreAiring : sortedGenre;
+        }break;
+        case 1:{
+          _actualSortedAnimeList = _onlyAiring ? sortedAZAiring : sortedAZ;
+        }break;
+        case 2:{
+          _actualSortedAnimeList = _onlyAiring ? sortedBewertungAiring : sortedBewertung;
+        }break;
+        case 3:{
+          _actualSortedAnimeList = _onlyAiring ? sortedAbosAiring : sortedAbos;
+        }
+      }
     });
   }
 
@@ -63,6 +84,16 @@ class AnimeListState extends State<AnimeList> {
         future: animeListData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if(sortedGenre.length < 1 && sortedAZ.length < 1 && sortedBewertung.length < 1 && sortedAbos.length < 1 && sortedGenreAiring.length < 1 && sortedAZAiring.length < 1 && sortedBewertungAiring.length < 1 && sortedAbosAiring.length < 1){
+              sortedGenre = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 0, false);
+              sortedAZ = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 1, false);
+              sortedBewertung = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 2, false);
+              sortedAbos = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 3, false);
+              sortedGenreAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 0, true);
+              sortedAZAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 1, true);
+              sortedBewertungAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 2, true);
+              sortedAbosAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 3, true);
+            }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
@@ -96,11 +127,7 @@ class AnimeListState extends State<AnimeList> {
                                         content: Text(newValue.toString()));
                                   });*/
                               changeActualFilterCriteria(newValue);
-                              updateAnimeList(
-                                  ctx,
-                                  state,
-                                  snapshot.data.allShows,
-                                  snapshot.data.allShowsWithGenres);
+                              updateAnimeList(_actualFilterCriteria);
                             },
                           ),
                         ),
@@ -131,11 +158,7 @@ class AnimeListState extends State<AnimeList> {
                       ],
                     ),
                     Column(
-                      children: getAllAnimeAsSortedList(
-                          ctx,
-                          state,
-                          snapshot.data.allShows,
-                          snapshot.data.allShowsWithGenres),
+                      children: _actualSortedAnimeList == null ? []: _actualSortedAnimeList
                     )
                   ],
                 ));
@@ -160,14 +183,14 @@ class AnimeListState extends State<AnimeList> {
   }
 
   List<Widget> getAllAnimeAsSortedList(BuildContext ctx, MainWidgetState state,
-      List<Show> allShows, List<GenreWithShows> allShowsWithGenres) {
+      List<Show> allShows, List<GenreWithShows> allShowsWithGenres, int filterCriteria, bool airing) {
     List<Widget> sortedList = [SizedBox(height: 10)];
-    switch (_actualFilterCriteria) {
+    switch (filterCriteria) {
       case 0:
         {
           for (var genre in allShowsWithGenres) {
             List<SliderElement> showsAsSlider = [];
-            if (_onlyAiring) {
+            if (airing) {
               for (var show in genre.shows) {
                 if (show.airing == 1) {
                   showsAsSlider.add(SliderElement(
@@ -201,7 +224,7 @@ class AnimeListState extends State<AnimeList> {
         {
           List<String> nameList = [];
           for (var show in allShows) {
-            if (_onlyAiring) {
+            if (airing) {
               if (show.airing == 1) {
                 nameList.add(show.name);
               }
@@ -226,11 +249,11 @@ class AnimeListState extends State<AnimeList> {
                     },
                     child: Row(
                       children: <Widget>[
-                        /*Image.network(
+                        Image.network(
                           "https://www2.aniflix.tv/storage/" + show.cover_portrait,
                           width: 50,
                           height: 75,
-                        ),*/
+                        ),
                         SizedBox(width: 10),
                         Expanded(
                             child: Text(
@@ -252,7 +275,7 @@ class AnimeListState extends State<AnimeList> {
       case 2:
         {
           List<Show> sortedShows = [];
-          if (_onlyAiring) {
+          if (airing) {
             for (var show in allShows) {
               if (show.airing == 1) {
                 if (sortedShows.length < 1) {
@@ -318,7 +341,7 @@ class AnimeListState extends State<AnimeList> {
                       ),
                     ),
                     /*Image.network(
-                          "https://www2.aniflix.tv/storage/" + show.cover_portrait,
+                          "https://www2.aniflix.tv/storage/" + shows.cover_portrait,
                           width: 50,
                           height: 75,
                         ),*/
@@ -341,7 +364,7 @@ class AnimeListState extends State<AnimeList> {
       case 3:
         {
           List<Show> sortedShows = [];
-          if (_onlyAiring) {
+          if (airing) {
             for (var show in allShows) {
               if (show.airing == 1) {
                 if (sortedShows.length < 1) {
