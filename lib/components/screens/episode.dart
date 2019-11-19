@@ -1,5 +1,6 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
+import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
@@ -25,7 +26,6 @@ class EpisodeScreen extends StatefulWidget {
 
 class EpisodeScreenState extends State<EpisodeScreen> {
   MainWidgetState mainState;
-  Future<EpisodeInfo> episodedata;
   List<String> languages = [];
   List<AnimeStream> _links = [];
   int _language;
@@ -38,6 +38,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   String _actualVote;
   int _numberOfUpVotes;
   int _numberOfDownVotes;
+  Future<LoadInfo> episodeInfo;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -107,7 +108,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   updateEpisodeData(String name, int season, int number){
     setState(() {
-      this.episodedata = APIManager.getEpisode(name, season, number);
+      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
       this.languages = [];
       this._links = [];
       this._language = null;
@@ -129,13 +130,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   }
 
   EpisodeScreenState(this.mainState, String name, int season, int number) {
-    this.episodedata = APIManager.getEpisode(name, season, number);
+    this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
-  getCommentsAsContainers(List<Comment> comments){
+  getCommentsAsContainers(List<Comment> comments, User user){
     List<CommentContainer> containers = [];
     for(var comment in comments){
-      CommentContainer cont = CommentContainer(comment);
+      CommentContainer cont = CommentContainer(comment, user);
       containers.add(cont);
     }
     return containers;
@@ -145,11 +146,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("episode_screen"),
-      child: FutureBuilder<EpisodeInfo>(
-        future: episodedata,
+      child: FutureBuilder<LoadInfo>(
+        future: episodeInfo,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var episode = snapshot.data;
+            var episode = snapshot.data.episodeInfo;
             for (var stream in episode.streams) {
               if (!languages.contains(stream.lang)) {
                 languages.add(stream.lang);
@@ -438,7 +439,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       expanded:
                           Column(
                             children:
-                              getCommentsAsContainers(episode.comments)
+                              getCommentsAsContainers(episode.comments, snapshot.data.user)
                           ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
@@ -516,4 +517,11 @@ class GetLanguagesAsDropdownList {
     }
     return namelist;
   }
+}
+
+class LoadInfo{
+  User user;
+  EpisodeInfo episodeInfo;
+
+  LoadInfo(this.user, this.episodeInfo);
 }

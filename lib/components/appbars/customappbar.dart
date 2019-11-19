@@ -53,8 +53,8 @@ class AniflixAppbar extends AppBar {
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image:  NetworkImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
                                 "https://www2.aniflix.tv/storage/" + snapshot.data.avatar,
                               ),
                           )

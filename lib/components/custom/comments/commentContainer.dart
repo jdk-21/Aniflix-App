@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
@@ -8,13 +9,15 @@ import 'SubCommentContainer.dart';
 
 class CommentContainer extends StatefulWidget {
   Comment comment;
+  User user;
 
-  CommentContainer(Comment comment) {
+  CommentContainer(Comment comment, this.user) {
     this.comment = comment;
   }
 
   @override
-  CommentContainerState createState() => CommentContainerState(this.comment);
+  CommentContainerState createState() =>
+      CommentContainerState(this.comment, this.user);
 }
 
 class CommentContainerState extends State<CommentContainer> {
@@ -28,8 +31,11 @@ class CommentContainerState extends State<CommentContainer> {
   List<String> possibleVotes = [null, "+", "-"];
   int _numberOfUpVotes;
   int _numberOfDownVotes;
+  bool _isReported;
+  var reports;
+  User currentUser;
 
-  CommentContainerState(Comment comment) {
+  CommentContainerState(Comment comment, this.currentUser) {
     this.text = comment.text;
     this.user = comment.user;
     this.subComments = comment.comments;
@@ -41,10 +47,16 @@ class CommentContainerState extends State<CommentContainer> {
   getSubCommentsAsContainers() {
     List<SubCommentContainer> containers = [];
     for (var comment in subComments) {
-      SubCommentContainer cont = SubCommentContainer(comment);
+      SubCommentContainer cont = SubCommentContainer(comment, this.currentUser);
       containers.add(cont);
     }
     return containers;
+  }
+
+  report() {
+    setState(() {
+      this._isReported = !_isReported;
+    });
   }
 
   makeUpVote() {
@@ -101,27 +113,32 @@ class CommentContainerState extends State<CommentContainer> {
   @override
   Widget build(BuildContext ctx) {
     sortVotes();
+    var date = DateTime.parse(this.createdAt);
+    String minute = date.minute.toString();
+    String hour = date.hour.toString();
+    if (date.minute < 10) {
+      minute = "0" + date.minute.toString();
+    }
+    if (date.hour < 10) {
+      hour = "0" + date.hour.toString();
+    }
     return Container(
       color: Theme.of(ctx).backgroundColor,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
               Row(children: [
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  (user.avatar == null)
-                      ? FloatingActionButton(
-                          backgroundColor: Theme.of(ctx).backgroundColor,
-                          elevation: 0,
-                          child: Icon(
-                            Icons.person,
-                          ),
-                        )
-                      : FloatingActionButton(
-                          backgroundColor: Theme.of(ctx).backgroundColor,
-                          elevation: 0,
-                          child: IconButton(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: (user.avatar == null)
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.person,
+                              color: Theme.of(ctx).primaryIconTheme.color,
+                            ),
+                          )
+                        : IconButton(
                             icon: new Container(
                                 decoration: new BoxDecoration(
                                     shape: BoxShape.circle,
@@ -133,8 +150,8 @@ class CommentContainerState extends State<CommentContainer> {
                                       ),
                                     ))),
                           ),
-                        )
-                ]),
+
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,21 +161,63 @@ class CommentContainerState extends State<CommentContainer> {
                         children: [
                           Text(
                             user.name + " ",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 12.0),
+                            style: TextStyle(
+                                color: Theme.of(ctx).textTheme.title.color,
+                                fontSize: 12.0),
                           ),
                           (this.createdAt != null)
-                              ? Text(this.createdAt,
+                              ? Text(
+                                  date.day.toString() +
+                                      "." +
+                                      date.month.toString() +
+                                      "." +
+                                      date.year.toString() +
+                                      " " +
+                                      hour +
+                                      ":" +
+                                      minute,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 9.0))
+                                      color: Colors.grey, fontSize: 9.0))
                               : Text("",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 10.0))
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontSize: 10.0)),
+                          (user.id == currentUser.id)
+                              ? IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  iconSize: 15,
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(ctx).primaryIconTheme.color,
+                                  ),
+                                  onPressed: () {
+                                    if (!_isReported) {
+                                      report();
+                                    }
+                                  },
+                                )
+                              : Container(),
+                          IconButton(
+                            padding: EdgeInsets.all(0),
+                            iconSize: 15,
+                            icon: Icon(
+                              Icons.report,
+                              color: Theme.of(ctx).primaryIconTheme.color,
+                            ),
+                            onPressed: () {
+                              if (!_isReported) {
+                                report();
+                              }
+                            },
+                          )
                         ],
                       ),
                       Text(
                         this.text,
-                        style: TextStyle(color: Colors.white, fontSize: 12.0),
+                        style: TextStyle(
+                            color: Theme.of(ctx).textTheme.title.color,
+                            fontSize: 12.0),
                         softWrap: true,
                       ),
                       Row(
@@ -217,7 +276,9 @@ class CommentContainerState extends State<CommentContainer> {
                                 child: Text(
                                   "Antworten",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 11),
+                                      color:
+                                          Theme.of(ctx).textTheme.title.color,
+                                      fontSize: 11),
                                 ),
                                 onPressed: () => {},
                               )
