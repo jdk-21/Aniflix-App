@@ -102,42 +102,41 @@ class CommentContainerState extends State<CommentContainer> {
   Widget build(BuildContext ctx) {
     sortVotes();
     return Container(
-        color: Theme.of(ctx).backgroundColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              children: [
-                Row(children: [
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (user.avatar == null)
-                            ? FloatingActionButton(
-                                backgroundColor: Theme.of(ctx).backgroundColor,
-                                elevation: 0,
-                                child: Icon(
-                                  Icons.person,
-                                ),
-                              )
-                            : FloatingActionButton(
-                                backgroundColor: Theme.of(ctx).backgroundColor,
-                                elevation: 0,
-                                child: IconButton(
-                                  icon: new Container(
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                              "https://www2.aniflix.tv/storage/" +
-                                                  user.avatar,
-                                            ),
-                                          ))),
-                                ),
-                              )
-                      ]),
-                  Column(
+      color: Theme.of(ctx).backgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              Row(children: [
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  (user.avatar == null)
+                      ? FloatingActionButton(
+                          backgroundColor: Theme.of(ctx).backgroundColor,
+                          elevation: 0,
+                          child: Icon(
+                            Icons.person,
+                          ),
+                        )
+                      : FloatingActionButton(
+                          backgroundColor: Theme.of(ctx).backgroundColor,
+                          elevation: 0,
+                          child: IconButton(
+                            icon: new Container(
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        "https://www2.aniflix.tv/storage/" +
+                                            user.avatar,
+                                      ),
+                                    ))),
+                          ),
+                        )
+                ]),
+                Expanded(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     textDirection: TextDirection.ltr,
                     children: [
@@ -157,15 +156,10 @@ class CommentContainerState extends State<CommentContainer> {
                                       color: Colors.white, fontSize: 10.0))
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            this.text,
-                            overflow: TextOverflow.fade,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 12.0),
-                          )
-                        ],
+                      Text(
+                        this.text,
+                        style: TextStyle(color: Colors.white, fontSize: 12.0),
+                        softWrap: true,
                       ),
                       Row(
                         children: <Widget>[
@@ -222,7 +216,8 @@ class CommentContainerState extends State<CommentContainer> {
                               FlatButton(
                                 child: Text(
                                   "Antworten",
-                                  style: TextStyle(color: Colors.white, fontSize: 11),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 11),
                                 ),
                                 onPressed: () => {},
                               )
@@ -232,15 +227,15 @@ class CommentContainerState extends State<CommentContainer> {
                       ),
                     ],
                   ),
-                ]),
-              ],
-            ),
-            Column(
-              children: getSubCommentsAsContainers(),
-            )
-          ],
-        ),
-
+                )
+              ]),
+            ],
+          ),
+          Column(
+            children: getSubCommentsAsContainers(),
+          )
+        ],
+      ),
     );
   }
 }
