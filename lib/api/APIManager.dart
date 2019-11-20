@@ -46,9 +46,10 @@ class APIManager {
     }
     return elements;
   }
+
   static Future<List<SubEpisode>> getSubData() async {
     List<SubEpisode> episodes = [];
-    var response = await _authGetRequest("abos/abos/0",login);
+    var response = await _authGetRequest("abos/abos/0", login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -77,7 +78,10 @@ class APIManager {
             image: "https://www2.aniflix.tv/storage/" +
                 ep.season.show.cover_landscape,
             onTap: () {
-              state.changePage(EpisodeScreen(state,ep.season.show.url,ep.season.number,ep.number), 10);
+              state.changePage(
+                  EpisodeScreen(
+                      state, ep.season.show.url, ep.season.number, ep.number),
+                  10);
             }));
       }
     }
@@ -94,8 +98,8 @@ class APIManager {
       for (var entry in json) {
         var show = Show.fromJson(entry);
         newshows.add(SliderElement(
-            name: show.name,
-            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
+          name: show.name,
+          image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: () {
             state.changePage(AnimeScreen(show.url, state), 10);
           },
@@ -115,19 +119,21 @@ class APIManager {
       for (var entry in json) {
         var show = Show.fromJson(entry);
         discover.add(SliderElement(
-            name: show.name,
-            image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
+          name: show.name,
+          image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: () {
             state.changePage(AnimeScreen(show.url, state), 10);
-          },));
+          },
+        ));
       }
     }
 
     return discover;
   }
+
   static Future<Anime> getAnime(String name) async {
     Anime anime;
-    var response = await _authGetRequest("show/"+name,login);
+    var response = await _authGetRequest("show/" + name, login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -136,9 +142,10 @@ class APIManager {
 
     return anime;
   }
+
   static Future<List<Show>> getAllShows() async {
     List<Show> shows = [];
-    var response = await _authGetRequest("show",login);
+    var response = await _authGetRequest("show", login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -150,9 +157,10 @@ class APIManager {
 
     return shows;
   }
+
   static Future<List<GenreWithShows>> getAllShowsByGenres() async {
     List<GenreWithShows> shows = [];
-    var response = await _authGetRequest("show/genres",login);
+    var response = await _authGetRequest("show/genres", login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -164,9 +172,18 @@ class APIManager {
 
     return shows;
   }
-  static Future<EpisodeInfo> getEpisode(String name,int season, int number) async {
+
+  static Future<EpisodeInfo> getEpisode(
+      String name, int season, int number) async {
     EpisodeInfo episode;
-    var response = await _authGetRequest("episode/show/"+name+"/season/"+season.toString()+"/episode/"+number.toString(),login);
+    var response = await _authGetRequest(
+        "episode/show/" +
+            name +
+            "/season/" +
+            season.toString() +
+            "/episode/" +
+            number.toString(),
+        login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -194,7 +211,10 @@ class APIManager {
             image: "https://www2.aniflix.tv/storage/" +
                 ep.season.show.cover_landscape,
             onTap: () {
-              state.changePage(EpisodeScreen(state,ep.season.show.url,ep.season.number,ep.number), 10);
+              state.changePage(
+                  EpisodeScreen(
+                      state, ep.season.show.url, ep.season.number, ep.number),
+                  10);
             }));
       }
     }
@@ -207,7 +227,7 @@ class APIManager {
     var airings = await getAirings(state);
     var newShows = await getNewShows(state);
     var discover = await getDiscover(state);
-    return Homedata(continues,airings, newShows, discover);
+    return Homedata(continues, airings, newShows, discover);
   }
 
   static Future<AnimeListData> getAnimeListData() async {
@@ -218,7 +238,7 @@ class APIManager {
 
   static Future<LoginResponse> loginRequest(String email, String pw) async {
     var response =
-    await _postRequest("auth/login", {"email": email, "password": pw});
+        await _postRequest("auth/login", {"email": email, "password": pw});
     login = LoginResponse.fromJson(jsonDecode(response.body));
     return login;
   }
@@ -226,6 +246,43 @@ class APIManager {
   static Future<User> getUser() async {
     var response = await _authPostRequest("user/me", login);
     return User.fromJson(jsonDecode(response.body));
+  }
+
+  static void setShowVote(int showID, int previous_vote, int value) {
+    _authPostRequest("vote/show/" + showID.toString(), login,
+        bodyObject: {"value":value,"previous_vote":previous_vote});
+  }
+  static void setEpisodeVote(int episodeID, int previous_value, int new_value) {
+    _authPostRequest("vote/episode/" + episodeID.toString(), login,
+        bodyObject: {"previous_value": previous_value, "new_value": new_value});
+  }
+  static void setCommentVote(int commentID, int previous_value, int new_value) {
+    _authPostRequest("vote/comment/" + commentID.toString(), login,
+        bodyObject: {"previous_value": previous_value, "new_value": new_value});
+  }
+
+  static void setSubscription(int showID, bool newValue) {
+    if(newValue){
+      _authPostRequest("abos/"+showID.toString()+"/subscribe", login);
+    }else{
+      _authPostRequest("abos/"+showID.toString()+"/unsubscribe", login);
+    }
+  }
+
+  static void setWatchlist(int showID, bool newValue) {
+    if(newValue){
+      _authPostRequest("watchlist/"+showID.toString()+"/add", login);
+    }else{
+      _authPostRequest("watchlist/"+showID.toString()+"/remove", login);
+    }
+  }
+
+  static void setFavourite(int showID, bool newValue) {
+    if(newValue){
+      _authPostRequest("favorites/"+showID.toString()+"/add", login);
+    }else{
+      _authPostRequest("favorites/"+showID.toString()+"/remove", login);
+    }
   }
 
   static Future<http.Response> _getRequest(String query) {
