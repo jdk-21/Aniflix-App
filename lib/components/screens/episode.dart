@@ -394,6 +394,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
+                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(episode.id, null, 1);
+                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(episode.id, 1, null);
+                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(episode.id, 0, 1);
+                                    }
                                     makeUpVote();
                                   },
                                 ),
@@ -418,6 +425,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
+
+                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(episode.id, null, 0);
+                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(episode.id, 1, 0);
+                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(episode.id, 0, null);
+                                    }
                                     makeDownVote();
                                   },
                                 ),

@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
@@ -19,6 +20,7 @@ class SubCommentContainer extends StatefulWidget {
 }
 
 class SubCommentContainerState extends State<SubCommentContainer> {
+  int id;
   String text;
   User user;
   List<SubComment> subComments = [];
@@ -33,6 +35,7 @@ class SubCommentContainerState extends State<SubCommentContainer> {
   User currentUser;
 
   SubCommentContainerState(SubComment comment, this.currentUser) {
+    this.id = comment.id;
     this.text = comment.text;
     this.user = comment.user;
     this.votes = comment.votes;
@@ -203,6 +206,13 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
+                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                    APIManager.setCommentVote(this.id, null, 1);
+                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                    APIManager.setCommentVote(this.id, 1, null);
+                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                    APIManager.setCommentVote(this.id, 0, 1);
+                                  }
                                   makeUpVote();
                                 },
                               ),
@@ -227,6 +237,13 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
+                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                    APIManager.setCommentVote(this.id, null, 0);
+                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                    APIManager.setCommentVote(this.id, 1, 0);
+                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                    APIManager.setCommentVote(this.id, 0, null);
+                                  }
                                   makeDownVote();
                                 },
                               ),

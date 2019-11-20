@@ -257,15 +257,15 @@ class APIManager {
 
   static void setShowVote(int showID, int previous_vote, int value) {
     _authPostRequest("vote/show/" + showID.toString(), login,
-        bodyObject: {"value":value,"previous_vote":previous_vote});
+        bodyObject: {"value":value.toString(),"previous_vote":previous_vote.toString()});
   }
   static void setEpisodeVote(int episodeID, int previous_value, int new_value) {
     _authPostRequest("vote/episode/" + episodeID.toString(), login,
-        bodyObject: {"previous_value": previous_value, "new_value": new_value});
+        bodyObject: {"previous_value": previous_value.toString(), "new_value": new_value.toString()});
   }
   static void setCommentVote(int commentID, int previous_value, int new_value) {
     _authPostRequest("vote/comment/" + commentID.toString(), login,
-        bodyObject: {"previous_value": previous_value, "new_value": new_value});
+        bodyObject: {"previous_value": previous_value.toString(), "new_value": new_value.toString()});
   }
 
   static void setSubscription(int showID, bool newValue) {
