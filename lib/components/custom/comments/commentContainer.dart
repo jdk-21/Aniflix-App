@@ -2,9 +2,11 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
+import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'AnswerCommentComponent.dart';
 import 'SubCommentContainer.dart';
 
 class CommentContainer extends StatefulWidget {
@@ -270,26 +272,13 @@ class CommentContainerState extends State<CommentContainer> {
                               )
                             ],
                           ),
-                          Row(
-                            children: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  "Antworten",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontSize: 11),
-                                ),
-                                onPressed: () => {},
-                              )
-                            ],
-                          )
                         ],
                       ),
                     ],
                   ),
                 )
               ]),
+              AnswerCommentComponent(this.currentUser)
             ],
           ),
           Column(

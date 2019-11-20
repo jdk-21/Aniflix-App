@@ -3,6 +3,7 @@ import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
 import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/main.dart';
@@ -39,6 +40,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int _numberOfUpVotes;
   int _numberOfDownVotes;
   Future<LoadInfo> episodeInfo;
+  List<Comment> commentList;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -134,12 +136,24 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   }
 
   getCommentsAsContainers(List<Comment> comments, User user){
-    List<CommentContainer> containers = [];
+
+    List<Widget> containers = [];
+
+
+
     for(var comment in comments){
       CommentContainer cont = CommentContainer(comment, user);
       containers.add(cont);
     }
     return containers;
+  }
+
+  addComment(Comment newComment){
+    setState(() {
+
+      commentList.insert(0, newComment);
+
+    });
   }
 
   @override
@@ -189,6 +203,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 }
               }
             }
+
+
+            if(commentList == null) {
+              commentList = [];
+              commentList =
+                  getCommentsAsContainers(episode.comments, snapshot.data.user);
+            }
+
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
@@ -425,6 +447,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         )
                       ],
                     ),
+
                     ExpandablePanel(
                       header: Align(
                         alignment: Alignment.center,
@@ -438,8 +461,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       ),
                       expanded:
                           Column(
-                            children:
-                              getCommentsAsContainers(episode.comments, snapshot.data.user)
+                            children:[
+                              CommentComponent(snapshot.data.user, this),
+                              Column(
+                                children:
+                                  commentList.map((comment) => CommentContainer(comment, snapshot.data.user)).toList()
+                              )
+                            ]
                           ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
