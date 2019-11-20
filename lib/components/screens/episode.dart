@@ -135,19 +135,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
-  getCommentsAsContainers(List<Comment> comments, User user){
-
-    List<Widget> containers = [];
-
-
-
-    for(var comment in comments){
-      CommentContainer cont = CommentContainer(comment, user);
-      containers.add(cont);
-    }
-    return containers;
-  }
-
   addComment(Comment newComment){
     setState(() {
 
@@ -204,13 +191,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-
             if(commentList == null) {
-              commentList = [];
-              commentList =
-                  getCommentsAsContainers(episode.comments, snapshot.data.user);
+              commentList = episode.comments;
             }
-
+            List<Widget> commentElements = [];
+            for(var comment in commentList){
+              commentElements.add(CommentContainer(comment, snapshot.data.user));
+            }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
@@ -463,10 +450,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           Column(
                             children:[
                               CommentComponent(snapshot.data.user, this),
-                              Column(
-                                children:
-                                  commentList.map((comment) => CommentContainer(comment, snapshot.data.user)).toList()
-                              )
+                              Column(children: commentElements)
                             ]
                           ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
@@ -546,6 +530,7 @@ class GetLanguagesAsDropdownList {
     return namelist;
   }
 }
+
 
 class LoadInfo{
   User user;
