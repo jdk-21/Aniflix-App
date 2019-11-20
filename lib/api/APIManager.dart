@@ -193,6 +193,13 @@ class APIManager {
     return episode;
   }
 
+  static Future<LoadInfo> getEpisodeInfo(String name,int season, int number) async {
+    var info = await getEpisode(name, season, number);
+    var user = await getUser();
+
+    return LoadInfo(user, info);
+  }
+
   static Future<List<SliderElement>> getContinue(MainWidgetState state) async {
     List<SliderElement> continues = [];
     var response = await _authPostRequest("show/continue", login);
