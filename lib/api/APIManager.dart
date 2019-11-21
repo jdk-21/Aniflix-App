@@ -371,6 +371,14 @@ class APIManager {
     return http.post('https://www2.aniflix.tv/api/' + query, body: bodyObject);
   }
 
+  static Future<http.Response> _authDeleteRequest(
+      String query, LoginResponse user) {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    return http.delete('https://www2.aniflix.tv/api/' + query, headers: headers);
+  }
+
   static Future<http.Response> _authPostRequest(
       String query, LoginResponse user,
       {bodyObject = const {}}) {
