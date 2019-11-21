@@ -1,6 +1,6 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
-import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 class CommentComponent extends StatelessWidget {
   User user;
   EpisodeScreenState state;
+  Function(String) callback;
 
-  CommentComponent(this.user, this.state);
+  CommentComponent(this.user, this.state, this.callback);
 
   @override
   Widget build(BuildContext ctx) {
@@ -51,7 +52,9 @@ class CommentComponent extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.send),
             color: Theme.of(ctx).primaryIconTheme.color,
-            onPressed: () {
+            onPressed: (){callback(controller.text);
+            controller.text = "";},
+            /*() {
               Comment newComment = new Comment(
                   null,
                   controller.text,
@@ -68,7 +71,7 @@ class CommentComponent extends StatelessWidget {
               /*CommentContainer comment = new CommentContainer(newComment, user);*/
 
               controller.text = "";
-            },
+            },*/
           ),
         ],
       ),

@@ -41,6 +41,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int _numberOfDownVotes;
   Future<LoadInfo> episodeInfo;
   List<Comment> commentList;
+  String name;
+  int season;
+  int number;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -120,6 +123,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this._actualVote = null;
       this._numberOfUpVotes = null;
       this._numberOfDownVotes = null;
+      this.commentList = null;
     });
   }
 
@@ -131,7 +135,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     return _language;
   }
 
-  EpisodeScreenState(this.mainState, String name, int season, int number) {
+  EpisodeScreenState(this.mainState, this.name, this.season, this.number) {
     this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
@@ -467,7 +471,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         ),
                       ),
                       expanded: Column(children: [
-                        CommentComponent(snapshot.data.user, this),
+                        CommentComponent(snapshot.data.user, this, (text)async{APIManager.addComment(episode.id, text);
+                        updateEpisodeData(episode.season.show.url,
+                            episode.season.number,
+                            (episode.number + 1));
+
+                        }),
                         Column(children: _commentElements)
                       ]),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
