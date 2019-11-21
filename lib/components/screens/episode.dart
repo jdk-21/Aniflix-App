@@ -41,7 +41,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int _numberOfDownVotes;
   Future<LoadInfo> episodeInfo;
   List<Comment> commentList;
-  List<Widget> _commentElements = [];
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -109,7 +108,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
-  updateEpisodeData(String name, int season, int number){
+  updateEpisodeData(String name, int season, int number) {
     setState(() {
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
       this.languages = [];
@@ -136,13 +135,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
-  addComment(Comment newComment, User user){
+  addComment(Comment newComment) {
     setState(() {
-
-      commentList.insert(0, newComment);
-
+      commentList.add(newComment);
     });
   }
+
 
   @override
   Widget build(BuildContext ctx) {
@@ -192,12 +190,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if(commentList == null) {
+            if (commentList == null) {
               commentList = episode.comments;
             }
-              for(var comment in commentList){
-                _commentElements.add(CommentContainer(comment, snapshot.data.user, this));
-              }
+            List<Widget> _commentElements = [];
+            for (var comment in commentList) {
+              _commentElements
+                  .add(CommentContainer(comment, snapshot.data.user, this));
+            }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
@@ -214,7 +214,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                 ),
                                 color: Theme.of(ctx).textTheme.title.color,
                                 onPressed: () {
-                                  updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number - 1));
+                                  updateEpisodeData(
+                                      episode.season.show.url,
+                                      episode.season.number,
+                                      (episode.number - 1));
                                 },
                               )
                             : IconButton(
@@ -279,7 +282,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               : Theme.of(ctx).backgroundColor,
                           onPressed: (episode.next != "")
                               ? () {
-                            updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number + 1));
+                                  updateEpisodeData(
+                                      episode.season.show.url,
+                                      episode.season.number,
+                                      (episode.number + 1));
                                 }
                               : () {},
                         ),
@@ -434,7 +440,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         )
                       ],
                     ),
-
                     ExpandablePanel(
                       header: Align(
                         alignment: Alignment.center,
@@ -446,13 +451,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               color: Theme.of(ctx).textTheme.title.color),
                         ),
                       ),
-                      expanded:
-                          Column(
-                            children:[
-                              CommentComponent(snapshot.data.user, this),
-                              Column(children: _commentElements)
-                            ]
-                          ),
+                      expanded: Column(children: [
+                        CommentComponent(snapshot.data.user, this),
+                        Column(children: _commentElements)
+                      ]),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
                       tapBodyToCollapse: true,
@@ -531,8 +533,7 @@ class GetLanguagesAsDropdownList {
   }
 }
 
-
-class LoadInfo{
+class LoadInfo {
   User user;
   EpisodeInfo episodeInfo;
 

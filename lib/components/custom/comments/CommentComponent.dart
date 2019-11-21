@@ -5,23 +5,11 @@ import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CommentComponent extends StatefulWidget {
+class CommentComponent extends StatelessWidget {
   User user;
   EpisodeScreenState state;
 
   CommentComponent(this.user, this.state);
-
-  @override
-  CommentComponentState createState() =>
-      CommentComponentState(user, state);
-}
-
-class CommentComponentState extends State<CommentComponent> {
-  User user;
-  EpisodeScreenState episodeState;
-
-
-  CommentComponentState(this.user, this.episodeState);
 
   @override
   Widget build(BuildContext ctx) {
@@ -73,10 +61,10 @@ class CommentComponentState extends State<CommentComponent> {
                   DateTime.now().toIso8601String(),
                   null,
                   null,
-                  0,
+                  null,
                   user, [], []);
 
-              episodeState.addComment(newComment, user);
+              state.addComment(newComment);
               /*CommentContainer comment = new CommentContainer(newComment, user);*/
 
               controller.text = "";
