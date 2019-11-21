@@ -296,6 +296,11 @@ class APIManager {
         });
   }
 
+  static void addComment(int episodeID, String text) async {
+    await _authPostRequest("comment", login,
+        bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID});
+  }
+
   static void setSubscription(int showID, bool newValue) {
     if (newValue) {
       _authPostRequest("abos/" + showID.toString() + "/subscribe", login);
