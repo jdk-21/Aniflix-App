@@ -249,11 +249,11 @@ class AnimeListState extends State<AnimeList> {
                     },
                     child: Row(
                       children: <Widget>[
-                        Image.network(
+                        /*Image.network(
                           "https://www2.aniflix.tv/storage/" + show.cover_portrait,
                           width: 50,
                           height: 75,
-                        ),
+                        ),*/
                         SizedBox(width: 10),
                         Expanded(
                             child: Text(
@@ -337,7 +337,7 @@ class AnimeListState extends State<AnimeList> {
                         ((double.parse(shows.rating) * 10).round() / 10)
                             .toString(),
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.title.color),
+                            color: Colors.white),
                       ),
                     ),
                     /*Image.network(
@@ -424,7 +424,7 @@ class AnimeListState extends State<AnimeList> {
                       child: Text(
                         show.howManyAbos.toString(),
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.title.color),
+                            color: Colors.white),
                       ),
                     ),
                     /*Image.network(

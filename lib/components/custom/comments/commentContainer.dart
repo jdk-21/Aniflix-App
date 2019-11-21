@@ -25,6 +25,7 @@ class CommentContainer extends StatefulWidget {
 }
 
 class CommentContainerState extends State<CommentContainer> {
+  int id;
   String text;
   User user;
   List<SubComment> subComments = [];
@@ -247,6 +248,13 @@ class CommentContainerState extends State<CommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
+                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                    APIManager.setCommentVote(this.id, null, 1);
+                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                    APIManager.setCommentVote(this.id, 1, null);
+                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                    APIManager.setCommentVote(this.id, 0, 1);
+                                  }
                                   makeUpVote();
                                 },
                               ),
@@ -271,6 +279,13 @@ class CommentContainerState extends State<CommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
+                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                    APIManager.setCommentVote(this.id, null, 0);
+                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                    APIManager.setCommentVote(this.id, 1, 0);
+                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                    APIManager.setCommentVote(this.id, 0, null);
+                                  }
                                   makeDownVote();
                                 },
                               ),

@@ -1,0 +1,911 @@
+@startuml
+set namespaceSeparator ::
+
+class "aniflix_app::api::APIManager.dart::APIManager" {
+  {static} +LoginResponse login
+  {static} +Future getNews()
+  {static} +Future getCalendarData()
+  {static} +Future getSubData()
+  {static} +Future getAirings()
+  {static} +Future getNewShows()
+  {static} +Future getDiscover()
+  {static} +Future getAnime()
+  {static} +Future getAllShows()
+  {static} +Future getAllShowsByGenres()
+  {static} +Future getEpisode()
+  {static} +Future getEpisodeInfo()
+  {static} +Future getReviews()
+  {static} +void createReview()
+  {static} +Future getContinue()
+  {static} +Future getHomeData()
+  {static} +Future getAnimeListData()
+  {static} +Future loginRequest()
+  {static} +Future getUser()
+  {static} +void setShowVote()
+  {static} +void setEpisodeVote()
+  {static} +void setCommentVote()
+  {static} +void setSubscription()
+  {static} +void setWatchlist()
+  {static} +Future getWatchlist()
+  {static} +Future getHistory()
+  {static} +void setFavourite()
+  {static} +Future getFavourite()
+  {static} -Future _getRequest()
+  {static} -Future _postRequest()
+  {static} -Future _authDeleteRequest()
+  {static} -Future _authPostRequest()
+  {static} -Future _authGetRequest()
+}
+
+"aniflix_app::api::APIManager.dart::APIManager" o-- "aniflix_app::api::objects::LoginResponse.dart::LoginResponse"
+
+class "aniflix_app::api::objects::Airing.dart::Airing" {
+  +int id
+  +int show_id
+  +int season
+  +int day
+  +String details
+  +String created_at
+  +String updated_at
+  +String deleted_at
+}
+
+class "aniflix_app::api::objects::allanime::genrewithshow.dart::GenreWithShows" {
+  +int id
+  +String name
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +List<Show> shows
+}
+
+class "aniflix_app::api::objects::anime::Anime.dart::Anime" {
+  +int id
+  +String name
+  +String name_alt
+  +String url
+  +String description
+  +String cover_landscape
+  +String cover_landscape_original
+  +String cover_portrait
+  +String visible_since
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +Vote ownVote
+  +String subscribed
+  +String favorite
+  +String watchlist
+  +int howManyAbos
+  +int seasonCount
+  +String rating
+  +Airing airing
+  +List<AnimeSeason> seasons
+  +List<Genre> genres
+}
+
+"aniflix_app::api::objects::anime::Anime.dart::Anime" o-- "aniflix_app::api::objects::anime::Vote.dart::Vote"
+"aniflix_app::api::objects::anime::Anime.dart::Anime" o-- "aniflix_app::api::objects::Airing.dart::Airing"
+
+class "aniflix_app::api::objects::anime::AnimeSeason.dart::AnimeSeason" {
+  +int id
+  +int number
+  +int show_id
+  +String type
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int length
+  +List<Episode> episodes
+  {static} +List getSeasons()
+}
+
+class "aniflix_app::api::objects::anime::Genre.dart::Genre" {
+  +int id
+  +String name
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  {static} +List getGenres()
+}
+
+class "aniflix_app::api::objects::anime::reviews::Review.dart::Review" {
+  +int id
+  +int show_id
+  +int user_id
+  +String text
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +Vote vote
+  +User user
+  {static} +List getReviews()
+}
+
+"aniflix_app::api::objects::anime::reviews::Review.dart::Review" o-- "aniflix_app::api::objects::anime::Vote.dart::Vote"
+"aniflix_app::api::objects::anime::reviews::Review.dart::Review" o-- "aniflix_app::api::objects::User.dart::User"
+
+class "aniflix_app::api::objects::anime::reviews::ReviewShow.dart::ReviewShow" {
+  +int id
+  +String name
+  +String name_alt
+  +String url
+  +String description
+  +String cover_landscape
+  +String cover_landscape_original
+  +String cover_portrait
+  +String visible_since
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int howManyAbos
+  +int seasonCount
+  +String rating
+  +int airing
+  +List<Review> reviews
+}
+
+class "aniflix_app::api::objects::anime::Vote.dart::Vote" {
+  +int id
+  +String voteable_type
+  +int voteable_id
+  +int user_id
+  +int value
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  {static} +List getVotes()
+}
+
+class "aniflix_app::api::objects::calendar::CalendarDay.dart::CalendarDay" {
+  +int day
+  +List<CalendarShow> airings
+}
+
+class "aniflix_app::api::objects::calendar::CalendarShow.dart::CalendarShow" {
+  +int id
+  +int show_id
+  +int season
+  +int day
+  +String details
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +Show show
+  {static} +List getCalendarShows()
+}
+
+"aniflix_app::api::objects::calendar::CalendarShow.dart::CalendarShow" o-- "aniflix_app::api::objects::Show.dart::Show"
+
+class "aniflix_app::api::objects::episode::Comment.dart::Comment" {
+  +int id
+  +String text
+  +int user_id
+  +String commentable_type
+  +int commentable_id
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int voted
+  +User user
+  +List<Vote> votes
+  +List<SubComment> comments
+  {static} +List getComments()
+}
+
+"aniflix_app::api::objects::episode::Comment.dart::Comment" o-- "aniflix_app::api::objects::User.dart::User"
+
+class "aniflix_app::api::objects::episode::Comment.dart::SubComment" {
+  +int id
+  +String text
+  +int user_id
+  +String commentable_type
+  +int commentable_id
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int voted
+  +User user
+  +List<Vote> votes
+  {static} +List getComments()
+}
+
+"aniflix_app::api::objects::episode::Comment.dart::SubComment" o-- "aniflix_app::api::objects::User.dart::User"
+
+class "aniflix_app::api::objects::episode::EpisodeInfo.dart::EpisodeInfo" {
+  +int id
+  +String name
+  +int number
+  +int season_id
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int voted
+  +String previous
+  +String next
+  +String avgVotes
+  +int hasReports
+  +List<AnimeStream> streams
+  +List<Comment> comments
+  +List<Vote> votes
+  +Season season
+}
+
+"aniflix_app::api::objects::episode::EpisodeInfo.dart::EpisodeInfo" o-- "aniflix_app::api::objects::Season.dart::Season"
+
+class "aniflix_app::api::objects::Episode.dart::Episode" {
+  +int id
+  +String name
+  +int number
+  +int season_id
+  +int user_id
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +String avgVotes
+  +int hasReports
+  +List<AnimeStream> streams
+  +Season season
+  {static} +List getEpisodes()
+}
+
+"aniflix_app::api::objects::Episode.dart::Episode" o-- "aniflix_app::api::objects::Season.dart::Season"
+
+class "aniflix_app::api::objects::Group.dart::Group" {
+  +int id
+  +String name
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +UserPivot pivot
+  {static} +List getGroups()
+}
+
+"aniflix_app::api::objects::Group.dart::Group" o-- "aniflix_app::api::objects::Pivot.dart::UserPivot"
+
+class "aniflix_app::api::objects::Hoster.dart::Hoster" {
+  +int id
+  +String name
+  +String logo
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int preferred
+}
+
+class "aniflix_app::api::objects::LoginResponse.dart::LoginResponse" {
+  +String access_token
+  +String token_type
+  +int expires_in
+  +String error
+  +bool hasError()
+}
+
+class "aniflix_app::api::objects::news::News.dart::News" {
+  +int id
+  +String text
+  +int user_id
+  +String show_from
+  +String show_until
+  +String created_at
+  +String updated_at
+  +String deleted_at
+}
+
+class "aniflix_app::api::objects::Pivot.dart::UserPivot" {
+  +int user_id
+  +int group_id
+}
+
+class "aniflix_app::api::objects::RegisterResponse.dart::RegisterResponse" {
+  +String id
+  +String name
+  +String error
+  +bool hasError()
+}
+
+class "aniflix_app::api::objects::Season.dart::Season" {
+  +int id
+  +int number
+  +int show_id
+  +String type
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int length
+  +Show show
+}
+
+"aniflix_app::api::objects::Season.dart::Season" o-- "aniflix_app::api::objects::Show.dart::Show"
+
+class "aniflix_app::api::objects::Show.dart::Show" {
+  +int id
+  +String name
+  +String name_alt
+  +String url
+  +String description
+  +String cover_landscape
+  +String cover_landscape_original
+  +String cover_portrait
+  +String visible_since
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +int howManyAbos
+  +int seasonCount
+  +String rating
+  +int airing
+  {static} +List getShows()
+}
+
+class "aniflix_app::api::objects::Stream.dart::AnimeStream" {
+  +int id
+  +String streamable_type
+  +int streamable_id
+  +int hoster_id
+  +int user_id
+  +String link
+  +String lang
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +Hoster hoster
+  +User user
+  {static} +List getStreams()
+}
+
+"aniflix_app::api::objects::Stream.dart::AnimeStream" o-- "aniflix_app::api::objects::Hoster.dart::Hoster"
+"aniflix_app::api::objects::Stream.dart::AnimeStream" o-- "aniflix_app::api::objects::User.dart::User"
+
+class "aniflix_app::api::objects::subbox::SubEpisode.dart::SubEpisode" {
+  +int id
+  +String name
+  +String created_at
+  +String cover_landscape
+  +int season_id
+  +int show_id
+  +String show_name
+  +int season_number
+  +int episode_number
+  +String show_url
+  +String avgVotes
+  +int hasReports
+  +List<AnimeStream> streams
+}
+
+class "aniflix_app::api::objects::User.dart::User" {
+  +int id
+  +String name
+  +String avatar
+  +String banned_until
+  +String created_at
+  +String updated_at
+  +String deleted_at
+  +String access_key
+  +List<Group> groups
+}
+
+class "aniflix_app::components::appbars::customappbar.dart::AniflixAppbar" {
+}
+
+"flutter::src::material::app_bar.dart::AppBar" <|-- "aniflix_app::components::appbars::customappbar.dart::AniflixAppbar"
+
+class "aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponent" {
+  +User user
+  +AnswerCommentComponentState createState()
+}
+
+"aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponent" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponent"
+
+class "aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponentState" {
+  +User user
+  +Widget build()
+}
+
+"aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponentState" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::custom::comments::AnswerCommentComponent.dart::AnswerCommentComponentState"
+
+class "aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponent" {
+  +User user
+  +EpisodeScreenState episodeState
+  +CommentComponentState createState()
+}
+
+"aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponent" o-- "aniflix_app::api::objects::User.dart::User"
+"aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponent" o-- "aniflix_app::components::screens::episode.dart::EpisodeScreenState"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponent"
+
+class "aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponentState" {
+  +User user
+  +EpisodeScreenState episodeState
+  +Widget build()
+}
+
+"aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponentState" o-- "aniflix_app::api::objects::User.dart::User"
+"aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponentState" o-- "aniflix_app::components::screens::episode.dart::EpisodeScreenState"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::custom::comments::CommentComponent.dart::CommentComponentState"
+
+class "aniflix_app::components::custom::comments::commentContainer.dart::CommentContainer" {
+  +Comment comment
+  +User user
+  +CommentContainerState createState()
+}
+
+"aniflix_app::components::custom::comments::commentContainer.dart::CommentContainer" o-- "aniflix_app::api::objects::episode::Comment.dart::Comment"
+"aniflix_app::components::custom::comments::commentContainer.dart::CommentContainer" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::custom::comments::commentContainer.dart::CommentContainer"
+
+class "aniflix_app::components::custom::comments::commentContainer.dart::CommentContainerState" {
+  +int id
+  +String text
+  +User user
+  +List<SubComment> subComments
+  +List<Vote> votes
+  +String createdAt
+  +int voted
+  -String _actualVote
+  +List<String> possibleVotes
+  -int _numberOfUpVotes
+  -int _numberOfDownVotes
+  -bool _isReported
+  +dynamic reports
+  +User currentUser
+  +dynamic getSubCommentsAsContainers()
+  +dynamic report()
+  +dynamic makeUpVote()
+  +dynamic makeDownVote()
+  +dynamic sortVotes()
+  +Widget build()
+}
+
+"aniflix_app::components::custom::comments::commentContainer.dart::CommentContainerState" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::custom::comments::commentContainer.dart::CommentContainerState"
+
+class "aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainer" {
+  +SubComment comment
+  +User user
+  +SubCommentContainerState createState()
+}
+
+"aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainer" o-- "aniflix_app::api::objects::episode::Comment.dart::SubComment"
+"aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainer" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainer"
+
+class "aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainerState" {
+  +int id
+  +String text
+  +User user
+  +List<SubComment> subComments
+  +List<Vote> votes
+  +String createdAt
+  +int voted
+  -String _actualVote
+  +List<String> possibleVotes
+  -int _numberOfUpVotes
+  -int _numberOfDownVotes
+  -bool _isReported
+  +User currentUser
+  +dynamic getSubCommentsAsContainers()
+  +dynamic report()
+  +dynamic makeUpVote()
+  +dynamic makeDownVote()
+  +dynamic sortVotes()
+  +Widget build()
+}
+
+"aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainerState" o-- "aniflix_app::api::objects::User.dart::User"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::custom::comments::SubCommentContainer.dart::SubCommentContainerState"
+
+class "aniflix_app::components::custom::slider::slider_with_headline.dart::HeadlineSlider" {
+  +String title
+  +List<SliderElement> elements
+  +double aspectRatio
+}
+
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::custom::slider::slider_with_headline.dart::HeadlineSlider"
+
+class "aniflix_app::components::custom::text::highlighted_text_box.dart::HighlightedTextBox" {
+}
+
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::custom::text::highlighted_text_box.dart::HighlightedTextBox"
+
+class "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavigationbar" {
+  {static} +dynamic getItems()
+  +BottomNavState createState()
+}
+
+"bmnav::bmnav.dart::BottomNav" <|-- "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavigationbar"
+
+class "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavState" {
+  +int currentIndex
+  +IconStyle iconStyle
+  +LabelStyle labelStyle
+  +Widget build()
+  +dynamic onItemClick()
+  +dynamic parseLabel()
+}
+
+"aniflix_app::components::navigationbars::mainbar.dart::AniflixNavState" o-- "bmnav::bmnav.dart::IconStyle"
+"aniflix_app::components::navigationbars::mainbar.dart::AniflixNavState" o-- "bmnav::bmnav.dart::LabelStyle"
+"bmnav::bmnav.dart::BottomNavState" <|-- "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavState"
+
+class "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavItem" {
+  +Key key
+  +bool selected
+  +Widget build()
+}
+
+"aniflix_app::components::navigationbars::mainbar.dart::AniflixNavItem" o-- "flutter::src::foundation::key.dart::Key"
+"bmnav::bmnav.dart::BMNavItem" <|-- "aniflix_app::components::navigationbars::mainbar.dart::AniflixNavItem"
+
+class "aniflix_app::components::screens::anime.dart::AnimeScreen" {
+  +dynamic name
+  +MainWidgetState state
+  +AnimeScreenState createState()
+}
+
+"aniflix_app::components::screens::anime.dart::AnimeScreen" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::screens::anime.dart::AnimeScreen"
+
+class "aniflix_app::components::screens::anime.dart::AnimeScreenState" {
+  +MainWidgetState state
+  +Future<Anime> anime
+  +List<TextboxSliderElement> test
+  +List<String> genreNames
+  -bool _isSubscribed
+  -int _actualSeason
+  -bool _isInWatchlist
+  -bool _isFavorite
+  -bool _useData
+  +dynamic toggleSubButton()
+  +dynamic changeSeason()
+  +dynamic addToWatchlist()
+  +dynamic addAsFavorite()
+  +Widget build()
+}
+
+"aniflix_app::components::screens::anime.dart::AnimeScreenState" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::screens::anime.dart::AnimeScreenState"
+
+class "aniflix_app::components::screens::anime.dart::AnimeInfo" {
+  +Anime anime
+  +Widget build()
+}
+
+"aniflix_app::components::screens::anime.dart::AnimeInfo" o-- "aniflix_app::api::objects::anime::Anime.dart::Anime"
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::screens::anime.dart::AnimeInfo"
+
+class "aniflix_app::components::screens::anime.dart::AnimeDescription" {
+  +String description
+  +Widget build()
+}
+
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::screens::anime.dart::AnimeDescription"
+
+class "aniflix_app::components::screens::anime.dart::GetSeasonsAsDropdownList" {
+  +int seasonCount
+  +List<AnimeSeason> seasons
+  +List getItems()
+}
+
+class "aniflix_app::components::screens::anime.dart::EpisodeList" {
+  +List getEpisodesAsList()
+}
+
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::screens::anime.dart::EpisodeList"
+
+class "aniflix_app::components::screens::animelist.dart::AnimeListData" {
+  +List<Show> allShows
+  +List<GenreWithShows> allShowsWithGenres
+}
+
+class "aniflix_app::components::screens::animelist.dart::AnimeList" {
+  +MainWidgetState state
+  +AnimeListState createState()
+}
+
+"aniflix_app::components::screens::animelist.dart::AnimeList" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::screens::animelist.dart::AnimeList"
+
+class "aniflix_app::components::screens::animelist.dart::AnimeListState" {
+  +MainWidgetState state
+  +Future<AnimeListData> animeListData
+  +List<String> filterCriteria
+  -bool _onlyAiring
+  -int _actualFilterCriteria
+  +List<Widget> sortedGenre
+  +List<Widget> sortedAZ
+  +List<Widget> sortedBewertung
+  +List<Widget> sortedAbos
+  +List<Widget> sortedGenreAiring
+  +List<Widget> sortedAZAiring
+  +List<Widget> sortedBewertungAiring
+  +List<Widget> sortedAbosAiring
+  -List<Widget> _actualSortedAnimeList
+  +dynamic changeCheckbox()
+  +dynamic changeActualFilterCriteria()
+  +dynamic updateAnimeList()
+  +Widget build()
+  +List getFilterCriteriaAsDropdownList()
+  +List getAllAnimeAsSortedList()
+}
+
+"aniflix_app::components::screens::animelist.dart::AnimeListState" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::screens::animelist.dart::AnimeListState"
+
+class "aniflix_app::components::screens::calendar.dart::Calendar" {
+  +MainWidgetState state
+  +Future<List<CalendarDay>> calendarData
+  +List<SliderElement> monday
+  +List<SliderElement> tuesday
+  +List<SliderElement> wednesday
+  +List<SliderElement> thursday
+  +List<SliderElement> friday
+  +List<SliderElement> saturday
+  +List<SliderElement> sunday
+  +Widget build()
+}
+
+"aniflix_app::components::screens::calendar.dart::Calendar" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::calendar.dart::Calendar"
+
+class "aniflix_app::components::screens::episode.dart::EpisodeScreen" {
+  +MainWidgetState state
+  +String name
+  +int season
+  +int number
+  +EpisodeScreenState createState()
+}
+
+"aniflix_app::components::screens::episode.dart::EpisodeScreen" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::components::screens::episode.dart::EpisodeScreen"
+
+class "aniflix_app::components::screens::episode.dart::EpisodeScreenState" {
+  +MainWidgetState mainState
+  +List<String> languages
+  -List<AnimeStream> _links
+  -int _language
+  -int _hoster
+  -String _stream
+  -List<DropdownMenuItem<int>> _streams
+  -List<String> _hosters
+  -bool _isReported
+  +List<String> possibleVotes
+  -String _actualVote
+  -int _numberOfUpVotes
+  -int _numberOfDownVotes
+  +Future<LoadInfo> episodeInfo
+  +List<Comment> commentList
+  +dynamic setLanguage()
+  +dynamic changeHoster()
+  +dynamic updateStream()
+  +dynamic report()
+  +dynamic makeUpVote()
+  +dynamic makeDownVote()
+  +dynamic updateEpisodeData()
+  +int startState()
+  +dynamic addComment()
+  +Widget build()
+}
+
+"aniflix_app::components::screens::episode.dart::EpisodeScreenState" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::components::screens::episode.dart::EpisodeScreenState"
+
+class "aniflix_app::components::screens::episode.dart::GetStreamsAsDropdownList" {
+  +List<AnimeStream> hosters
+  +List<DropdownMenuItem<int>> namelist
+  +List<AnimeStream> streams
+  +List<String> languages
+  +int language
+  +List getItems()
+  +List getHosters()
+  +List getStreams()
+}
+
+class "aniflix_app::components::screens::episode.dart::GetLanguagesAsDropdownList" {
+  +List<AnimeStream> streams
+  +List getItems()
+}
+
+class "aniflix_app::components::screens::episode.dart::LoadInfo" {
+  +User user
+  +EpisodeInfo episodeInfo
+}
+
+"aniflix_app::components::screens::episode.dart::LoadInfo" o-- "aniflix_app::api::objects::User.dart::User"
+"aniflix_app::components::screens::episode.dart::LoadInfo" o-- "aniflix_app::api::objects::episode::EpisodeInfo.dart::EpisodeInfo"
+
+class "aniflix_app::components::screens::favoriten.dart::Favoriten" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::favoriten.dart::Favoriten"
+
+class "aniflix_app::components::screens::home.dart::Homedata" {
+  +List<SliderElement> continues
+  +List<SliderElement> airings
+  +List<SliderElement> newshows
+  +List<SliderElement> discover
+}
+
+class "aniflix_app::components::screens::home.dart::Home" {
+  +Future<Homedata> homedata
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::home.dart::Home"
+
+class "aniflix_app::components::screens::login.dart::Login" {
+  +MainWidgetState state
+  +TextEditingController emailController
+  +TextEditingController passwortController
+  +Widget build()
+  -dynamic _launchURL()
+  +void resetTextController()
+  +void showErrorDialog()
+}
+
+"aniflix_app::components::screens::login.dart::Login" o-- "aniflix_app::main.dart::MainWidgetState"
+"aniflix_app::components::screens::login.dart::Login" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::login.dart::Login"
+
+class "aniflix_app::components::screens::news.dart::NewsPage" {
+  +Future<List<News>> news
+  +Widget build()
+  +List getNotificationsAsList()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::news.dart::NewsPage"
+
+class "aniflix_app::components::screens::profil.dart::Profil" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::profil.dart::Profil"
+
+class "aniflix_app::components::screens::register.dart::Register" {
+  +MainWidgetState state
+  +TextEditingController usernameController
+  +TextEditingController emailController
+  +TextEditingController passwortController
+  +TextEditingController passwortWiederholenController
+  +Widget build()
+  +void resetTextController()
+}
+
+"aniflix_app::components::screens::register.dart::Register" o-- "aniflix_app::main.dart::MainWidgetState"
+"aniflix_app::components::screens::register.dart::Register" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::register.dart::Register"
+
+class "aniflix_app::components::screens::settings.dart::Settings" {
+  +MainWidgetState state
+  +Widget build()
+}
+
+"aniflix_app::components::screens::settings.dart::Settings" o-- "aniflix_app::main.dart::MainWidgetState"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::settings.dart::Settings"
+
+class "aniflix_app::components::screens::subbox.dart::SubBox" {
+  +Future<List<SubEpisode>> episodes
+  +List<HeadlineSlider> days
+  +List<List<SliderElement>> lists
+  +dynamic getDays()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::subbox.dart::SubBox"
+
+class "aniflix_app::components::screens::verlauf.dart::Verlauf" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::verlauf.dart::Verlauf"
+
+class "aniflix_app::components::screens::watchlist.dart::Watchlist" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "aniflix_app::components::screens::watchlist.dart::Watchlist"
+
+class "aniflix_app::components::slider::carousel::AnimeCarousel.dart::AnimeCarousel" {
+}
+
+"carousel_slider::carousel_slider.dart::CarouselSlider" <|-- "aniflix_app::components::slider::carousel::AnimeCarousel.dart::AnimeCarousel"
+
+class "aniflix_app::components::slider::carousel::TextBoxCarousel.dart::TextboxCarousel" {
+}
+
+"carousel_slider::carousel_slider.dart::CarouselSlider" <|-- "aniflix_app::components::slider::carousel::TextBoxCarousel.dart::TextboxCarousel"
+
+class "aniflix_app::components::slider::SliderElement.dart::SliderElement" {
+  +void Function() onTap
+  +String name
+  +String description
+  +String image
+}
+
+"aniflix_app::components::slider::SliderElement.dart::SliderElement" o-- "flutter::src::gestures::tap.dart::void Function()"
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::slider::SliderElement.dart::SliderElement"
+
+class "aniflix_app::components::slider::TextboxSliderElement.dart::TextboxSliderElement" {
+}
+
+"flutter::src::widgets::container.dart::Container" <|-- "aniflix_app::components::slider::TextboxSliderElement.dart::TextboxSliderElement"
+
+class "aniflix_app::main.dart::App" {
+  +_AppState createState()
+  {static} +void setTheme()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::main.dart::App"
+
+class "aniflix_app::main.dart::_AppState" {
+  -ThemeData _theme
+  +Widget build()
+}
+
+"aniflix_app::main.dart::_AppState" o-- "flutter::src::material::theme_data.dart::ThemeData"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::main.dart::_AppState"
+
+class "aniflix_app::main.dart::MainWidget" {
+  {static} +MainWidgetState of()
+  +MainWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "aniflix_app::main.dart::MainWidget"
+
+class "aniflix_app::main.dart::MainWidgetState" {
+  +PageStorageBucket bucket
+  -Widget _screen
+  +int index
+  +Future<SharedPreferences> sharedPreferencesData
+  +dynamic changePage()
+  +Widget build()
+  +dynamic showChat()
+}
+
+"aniflix_app::main.dart::MainWidgetState" o-- "flutter::src::widgets::page_storage.dart::PageStorageBucket"
+"aniflix_app::main.dart::MainWidgetState" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "aniflix_app::main.dart::MainWidgetState"
+
+class "aniflix_app::themes::theme.dart::CustomTheme" {
+  +String themeName
+  +Color mainbarColor
+  +Color appbarColor
+  +Color screenBackgroundColor
+  +Color unselectedIconColor
+  +Color selectedIconColor
+  +Color chatButtonColor
+  +Color textColor
+  +String getThemeName()
+  +Color getMainbarColor()
+  +Color getAppbarColor()
+  +Color getScreenBackgroundColor()
+  +Color getUnselectedIconColor()
+  +Color getSelectedIconColor()
+  +Color getChatButtonColor()
+  +Color getTextColor()
+  +ThemeData getThemeData()
+}
+
+"aniflix_app::themes::theme.dart::CustomTheme" o-- "dart::ui::Color"
+
+class "aniflix_app::themes::themeManager.dart::ThemeManager" {
+  {static} +ThemeManager instance
+  +List<CustomTheme> Themes
+  +CustomTheme actualTheme
+  +int actualThemeIndex
+  {static} +ThemeManager getInstance()
+  +List getThemeNames()
+  +void setActualTheme()
+  +void addNewTheme()
+  +void addNewThemes()
+  +ThemeData getActualThemeData()
+}
+
+"aniflix_app::themes::themeManager.dart::ThemeManager" o-- "aniflix_app::themes::themeManager.dart::ThemeManager"
+"aniflix_app::themes::themeManager.dart::ThemeManager" o-- "aniflix_app::Themes::theme.dart::CustomTheme"
+
+
+@enduml
