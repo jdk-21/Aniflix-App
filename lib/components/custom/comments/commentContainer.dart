@@ -3,6 +3,7 @@ import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,14 +13,15 @@ import 'SubCommentContainer.dart';
 class CommentContainer extends StatefulWidget {
   Comment comment;
   User user;
+  EpisodeScreenState episodeScreenState;
 
-  CommentContainer(Comment comment, this.user) {
+  CommentContainer(Comment comment, this.user, this.episodeScreenState) {
     this.comment = comment;
   }
 
   @override
   CommentContainerState createState() =>
-      CommentContainerState(this.comment, this.user);
+      CommentContainerState(this.comment, this.user, this.episodeScreenState);
 }
 
 class CommentContainerState extends State<CommentContainer> {
@@ -36,8 +38,10 @@ class CommentContainerState extends State<CommentContainer> {
   bool _isReported;
   var reports;
   User currentUser;
+  bool _needAnswer = false;
+  EpisodeScreenState state;
 
-  CommentContainerState(Comment comment, this.currentUser) {
+  CommentContainerState(Comment comment, this.currentUser, this.state) {
     this.text = comment.text;
     this.user = comment.user;
     this.subComments = comment.comments;
@@ -110,6 +114,12 @@ class CommentContainerState extends State<CommentContainer> {
         _actualVote = possibleVotes.elementAt(1);
       }
     }
+  }
+
+  changeNeedAnswer(){
+    setState(() {
+      _needAnswer = !_needAnswer;
+    });
   }
 
   @override
@@ -272,13 +282,14 @@ class CommentContainerState extends State<CommentContainer> {
                               )
                             ],
                           ),
+                          _needAnswer ? SizedBox() : FlatButton(onPressed: (){changeNeedAnswer();},child: Text("Antworten", style: TextStyle(fontWeight: FontWeight.normal, color: Theme.of(ctx).textTheme.title.color),),)
                         ],
                       ),
                     ],
                   ),
                 )
               ]),
-              AnswerCommentComponent(this.currentUser)
+              _needAnswer ? AnswerCommentComponent(this.currentUser, this) : SizedBox()
             ],
           ),
           Column(

@@ -6,27 +6,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CommentComponent extends StatefulWidget {
-
   User user;
-  EpisodeScreenState episodeState;
+  EpisodeScreenState state;
 
-  CommentComponent(this.user, this.episodeState);
+  CommentComponent(this.user, this.state);
 
   @override
   CommentComponentState createState() =>
-      CommentComponentState(user, episodeState);
+      CommentComponentState(user, state);
 }
 
 class CommentComponentState extends State<CommentComponent> {
-
   User user;
   EpisodeScreenState episodeState;
+
 
   CommentComponentState(this.user, this.episodeState);
 
   @override
-  Widget build(BuildContext ctx){
-
+  Widget build(BuildContext ctx) {
     var controller = TextEditingController();
 
     var textField = TextField(
@@ -35,9 +33,8 @@ class CommentComponentState extends State<CommentComponent> {
       controller: controller,
       maxLines: null,
       maxLength: 1000,
-      decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Kommentar'),
+      decoration:
+          InputDecoration(fillColor: Colors.white,border: InputBorder.none, hintText: 'Kommentar'),
     );
 
     return Container(
@@ -45,36 +42,41 @@ class CommentComponentState extends State<CommentComponent> {
         children: <Widget>[
           (user.avatar == null)
               ? IconButton(
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(ctx).primaryIconTheme.color,
-            ),
-          )
+                  icon: Icon(
+                    Icons.person,
+                    color: Theme.of(ctx).primaryIconTheme.color,
+                  ),
+                )
               : IconButton(
-            icon: new Container(
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        "https://www2.aniflix.tv/storage/" +
-                            user.avatar,
-                      ),
-                    ))),
-            onPressed: () => {},
-          ),
-          Container(
-            width: 200,
-            child: textField
-            ),
+                  icon: new Container(
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              "https://www2.aniflix.tv/storage/" + user.avatar,
+                            ),
+                          ))),
+                  onPressed: () => {},
+                ),
+          Expanded(child: textField),
           IconButton(
             icon: Icon(Icons.send),
             color: Theme.of(ctx).primaryIconTheme.color,
             onPressed: () {
+              Comment newComment = new Comment(
+                  null,
+                  controller.text,
+                  user.id,
+                  "App\\Comment",
+                  null,
+                  DateTime.now().toIso8601String(),
+                  null,
+                  null,
+                  0,
+                  user, [], []);
 
-              Comment newComment = new Comment(null, controller.text, user.id, "App\\Comment", null, DateTime.now().toIso8601String(), null, null, 0, user, [], []);
-
-              episodeState.addComment(newComment);
+              episodeState.addComment(newComment, user);
               /*CommentContainer comment = new CommentContainer(newComment, user);*/
 
               controller.text = "";

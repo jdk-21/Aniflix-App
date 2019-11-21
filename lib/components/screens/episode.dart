@@ -41,6 +41,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int _numberOfDownVotes;
   Future<LoadInfo> episodeInfo;
   List<Comment> commentList;
+  List<Widget> _commentElements = [];
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -135,7 +136,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
-  addComment(Comment newComment){
+  addComment(Comment newComment, User user){
     setState(() {
 
       commentList.insert(0, newComment);
@@ -194,10 +195,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             if(commentList == null) {
               commentList = episode.comments;
             }
-            List<Widget> commentElements = [];
-            for(var comment in commentList){
-              commentElements.add(CommentContainer(comment, snapshot.data.user));
-            }
+              for(var comment in commentList){
+                _commentElements.add(CommentContainer(comment, snapshot.data.user, this));
+              }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
@@ -450,7 +450,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           Column(
                             children:[
                               CommentComponent(snapshot.data.user, this),
-                              Column(children: commentElements)
+                              Column(children: _commentElements)
                             ]
                           ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
