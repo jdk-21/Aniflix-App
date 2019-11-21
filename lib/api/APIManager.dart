@@ -13,7 +13,9 @@ import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
+import 'package:aniflix_app/components/screens/animelist.dart';
 import 'objects/anime/Anime.dart';
+import 'objects/allanime/genrewithshow.dart';
 import 'package:http/http.dart' as http;
 
 class APIManager {
@@ -134,6 +136,34 @@ class APIManager {
 
     return anime;
   }
+  static Future<List<Show>> getAllShows() async {
+    List<Show> shows = [];
+    var response = await _authGetRequest("show",login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var show = Show.fromJson(entry);
+        shows.add(show);
+      }
+    }
+
+    return shows;
+  }
+  static Future<List<GenreWithShows>> getAllShowsByGenres() async {
+    List<GenreWithShows> shows = [];
+    var response = await _authGetRequest("show/genres",login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var show = GenreWithShows.fromJson(entry);
+        shows.add(show);
+      }
+    }
+
+    return shows;
+  }
   static Future<EpisodeInfo> getEpisode(String name,int season, int number) async {
     EpisodeInfo episode;
     var response = await _authGetRequest("episode/show/"+name+"/season/"+season.toString()+"/episode/"+number.toString(),login);
@@ -185,6 +215,12 @@ class APIManager {
     var newShows = await getNewShows(state);
     var discover = await getDiscover(state);
     return Homedata(continues,airings, newShows, discover);
+  }
+
+  static Future<AnimeListData> getAnimeListData() async {
+    var allShows = await getAllShows();
+    var allShowsWithGenres = await getAllShowsByGenres();
+    return AnimeListData(allShows, allShowsWithGenres);
   }
 
   static Future<LoginResponse> loginRequest(String email, String pw) async {
