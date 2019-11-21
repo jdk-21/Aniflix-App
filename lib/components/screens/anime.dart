@@ -202,6 +202,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                               children: <Widget>[
                                 OutlineButton(
                                   onPressed: () {
+                                    APIManager.setSubscription(anime.id, !_isSubscribed);
                                     toggleSubButton(!_isSubscribed);
                                   },
                                   child: Text(_isSubscribed
@@ -219,6 +220,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 ),
                                 IconButton(
                                     onPressed: () {
+                                      APIManager.setWatchlist(anime.id, !_isInWatchlist);
                                       addToWatchlist(!_isInWatchlist);
                                     },
                                     icon: Icon(_isInWatchlist
@@ -229,6 +231,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         : Theme.of(ctx).primaryIconTheme.color),
                                 IconButton(
                                     onPressed: () {
+                                      APIManager.setFavourite(anime.id, !_isFavorite);
                                       addAsFavorite();
                                     },
                                     icon: _isFavorite

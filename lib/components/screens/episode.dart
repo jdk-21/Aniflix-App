@@ -1,6 +1,10 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
+import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
+import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:expandable/expandable.dart';
@@ -23,7 +27,6 @@ class EpisodeScreen extends StatefulWidget {
 
 class EpisodeScreenState extends State<EpisodeScreen> {
   MainWidgetState mainState;
-  Future<EpisodeInfo> episodedata;
   List<String> languages = [];
   List<AnimeStream> _links = [];
   int _language;
@@ -36,6 +39,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   String _actualVote;
   int _numberOfUpVotes;
   int _numberOfDownVotes;
+  Future<LoadInfo> episodeInfo;
+  List<Comment> commentList;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -105,7 +110,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   updateEpisodeData(String name, int season, int number){
     setState(() {
-      this.episodedata = APIManager.getEpisode(name, season, number);
+      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
       this.languages = [];
       this._links = [];
       this._language = null;
@@ -127,18 +132,26 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   }
 
   EpisodeScreenState(this.mainState, String name, int season, int number) {
-    this.episodedata = APIManager.getEpisode(name, season, number);
+    this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
+  }
+
+  addComment(Comment newComment){
+    setState(() {
+
+      commentList.insert(0, newComment);
+
+    });
   }
 
   @override
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("episode_screen"),
-      child: FutureBuilder<EpisodeInfo>(
-        future: episodedata,
+      child: FutureBuilder<LoadInfo>(
+        future: episodeInfo,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var episode = snapshot.data;
+            var episode = snapshot.data.episodeInfo;
             for (var stream in episode.streams) {
               if (!languages.contains(stream.lang)) {
                 languages.add(stream.lang);
@@ -176,6 +189,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                   this._stream = stream.link;
                 }
               }
+            }
+
+            if(commentList == null) {
+              commentList = episode.comments;
+            }
+            List<Widget> commentElements = [];
+            for(var comment in commentList){
+              commentElements.add(CommentContainer(comment, snapshot.data.user));
             }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
@@ -373,6 +394,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
+                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(episode.id, null, 1);
+                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(episode.id, 1, null);
+                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(episode.id, 0, 1);
+                                    }
                                     makeUpVote();
                                   },
                                 ),
@@ -397,6 +425,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
+
+                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(episode.id, null, 0);
+                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(episode.id, 1, 0);
+                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(episode.id, 0, null);
+                                    }
                                     makeDownVote();
                                   },
                                 ),
@@ -413,6 +449,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         )
                       ],
                     ),
+
                     ExpandablePanel(
                       header: Align(
                         alignment: Alignment.center,
@@ -424,7 +461,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               color: Theme.of(ctx).textTheme.title.color),
                         ),
                       ),
-                      expanded: Text(""),
+                      expanded:
+                          Column(
+                            children:[
+                              CommentComponent(snapshot.data.user, this),
+                              Column(children: commentElements)
+                            ]
+                          ),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
                       tapBodyToCollapse: true,
@@ -501,4 +544,12 @@ class GetLanguagesAsDropdownList {
     }
     return namelist;
   }
+}
+
+
+class LoadInfo{
+  User user;
+  EpisodeInfo episodeInfo;
+
+  LoadInfo(this.user, this.episodeInfo);
 }
