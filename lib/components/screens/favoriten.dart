@@ -38,7 +38,7 @@ class Favoriten extends StatelessWidget {
   }
 
   List<Widget> getFavouritesAsWidgets(BuildContext ctx, List<Show> favouriteList){
-    List<Widget> watchlistWidget = [Container(padding: EdgeInsets.all(5),child: Text("Favourites", style: TextStyle(color: Theme.of(ctx).textTheme.title.color, fontSize: 30, fontWeight: FontWeight.bold)))];
+    List<Widget> watchlistWidget = [Container(padding: EdgeInsets.all(5),child: Text("Favoriten", style: TextStyle(color: Theme.of(ctx).textTheme.title.color, fontSize: 30, fontWeight: FontWeight.bold)))];
 
     for(var anime in favouriteList){
       watchlistWidget.add(Container(
