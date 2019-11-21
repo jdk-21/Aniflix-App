@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
@@ -193,11 +194,28 @@ class APIManager {
     return episode;
   }
 
-  static Future<LoadInfo> getEpisodeInfo(String name,int season, int number) async {
+  static Future<LoadInfo> getEpisodeInfo(
+      String name, int season, int number) async {
     var info = await getEpisode(name, season, number);
     var user = await getUser();
 
     return LoadInfo(user, info);
+  }
+
+  static Future<ReviewShow> getReviews(String name) async {
+    ReviewShow review;
+    var response = await _authGetRequest("show/reviews/"+name, login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      review = ReviewShow.fromJson(json);
+    }
+
+    return review;
+  }
+
+  static void createReview(int show_id, String text) {
+    _authPostRequest("review", login,bodyObject: {"show_id":show_id,"text":text});
   }
 
   static Future<List<SliderElement>> getContinue(MainWidgetState state) async {
@@ -256,40 +274,93 @@ class APIManager {
   }
 
   static void setShowVote(int showID, int previous_vote, int value) {
-    _authPostRequest("vote/show/" + showID.toString(), login,
-        bodyObject: {"value":value.toString(),"previous_vote":previous_vote.toString()});
+    _authPostRequest("vote/show/" + showID.toString(), login, bodyObject: {
+      "value": value.toString(),
+      "previous_vote": previous_vote.toString()
+    });
   }
+
   static void setEpisodeVote(int episodeID, int previous_value, int new_value) {
     _authPostRequest("vote/episode/" + episodeID.toString(), login,
-        bodyObject: {"previous_value": previous_value.toString(), "new_value": new_value.toString()});
+        bodyObject: {
+          "previous_value": previous_value.toString(),
+          "new_value": new_value.toString()
+        });
   }
+
   static void setCommentVote(int commentID, int previous_value, int new_value) {
     _authPostRequest("vote/comment/" + commentID.toString(), login,
-        bodyObject: {"previous_value": previous_value.toString(), "new_value": new_value.toString()});
+        bodyObject: {
+          "previous_value": previous_value.toString(),
+          "new_value": new_value.toString()
+        });
   }
 
   static void setSubscription(int showID, bool newValue) {
-    if(newValue){
-      _authPostRequest("abos/"+showID.toString()+"/subscribe", login);
-    }else{
-      _authPostRequest("abos/"+showID.toString()+"/unsubscribe", login);
+    if (newValue) {
+      _authPostRequest("abos/" + showID.toString() + "/subscribe", login);
+    } else {
+      _authPostRequest("abos/" + showID.toString() + "/unsubscribe", login);
     }
   }
 
   static void setWatchlist(int showID, bool newValue) {
-    if(newValue){
-      _authPostRequest("watchlist/"+showID.toString()+"/add", login);
-    }else{
-      _authPostRequest("watchlist/"+showID.toString()+"/remove", login);
+    if (newValue) {
+      _authPostRequest("watchlist/" + showID.toString() + "/add", login);
+    } else {
+      _authPostRequest("watchlist/" + showID.toString() + "/remove", login);
     }
+  }
+  static Future<List<Show>> getWatchlist() async {
+    List<Show> shows = [];
+    var response = await _authGetRequest("watchlist", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var show = Show.fromJson(entry);
+        shows.add(show);
+      }
+    }
+
+    return shows;
+  }
+
+  static Future<List<Episode>> getHistory() async {
+    List<Episode> episodes = [];
+    var response = await _authPostRequest("show/history", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var episode = Episode.fromJson(entry);
+        episodes.add(episode);
+      }
+    }
+
+    return episodes;
   }
 
   static void setFavourite(int showID, bool newValue) {
-    if(newValue){
-      _authPostRequest("favorites/"+showID.toString()+"/add", login);
-    }else{
-      _authPostRequest("favorites/"+showID.toString()+"/remove", login);
+    if (newValue) {
+      _authPostRequest("favorites/" + showID.toString() + "/add", login);
+    } else {
+      _authPostRequest("favorites/" + showID.toString() + "/remove", login);
     }
+  }
+  static Future<List<Show>> getFavourite() async {
+    List<Show> shows = [];
+    var response = await _authGetRequest("favorites", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var show = Show.fromJson(entry);
+        shows.add(show);
+      }
+    }
+
+    return shows;
   }
 
   static Future<http.Response> _getRequest(String query) {
