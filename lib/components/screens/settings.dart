@@ -67,7 +67,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Favoriten(), 9);
+              state.changePage(Favoriten(state), 9);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
