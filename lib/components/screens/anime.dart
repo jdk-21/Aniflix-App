@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/components/custom/text/highlighted_text_box.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
+import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
 import 'package:aniflix_app/main.dart';
@@ -83,7 +84,7 @@ class AnimeScreenState extends State<AnimeScreen> {
               }
               if (snapshot.data.genres != null) {
                 for (var genre in snapshot.data.genres) {
-                  if(!genreNames.contains(genre.name)){
+                  if (!genreNames.contains(genre.name)) {
                     genreNames.add(genre.name);
                     test.add(TextboxSliderElement(genre.name));
                   }
@@ -145,14 +146,46 @@ class AnimeScreenState extends State<AnimeScreen> {
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
-                                  )
+                                  ),
+                                  InkWell(
+                                    child: Container(
+                                      padding: EdgeInsets.all(0),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Theme.of(ctx)
+                                                      .textTheme
+                                                      .title
+                                                      .color))),
+                                      child: Text(
+                                        "Reviews",
+                                        style: TextStyle(
+                                            color: Theme.of(ctx)
+                                                .textTheme
+                                                .title
+                                                .color,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      state.changePage(
+                                          ReviewScreen(anime.url), 9);
+                                    },
+                                  ),
                                 ],
                               ),
                             )
                           ],
                         ),
-                        SizedBox(height: 10,),
-                        test.length < 1 ? SizedBox(height: 0,) : TextboxCarousel(test),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        test.length < 1
+                            ? SizedBox(
+                                height: 0,
+                              )
+                            : TextboxCarousel(test),
                         Container(
                           child: ExpandablePanel(
                             header: Align(
@@ -202,7 +235,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                               children: <Widget>[
                                 OutlineButton(
                                   onPressed: () {
-                                    APIManager.setSubscription(anime.id, !_isSubscribed);
+                                    APIManager.setSubscription(
+                                        anime.id, !_isSubscribed);
                                     toggleSubButton(!_isSubscribed);
                                   },
                                   child: Text(_isSubscribed
@@ -220,7 +254,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 ),
                                 IconButton(
                                     onPressed: () {
-                                      APIManager.setWatchlist(anime.id, !_isInWatchlist);
+                                      APIManager.setWatchlist(
+                                          anime.id, !_isInWatchlist);
                                       addToWatchlist(!_isInWatchlist);
                                     },
                                     icon: Icon(_isInWatchlist
@@ -231,7 +266,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         : Theme.of(ctx).primaryIconTheme.color),
                                 IconButton(
                                     onPressed: () {
-                                      APIManager.setFavourite(anime.id, !_isFavorite);
+                                      APIManager.setFavourite(
+                                          anime.id, !_isFavorite);
                                       addAsFavorite();
                                     },
                                     icon: _isFavorite
