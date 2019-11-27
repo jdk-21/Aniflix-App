@@ -256,6 +256,11 @@ class APIManager {
     return continues;
   }
 
+  static Future<List<SliderElement>> hideContinue(int show_id, MainWidgetState state) async {
+    await _authPostRequest("show/hide-continue/"+show_id.toString(), login);
+    return getContinue(state);
+  }
+
   static Future<Homedata> getHomeData(MainWidgetState state) async {
     var continues = await getContinue(state);
     var airings = await getAirings(state);
