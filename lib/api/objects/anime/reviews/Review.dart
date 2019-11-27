@@ -6,13 +6,10 @@ class Review{
   int show_id;
   int user_id;
   String text;
-  String created_at;
-  String updated_at;
-  String deleted_at;
   Vote vote;
   User user;
 
-  Review(this.id, this.show_id,this.user_id,this.text,this.created_at,this.updated_at,this.deleted_at,this.vote,this.user);
+  Review(this.id, this.show_id,this.user_id,this.text,this.vote,this.user);
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
@@ -20,9 +17,6 @@ class Review{
         json["show_id"],
         json["user_id"],
         json["text"],
-        json["created_at"],
-        json["updated_at"],
-        json["deleted_at"],
         Vote.fromJson(json["vote"]),
         User.fromJson(json["user"])
     );
