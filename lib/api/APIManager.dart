@@ -206,7 +206,7 @@ class APIManager {
 
   static Future<ReviewShow> getReviews(String name) async {
     ReviewShow review;
-    var response = await _authGetRequest("show/reviews/"+name, login);
+    var response = await _authGetRequest("show/reviews/" + name, login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -216,7 +216,7 @@ class APIManager {
     return review;
   }
 
-  static Future<ReviewInfo> getReviewInfo(String name) async{
+  static Future<ReviewInfo> getReviewInfo(String name) async {
     var info = await getReviews(name);
     var user = await getUser();
 
@@ -224,10 +224,12 @@ class APIManager {
   }
 
   static void createReview(int show_id, String text) {
-    _authPostRequest("review", login,bodyObject: {"show_id":show_id.toString(),"text":text});
+    _authPostRequest("review", login,
+        bodyObject: {"show_id": show_id.toString(), "text": text});
   }
 
-  static Future<List<SliderElement>> getContinue(MainWidgetState state) async {
+  static Future<List<SliderElement>> getContinue(
+      MainWidgetState state, Function(List<SliderElement>) reload) async {
     List<SliderElement> continues = [];
     var response = await _authPostRequest("show/continue", login);
 
@@ -236,28 +238,40 @@ class APIManager {
       for (var entry in json) {
         var ep = Episode.fromJson(entry);
         continues.add(SliderElement(
-            name: ep.season.show.name +
-                " S" +
-                ep.season.number.toString() +
-                "E" +
-                ep.number.toString(),
-            description: ep.updated_at,
-            image: "https://www2.aniflix.tv/storage/" +
-                ep.season.show.cover_landscape,
-            onTap: () {
-              state.changePage(
-                  EpisodeScreen(
-                      state, ep.season.show.url, ep.season.number, ep.number),
-                  10);
-            }));
+          name: ep.season.show.name +
+              " S" +
+              ep.season.number.toString() +
+              "E" +
+              ep.number.toString(),
+          description: ep.updated_at,
+          image: "https://www2.aniflix.tv/storage/" +
+              ep.season.show.cover_landscape,
+          onTap: () {
+            state.changePage(
+                EpisodeScreen(
+                    state, ep.season.show.url, ep.season.number, ep.number),
+                10);
+          },
+          close: () async {
+            var continues =
+                await APIManager.hideContinue(ep.season.show_id, state, reload);
+            reload(continues);
+         },
+        ));
       }
     }
 
     return continues;
   }
 
-  static Future<Homedata> getHomeData(MainWidgetState state) async {
-    var continues = await getContinue(state);
+  static Future<List<SliderElement>> hideContinue(
+      int show_id, MainWidgetState state, Function(List<SliderElement>) reload) async {
+    await _authPostRequest("show/hide-continue/" + show_id.toString(), login);
+    return getContinue(state, reload);
+  }
+
+  static Future<Homedata> getHomeData(MainWidgetState state,Function(List<SliderElement>) reload) async {
+    var continues = await getContinue(state, reload);
     var airings = await getAirings(state);
     var newShows = await getNewShows(state);
     var discover = await getDiscover(state);
@@ -325,6 +339,7 @@ class APIManager {
       _authPostRequest("watchlist/" + showID.toString() + "/remove", login);
     }
   }
+
   static Future<List<Show>> getWatchlist() async {
     List<Show> shows = [];
     var response = await _authGetRequest("watchlist", login);
@@ -362,6 +377,7 @@ class APIManager {
       _authPostRequest("favorites/" + showID.toString() + "/remove", login);
     }
   }
+
   static Future<List<Show>> getFavourite() async {
     List<Show> shows = [];
     var response = await _authGetRequest("favorites", login);
@@ -390,7 +406,8 @@ class APIManager {
     Map<String, String> headers = {
       "Authorization": user.token_type + " " + user.access_token
     };
-    return http.delete('https://www2.aniflix.tv/api/' + query, headers: headers);
+    return http.delete('https://www2.aniflix.tv/api/' + query,
+        headers: headers);
   }
 
   static Future<http.Response> _authPostRequest(

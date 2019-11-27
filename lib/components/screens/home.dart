@@ -13,10 +13,24 @@ class Homedata{
   Homedata(this.continues,this.airings,this.newshows,this.discover);
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  MainWidgetState state;
+
+  Home(this.state);
+
+  @override
+  HomeState createState() => HomeState(state);
+}
+
+class HomeState extends State<Home>{
+
   Future<Homedata> homedata;
-  Home(MainWidgetState state){
-    this.homedata = APIManager.getHomeData(state);
+  List<SliderElement> continues = [];
+
+  HomeState(MainWidgetState state){
+    this.homedata = APIManager.getHomeData(state, (continues){setState(() {
+      this.continues = continues;
+    });});
   }
 
   @override
@@ -30,7 +44,7 @@ class Home extends StatelessWidget {
           return Container(
               color: Theme.of(ctx).backgroundColor,
               child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                (snapshot.data.continues.length > 0)?HeadlineSlider("Weitersehen",ctx, snapshot.data.continues):Container(),
+                (continues.length < 1) ? ((snapshot.data.continues.length > 0) ? HeadlineSlider("Weitersehen",ctx, snapshot.data.continues):Container()) : HeadlineSlider("Weitersehen",ctx, continues),
                 HeadlineSlider("Neue Folgen",ctx, snapshot.data.airings),
                 HeadlineSlider("Neu auf Aniflix",ctx, snapshot.data.newshows, aspectRatio: 200/300, size: 0.4,),
                 HeadlineSlider("Entdecken",ctx, snapshot.data.discover, aspectRatio: 200/300, size: 0.4,),
