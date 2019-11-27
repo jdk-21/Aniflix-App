@@ -1,32 +1,19 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
-import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CommentComponent extends StatefulWidget {
-
+class CommentComponent extends StatelessWidget {
   User user;
-  EpisodeScreenState episodeState;
+  EpisodeScreenState state;
+  Function(String) callback;
 
-  CommentComponent(this.user, this.episodeState);
+  CommentComponent(this.user, this.state, this.callback);
 
   @override
-  CommentComponentState createState() =>
-      CommentComponentState(user, episodeState);
-}
-
-class CommentComponentState extends State<CommentComponent> {
-
-  User user;
-  EpisodeScreenState episodeState;
-
-  CommentComponentState(this.user, this.episodeState);
-
-  @override
-  Widget build(BuildContext ctx){
-
+  Widget build(BuildContext ctx) {
     var controller = TextEditingController();
 
     var textField = TextField(
@@ -35,9 +22,8 @@ class CommentComponentState extends State<CommentComponent> {
       controller: controller,
       maxLines: null,
       maxLength: 1000,
-      decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Kommentar'),
+      decoration:
+          InputDecoration(fillColor: Colors.white,border: InputBorder.none, hintText: 'Kommentar'),
     );
 
     return Container(
@@ -52,34 +38,41 @@ class CommentComponentState extends State<CommentComponent> {
             onPressed: (){},
           )
               : IconButton(
-            icon: new Container(
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        "https://www2.aniflix.tv/storage/" +
-                            user.avatar,
-                      ),
-                    ))),
-            onPressed: () => {},
-          ),
-          Container(
-            width: 200,
-            child: textField
-            ),
+                  icon: new Container(
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              "https://www2.aniflix.tv/storage/" + user.avatar,
+                            ),
+                          ))),
+                  onPressed: () => {},
+                ),
+          Expanded(child: textField),
           IconButton(
             icon: Icon(Icons.send),
             color: Theme.of(ctx).primaryIconTheme.color,
-            onPressed: () {
+            onPressed: (){callback(controller.text);
+            controller.text = "";},
+            /*() {
+              Comment newComment = new Comment(
+                  null,
+                  controller.text,
+                  user.id,
+                  "App\\Comment",
+                  null,
+                  DateTime.now().toIso8601String(),
+                  null,
+                  null,
+                  null,
+                  user, [], []);
 
-              Comment newComment = new Comment(null, controller.text, user.id, "App\\Comment", null, DateTime.now().toIso8601String(), null, null, 0, user, [], []);
-
-              episodeState.addComment(newComment);
+              state.addComment(newComment);
               /*CommentContainer comment = new CommentContainer(newComment, user);*/
 
               controller.text = "";
-            },
+            },*/
           ),
         ],
       ),

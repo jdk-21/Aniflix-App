@@ -41,6 +41,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int _numberOfDownVotes;
   Future<LoadInfo> episodeInfo;
   List<Comment> commentList;
+  String name;
+  int season;
+  int number;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -108,7 +111,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
-  updateEpisodeData(String name, int season, int number){
+  updateEpisodeData(String name, int season, int number) {
     setState(() {
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
       this.languages = [];
@@ -120,6 +123,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this._actualVote = null;
       this._numberOfUpVotes = null;
       this._numberOfDownVotes = null;
+      this.commentList = null;
     });
   }
 
@@ -131,17 +135,16 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     return _language;
   }
 
-  EpisodeScreenState(this.mainState, String name, int season, int number) {
+  EpisodeScreenState(this.mainState, this.name, this.season, this.number) {
     this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
   }
 
-  addComment(Comment newComment){
+  addComment(Comment newComment) {
     setState(() {
-
-      commentList.insert(0, newComment);
-
+      commentList.add(newComment);
     });
   }
+
 
   @override
   Widget build(BuildContext ctx) {
@@ -191,12 +194,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if(commentList == null) {
+            if (commentList == null) {
               commentList = episode.comments;
             }
-            List<Widget> commentElements = [];
-            for(var comment in commentList){
-              commentElements.add(CommentContainer(comment, snapshot.data.user));
+            List<Widget> _commentElements = [];
+            for (var comment in commentList) {
+              _commentElements
+                  .add(CommentContainer(comment, snapshot.data.user, this));
             }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
@@ -214,7 +218,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                 ),
                                 color: Theme.of(ctx).textTheme.title.color,
                                 onPressed: () {
-                                  updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number - 1));
+                                  updateEpisodeData(
+                                      episode.season.show.url,
+                                      episode.season.number,
+                                      (episode.number - 1));
                                 },
                               )
                             : IconButton(
@@ -279,7 +286,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               : Theme.of(ctx).backgroundColor,
                           onPressed: (episode.next != "")
                               ? () {
-                            updateEpisodeData(episode.season.show.url, episode.season.number, (episode.number + 1));
+                                  updateEpisodeData(
+                                      episode.season.show.url,
+                                      episode.season.number,
+                                      (episode.number + 1));
                                 }
                               : () {},
                         ),
@@ -449,7 +459,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         )
                       ],
                     ),
-
                     ExpandablePanel(
                       header: Align(
                         alignment: Alignment.center,
@@ -461,13 +470,15 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               color: Theme.of(ctx).textTheme.title.color),
                         ),
                       ),
-                      expanded:
-                          Column(
-                            children:[
-                              CommentComponent(snapshot.data.user, this),
-                              Column(children: commentElements)
-                            ]
-                          ),
+                      expanded: Column(children: [
+                        CommentComponent(snapshot.data.user, this, (text)async{APIManager.addComment(episode.id, text);
+                        updateEpisodeData(episode.season.show.url,
+                            episode.season.number,
+                            (episode.number + 1));
+
+                        }),
+                        Column(children: _commentElements)
+                      ]),
                       headerAlignment: ExpandablePanelHeaderAlignment.center,
                       tapHeaderToExpand: true,
                       tapBodyToCollapse: true,
@@ -546,8 +557,7 @@ class GetLanguagesAsDropdownList {
   }
 }
 
-
-class LoadInfo{
+class LoadInfo {
   User user;
   EpisodeInfo episodeInfo;
 
