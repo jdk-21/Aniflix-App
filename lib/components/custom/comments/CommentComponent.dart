@@ -31,11 +31,12 @@ class CommentComponent extends StatelessWidget {
         children: <Widget>[
           (user.avatar == null)
               ? IconButton(
-                  icon: Icon(
-                    Icons.person,
-                    color: Theme.of(ctx).primaryIconTheme.color,
-                  ),
-                )
+            icon: Icon(
+              Icons.person,
+              color: Theme.of(ctx).primaryIconTheme.color,
+            ),
+            onPressed: (){},
+          )
               : IconButton(
                   icon: new Container(
                       decoration: new BoxDecoration(

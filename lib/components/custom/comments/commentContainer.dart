@@ -150,6 +150,7 @@ class CommentContainerState extends State<CommentContainer> {
                               Icons.person,
                               color: Theme.of(ctx).primaryIconTheme.color,
                             ),
+                      onPressed: (){},
                           )
                         : IconButton(
                             icon: new Container(
@@ -162,6 +163,7 @@ class CommentContainerState extends State<CommentContainer> {
                                             user.avatar,
                                       ),
                                     ))),
+                      onPressed: (){},
                           ),
 
                 ),

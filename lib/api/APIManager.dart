@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
+import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
+import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
 import 'package:aniflix_app/api/objects/Episode.dart';
@@ -214,8 +216,15 @@ class APIManager {
     return review;
   }
 
+  static Future<ReviewInfo> getReviewInfo(String name) async{
+    var info = await getReviews(name);
+    var user = await getUser();
+
+    return ReviewInfo(info, user);
+  }
+
   static void createReview(int show_id, String text) {
-    _authPostRequest("review", login,bodyObject: {"show_id":show_id,"text":text});
+    _authPostRequest("review", login,bodyObject: {"show_id":show_id.toString(),"text":text});
   }
 
   static Future<List<SliderElement>> getContinue(MainWidgetState state) async {
@@ -331,14 +340,14 @@ class APIManager {
     return shows;
   }
 
-  static Future<List<Episode>> getHistory() async {
-    List<Episode> episodes = [];
+  static Future<List<HistoryEpisode>> getHistory() async {
+    List<HistoryEpisode> episodes = [];
     var response = await _authPostRequest("show/history", login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
-        var episode = Episode.fromJson(entry);
+        var episode = HistoryEpisode.fromJson(entry);
         episodes.add(episode);
       }
     }

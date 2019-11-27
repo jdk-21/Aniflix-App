@@ -39,7 +39,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Verlauf(), 7);
+              state.changePage(Verlauf(state), 7);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -53,7 +53,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Watchlist(), 8);
+              state.changePage(Watchlist(state), 8);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(
@@ -67,7 +67,7 @@ class Settings extends StatelessWidget {
           ),
           FlatButton(
             onPressed: () {
-              state.changePage(Favoriten(), 9);
+              state.changePage(Favoriten(state), 9);
             },
             padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
             child: Align(

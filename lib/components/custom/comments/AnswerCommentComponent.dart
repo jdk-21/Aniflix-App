@@ -51,6 +51,7 @@ class AnswerCommentComponentState extends State<AnswerCommentComponent> {
               Icons.person,
               color: Theme.of(ctx).primaryIconTheme.color,
             ),
+            onPressed: (){},
           )
               :Transform.scale(
             scale: 0.6,
