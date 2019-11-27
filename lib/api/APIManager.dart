@@ -224,7 +224,7 @@ class APIManager {
   }
 
   static void createReview(int show_id, String text) {
-    _authPostRequest("review", login,bodyObject: {"show_id":show_id,"text":text});
+    _authPostRequest("review", login,bodyObject: {"show_id":show_id.toString(),"text":text});
   }
 
   static Future<List<SliderElement>> getContinue(MainWidgetState state) async {

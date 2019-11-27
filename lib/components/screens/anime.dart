@@ -1,5 +1,5 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
-import 'package:aniflix_app/components/custom/text/highlighted_text_box.dart';
+import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import '../../api/objects/anime/Anime.dart';
 import '../../api/APIManager.dart';
 import 'package:expandable/expandable.dart';
-import 'package:aniflix_app/api/objects/Episode.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class AnimeScreen extends StatefulWidget {
   var name;
@@ -32,6 +32,7 @@ class AnimeScreenState extends State<AnimeScreen> {
   bool _isInWatchlist;
   bool _isFavorite;
   bool _useData;
+  double _rating;
 
   toggleSubButton(bool isSubscribed) {
     setState(() {
@@ -282,7 +283,13 @@ class AnimeScreenState extends State<AnimeScreen> {
                                                 .primaryIconTheme
                                                 .color)),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showDialog(
+                                          context: ctx,
+                                          builder: (BuildContext ctx) {
+                                            return RatingDialog(anime, (x){this._rating = x;}, _rating);
+                                          });
+                                    },
                                     icon: Icon(
                                       Icons.assessment,
                                       color:

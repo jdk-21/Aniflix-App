@@ -49,6 +49,7 @@ class CommentComponentState extends State<CommentComponent> {
               Icons.person,
               color: Theme.of(ctx).primaryIconTheme.color,
             ),
+            onPressed: (){},
           )
               : IconButton(
             icon: new Container(

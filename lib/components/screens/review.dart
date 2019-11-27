@@ -2,6 +2,7 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
+import 'package:aniflix_app/components/custom/dialogs/writeReviewDialog.dart';
 import 'package:aniflix_app/components/custom/review/reviewElement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,14 @@ class ReviewScreenState extends State<ReviewScreen> {
   Future<ReviewInfo> reviewData;
   String url;
   List<ReviewElement> _actualReviews = [];
+  bool _showButton = true;
 
-  addNewReview(Review review, BuildContext ctx) {
-    _actualReviews.add(ReviewElement(review, ctx));
+  addNewReview(Review review, BuildContext ctx, ReviewShow reviewInfo) {
+    setState(() {
+      _actualReviews.insert(0, ReviewElement(review, ctx));
+      _showButton = false;
+    });
+    APIManager.createReview(reviewInfo.id, review.text);
   }
 
   ReviewScreenState(this.url) {
@@ -41,6 +47,9 @@ class ReviewScreenState extends State<ReviewScreen> {
             if (_actualReviews.length < 1) {
               for (var review in reviewedAnime.reviews) {
                 _actualReviews.add(ReviewElement(review, ctx));
+                if(review.user_id == snapshot.data.user.id){
+                  _showButton = false;
+                }
               }
             }
             return Container(
@@ -86,6 +95,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                                 style: BorderStyle.solid))),
                     height: 10,
                   ),
+                  _showButton ?
                   Align(
                       alignment: Alignment.center,
                       child: OutlineButton(
@@ -96,55 +106,11 @@ class ReviewScreenState extends State<ReviewScreen> {
                         onPressed: () {
                           showDialog(
                               context: ctx,
-                              builder: (BuildContext ctx) {
-                                return AlertDialog(
-                                  backgroundColor:
-                                      Theme.of(ctx).backgroundColor,
-                                  contentTextStyle: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color),
-                                  content: Column(
-                                    children: <Widget>[
-                                      Text("Review schreiben")
-                                    ],
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      color: Colors.red,
-                                      child: Text(
-                                        "Abbrechen",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      color: Colors.green,
-                                      child: Text(
-                                        "Abgeben",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                        addNewReview(
-                                            new Review(
-                                                (reviewedAnime
-                                                        .reviews.first.id +
-                                                    1),
-                                                reviewedAnime.id,
-                                                snapshot.data.user.id,
-                                                "",
-                                                null,
-                                                snapshot.data.user),
-                                            ctx);
-                                      },
-                                    )
-                                  ],
-                                );
+                              builder: (BuildContext context) {
+                                return WriteReviewDialog((review){addNewReview(review, ctx, reviewedAnime);}, reviewedAnime, snapshot.data.user);
                               });
                         },
-                      ))
+                      )) : SizedBox()
                 ],
               ),
             );
