@@ -307,7 +307,7 @@ class APIManager {
 
   static void addComment(int episodeID, String text) async {
     await _authPostRequest("comment", login,
-        bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID});
+        bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID.toString()});
   }
 
   static void setSubscription(int showID, bool newValue) {
