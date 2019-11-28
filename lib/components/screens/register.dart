@@ -1,5 +1,4 @@
 import 'package:aniflix_app/main.dart';
-import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

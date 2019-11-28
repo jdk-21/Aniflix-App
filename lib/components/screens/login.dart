@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class Login extends StatelessWidget {
   MainWidgetState state;
@@ -16,7 +17,6 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext ctx) {
-    //bool angemeldetBleiben = false;
     return new Container(
       color: Theme.of(ctx).backgroundColor,
       child: Padding(
@@ -31,12 +31,10 @@ class Login extends StatelessWidget {
                       color: Theme.of(ctx).primaryIconTheme.color,
                       size: 50,
                     ),
-                    Text("User Login",
-                        style: TextStyle(
-                            fontFamily: "Poppins-Medium",
-                            color: Theme.of(ctx).textTheme.title.color,
+                    ThemeText("User Login",
+                        ctx,
                             fontWeight: FontWeight.bold,
-                            fontSize: 25))
+                            fontSize: 25)
                   ])),
               SizedBox(height: 30),
               TextField(
@@ -62,34 +60,13 @@ class Login extends StatelessWidget {
                           borderSide:
                               BorderSide(color: Theme.of(ctx).hintColor)))),
               SizedBox(height: 30),
-              /*Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Theme(
-                      child: Checkbox(
-                        onChanged: (newValue) {
-                          angemeldetBleiben = newValue;
-                        },
-                        value: angemeldetBleiben,
-                      ),
-                      data: Theme.of(ctx).copyWith(
-                          unselectedWidgetColor:
-                              Theme.of(ctx).textTheme.title.color),
-                    ),
-                    Text(
-                      "Angemeldet bleiben",
-                      style:
-                          TextStyle(color: Theme.of(ctx).textTheme.title.color),
-                    )
-                  ]),
-              SizedBox(height: 15),*/
               Align(
                   alignment: Alignment.center,
                   child: OutlineButton(
                     textColor: Theme.of(ctx).textTheme.title.color,
                     borderSide:
                         BorderSide(color: Theme.of(ctx).textTheme.title.color),
-                    child: Text("Login"),
+                    child: ThemeText("Login",ctx),
                     onPressed: () async {
                       var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
                       if(response.hasError()){
@@ -107,7 +84,7 @@ class Login extends StatelessWidget {
                 alignment: Alignment.center,
                 child: FlatButton(
                   textColor: Theme.of(ctx).textTheme.title.color,
-                  child: Text("Noch keinen Account?"),
+                  child: ThemeText("Noch keinen Account?",ctx),
                   onPressed: () {
                     _launchURL();
                     //state.changePage(5);
@@ -138,11 +115,12 @@ class Login extends StatelessWidget {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Error"),
-          content: new Text(message),
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: new ThemeText("Error",context),
+          content: new ThemeText(message,context),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("Close"),
+              child: new ThemeText("Close",context),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -1,16 +1,8 @@
-import 'package:aniflix_app/components/screens/calendar.dart';
-import 'package:aniflix_app/components/screens/favoriten.dart';
-import 'package:aniflix_app/components/screens/profil.dart';
-import 'package:aniflix_app/components/screens/verlauf.dart';
-import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import '../screens/home.dart';
 import '../screens/subbox.dart';
 import '../screens/animelist.dart';
-import '../screens/settings.dart';
-import '../screens/login.dart';
-import '../screens/register.dart';
 import '../../main.dart';
 
 class AniflixNavigationbar extends BottomNav {

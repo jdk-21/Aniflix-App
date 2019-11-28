@@ -1,6 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/components/navigationbars/mainbar.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import '../screens/calendar.dart';
@@ -79,8 +78,6 @@ class AniflixAppbar extends AppBar {
                   color
               );
             }
-
-            // By default, show a loading spinner.
             return IconButton(
             icon: Icon(Icons.person),
             onPressed: () {

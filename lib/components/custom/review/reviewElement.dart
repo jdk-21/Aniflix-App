@@ -3,6 +3,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class ReviewElement extends Container {
   Review review;
@@ -43,17 +44,17 @@ class ReviewElement extends Container {
                                   ),
                                 ))),
                       ),
-                Text(
+                ThemeText(
                   review.user.name,
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  ctx,
                   softWrap: true,
                 ),
                 SizedBox(width: 10,),
-                Text(
+                ThemeText(
                   review.vote == null || review.vote.value == null
                       ? ""
                       : review.vote.value.toString() + "/5",
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  ctx,
                   softWrap: true,
                 )
               ],
@@ -65,9 +66,9 @@ class ReviewElement extends Container {
               style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
               softWrap: true,
             ),
-            expanded: Text(
+            expanded: ThemeText(
               review.text,
-              style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+              ctx,
               softWrap: true,
             ),
           ),

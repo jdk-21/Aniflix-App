@@ -2,29 +2,24 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
-import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
-import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
-import 'AnswerCommentComponent.dart';
-import 'SubCommentContainer.dart';
-
-class CommentContainer extends StatefulWidget {
-  Comment comment;
+class SubCommentContainer extends StatefulWidget {
+  SubComment comment;
   User user;
-  EpisodeScreenState episodeScreenState;
 
-  CommentContainer(Comment comment, this.user, this.episodeScreenState) {
+  SubCommentContainer(SubComment comment, this.user) {
     this.comment = comment;
   }
 
   @override
-  CommentContainerState createState() =>
-      CommentContainerState(this.comment, this.user, this.episodeScreenState);
+  SubCommentContainerState createState() =>
+      SubCommentContainerState(this.comment, this.user);
 }
 
-class CommentContainerState extends State<CommentContainer> {
+class SubCommentContainerState extends State<SubCommentContainer> {
   int id;
   String text;
   User user;
@@ -37,15 +32,12 @@ class CommentContainerState extends State<CommentContainer> {
   int _numberOfUpVotes;
   int _numberOfDownVotes;
   bool _isReported;
-  var reports;
   User currentUser;
-  bool _needAnswer = false;
-  EpisodeScreenState state;
 
-  CommentContainerState(Comment comment, this.currentUser, this.state) {
+  SubCommentContainerState(SubComment comment, this.currentUser) {
+    this.id = comment.id;
     this.text = comment.text;
     this.user = comment.user;
-    this.subComments = comment.comments;
     this.votes = comment.votes;
     this.voted = comment.voted;
     this.createdAt = comment.created_at;
@@ -117,12 +109,6 @@ class CommentContainerState extends State<CommentContainer> {
     }
   }
 
-  changeNeedAnswer(){
-    setState(() {
-      _needAnswer = !_needAnswer;
-    });
-  }
-
   @override
   Widget build(BuildContext ctx) {
     sortVotes();
@@ -136,37 +122,37 @@ class CommentContainerState extends State<CommentContainer> {
       hour = "0" + date.hour.toString();
     }
     return Container(
+      padding: EdgeInsets.only(left: 55),
       color: Theme.of(ctx).backgroundColor,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
               Row(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: (user.avatar == null)
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.person,
-                              color: Theme.of(ctx).primaryIconTheme.color,
-                            ),
-                      onPressed: (){},
-                          )
-                        : IconButton(
-                            icon: new Container(
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                        "https://www2.aniflix.tv/storage/" +
-                                            user.avatar,
-                                      ),
-                                    ))),
-                      onPressed: (){},
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  (user.avatar == null)
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.person,
+                            color: Theme.of(ctx).primaryIconTheme.color,
                           ),
-
-                ),
+                          onPressed: () {},
+                        )
+                      : IconButton(
+                          icon: new Container(
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      "https://www2.aniflix.tv/storage/" +
+                                          user.avatar,
+                                    ),
+                                  ))),
+                          onPressed: () {},
+                        ),
+                ]),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,12 +160,7 @@ class CommentContainerState extends State<CommentContainer> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            user.name + " ",
-                            style: TextStyle(
-                                color: Theme.of(ctx).textTheme.title.color,
-                                fontSize: 12.0),
-                          ),
+                          ThemeText(user.name + " ", ctx, fontSize: 12.0),
                           (this.createdAt != null)
                               ? Text(
                                   date.day.toString() +
@@ -195,24 +176,7 @@ class CommentContainerState extends State<CommentContainer> {
                                       color: Colors.grey, fontSize: 9.0))
                               : Text("",
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontSize: 10.0)),
-                          (user.id == currentUser.id)
-                              ? IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  iconSize: 15,
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(ctx).primaryIconTheme.color,
-                                  ),
-                                  onPressed: () {
-                                    if (!_isReported) {
-                                      report();
-                                    }
-                                  },
-                                )
-                              : Container(),
+                                      color: Colors.grey, fontSize: 10.0)),
                           IconButton(
                             padding: EdgeInsets.all(0),
                             iconSize: 15,
@@ -228,11 +192,10 @@ class CommentContainerState extends State<CommentContainer> {
                           )
                         ],
                       ),
-                      Text(
+                      ThemeText(
                         this.text,
-                        style: TextStyle(
-                            color: Theme.of(ctx).textTheme.title.color,
-                            fontSize: 12.0),
+                        ctx,
+                        fontSize: 12.0,
                         softWrap: true,
                       ),
                       Row(
@@ -250,21 +213,23 @@ class CommentContainerState extends State<CommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
-                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                  if (_actualVote ==
+                                      possibleVotes.elementAt(0) /*null*/) {
                                     APIManager.setCommentVote(this.id, null, 1);
-                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(1) /*+*/) {
                                     APIManager.setCommentVote(this.id, 1, null);
-                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(2) /*-*/) {
                                     APIManager.setCommentVote(this.id, 0, 1);
                                   }
                                   makeUpVote();
                                 },
                               ),
-                              Text(
+                              ThemeText(
                                 _numberOfUpVotes.toString(),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(ctx).textTheme.title.color),
+                                ctx,
+                                fontSize: 12,
                               )
                             ],
                           ),
@@ -281,32 +246,32 @@ class CommentContainerState extends State<CommentContainer> {
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
-                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                  if (_actualVote ==
+                                      possibleVotes.elementAt(0) /*null*/) {
                                     APIManager.setCommentVote(this.id, null, 0);
-                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(1) /*+*/) {
                                     APIManager.setCommentVote(this.id, 1, 0);
-                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(2) /*-*/) {
                                     APIManager.setCommentVote(this.id, 0, null);
                                   }
                                   makeDownVote();
                                 },
                               ),
-                              Text(
+                              ThemeText(
                                 _numberOfDownVotes.toString(),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(ctx).textTheme.title.color),
+                                ctx,
+                                fontSize: 12,
                               )
                             ],
                           ),
-                          _needAnswer ? SizedBox() : FlatButton(onPressed: (){changeNeedAnswer();},child: Text("Antworten", style: TextStyle(fontWeight: FontWeight.normal, color: Theme.of(ctx).textTheme.title.color),),)
                         ],
                       ),
                     ],
                   ),
                 )
               ]),
-              _needAnswer ? AnswerCommentComponent(this.currentUser, this) : SizedBox()
             ],
           ),
           Column(

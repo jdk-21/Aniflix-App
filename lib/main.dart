@@ -73,7 +73,6 @@ class MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext ctx) {
-    var bar = AniflixNavigationbar(this, index, ctx);
     if (APIManager.login == null) {
       return FutureBuilder<SharedPreferences>(
           future: sharedPreferencesData,

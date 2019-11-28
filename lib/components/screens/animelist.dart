@@ -6,6 +6,7 @@ import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/objects/allanime/genrewithshow.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
 
 class AnimeListData {
@@ -55,19 +56,29 @@ class AnimeListState extends State<AnimeList> {
 
   updateAnimeList(filterCriteria) {
     setState(() {
-      switch(filterCriteria){
-        case 0: {
-          _actualSortedAnimeList = _onlyAiring ? sortedGenreAiring : sortedGenre;
-        }break;
-        case 1:{
-          _actualSortedAnimeList = _onlyAiring ? sortedAZAiring : sortedAZ;
-        }break;
-        case 2:{
-          _actualSortedAnimeList = _onlyAiring ? sortedBewertungAiring : sortedBewertung;
-        }break;
-        case 3:{
-          _actualSortedAnimeList = _onlyAiring ? sortedAbosAiring : sortedAbos;
-        }
+      switch (filterCriteria) {
+        case 0:
+          {
+            _actualSortedAnimeList =
+                _onlyAiring ? sortedGenreAiring : sortedGenre;
+          }
+          break;
+        case 1:
+          {
+            _actualSortedAnimeList = _onlyAiring ? sortedAZAiring : sortedAZ;
+          }
+          break;
+        case 2:
+          {
+            _actualSortedAnimeList =
+                _onlyAiring ? sortedBewertungAiring : sortedBewertung;
+          }
+          break;
+        case 3:
+          {
+            _actualSortedAnimeList =
+                _onlyAiring ? sortedAbosAiring : sortedAbos;
+          }
       }
     });
   }
@@ -84,15 +95,70 @@ class AnimeListState extends State<AnimeList> {
         future: animeListData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if(sortedGenre.length < 1 && sortedAZ.length < 1 && sortedBewertung.length < 1 && sortedAbos.length < 1 && sortedGenreAiring.length < 1 && sortedAZAiring.length < 1 && sortedBewertungAiring.length < 1 && sortedAbosAiring.length < 1){
-              sortedGenre = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 0, false);
-              sortedAZ = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 1, false);
-              sortedBewertung = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 2, false);
-              sortedAbos = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 3, false);
-              sortedGenreAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 0, true);
-              sortedAZAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 1, true);
-              sortedBewertungAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 2, true);
-              sortedAbosAiring = getAllAnimeAsSortedList(ctx, state, snapshot.data.allShows, snapshot.data.allShowsWithGenres, 3, true);
+            if (sortedGenre.length < 1 &&
+                sortedAZ.length < 1 &&
+                sortedBewertung.length < 1 &&
+                sortedAbos.length < 1 &&
+                sortedGenreAiring.length < 1 &&
+                sortedAZAiring.length < 1 &&
+                sortedBewertungAiring.length < 1 &&
+                sortedAbosAiring.length < 1) {
+              sortedGenre = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  0,
+                  false);
+              sortedAZ = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  1,
+                  false);
+              sortedBewertung = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  2,
+                  false);
+              sortedAbos = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  3,
+                  false);
+              sortedGenreAiring = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  0,
+                  true);
+              sortedAZAiring = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  1,
+                  true);
+              sortedBewertungAiring = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  2,
+                  true);
+              sortedAbosAiring = getAllAnimeAsSortedList(
+                  ctx,
+                  state,
+                  snapshot.data.allShows,
+                  snapshot.data.allShowsWithGenres,
+                  3,
+                  true);
             }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
@@ -106,26 +172,13 @@ class AnimeListState extends State<AnimeList> {
                           data: Theme.of(ctx).copyWith(
                               canvasColor: Theme.of(ctx).backgroundColor),
                           child: DropdownButton(
-                            hint: Text("Filter"),
-                            items: getFilterCriteriaAsDropdownList(),
+                            hint: ThemeText("Filter", ctx),
+                            items: getFilterCriteriaAsDropdownList(ctx),
                             value: _actualFilterCriteria,
                             style: TextStyle(
                                 color: Theme.of(ctx).textTheme.title.color,
                                 fontSize: 15),
                             onChanged: (newValue) {
-                              /*showDialog(
-                                  context: ctx,
-                                  builder: (BuildContext ctx) {
-                                    return AlertDialog(
-                                        backgroundColor:
-                                            Theme.of(ctx).backgroundColor,
-                                        contentTextStyle: TextStyle(
-                                            color: Theme.of(ctx)
-                                                .textTheme
-                                                .title
-                                                .color),
-                                        content: Text(newValue.toString()));
-                                  });*/
                               changeActualFilterCriteria(newValue);
                               updateAnimeList(_actualFilterCriteria);
                             },
@@ -144,12 +197,7 @@ class AnimeListState extends State<AnimeList> {
                                 value: _onlyAiring,
                               ),
                             ),
-                            Text(
-                              "Nur Airing",
-                              style: TextStyle(
-                                  color: Theme.of(ctx).textTheme.title.color,
-                                  fontWeight: FontWeight.normal),
-                            )
+                            ThemeText("Nur Airing", ctx)
                           ]),
                           onPressed: () {
                             changeCheckbox();
@@ -158,8 +206,9 @@ class AnimeListState extends State<AnimeList> {
                       ],
                     ),
                     Column(
-                      children: _actualSortedAnimeList == null ? []: _actualSortedAnimeList
-                    )
+                        children: _actualSortedAnimeList == null
+                            ? []
+                            : _actualSortedAnimeList)
                   ],
                 ));
           } else if (snapshot.hasError) {
@@ -173,17 +222,23 @@ class AnimeListState extends State<AnimeList> {
     );
   }
 
-  List<DropdownMenuItem<int>> getFilterCriteriaAsDropdownList() {
+  List<DropdownMenuItem<int>> getFilterCriteriaAsDropdownList(
+      BuildContext ctx) {
     List<DropdownMenuItem<int>> filterCriteriaAsDropdown = [];
     for (int l = 0; l < filterCriteria.length; l++) {
-      filterCriteriaAsDropdown.add(
-          DropdownMenuItem(value: l, child: Text(filterCriteria.elementAt(l))));
+      filterCriteriaAsDropdown.add(DropdownMenuItem(
+          value: l, child: ThemeText(filterCriteria.elementAt(l), ctx)));
     }
     return filterCriteriaAsDropdown;
   }
 
-  List<Widget> getAllAnimeAsSortedList(BuildContext ctx, MainWidgetState state,
-      List<Show> allShows, List<GenreWithShows> allShowsWithGenres, int filterCriteria, bool airing) {
+  List<Widget> getAllAnimeAsSortedList(
+      BuildContext ctx,
+      MainWidgetState state,
+      List<Show> allShows,
+      List<GenreWithShows> allShowsWithGenres,
+      int filterCriteria,
+      bool airing) {
     List<Widget> sortedList = [SizedBox(height: 10)];
     switch (filterCriteria) {
       case 0:
@@ -256,11 +311,9 @@ class AnimeListState extends State<AnimeList> {
                         ),*/
                         SizedBox(width: 10),
                         Expanded(
-                            child: Text(
+                            child: ThemeText(
                           show.name,
-                          style: TextStyle(
-                              color: Theme.of(ctx).textTheme.title.color,
-                              fontSize: 20),
+                          ctx,
                           softWrap: true,
                         ))
                       ],
@@ -336,8 +389,7 @@ class AnimeListState extends State<AnimeList> {
                       child: Text(
                         ((double.parse(shows.rating) * 10).round() / 10)
                             .toString(),
-                        style: TextStyle(
-                            color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                     /*Image.network(
@@ -347,11 +399,9 @@ class AnimeListState extends State<AnimeList> {
                         ),*/
                     SizedBox(width: 10),
                     Expanded(
-                        child: Text(
+                        child: ThemeText(
                       shows.name,
-                      style: TextStyle(
-                          color: Theme.of(ctx).textTheme.title.color,
-                          fontSize: 20),
+                      ctx,
                       softWrap: true,
                     ))
                   ],
@@ -423,22 +473,14 @@ class AnimeListState extends State<AnimeList> {
                       color: Colors.blue,
                       child: Text(
                         show.howManyAbos.toString(),
-                        style: TextStyle(
-                            color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    /*Image.network(
-                          "https://www2.aniflix.tv/storage/" + show.cover_portrait,
-                          width: 50,
-                          height: 75,
-                        ),*/
                     SizedBox(width: 10),
                     Expanded(
-                        child: Text(
+                        child: ThemeText(
                       show.name,
-                      style: TextStyle(
-                          color: Theme.of(ctx).textTheme.title.color,
-                          fontSize: 20),
+                      ctx,
                       softWrap: true,
                     ))
                   ],
