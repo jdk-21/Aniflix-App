@@ -4,8 +4,7 @@ import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'SubCommentContainer.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class SubCommentContainer extends StatefulWidget {
   SubComment comment;
@@ -16,7 +15,8 @@ class SubCommentContainer extends StatefulWidget {
   }
 
   @override
-  SubCommentContainerState createState() => SubCommentContainerState(this.comment, this.user);
+  SubCommentContainerState createState() =>
+      SubCommentContainerState(this.comment, this.user);
 }
 
 class SubCommentContainerState extends State<SubCommentContainer> {
@@ -115,10 +115,10 @@ class SubCommentContainerState extends State<SubCommentContainer> {
     var date = DateTime.parse(this.createdAt);
     String minute = date.minute.toString();
     String hour = date.hour.toString();
-    if(date.minute < 10){
+    if (date.minute < 10) {
       minute = "0" + date.minute.toString();
     }
-    if(date.hour < 10){
+    if (date.hour < 10) {
       hour = "0" + date.hour.toString();
     }
     return Container(
@@ -133,25 +133,25 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   (user.avatar == null)
                       ? IconButton(
-                    icon: Icon(
-                      Icons.person,
-                      color: Theme.of(ctx).primaryIconTheme.color,
-                    ),
-                    onPressed: (){},
-                  )
+                          icon: Icon(
+                            Icons.person,
+                            color: Theme.of(ctx).primaryIconTheme.color,
+                          ),
+                          onPressed: () {},
+                        )
                       : IconButton(
-                    icon: new Container(
-                        decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                "https://www2.aniflix.tv/storage/" +
-                                    user.avatar,
-                              ),
-                            ))),
-                    onPressed: (){},
-                  ),
+                          icon: new Container(
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      "https://www2.aniflix.tv/storage/" +
+                                          user.avatar,
+                                    ),
+                                  ))),
+                          onPressed: () {},
+                        ),
                 ]),
                 Expanded(
                   child: Column(
@@ -160,25 +160,29 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            user.name + " ",
-                            style:
-                            TextStyle(color: Theme.of(ctx).textTheme.title.color, fontSize: 12.0),
-                          ),
+                          ThemeText(user.name + " ", ctx, fontSize: 12.0),
                           (this.createdAt != null)
-                              ? Text(date.day.toString() + "." + date.month.toString() + "." + date.year.toString() + " " + hour + ":" + minute,
-                              style: TextStyle(
-                                  color: Colors.grey, fontSize: 9.0))
+                              ? Text(
+                                  date.day.toString() +
+                                      "." +
+                                      date.month.toString() +
+                                      "." +
+                                      date.year.toString() +
+                                      " " +
+                                      hour +
+                                      ":" +
+                                      minute,
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 9.0))
                               : Text("",
-                              style: TextStyle(
-                                  color: Colors.grey, fontSize: 10.0)),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 10.0)),
                           IconButton(
                             padding: EdgeInsets.all(0),
                             iconSize: 15,
                             icon: Icon(
                               Icons.report,
-                              color:
-                              Theme.of(ctx).primaryIconTheme.color,
+                              color: Theme.of(ctx).primaryIconTheme.color,
                             ),
                             onPressed: () {
                               if (!_isReported) {
@@ -188,9 +192,10 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                           )
                         ],
                       ),
-                      Text(
+                      ThemeText(
                         this.text,
-                        style: TextStyle(color: Theme.of(ctx).textTheme.title.color, fontSize: 12.0),
+                        ctx,
+                        fontSize: 12.0,
                         softWrap: true,
                       ),
                       Row(
@@ -202,27 +207,29 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                                 icon: Icon(
                                   Icons.thumb_up,
                                   color: _actualVote == null ||
-                                      _actualVote ==
-                                          possibleVotes.elementAt(2)
+                                          _actualVote ==
+                                              possibleVotes.elementAt(2)
                                       ? Theme.of(ctx).primaryIconTheme.color
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
-                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                  if (_actualVote ==
+                                      possibleVotes.elementAt(0) /*null*/) {
                                     APIManager.setCommentVote(this.id, null, 1);
-                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(1) /*+*/) {
                                     APIManager.setCommentVote(this.id, 1, null);
-                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(2) /*-*/) {
                                     APIManager.setCommentVote(this.id, 0, 1);
                                   }
                                   makeUpVote();
                                 },
                               ),
-                              Text(
+                              ThemeText(
                                 _numberOfUpVotes.toString(),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(ctx).textTheme.title.color),
+                                ctx,
+                                fontSize: 12,
                               )
                             ],
                           ),
@@ -233,27 +240,29 @@ class SubCommentContainerState extends State<SubCommentContainer> {
                                 icon: Icon(
                                   Icons.thumb_down,
                                   color: (_actualVote == null ||
-                                      _actualVote ==
-                                          possibleVotes.elementAt(1))
+                                          _actualVote ==
+                                              possibleVotes.elementAt(1))
                                       ? Theme.of(ctx).primaryIconTheme.color
                                       : Theme.of(ctx).accentIconTheme.color,
                                 ),
                                 onPressed: () {
-                                  if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
+                                  if (_actualVote ==
+                                      possibleVotes.elementAt(0) /*null*/) {
                                     APIManager.setCommentVote(this.id, null, 0);
-                                  } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(1) /*+*/) {
                                     APIManager.setCommentVote(this.id, 1, 0);
-                                  } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
+                                  } else if (_actualVote ==
+                                      possibleVotes.elementAt(2) /*-*/) {
                                     APIManager.setCommentVote(this.id, 0, null);
                                   }
                                   makeDownVote();
                                 },
                               ),
-                              Text(
+                              ThemeText(
                                 _numberOfDownVotes.toString(),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(ctx).textTheme.title.color),
+                                ctx,
+                                fontSize: 12,
                               )
                             ],
                           ),

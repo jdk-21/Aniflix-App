@@ -28,8 +28,7 @@ class EpisodeBarState extends State<EpisodeBar> {
 
   EpisodeBarState(this._episode, this._state,this._created);
 
-  @override
-  void initState() {
+  void init(){
     _isReported = _episode.hasReports == 1;
 
     _numberOfDownVotes = 0;
@@ -48,13 +47,18 @@ class EpisodeBarState extends State<EpisodeBar> {
       _actualVote = possibleVotes.elementAt(1);
     }
     _created(this);
-    super.initState();
   }
 
-  updateEpisode(EpisodeInfo episode){
+  @override
+  void initState() {
+      init();
+      super.initState();
+    }
+
+  updateEpisode(EpisodeInfo episode) {
     setState(() {
       this._episode = episode;
-      initState();
+      init();
     });
   }
 

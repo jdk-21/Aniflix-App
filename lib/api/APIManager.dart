@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
@@ -319,9 +318,10 @@ class APIManager {
         });
   }
 
-  static void addComment(int episodeID, String text) async {
-    await _authPostRequest("comment", login,
+  static addComment(int episodeID, String text) async {
+    var result = await _authPostRequest("comment", login,
         bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID.toString()});
+    return result;
   }
 
   static void setSubscription(int showID, bool newValue) {

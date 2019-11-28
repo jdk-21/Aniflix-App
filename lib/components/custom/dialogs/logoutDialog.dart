@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class LogoutDialog extends StatelessWidget {
 MainWidgetState state;
@@ -13,7 +14,7 @@ LogoutDialog(this.state);
     return AlertDialog(
       backgroundColor: Theme.of(ctx).backgroundColor,
       contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.title.color),
-      content: Text("Wirklich ausloggen?"),
+      content: ThemeText("Wirklich ausloggen?",ctx),
       actions: <Widget>[
         FlatButton(
           color: Colors.red,

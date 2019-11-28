@@ -1,7 +1,6 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
 import 'package:aniflix_app/components/custom/anime/animeHeader.dart';
-import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
 import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
@@ -218,18 +217,6 @@ class AnimeScreenState extends State<AnimeScreen> {
             return CircularProgressIndicator();
           },
         ));
-  }
-}
-
-class AnimeInfo extends Container {
-  Anime anime;
-
-  AnimeInfo(this.anime);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return super.build(context);
   }
 }
 

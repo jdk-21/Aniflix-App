@@ -37,7 +37,6 @@ class SubBox extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<SubEpisode> episodes = snapshot.data;
-              List<SliderElement> elements = [];
 
               List<DateTime> epDays = getDays(episodes);
 
@@ -48,7 +47,6 @@ class SubBox extends StatelessWidget {
 
               for (var i = 0; i < episodes.length; i++) {
                 var date = DateTime.parse(episodes[i].created_at);
-                var dateNow = DateTime.now();
 
                 for (var j = 0; j < epDays.length; j++) {
                   var d = epDays[j];
