@@ -3,14 +3,18 @@ import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
-import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
-import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
+import 'package:aniflix_app/components/custom/episode/comments/CommentComponent.dart';
+import 'package:aniflix_app/components/custom/episode/comments/commentContainer.dart';
+import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
+import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
+import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class EpisodeScreen extends StatefulWidget {
   MainWidgetState state;
@@ -31,7 +35,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   List<AnimeStream> _links = [];
   int _language;
   int _hoster;
-  String _stream = null;
+  AnimeStream _stream = null;
   List<DropdownMenuItem<int>> _streams;
   List<String> _hosters = [];
   bool _isReported;
@@ -44,6 +48,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   String name;
   int season;
   int number;
+  EpisodeBarState barState;
 
   setLanguage(int language, List<AnimeStream> streams) {
     setState(() {
@@ -66,7 +71,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       for (var stream in _links) {
         if (_hosters[_hoster] == stream.hoster.name &&
             languages[_language] == stream.lang) {
-          this._stream = stream.link;
+          this._stream = stream;
           return;
         }
       }
@@ -145,7 +150,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext ctx) {
     return Container(
@@ -189,7 +193,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               for (var stream in _links) {
                 if (_hosters[0] == stream.hoster.name &&
                     languages[0] == stream.lang) {
-                  this._stream = stream.link;
+                  this._stream = stream;
                 }
               }
             }
@@ -207,118 +211,31 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 child: ListView(
                   padding: EdgeInsets.only(left: 5, right: 5),
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        (episode.number > 1)
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.navigate_before,
-                                  color: Theme.of(ctx).textTheme.title.color,
-                                ),
-                                color: Theme.of(ctx).textTheme.title.color,
-                                onPressed: () {
-                                  updateEpisodeData(
-                                      episode.season.show.url,
-                                      episode.season.number,
-                                      (episode.number - 1));
-                                },
-                              )
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.navigate_before,
-                                  color: Theme.of(ctx).backgroundColor,
-                                ),
-                                color: Theme.of(ctx).backgroundColor,
-                                onPressed: () {},
-                              ),
-                        Row(
-                          children: <Widget>[
-                            Theme(
-                              data: Theme.of(ctx).copyWith(
-                                  canvasColor: Theme.of(ctx).backgroundColor),
-                              child: DropdownButton(
-                                style: TextStyle(
-                                    color: Theme.of(ctx).textTheme.title.color,
-                                    fontSize: 15),
-                                onChanged: (newValue) {
-                                  setLanguage(newValue, episode.streams);
-                                },
-                                items:
-                                    GetLanguagesAsDropdownList(episode.streams)
-                                        .getItems(),
-                                value: _language == null
-                                    ? startState(episode.streams, episode)
-                                    : _language,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Theme(
-                              data: Theme.of(ctx).copyWith(
-                                  canvasColor: Theme.of(ctx).backgroundColor),
-                              child: DropdownButton(
-                                style: TextStyle(
-                                    color: Theme.of(ctx).textTheme.title.color,
-                                    fontSize: 15),
-                                onChanged: (newValue) {
-                                  changeHoster(newValue);
-                                },
-                                items: _streams,
-                                value: _hoster,
-                              ),
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                          icon: (episode.next != "")
-                              ? Icon(
-                                  Icons.navigate_next,
-                                  color: Theme.of(ctx).textTheme.title.color,
-                                )
-                              : Icon(
-                                  Icons.navigate_before,
-                                  color: Theme.of(ctx).backgroundColor,
-                                ),
-                          color: (episode.next != "")
-                              ? Theme.of(ctx).textTheme.title.color
-                              : Theme.of(ctx).backgroundColor,
-                          onPressed: (episode.next != "")
-                              ? () {
-                                  updateEpisodeData(
-                                      episode.season.show.url,
-                                      episode.season.number,
-                                      (episode.number + 1));
-                                }
-                              : () {},
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: (_hosters[_hoster] == "Anistream")
-                          ? InAppWebView(
-                              initialHeaders: {},
-                              initialOptions: {},
-                              onWebViewCreated:
-                                  (InAppWebViewController controller) {
-                                controller.loadUrl(_stream);
-                              })
-                          : Center(
-                              child: IconButton(
-                                  icon: Icon(Icons.play_circle_outline),
-                                  onPressed: () =>
-                                      ChromeSafariBrowser(null).open(_stream))),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              style: BorderStyle.solid,
-                              color: Theme.of(ctx).textTheme.title.color)),
-                      height: 200,
-                    ),
+                    ThemeText(episode.name,ctx),
+                    EpisodeHeader(episode, () {
+                      updateEpisodeData(episode.season.show.url,
+                          episode.season.number, (episode.number - 1));
+                      if(barState != null){
+                        barState.updateEpisode(episode);
+                      }
+                    }, () {
+                      updateEpisodeData(episode.season.show.url,
+                          episode.season.number, (episode.number + 1));
+                      if(barState != null){
+                        barState.updateEpisode(episode);
+                      }
+                    },(lang, hoster) {
+                      setLanguage(lang, episode.streams);
+                      changeHoster(hoster);
+                    }),
+                    AnimePlayer(_stream),
                     SizedBox(
                       height: 10,
                     ),
+                    EpisodeBar(episode,mainState,(state){
+                      this.barState = state;
+                    }),
+                    /*
                     Text(
                       (episode != null) ? episode.name : "",
                       style: TextStyle(
@@ -404,12 +321,18 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
-                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-                                      APIManager.setEpisodeVote(episode.id, null, 1);
-                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-                                      APIManager.setEpisodeVote(episode.id, 1, null);
-                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-                                      APIManager.setEpisodeVote(episode.id, 0, 1);
+                                    if (_actualVote ==
+                                        possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, null, 1);
+                                    } else if (_actualVote ==
+                                        possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, 1, null);
+                                    } else if (_actualVote ==
+                                        possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, 0, 1);
                                     }
                                     makeUpVote();
                                   },
@@ -435,13 +358,18 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                         : Theme.of(ctx).accentIconTheme.color,
                                   ),
                                   onPressed: () {
-
-                                    if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-                                      APIManager.setEpisodeVote(episode.id, null, 0);
-                                    } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-                                      APIManager.setEpisodeVote(episode.id, 1, 0);
-                                    } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-                                      APIManager.setEpisodeVote(episode.id, 0, null);
+                                    if (_actualVote ==
+                                        possibleVotes.elementAt(0) /*null*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, null, 0);
+                                    } else if (_actualVote ==
+                                        possibleVotes.elementAt(1) /*+*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, 1, 0);
+                                    } else if (_actualVote ==
+                                        possibleVotes.elementAt(2) /*-*/) {
+                                      APIManager.setEpisodeVote(
+                                          episode.id, 0, null);
                                     }
                                     makeDownVote();
                                   },
@@ -471,11 +399,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         ),
                       ),
                       expanded: Column(children: [
-                        CommentComponent(snapshot.data.user, this, (text)async{APIManager.addComment(episode.id, text);
-                        updateEpisodeData(episode.season.show.url,
-                            episode.season.number,
-                            (episode.number + 1));
-
+                        CommentComponent(snapshot.data.user, this,
+                            (text) async {
+                          APIManager.addComment(episode.id, text);
+                          updateEpisodeData(episode.season.show.url,
+                              episode.season.number, (episode.number + 1));
                         }),
                         Column(children: _commentElements)
                       ]),
@@ -483,7 +411,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       tapHeaderToExpand: true,
                       tapBodyToCollapse: true,
                       hasIcon: false,
-                    )
+                    )*/
                   ],
                 ));
           } else if (snapshot.hasError) {
@@ -536,26 +464,7 @@ class GetStreamsAsDropdownList {
   }
 }
 
-class GetLanguagesAsDropdownList {
-  List<AnimeStream> streams;
 
-  GetLanguagesAsDropdownList(this.streams);
-
-  List<DropdownMenuItem<int>> getItems() {
-    List<DropdownMenuItem<int>> namelist = [];
-    List<String> languages = [];
-    for (var stream in streams) {
-      if (!languages.contains(stream.lang)) {
-        languages.add(stream.lang);
-      }
-    }
-    for (int l = 0; l < languages.length; l++) {
-      namelist
-          .add(DropdownMenuItem(value: l, child: Text(languages.elementAt(l))));
-    }
-    return namelist;
-  }
-}
 
 class LoadInfo {
   User user;

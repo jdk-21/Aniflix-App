@@ -1,7 +1,5 @@
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/components/custom/comments/commentContainer.dart';
-import 'package:aniflix_app/components/screens/episode.dart';
-import 'package:aniflix_app/main.dart';
+import 'package:aniflix_app/components/custom/episode/comments/commentContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

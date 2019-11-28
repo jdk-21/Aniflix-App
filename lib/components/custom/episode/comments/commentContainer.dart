@@ -2,7 +2,6 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
-import 'package:aniflix_app/components/custom/comments/CommentComponent.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

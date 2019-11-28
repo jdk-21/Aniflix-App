@@ -1,16 +1,16 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
+import 'package:aniflix_app/components/custom/anime/animeHeader.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
-import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
+import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
+import 'package:aniflix_app/components/custom/anime/episodeList.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../api/objects/anime/Anime.dart';
 import '../../api/APIManager.dart';
-import 'package:expandable/expandable.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class AnimeScreen extends StatefulWidget {
   var name;
@@ -25,7 +25,7 @@ class AnimeScreen extends StatefulWidget {
 class AnimeScreenState extends State<AnimeScreen> {
   MainWidgetState state;
   Future<Anime> anime;
-  List<TextboxSliderElement> test = [];
+  List<TextboxSliderElement> genres = [];
   List<String> genreNames = [];
   bool _isSubscribed;
   int _actualSeason;
@@ -87,7 +87,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                 for (var genre in snapshot.data.genres) {
                   if (!genreNames.contains(genre.name)) {
                     genreNames.add(genre.name);
-                    test.add(TextboxSliderElement(genre.name));
+                    genres.add(TextboxSliderElement(genre.name));
                   }
                 }
               }
@@ -96,139 +96,16 @@ class AnimeScreenState extends State<AnimeScreen> {
                   child: ListView(
                       padding: EdgeInsets.only(top: 10, left: 5),
                       children: [
-                        Row(
-                          children: [
-                            Image.network(
-                              "https://www2.aniflix.tv/storage/" +
-                                  anime.cover_portrait,
-                              width: 100,
-                              height: 150,
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    anime.name,
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                    softWrap: true,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "Score: " + anime.rating,
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontSize: 15,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Text(
-                                    "Status: " +
-                                        ((anime.airing != null)
-                                            ? "Airing"
-                                            : "Not Airing"),
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontSize: 15,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Text(
-                                    "Episoden: " + episodeCount.toString(),
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(ctx).textTheme.title.color,
-                                      fontSize: 15,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  InkWell(
-                                    child: Container(
-                                      padding: EdgeInsets.all(0),
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Theme.of(ctx)
-                                                      .textTheme
-                                                      .title
-                                                      .color))),
-                                      child: Text(
-                                        "Reviews",
-                                        style: TextStyle(
-                                            color: Theme.of(ctx)
-                                                .textTheme
-                                                .title
-                                                .color,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      state.changePage(
-                                          ReviewScreen(anime.url), 9);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                        AnimeHeader(anime, episodeCount, ctx, state),
                         SizedBox(
                           height: 10,
                         ),
-                        test.length < 1
+                        genres.length < 1
                             ? SizedBox(
                                 height: 0,
                               )
-                            : TextboxCarousel(test),
-                        Container(
-                          child: ExpandablePanel(
-                            header: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Beschreibung",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .title
-                                          .color,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                            headerAlignment:
-                                ExpandablePanelHeaderAlignment.center,
-                            collapsed: Text(
-                              anime.description,
-                              maxLines: 5,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).textTheme.title.color,
-                                  fontSize: 15),
-                            ),
-                            expanded: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  anime.description,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .title
-                                          .color,
-                                      fontSize: 15),
-                                  softWrap: true,
-                                )),
-                            tapHeaderToExpand: true,
-                            hasIcon: true,
-                            iconColor: Theme.of(ctx).primaryIconTheme.color,
-                            tapBodyToCollapse: true,
-                          ),
-                        ),
+                            : TextboxCarousel(genres),
+                        AnimeDescription(anime.description, ctx),
                         Container(
                             padding: EdgeInsets.only(top: 10, right: 5),
                             child: Row(
@@ -287,7 +164,9 @@ class AnimeScreenState extends State<AnimeScreen> {
                                       showDialog(
                                           context: ctx,
                                           builder: (BuildContext ctx) {
-                                            return RatingDialog(anime, (x){this._rating = x;}, _rating);
+                                            return RatingDialog(anime, (x) {
+                                              this._rating = x;
+                                            }, _rating);
                                           });
                                     },
                                     icon: Icon(
@@ -306,9 +185,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                               .title
                                               .color,
                                           fontSize: 15),
-                                      items: GetSeasonsAsDropdownList(
-                                              anime.seasonCount, anime.seasons)
-                                          .getItems(),
+                                      items: getSeasonsAsDropdownList(
+                                          anime.seasonCount, anime.seasons),
                                       onChanged: (newValue) {
                                         changeSeason(newValue);
                                       },
@@ -326,14 +204,12 @@ class AnimeScreenState extends State<AnimeScreen> {
                                     ))
                               ],
                             )),
-                        Column(
-                            children: EpisodeList().getEpisodesAsList(
-                                ctx,
-                                state,
-                                (_actualSeason == null || anime.seasons == null)
-                                    ? null
-                                    : anime.seasons.elementAt(_actualSeason),
-                                anime))
+                        EpisodeList(
+                            (_actualSeason == null || anime.seasons == null)
+                                ? null
+                                : anime.seasons.elementAt(_actualSeason),
+                            anime,
+                            state)
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -357,146 +233,13 @@ class AnimeInfo extends Container {
   }
 }
 
-class AnimeDescription extends Container {
-  String description;
-
-  AnimeDescription(this.description);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return super.build(context);
+List<DropdownMenuItem<int>> getSeasonsAsDropdownList(
+    int seasonCount, List<AnimeSeason> seasons) {
+  List<DropdownMenuItem<int>> namelist = [];
+  for (int l = 0; l < seasonCount; l++) {
+    namelist.add(DropdownMenuItem(
+        value: l,
+        child: Text("Season " + (seasons.elementAt(l).number).toString())));
   }
-}
-
-class GetSeasonsAsDropdownList {
-  int seasonCount;
-  List<AnimeSeason> seasons;
-
-  GetSeasonsAsDropdownList(this.seasonCount, this.seasons);
-
-  List<DropdownMenuItem<int>> getItems() {
-    List<DropdownMenuItem<int>> namelist = [];
-    for (int l = 0; l < seasonCount; l++) {
-      namelist.add(DropdownMenuItem(
-          value: l,
-          child: Text("Season " + (seasons.elementAt(l).number).toString())));
-    }
-    return namelist;
-  }
-}
-
-class EpisodeList extends Container {
-  EpisodeList() : super();
-
-  List<Widget> getEpisodesAsList(BuildContext ctx, MainWidgetState state,
-      AnimeSeason season, Anime anime) {
-    var episodes = season == null ? null : season.episodes;
-    if (episodes == null) {
-      return [];
-    } else {
-      List<Widget> episodeList = [
-        Container(
-          padding: EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text("Episodes",
-                  style: TextStyle(
-                      color: Theme.of(ctx).textTheme.title.color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20)),
-              Icon(
-                Icons.thumbs_up_down,
-                color: Theme.of(ctx).primaryIconTheme.color,
-                size: 30,
-              )
-            ],
-          ),
-        )
-      ];
-      for (int v = 0; v < episodes.length; v++) {
-        var actualEpisode = episodes.elementAt(v);
-        bool ger = false;
-        bool jap = false;
-        for (var stream in actualEpisode.streams) {
-          if (stream.lang == "SUB") {
-            jap = true;
-          } else if (stream.lang == "DUB") {
-            ger = true;
-          }
-          if (jap && ger) break;
-        }
-        var image;
-        if (ger && jap) {
-          image = Image.asset('assets/images/gerjap.png', scale: 10);
-        } else if (ger) {
-          image = Image.asset('assets/images/ger.png', scale: 50);
-        } else if (jap) {
-          image = Image.asset('assets/images/jap.png', scale: 50);
-        }
-        episodeList.add(Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(
-                      width: 1,
-                      color: Theme.of(ctx).hintColor,
-                      style: BorderStyle.solid))),
-          child: FlatButton(
-            padding: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                    child: Row(
-                  children: <Widget>[
-                    image,
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      actualEpisode == null
-                          ? "---"
-                          : actualEpisode.number.toString() + ". ",
-                      style: TextStyle(
-                          color: Theme.of(ctx).textTheme.title.color,
-                          fontSize: 15,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Expanded(
-                        child: Text(
-                      actualEpisode == null ? "---" : actualEpisode.name,
-                      style: TextStyle(
-                          color: Theme.of(ctx).textTheme.title.color,
-                          fontSize: 15,
-                          fontWeight: FontWeight.normal),
-                      softWrap: true,
-                    ))
-                  ],
-                )),
-                Text(
-                    actualEpisode.avgVotes == null
-                        ? ""
-                        : (double.parse(actualEpisode.avgVotes) * 100)
-                                .round()
-                                .toString() +
-                            "%",
-                    style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal))
-              ],
-            ),
-            onPressed: () {
-              state.changePage(
-                  EpisodeScreen(
-                      state, anime.url, season.number, actualEpisode.number),
-                  6);
-            },
-          ),
-        ));
-      }
-      return episodeList;
-    }
-  }
+  return namelist;
 }
