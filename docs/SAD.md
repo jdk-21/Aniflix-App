@@ -62,7 +62,8 @@ Languages:
 - Testing: Flutter Gherkin
 
 ## 3. Architectural Goals and Constraints
-n/a
+Since we use flutter to create a mobile app MVC is already inhereted. We got our main.dart as controller that decides which view is shown, our different screens as views and different classes which get filled with the data of our API calls. This classes work as our models.
+![MVC diagram](../docs/class_diagramm.svg)
 
 ## 4. Use-Case View
 ![Use Case Diagram](../docs/UCD_1_23.png)
