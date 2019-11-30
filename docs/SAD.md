@@ -68,9 +68,9 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 ## 4. Use-Case View
 ![Use Case Diagram](../docs/UCD_1_23.png)
 ### 4.1 Use-Case Realizations
-[UC Get last seen, Get new episodes, Get New on Aniflix, Get discover animes](../docs/UC_Get_Anime_HomePage.md)
-[UC See subscribed animes](../docs/UC_See_sub_box.md)
-[UC Switch between main pages](../UC_Switch%20pages.md)
+- [UC Get last seen, Get new episodes, Get New on Aniflix, Get discover animes](../docs/UC_Get_Anime_HomePage.md)
+- [UC See subscribed animes](../docs/UC_See_sub_box.md)
+- [UC Switch between main pages](../UC_Switch%20pages.md)
 
 ## 5. Logical View
 The following graphic describes the overall class organization of our app. If you want to see the class diagram you have to download it from our Git and open it with your browser. Because we are very advanced in development our class diagram is very large and confusing, so for a better view of our structure go back to this section: 
