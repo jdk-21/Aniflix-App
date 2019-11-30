@@ -63,7 +63,8 @@ Languages:
 
 ## 3. Architectural Goals and Constraints
 Since we use flutter to create a mobile app MVC is already inhereted. We got our main.dart as controller that decides which view is shown, our different screens as views and different classes which get filled with the data of our API calls. This classes work as our models.
-![MVC diagram](../docs/class_diagramm.svg)
+![Class-Diagram](../docs/class_diagramm.svg)
+[Link to class diagram](../docs/class_diagramm.svg)
 
 ## 4. Use-Case View
 ![Use Case Diagram](../docs/UCD_1_23.png)
@@ -73,8 +74,7 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 - [UC Switch between main pages](../UC_Switch%20pages.md)
 
 ## 5. Logical View
-The following graphic describes the overall class organization of our app. If you want to see the class diagram you have to download it from our Git and open it with your browser. Because we are very advanced in development our class diagram is very large and confusing, so for a better view of our structure go back to this section: 
-[3. Architectural Goals and Constraints](#3-architectural-goals-and-constraints).  <br>
+The following graphic describes the overall class organization of our app. If you want to see the class diagram you have to download it from our Git and open it with your browser. Because we are very advanced in development our class diagram is very large and confusing.
 ![Class-Diagram](../docs/class_diagramm.svg)
 [Link to class diagram](../docs/class_diagramm.svg)
 ### 5.1 Overview
