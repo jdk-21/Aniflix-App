@@ -67,7 +67,7 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 [Link to class diagram](../Diagrams/class_diagramm.svg)
 
 ## 4. Use-Case View
-![Use Case Diagram](../docs/UCD_Main.png)
+[OUCD]
 ### 4.1 Use-Case Realizations
 - [UC Get last seen, Get new episodes, Get New on Aniflix, Get discover animes](../UC/UC_Get_Anime_HomePage.md)
 - [UC See subscribed animes](../UC/UC_See_sub_box.md)
@@ -100,3 +100,6 @@ tbd
 
 ## 11. Quality
 tbd
+
+<!-- Picture-Link definitions: -->
+[OUCD]: <../UCD_Main.png> "Overall Use Case Diagramm"
