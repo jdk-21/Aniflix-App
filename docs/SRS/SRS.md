@@ -182,5 +182,5 @@ You can find any internal linked sources in the chapter References (go to the to
 
 
 <!-- Picture-Link definitions: -->
-[OUCD]: <../docs/UCD_Main.png> "Overall Use Case Diagramm"
+[OUCD]: <../UCD_Main.png> "Overall Use Case Diagramm"
 
