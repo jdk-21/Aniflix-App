@@ -20,7 +20,7 @@ You open the subscription box and send a request to the system which will search
 
 ### .feature File
 
-![.feature file](../docs/feature%20files/feature%20subscribedAnimes.PNG)
+![.feature file](../feature%20files/feature%20subscribedAnimes.PNG)
 
 
 ## 2.2 Alternative Flows
