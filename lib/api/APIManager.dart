@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -318,9 +319,23 @@ class APIManager {
         });
   }
 
-  static addComment(int episodeID, String text) async {
-    var result = await _authPostRequest("comment", login,
+  static Future<Comment> addComment(int episodeID, String text) async {
+    var response = await _authPostRequest("comment", login,
         bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID.toString()});
+    var result;
+    if (response.statusCode != 404) {
+      result = Comment.fromJson(jsonDecode(response.body));
+    }
+    return result;
+  }
+
+  static Future<SubComment> addSubComment(int commentID, String text) async {
+    var response = await _authPostRequest("comment", login,
+        bodyObject: {"text":text,"commentable_type":"Comment","commentable_id":commentID.toString()});
+    var result;
+    if (response.statusCode != 404) {
+      result = SubComment.fromJson(jsonDecode(response.body));
+    }
     return result;
   }
 

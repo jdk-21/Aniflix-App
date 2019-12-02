@@ -1,26 +1,25 @@
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/components/custom/episode/comments/commentContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AnswerCommentComponent extends StatefulWidget {
 
   User user;
-  CommentContainerState state;
+  Function(String) _callback;
 
-  AnswerCommentComponent(this.user, this.state);
+  AnswerCommentComponent(this.user, this._callback);
 
   @override
   AnswerCommentComponentState createState() =>
-      AnswerCommentComponentState(user, state);
+      AnswerCommentComponentState(user, this._callback);
 }
 
 class AnswerCommentComponentState extends State<AnswerCommentComponent> {
 
   User user;
-  CommentContainerState state;
+  Function(String) _callback;
 
-  AnswerCommentComponentState(this.user, this.state);
+  AnswerCommentComponentState(this.user, this._callback);
 
   @override
   Widget build(BuildContext ctx){
@@ -73,8 +72,8 @@ class AnswerCommentComponentState extends State<AnswerCommentComponent> {
             icon: Icon(Icons.send, size: 15,),
             color: Theme.of(ctx).primaryIconTheme.color,
             onPressed: () {
+              _callback(controller.text);
               controller.text = "";
-              state.changeNeedAnswer();
             },
           ),
         ],
