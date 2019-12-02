@@ -59,7 +59,7 @@ In this section definitions and explanations of acronyms and abbreviations are l
 |---------------------------------------------------|---------------|
 | [AniflixApp Blog](https://aniflixapp.wordpress.com/) | 17.10.2019 |
 | [ANiflixApp Git](https://github.com/d0mmi/Aniflix-App) | 17.10.2019 |
-| [Overall Use Case Diagramm](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UCD_1_22.png)| 19.10.2017 |
+| [Overall Use Case Diagramm](https://raw.githubusercontent.com/d0mmi/Aniflix-App/Docu-fixes/docs/UCD_Main.png)| 19.10.2017 |
 
 ### 1.5 Overview
 The following chapters are about our vision and perspective, the software requirements, the demands we have and
@@ -84,7 +84,7 @@ You will be able to create your own account on the website to get access to all 
 #### 3.1.2 Get animes on Home Page
 The home page shows you your last watched animes, new released episodes and some animes you could like based on your watched animes. This lists of animes will be provided by an API.
 
-	- [Use Case: Get animes on homepage](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC_Get_Anime_HomePage.md)
+	- [Use Case: Get animes on homepage](https://github.com/d0mmi/Aniflix-App/blob/Docu-fixes/docs/UC/UC_Get_Anime_HomePage.md)
 
 #### 3.1.3 See all animes provided by aniflix.tv
 Shows you all animes the site provides.
@@ -92,7 +92,7 @@ Shows you all animes the site provides.
 #### 3.1.4 See subscribed animes
 Here you will see all new episodes of the animes you subscribed to. It is based on your user which give us a list of your subscribed animes.
 
-	- [Use Case: See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC_See_sub_box.md)
+	- [Use Case: See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/Docu-fixes/docs/UC/UC_See_sub_box.md)
 
 #### 3.1.5 Anime Site
 The anime site shows all episodes of the selected anime you want to watch. You get a description of the anime and the possibility to subscribe or review the anime.
@@ -186,5 +186,5 @@ You can find any internal linked sources in the chapter References (go to the to
 
 
 <!-- Picture-Link definitions: -->
-[OUCD]: <https://github.com/d0mmi/Aniflix-App/blob/master/docs/UCD_1_22.png> "Overall Use Case Diagramm"
+[OUCD]: <https://raw.githubusercontent.com/d0mmi/Aniflix-App/Docu-fixes/docs/UCD_Main.png> "Overall Use Case Diagramm"
 
