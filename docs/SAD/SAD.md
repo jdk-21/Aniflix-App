@@ -63,8 +63,8 @@ Languages:
 
 ## 3. Architectural Goals and Constraints
 Since we use flutter to create a mobile app MVC is already inhereted. We got our main.dart as controller that decides which view is shown, our different screens as views and different classes which get filled with the data of our API calls. This classes work as our models.
-![Class-Diagram](./class_diagramm.svg)
-[Link to class diagram](../docs/class_diagramm.svg)
+![Class-Diagram](../Diagrams/class_diagramm.svg)
+[Link to class diagram](../Diagrams/class_diagramm.svg)
 
 ## 4. Use-Case View
 ![Use Case Diagram](../docs/UCD_Main.png)
