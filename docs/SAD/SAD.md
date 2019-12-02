@@ -47,8 +47,8 @@ Title | Date | Publishing organization |
 --- | :---:  | ---
 [AniflixApp Blog](https://aniflixapp.wordpress.com/) | 05.10.2019 | AniflixApp-Team  
 [YouTrack Instance (not public for the moment)](https://aniflixapp.myjetbrains.com/youtrack/) | 05.10.2019 | AniflixApp-Team  
-[SRS](../docs/SRS.md) | 24.10.2019 | AniflixApp-Team  
-[SAD](../docs/SAD.md) | 28.11.2019 | AniflixApp-Team  
+[SRS](../SRS/SRS.md) | 24.10.2019 | AniflixApp-Team  
+[SAD](../SAD/SAD.md) | 28.11.2019 | AniflixApp-Team  
 ### 1.5 Overview
 This document contains the architectural representation, goals and constraints.
 
@@ -63,27 +63,27 @@ Languages:
 
 ## 3. Architectural Goals and Constraints
 Since we use flutter to create a mobile app MVC is already inhereted. We got our main.dart as controller that decides which view is shown, our different screens as views and different classes which get filled with the data of our API calls. This classes work as our models.
-![Class-Diagram](../docs/class_diagramm.svg)
-[Link to class diagram](../docs/class_diagramm.svg)
+![Class-Diagram](../Diagrams/class_diagramm.svg)
+[Link to class diagram](../Diagrams/class_diagramm.svg)
 
 ## 4. Use-Case View
-![Use Case Diagram](../docs/UCD_1_23.png)
+![OUCD]
 ### 4.1 Use-Case Realizations
-- [UC Get last seen, Get new episodes, Get New on Aniflix, Get discover animes](../docs/UC_Get_Anime_HomePage.md)
-- [UC See subscribed animes](../docs/UC_See_sub_box.md)
-- [UC Switch between main pages](../UC_Switch%20pages.md)
+- [UC Get last seen, Get new episodes, Get New on Aniflix, Get discover animes](../UC/UC_Get_Anime_HomePage.md)
+- [UC See subscribed animes](../UC/UC_See_sub_box.md)
+- [UC Switch between main pages](../UC/UC_Switch%20pages.md)
 
 ## 5. Logical View
 The following graphic describes the overall class organization of our app. If you want to see the class diagram you have to download it from our Git and open it with your browser. Because we are very advanced in development our class diagram is very large and confusing.
-![Class-Diagram](../docs/class_diagramm.svg)
-[Link to class diagram](../docs/class_diagramm.svg)
+![Class-Diagram](../Diagrams/class_diagramm.svg)
+[Link to class diagram](../Diagrams/class_diagramm.svg)
 ### 5.1 Overview
 
 ## 6. Process View
 n/a
 
 ## 7. Deployment View  
-![Deployment View](../docs/Development_Diagram.png)
+![Deployment View](../Diagrams/Development_Diagram.png)
 
 ## 8. Implementation View
 n/a
@@ -100,3 +100,6 @@ tbd
 
 ## 11. Quality
 tbd
+
+<!-- Picture-Link definitions: -->
+[OUCD]: <../UCD_Main.png> "Overall Use Case Diagramm"

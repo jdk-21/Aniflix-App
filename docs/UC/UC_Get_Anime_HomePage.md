@@ -17,11 +17,11 @@ The app will send a request to the server to get the lists of animes that will b
 ## 2.1 Basic Flow
 
 ### Activity Diagram
-![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagram_get_homepage_anime.png)
+![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/Docu-fixes/docs/UC/Diagrams/activity_diagram_get_homepage_anime.png)
 
 ### .feature File
 
-![.feature file](../docs/feature%20files/feature%20getHomeVideos.PNG)
+![.feature file](../feature%20files/feature%20getHomeVideos.PNG)
 
 ## 2.2 Alternative Flows
 n/a
