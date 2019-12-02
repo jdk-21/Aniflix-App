@@ -75,8 +75,8 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 
 ## 5. Logical View
 The following graphic describes the overall class organization of our app. If you want to see the class diagram you have to download it from our Git and open it with your browser. Because we are very advanced in development our class diagram is very large and confusing.
-![Class-Diagram](../docs/class_diagramm.svg)
-[Link to class diagram](../docs/class_diagramm.svg)
+![Class-Diagram](../Diagrams/class_diagramm.svg)
+[Link to class diagram](../Diagrams/class_diagramm.svg)
 ### 5.1 Overview
 
 ## 6. Process View
