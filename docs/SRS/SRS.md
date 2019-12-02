@@ -92,7 +92,8 @@ Shows you all animes the site provides.
 #### 3.1.4 See subscribed animes
 Here you will see all new episodes of the animes you subscribed to. It is based on your user which give us a list of your subscribed animes.
 
-	[Use Case: See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/Docu-fixes/docs/UC/UC_See_sub_box.md)
+	[See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/Docu-fixes/docs/UC/UC_Get_Anime_HomePage.md)
+	-Use Case: [See subscribed animes](https://github.com/d0mmi/Aniflix-App/blob/Docu-fixes/docs/UC/UC_See_sub_box.md)
 
 #### 3.1.5 Anime Site
 The anime site shows all episodes of the selected anime you want to watch. You get a description of the anime and the possibility to subscribe or review the anime.
