@@ -1,24 +1,117 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import '../../rating/voteBar.dart';
+import '../../report/reportDeleteBar.dart';
 
-class SubCommentContainer extends StatefulWidget {
-  SubComment comment;
-  User user;
+class SubCommentContainer extends StatelessWidget {
+  SubComment _comment;
+  User _user;
 
-  SubCommentContainer(SubComment comment, this.user) {
-    this.comment = comment;
-  }
-
+  SubCommentContainer(this._comment, this._user);
   @override
-  SubCommentContainerState createState() =>
-      SubCommentContainerState(this.comment, this.user);
-}
+  Widget build(BuildContext ctx) {
+    var date = DateTime.parse(this._comment.created_at);
+    String minute = date.minute.toString();
+    String hour = date.hour.toString();
+    if (date.minute < 10) {
+      minute = "0" + date.minute.toString();
+    }
+    if (date.hour < 10) {
+      hour = "0" + date.hour.toString();
+    }
+    return Container(
+        padding: EdgeInsets.only(left: 55),
+        color: Theme.of(ctx).backgroundColor,
+        child: Column(children: [
+          Column(
+            children: [
+              Row(children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: (_comment.user.avatar == null)
+                      ? IconButton(
+                    icon: Icon(
+                      Icons.person,
+                      color: Theme.of(ctx).primaryIconTheme.color,
+                    ),
+                    onPressed: () {},
+                  )
+                      : IconButton(
+                    icon: new Container(
+                        decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                "https://www2.aniflix.tv/storage/" +
+                                    _comment.user.avatar,
+                              ),
+                            ))),
+                    onPressed: () {},
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      textDirection: TextDirection.ltr,
+                      children: [
+                        Row(
+                          children: [
+                            ThemeText(
+                              _comment.user.name + " ",
+                              ctx,
+                              fontSize: 12.0,
+                            ),
+                            (this._comment.created_at != null)
+                                ? Text(
+                                date.day.toString() +
+                                    "." +
+                                    date.month.toString() +
+                                    "." +
+                                    date.year.toString() +
+                                    " " +
+                                    hour +
+                                    ":" +
+                                    minute,
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 9.0))
+                                : Text("",
+                                style: TextStyle(
+                                    color:
+                                    Theme.of(ctx).textTheme.title.color,
+                                    fontSize:
+                                    10.0)),
+                            ReportDeleteBar((_user.id == _comment.user_id),false,(){},(){},(state){})
+                          ],
+                        ),
+                        ThemeText(
+                          this._comment.text,
+                          ctx,
+                          fontSize: 12.0,
+                          softWrap: true,
+                        ),
+                        Row(children: [
+                          VoteBar(_comment.id, _comment.votes, _comment.voted,
+                                  (prev, next) {
+                                APIManager.setCommentVote(_comment.id, prev, next);
+                              })
+                        ],),
 
+                      ]),
+                ),
+
+
+              ])
+            ],
+          ),
+        ]));
+  }
+}
+/*
 class SubCommentContainerState extends State<SubCommentContainer> {
   int id;
   String text;
@@ -282,3 +375,4 @@ class SubCommentContainerState extends State<SubCommentContainer> {
     );
   }
 }
+}*/

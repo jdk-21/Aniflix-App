@@ -8,12 +8,13 @@ class EpisodeHeader extends StatefulWidget {
   Function prev;
   Function next;
   Function(int lang,int hoster) change;
+  Function(EpisodeHeaderState) _created;
 
-  EpisodeHeader(this.episode, this.prev, this.next, this.change);
+  EpisodeHeader(this.episode, this.prev, this.next, this.change,this._created);
 
   @override
   EpisodeHeaderState createState() =>
-      EpisodeHeaderState(this.episode, this.prev, this.next, this.change);
+      EpisodeHeaderState(this.episode, this.prev, this.next, this.change,this._created);
 }
 
 class EpisodeHeaderState extends State<EpisodeHeader> {
@@ -21,16 +22,16 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
   Function prev;
   Function next;
   Function(int lang,int hoster) change;
+  Function(EpisodeHeaderState) _created;
   int _language;
   int _hoster;
   List<String> _hosters;
 
-  EpisodeHeaderState(this.episode, this.prev, this.next, this.change){
+  EpisodeHeaderState(this.episode, this.prev, this.next, this.change,this._created){
     _hosters = [];
   }
 
-  @override
-  void initState() {
+  void init(){
     _language = 0;
     _hoster = 0;
     for (var stream in episode.streams) {
@@ -38,7 +39,20 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
         _hosters.add(stream.hoster.name);
       }
     }
+    _created(this);
+  }
+
+  @override
+  void initState() {
+    init();
     super.initState();
+  }
+
+  updateEpisode(EpisodeInfo episode) {
+    setState(() {
+      this.episode = episode;
+      init();
+    });
   }
 
   @override

@@ -2,10 +2,11 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
+import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
-import 'package:aniflix_app/components/custom/episode/comments/commentPanel.dart';
+import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,14 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   AnimeStream _stream;
   List<String> _hosters;
   List<String> _langs;
+  List<Comment> _comments;
   bool _isReported;
   Future<LoadInfo> episodeInfo;
   String name;
   int season;
   int number;
   EpisodeBarState barState;
-  CommentPanelState commentPanelState;
+  EpisodeHeaderState episodeHeaderState;
 
   updateStream(EpisodeInfo episodeInfo, int lang, int hoster) {
     setState(() {
@@ -57,21 +59,35 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   updateEpisodeData(String name, int season, int number) {
     setState(() {
-      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
-
-      if (barState != null) {
-        this.episodeInfo.then((episode) {
-          barState.updateEpisode(episode.episodeInfo);
-        });
-      }
-      if (commentPanelState != null) {
-        this.episodeInfo.then((episode) {
-          commentPanelState.updateEpisode(episode.episodeInfo);
-        });
-      }
+      print(name);
+      print(season);
+      print(number);
+      this.name = name;
+      this.season = season;
+      this.number = number;
       this._hosters = null;
       this._langs = null;
       this._isReported = null;
+      this._stream = null;
+      this._comments = null;
+      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
+
+      this.episodeInfo.then((episode) {
+        if (episode.episodeInfo != null) {
+          if (barState != null) {
+            barState.updateEpisode(episode.episodeInfo);
+          }
+
+          if (episodeHeaderState != null) {
+            episodeHeaderState.updateEpisode(episode.episodeInfo);
+          }
+        } else {
+          print("Test null");
+        }
+      }).catchError((error) {
+        print("Test");
+        print(error);
+      });
     });
   }
 
@@ -86,7 +102,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       child: FutureBuilder<LoadInfo>(
         future: episodeInfo,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.episodeInfo != null) {
             var episode = snapshot.data.episodeInfo;
             if (_hosters == null) {
               _hosters = [];
@@ -105,7 +121,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if(_stream == null){
+            if (_stream == null) {
               for (var stream in episode.streams) {
                 if (_hosters[0] == stream.hoster.name &&
                     _langs[0] == stream.lang) {
@@ -114,35 +130,54 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 }
               }
             }
+            if (_comments == null) {
+              _comments = episode.comments;
+            }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
                   padding: EdgeInsets.only(left: 5, right: 5),
                   children: <Widget>[
-                    ThemeText(episode.name, ctx),
                     EpisodeHeader(episode, () {
-                      updateEpisodeData(episode.season.show.url,
-                          episode.season.number, (episode.number - 1));
+                      updateEpisodeData(
+                          this.name, this.season, (this.number - 1));
                     }, () {
-                      updateEpisodeData(episode.season.show.url,
-                          episode.season.number, (episode.number + 1));
+                      updateEpisodeData(
+                          this.name, this.season, (this.number + 1));
                     }, (lang, hoster) {
                       updateStream(episode, lang, hoster);
+                    }, (state) {
+                      episodeHeaderState = state;
                     }),
-                    (_stream != null)? AnimePlayer(_stream) : Container(),
+                    (_stream != null) ? AnimePlayer(_stream) : Container(),
                     SizedBox(
                       height: 10,
                     ),
                     EpisodeBar(episode, mainState, (state) {
                       this.barState = state;
                     }),
-                    CommentPanel(snapshot.data.user, snapshot.data.episodeInfo,
-                        (state) {
-                      this.commentPanelState = state;
-                    }, (text) async {
-                      await APIManager.addComment(episode.id, text);
-                      updateEpisodeData(episode.season.show.url,
-                          episode.season.number, episode.number);
+                    new CommentList(
+                        snapshot.data.user, episode, this._comments, ctx,
+                        (text) {
+                      APIManager.addComment(episode.id, text).then((comment) {
+                        if (comment != null) {
+                          setState(() {
+                            _comments.insert(0, comment);
+                          });
+                        }
+                      });
+                    }, (id, text) {
+                      APIManager.addSubComment(id, text).then((comment) {
+                        if (comment != null) {
+                          setState(() {
+                            for (var c in _comments) {
+                              if (c.id == id) {
+                                c.comments.add(comment);
+                              }
+                            }
+                          });
+                        }
+                      });
                     })
                   ],
                 ));
