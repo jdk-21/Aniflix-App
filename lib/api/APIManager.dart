@@ -160,6 +160,21 @@ class APIManager {
 
     return shows;
   }
+  
+  static Future<List<Show>> searchShows(String search) async {
+    List<Show> shows = [];
+    var response = await _authPostRequest("show/search", login,bodyObject: {"search":search});
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var show = Show.fromJson(entry);
+        shows.add(show);
+      }
+    }
+
+    return shows;
+  }
 
   static Future<List<GenreWithShows>> getAllShowsByGenres() async {
     List<GenreWithShows> shows = [];
