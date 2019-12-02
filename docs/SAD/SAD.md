@@ -83,7 +83,7 @@ The following graphic describes the overall class organization of our app. If yo
 n/a
 
 ## 7. Deployment View  
-![Deployment View](../docs/Development_Diagram.png)
+![Deployment View](../Diagrams/Development_Diagram.png)
 
 ## 8. Implementation View
 n/a
