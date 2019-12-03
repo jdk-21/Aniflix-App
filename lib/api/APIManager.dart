@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
+import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -253,9 +254,21 @@ class APIManager {
     return ReviewInfo(info, user);
   }
 
-  static void createReview(int show_id, String text) {
-    _authPostRequest("review", login,
+  static Future<Review> createReview(int show_id, String text) async{
+    var response = await _authPostRequest("review", login,
         bodyObject: {"show_id": show_id.toString(), "text": text});
+    var review;
+    if (response.statusCode != 404) {
+      var json = jsonDecode(response.body);
+      print(json);
+      review = Review.fromJson(json);
+    }
+    return review;
+  }
+
+  static void deleteReview(int id) {
+    print(id);
+    _authDeleteRequest("review/"+id.toString(), login);
   }
 
   static Future<List<SliderElement>> getContinue(

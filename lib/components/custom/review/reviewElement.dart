@@ -1,15 +1,20 @@
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
+import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/custom/report/reportDeleteBar.dart';
 
 class ReviewElement extends Container {
   Review review;
+  User _user;
   BuildContext ctx;
+  Function(int) _onDelete;
 
-  ReviewElement(this.review, this.ctx)
+  ReviewElement(this.review,this._user,this._onDelete, this.ctx)
       : super(
           padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
           decoration: BoxDecoration(
@@ -49,6 +54,10 @@ class ReviewElement extends Container {
                   ctx,
                   softWrap: true,
                 ),
+                ReportDeleteBar((review.user_id == _user.id),false,(){},(){
+                  APIManager.deleteReview(review.id);
+                  _onDelete(review.id);
+                },(state){}),
                 SizedBox(width: 10,),
                 ThemeText(
                   review.vote == null || review.vote.value == null

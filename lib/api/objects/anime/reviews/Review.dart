@@ -14,7 +14,7 @@ class Review{
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
         json["id"],
-        json["show_id"],
+        int.parse(json["show_id"].toString()),
         json["user_id"],
         json["text"],
         Vote.fromJson(json["vote"]),
