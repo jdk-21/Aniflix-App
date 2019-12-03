@@ -71,13 +71,28 @@ class APIManager {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
         var ep = Episode.fromJson(entry);
+        var desc = "";
+        var date;
+        if(ep.updated_at != null){
+          date = DateTime.parse(ep.updated_at);
+        }else{
+          date = DateTime.parse(ep.created_at);
+        }
+
+        var now = DateTime.now();
+
+        if(now.day == date.day && now.month == date.month && now.year == date.year){
+          desc = "Heute";
+        }else{
+          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        }
         airings.add(SliderElement(
             name: ep.season.show.name +
                 " S" +
                 ep.season.number.toString() +
                 "E" +
                 ep.number.toString(),
-            description: ep.updated_at,
+            description: desc,
             image: "https://www2.aniflix.tv/storage/" +
                 ep.season.show.cover_landscape,
             onTap: () {
@@ -252,13 +267,28 @@ class APIManager {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
         var ep = Episode.fromJson(entry);
+        var desc = "";
+        var date;
+        if(ep.updated_at != null){
+          date = DateTime.parse(ep.updated_at);
+        }else{
+          date = DateTime.parse(ep.created_at);
+        }
+
+        var now = DateTime.now();
+
+        if(now.day == date.day && now.month == date.month && now.year == date.year){
+          desc = "Heute";
+        }else{
+          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        }
         continues.add(SliderElement(
           name: ep.season.show.name +
               " S" +
               ep.season.number.toString() +
               "E" +
               ep.number.toString(),
-          description: ep.updated_at,
+          description: desc,
           image: "https://www2.aniflix.tv/storage/" +
               ep.season.show.cover_landscape,
           onTap: () {
