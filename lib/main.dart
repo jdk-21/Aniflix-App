@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
@@ -124,5 +125,5 @@ class MainWidgetState extends State<MainWidget> {
     }
   }
 
-  showChat() {}
+  showChat() {changePage(ChatScreen(this), 5);}
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
@@ -391,6 +392,21 @@ class APIManager {
     }
 
     return shows;
+  }
+
+  static Future<List<ChatMessage>> getChatMessages() async {
+    List<ChatMessage> messages = [];
+    var response = await _authGetRequest("chat/1/0", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var message = ChatMessage.fromJson(entry);
+        messages.add(message);
+      }
+    }
+
+    return messages;
   }
 
   static Future<http.Response> _getRequest(String query) {
