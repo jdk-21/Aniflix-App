@@ -38,7 +38,7 @@ class SearchAnimeState extends State<SearchAnime> {
       color: Theme
           .of(ctx)
           .backgroundColor,
-      child: Column(
+      child: ListView(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -66,11 +66,7 @@ class SearchAnimeState extends State<SearchAnime> {
               )
             ],
           ),
-          (shows == null)?Container(
-            child: ThemeText(
-              "Suche", ctx
-            ),
-          )
+          (shows == null)?Container()
           : SearchList(shows, state)
         ],
       )

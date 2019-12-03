@@ -42,7 +42,7 @@ class ImageListElement extends Container {
                         ? Align(
                             alignment: Alignment.centerLeft,
                             child: ThemeText(descLine1, ctx,
-                                fontSize: 15, softWrap: true))
+                                fontSize: 15, softWrap: true,maxLines: 5,))
                         : Container(),
                     (descLine2 != null)
                         ? Align(
