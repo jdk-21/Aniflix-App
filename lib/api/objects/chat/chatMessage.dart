@@ -17,7 +17,7 @@ class ChatMessage{
     return ChatMessage(
         json["id"],
         json["user_id"],
-        json["chat_id"],
+        int.parse(json["chat_id"].toString()),
         json["text"],
         json["created_at"],
         json["updated_at"],

@@ -7,12 +7,11 @@ import 'package:flutter/widgets.dart';
 
 class ChatComponent extends StatelessWidget {
   ChatMessage message;
-  BuildContext ctx;
 
-  ChatComponent(this.message, this.ctx);
+  ChatComponent(this.message);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     // TODO: implement build
     return Container(
         padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
@@ -60,7 +59,7 @@ class ChatComponent extends StatelessWidget {
                             fontSize: 20,
                           ),
                           Row(
-                            children: getUserGroups(),
+                            children: getUserGroups(ctx),
                           ),
                         ],
                       ),
@@ -86,7 +85,7 @@ class ChatComponent extends StatelessWidget {
         ));
   }
 
-  List<Container> getUserGroups() {
+  List<Container> getUserGroups(BuildContext ctx) {
     List<Container> usergroups = [];
     for (var group in message.user.groups) {
       usergroups.add(Container(

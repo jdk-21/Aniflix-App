@@ -3,6 +3,7 @@ import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/main.dart';
@@ -407,6 +408,20 @@ class APIManager {
     }
 
     return messages;
+  }
+
+  static Future<ChatInfo> getChatInfo() async {
+    var info = await getChatMessages();
+    var user = await getUser();
+
+    return ChatInfo(info, user);
+  }
+
+  static Future<ChatMessage> addMessage(String text) async {
+    var result = await _authPostRequest("chat", login,
+        bodyObject: {"chat_id":"1","message":text});
+    var json = jsonDecode(result.body);
+    return ChatMessage.fromJson(json);
   }
 
   static Future<http.Response> _getRequest(String query) {
