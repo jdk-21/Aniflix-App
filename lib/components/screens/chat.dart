@@ -3,8 +3,6 @@ import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/components/custom/chat/chatComponent.dart';
 import 'package:aniflix_app/components/custom/chat/chatInput.dart';
-import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
-import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +45,7 @@ class ChatState extends State<ChatScreen> {
             List<Widget> widgets = [ChatInput(snapshot.data.chatMessage, (component) {
               addMessage(component);
             })];
-            _messages.forEach((message){print("1"); widgets.add(ChatComponent(message));});
+            _messages.forEach((message){widgets.add(ChatComponent(message));});
             return Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(

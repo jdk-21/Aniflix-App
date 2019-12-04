@@ -1,4 +1,3 @@
-import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/components/custom/text/dateText.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -12,7 +11,6 @@ class ChatComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext ctx) {
-    // TODO: implement build
     return Container(
         padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
         decoration: BoxDecoration(

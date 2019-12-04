@@ -1,6 +1,4 @@
-import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
-import 'package:aniflix_app/components/custom/chat/chatComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -19,7 +17,6 @@ class ChatInput extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       controller: controller,
       maxLines: null,
-      //maxLength: 1000,
       decoration: InputDecoration(
           fillColor: Colors.white,
           border: InputBorder.none,
