@@ -2,20 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
-class VoteBar extends StatefulWidget {
-  int _id;
-  List<Vote> _votes;
-  int _voted;
-  Function(int,int) _onVote;
-
-  VoteBar(this._id, this._votes, this._voted, this._onVote);
-
-  @override
-  VoteBarState createState() =>
-      VoteBarState(this._id, this._votes, this._voted, this._onVote);
-}
-
-class VoteBarState extends State<VoteBar> {
+class VoteBar extends StatelessWidget {
   int _id;
   List<Vote> _votes;
   int _voted;
@@ -25,7 +12,9 @@ class VoteBarState extends State<VoteBar> {
   int _numberOfUpVotes;
   int _numberOfDownVotes;
 
-  VoteBarState(this._id, this._votes, this._voted, this._onVote);
+  VoteBar(this._id, this._votes, this._voted, this._onVote){
+    init();
+  }
 
   void init() {
     _numberOfDownVotes = 0;
@@ -44,21 +33,6 @@ class VoteBarState extends State<VoteBar> {
     } else if (_voted == 0) {
       _actualVote = possibleVotes.elementAt(2);
     }
-  }
-
-  @override
-  void initState() {
-    init();
-    super.initState();
-  }
-
-  updateInfo(int id, List<Vote> votes, int voted) {
-    setState(() {
-      this._id = id;
-      this._votes = votes;
-      this._voted = voted;
-      init();
-    });
   }
 
   @override
@@ -83,7 +57,6 @@ class VoteBarState extends State<VoteBar> {
                 } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
                   _onVote(0, 1);
                 }
-                makeUpVote();
               },
             ),
             ThemeText(
@@ -111,7 +84,6 @@ class VoteBarState extends State<VoteBar> {
                 } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
                   _onVote(0, null);
                 }
-                makeDownVote();
               },
             ),
             ThemeText(
@@ -123,37 +95,5 @@ class VoteBarState extends State<VoteBar> {
         )
       ],
     );
-  }
-
-  makeUpVote() {
-    setState(() {
-      if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-        _actualVote = possibleVotes.elementAt(1);
-        _numberOfUpVotes = _numberOfUpVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-        _actualVote = possibleVotes.elementAt(0);
-        _numberOfUpVotes = _numberOfUpVotes - 1;
-      } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-        _actualVote = possibleVotes.elementAt(1);
-        _numberOfDownVotes = _numberOfDownVotes - 1;
-        _numberOfUpVotes = _numberOfUpVotes + 1;
-      }
-    });
-  }
-
-  makeDownVote() {
-    setState(() {
-      if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-        _actualVote = possibleVotes.elementAt(2);
-        _numberOfDownVotes = _numberOfDownVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-        _actualVote = possibleVotes.elementAt(2);
-        _numberOfUpVotes = _numberOfUpVotes - 1;
-        _numberOfDownVotes = _numberOfDownVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-        _actualVote = possibleVotes.elementAt(0);
-        _numberOfDownVotes = _numberOfDownVotes - 1;
-      }
-    });
   }
 }

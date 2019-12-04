@@ -54,10 +54,10 @@ class ReviewElement extends Container {
                   ctx,
                   softWrap: true,
                 ),
-                ReportDeleteBar((review.user_id == _user.id),false,(){},(){
+                ReportDeleteBar((review.user_id == _user.id),(){},(){
                   APIManager.deleteReview(review.id);
                   _onDelete(review.id);
-                },(state){}),
+                }),
                 SizedBox(width: 10,),
                 ThemeText(
                   review.vote == null || review.vote.value == null

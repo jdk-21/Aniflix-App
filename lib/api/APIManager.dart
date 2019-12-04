@@ -267,7 +267,6 @@ class APIManager {
   }
 
   static void deleteReview(int id) {
-    print(id);
     _authDeleteRequest("review/"+id.toString(), login);
   }
 
@@ -385,6 +384,10 @@ class APIManager {
       result = Comment.fromJson(jsonDecode(response.body));
     }
     return result;
+  }
+
+  static void deleteComment(int id) {
+    _authDeleteRequest("comment/"+id.toString(), login);
   }
 
   static Future<SubComment> addSubComment(int commentID, String text) async {
