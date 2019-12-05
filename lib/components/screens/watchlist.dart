@@ -19,7 +19,7 @@ class Watchlist extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      key: Key("watchlist"),
+      key: Key("watchlist_screen"),
       child: FutureBuilder(
         future: watchlistdata,
         builder: (context, snapshot) {
