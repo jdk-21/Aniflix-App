@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/review.dart';
 import 'package:aniflix_app/main.dart';
@@ -475,6 +477,35 @@ class APIManager {
     }
 
     return shows;
+  }
+
+  static Future<List<ChatMessage>> getChatMessages() async {
+    List<ChatMessage> messages = [];
+    var response = await _authGetRequest("chat/1/0", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var message = ChatMessage.fromJson(entry);
+        messages.add(message);
+      }
+    }
+
+    return messages;
+  }
+
+  static Future<ChatInfo> getChatInfo() async {
+    var info = await getChatMessages();
+    var user = await getUser();
+
+    return ChatInfo(info, user);
+  }
+
+  static Future<ChatMessage> addMessage(String text) async {
+    var result = await _authPostRequest("chat", login,
+        bodyObject: {"chat_id":"1","message":text});
+    var json = jsonDecode(result.body);
+    return ChatMessage.fromJson(json);
   }
 
   static Future<http.Response> _getRequest(String query) {
