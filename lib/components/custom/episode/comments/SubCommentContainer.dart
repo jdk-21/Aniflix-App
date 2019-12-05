@@ -91,7 +91,9 @@ class SubCommentContainer extends StatelessWidget {
                                             Theme.of(ctx).textTheme.title.color,
                                         fontSize: 10.0)),
                             ReportDeleteBar(
-                                (_user.id == _comment.user_id), () {}, () {
+                                (_user.id == _comment.user_id), () {
+
+                            }, () {
                               _onSubDelete();
                             })
                           ],

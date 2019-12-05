@@ -390,6 +390,14 @@ class APIManager {
     _authDeleteRequest("comment/"+id.toString(), login);
   }
 
+  static void reportComment(int id, String text) {
+    _authPostRequest("report", login,bodyObject: {"reportable_type":"Comment","reportable_id":id.toString(),"text":text});
+  }
+
+  static void reportEpisode(int id, String text) {
+    _authPostRequest("report", login,bodyObject: {"reportable_type":"Episode","reportable_id":id.toString(),"text":text});
+  }
+
   static Future<SubComment> addSubComment(int commentID, String text) async {
     var response = await _authPostRequest("comment", login,
         bodyObject: {"text":text,"commentable_type":"Comment","commentable_id":commentID.toString()});
