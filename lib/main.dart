@@ -57,7 +57,7 @@ class MainWidget extends StatefulWidget {
 class MainWidgetState extends State<MainWidget> {
   final PageStorageBucket bucket = PageStorageBucket();
   Widget _screen;
-  int index;
+  int index = 0;
 
   Future<SharedPreferences> sharedPreferencesData;
 
