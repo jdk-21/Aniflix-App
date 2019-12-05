@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'answerBar.dart';
 import 'SubCommentContainer.dart';
 import '../../rating/voteBar.dart';
+import '../../dialogs/reportDialog.dart';
 import '../../report/reportDeleteBar.dart';
 import '../../../screens/episode.dart';
 
@@ -95,7 +96,13 @@ class CommentContainer extends Container {
                                             Theme.of(ctx).textTheme.title.color,
                                         fontSize:
                                             10.0)),
-                            ReportDeleteBar((_user.id == _comment.user_id),(){},(){
+                            ReportDeleteBar((_user.id == _comment.user_id),() {
+                              showDialog(context: ctx,builder: (BuildContext ctx){
+                                return ReportDialog((text){
+                                  APIManager.reportComment(_comment.id, text);
+                                });
+                              });
+                            },(){
                               _onDelete(_comment.id);
                             })
                           ],

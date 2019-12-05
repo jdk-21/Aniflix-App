@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import '../../rating/voteBar.dart';
 import '../../report/reportDeleteBar.dart';
+import '../../dialogs/reportDialog.dart';
 import '../../../screens/episode.dart';
 
 class SubCommentContainer extends StatelessWidget {
@@ -92,7 +93,11 @@ class SubCommentContainer extends StatelessWidget {
                                         fontSize: 10.0)),
                             ReportDeleteBar(
                                 (_user.id == _comment.user_id), () {
-
+                                showDialog(context: ctx,builder: (BuildContext ctx){
+                                  return ReportDialog((text){
+                                    APIManager.reportComment(_comment.id, text);
+                                  });
+                                });
                             }, () {
                               _onSubDelete();
                             })

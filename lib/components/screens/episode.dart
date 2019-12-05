@@ -10,7 +10,6 @@ import 'package:aniflix_app/components/custom/episode/comments/commentList.dart'
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class EpisodeScreen extends StatefulWidget {
   MainWidgetState state;
@@ -31,7 +30,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   List<String> _hosters;
   List<String> _langs;
   List<Comment> comments;
-  bool _isReported;
   Future<LoadInfo> episodeInfo;
   String name;
   int season;
@@ -51,12 +49,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
-  report() {
-    setState(() {
-      this._isReported = !_isReported;
-    });
-  }
-
   updateEpisodeData(String name, int season, int number) {
     setState(() {
       print(name);
@@ -67,7 +59,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this.number = number;
       this._hosters = null;
       this._langs = null;
-      this._isReported = null;
       this._stream = null;
       this.comments = null;
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
@@ -84,7 +75,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
           comments = episode.episodeInfo.comments;
         }
       }).catchError((error) {
-        print("Test");
         print(error);
       });
     });
