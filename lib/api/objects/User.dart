@@ -15,6 +15,7 @@ class User {
       this.updated_at, this.deleted_at, this.access_key, this.groups);
 
   factory User.fromJson(Map<String, dynamic> json) {
+    if(json == null) return null;
     return User(
         json["id"],
         json["name"],

@@ -1,6 +1,6 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/components/navigationbars/mainbar.dart';
+import 'package:aniflix_app/components/screens/search.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import '../screens/calendar.dart';
@@ -22,7 +22,7 @@ class AniflixAppbar extends AppBar {
         IconButton(
           key: Key("Search"),
           icon: Icon(Icons.search),
-          onPressed: () {},
+          onPressed: () {state.changePage(SearchAnime(state), 9);},
           color: Theme
               .of(ctx)
               .primaryIconTheme
@@ -58,8 +58,8 @@ class AniflixAppbar extends AppBar {
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image:  NetworkImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
                                 "https://www2.aniflix.tv/storage/" + snapshot.data.avatar,
                               ),
                           )
@@ -83,8 +83,6 @@ class AniflixAppbar extends AppBar {
                   color
               );
             }
-
-            // By default, show a loading spinner.
             return IconButton(
             icon: Icon(Icons.person),
             onPressed: () {

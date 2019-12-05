@@ -12,6 +12,7 @@ class Calendar extends StatelessWidget {
 
   Future<List<CalendarDay>> calendarData;
 
+  List<SliderElement> special = [];
   List<SliderElement> monday = [];
   List<SliderElement> tuesday = [];
   List<SliderElement> wednesday = [];
@@ -44,6 +45,9 @@ class Calendar extends StatelessWidget {
 
                 SliderElement element = new SliderElement(name: show.name,description: airing.details,image: "https://www2.aniflix.tv/storage/"+show.cover_landscape,);
                 switch(day.day){
+                  case 0:
+                    special.add(element);
+                    break;
                   case 1:
                     monday.add(element);
                     break;
@@ -77,13 +81,14 @@ class Calendar extends StatelessWidget {
                     .of(ctx)
                     .backgroundColor,
                 child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                  HeadlineSlider("Montag", ctx, monday),
-                  HeadlineSlider("Dienstag", ctx, tuesday),
-                  HeadlineSlider("Mittwoch", ctx, wednesday),
-                  HeadlineSlider("Donnerstag", ctx, thursday),
-                  HeadlineSlider("Freitag", ctx, friday),
-                  HeadlineSlider("Samstag", ctx, saturday),
-                  HeadlineSlider("Sonntag", ctx, sunday),
+                  (monday.length > 0) ? HeadlineSlider("Montag", ctx, monday): Container(),
+                  (tuesday.length > 0) ? HeadlineSlider("Dienstag", ctx, tuesday): Container(),
+                  (wednesday.length > 0) ? HeadlineSlider("Mittwoch", ctx, wednesday): Container(),
+                  (thursday.length > 0) ? HeadlineSlider("Donnerstag", ctx, thursday): Container(),
+                  (friday.length > 0) ? HeadlineSlider("Freitag", ctx, friday): Container(),
+                  (saturday.length > 0) ? HeadlineSlider("Samstag", ctx, saturday): Container(),
+                  (sunday.length > 0) ? HeadlineSlider("Sonntag", ctx, sunday): Container(),
+                  (special.length > 0) ? HeadlineSlider("Unregelmäßig", ctx, special): Container()
                 ]));
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");

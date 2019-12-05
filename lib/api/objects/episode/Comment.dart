@@ -14,8 +14,12 @@ class Comment{
   User user;
   List<Vote> votes;
   List<SubComment> comments;
+  bool needAnswer = false;
 
-  Comment(this.id,this.text,this.user_id,this.commentable_type,this.commentable_id,this.created_at,this.updated_at,this.deleted_at,this.voted,this.user,this.votes,this.comments);
+  Comment(this.id,this.text,this.user_id,this.commentable_type,this.commentable_id,this.created_at,this.updated_at,this.deleted_at,this.voted,this.user,this.votes,this.comments){
+    if(votes == null) votes = [];
+    if(comments==null) comments = [];
+  }
   factory Comment.fromJson(Map<String, dynamic> json) {
     if(json == null) return null;
     return Comment(
@@ -23,7 +27,7 @@ class Comment{
         json["text"],
         json["user_id"],
         json["commentable_type"],
-        json["commentable_id"],
+        int.parse(json["commentable_id"].toString()),
         json["created_at"],
         json["updated_at"],
         json["deleted_at"],
@@ -67,7 +71,7 @@ class SubComment{
         json["text"],
         json["user_id"],
         json["commentable_type"],
-        json["commentable_id"],
+        int.parse(json["commentable_id"].toString()),
         json["created_at"],
         json["updated_at"],
         json["deleted_at"],

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../slider/carousel/AnimeCarousel.dart';
 import '../../slider/SliderElement.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class HeadlineSlider extends Container {
   String title;
@@ -17,14 +18,7 @@ class HeadlineSlider extends Container {
               Container(
                   margin: EdgeInsets.only(left: 5, bottom: 5),
                   alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: Theme.of(ctx).textTheme.title.color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  )),
+                  child: ThemeText(title, ctx, fontWeight: FontWeight.bold)),
               AnimeCarousel(elements, aspectRatio: aspectRatio, size: size),
             ]));
 }

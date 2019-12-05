@@ -16,11 +16,11 @@ You open the subscription box and send a request to the system which will search
 ## 2.1 Basic Flow
 
 ### Activity Diagram
-![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/activity_diagramm_see_subscribed_anime.png)
+![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/UC/Diagrams/activity_diagramm_see_subscribed_anime.png)
 
 ### .feature File
 
-![.feature file](../docs/feature%20files/feature%20subscribedAnimes.PNG)
+![.feature file](../feature%20files/feature%20subscribedAnimes.PNG)
 
 
 ## 2.2 Alternative Flows

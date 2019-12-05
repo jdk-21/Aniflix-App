@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
@@ -56,7 +57,7 @@ class MainWidget extends StatefulWidget {
 class MainWidgetState extends State<MainWidget> {
   final PageStorageBucket bucket = PageStorageBucket();
   Widget _screen;
-  int index;
+  int index = 0;
 
   Future<SharedPreferences> sharedPreferencesData;
 
@@ -73,7 +74,6 @@ class MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext ctx) {
-    var bar = AniflixNavigationbar(this, index, ctx);
     if (APIManager.login == null) {
       return FutureBuilder<SharedPreferences>(
           future: sharedPreferencesData,
@@ -125,5 +125,5 @@ class MainWidgetState extends State<MainWidget> {
     }
   }
 
-  showChat() {}
+  showChat() {changePage(ChatScreen(this), 5);}
 }
