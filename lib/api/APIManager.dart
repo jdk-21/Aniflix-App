@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
+import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
@@ -73,13 +74,28 @@ class APIManager {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
         var ep = Episode.fromJson(entry);
+        var desc = "";
+        var date;
+        if(ep.updated_at != null){
+          date = DateTime.parse(ep.updated_at);
+        }else{
+          date = DateTime.parse(ep.created_at);
+        }
+
+        var now = DateTime.now();
+
+        if(now.day == date.day && now.month == date.month && now.year == date.year){
+          desc = "Heute";
+        }else{
+          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        }
         airings.add(SliderElement(
             name: ep.season.show.name +
                 " S" +
                 ep.season.number.toString() +
                 "E" +
                 ep.number.toString(),
-            description: ep.updated_at,
+            description: desc,
             image: "https://www2.aniflix.tv/storage/" +
                 ep.season.show.cover_landscape,
             onTap: () {
@@ -240,9 +256,20 @@ class APIManager {
     return ReviewInfo(info, user);
   }
 
-  static void createReview(int show_id, String text) {
-    _authPostRequest("review", login,
+  static Future<Review> createReview(int show_id, String text) async{
+    var response = await _authPostRequest("review", login,
         bodyObject: {"show_id": show_id.toString(), "text": text});
+    var review;
+    if (response.statusCode != 404) {
+      var json = jsonDecode(response.body);
+      print(json);
+      review = Review.fromJson(json);
+    }
+    return review;
+  }
+
+  static void deleteReview(int id) {
+    _authDeleteRequest("review/"+id.toString(), login);
   }
 
   static Future<List<SliderElement>> getContinue(
@@ -254,13 +281,28 @@ class APIManager {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
         var ep = Episode.fromJson(entry);
+        var desc = "";
+        var date;
+        if(ep.updated_at != null){
+          date = DateTime.parse(ep.updated_at);
+        }else{
+          date = DateTime.parse(ep.created_at);
+        }
+
+        var now = DateTime.now();
+
+        if(now.day == date.day && now.month == date.month && now.year == date.year){
+          desc = "Heute";
+        }else{
+          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        }
         continues.add(SliderElement(
           name: ep.season.show.name +
               " S" +
               ep.season.number.toString() +
               "E" +
               ep.number.toString(),
-          description: ep.updated_at,
+          description: desc,
           image: "https://www2.aniflix.tv/storage/" +
               ep.season.show.cover_landscape,
           onTap: () {
@@ -344,6 +386,18 @@ class APIManager {
       result = Comment.fromJson(jsonDecode(response.body));
     }
     return result;
+  }
+
+  static void deleteComment(int id) {
+    _authDeleteRequest("comment/"+id.toString(), login);
+  }
+
+  static void reportComment(int id, String text) {
+    _authPostRequest("report", login,bodyObject: {"reportable_type":"Comment","reportable_id":id.toString(),"text":text});
+  }
+
+  static void reportEpisode(int id, String text) {
+    _authPostRequest("report", login,bodyObject: {"reportable_type":"Episode","reportable_id":id.toString(),"text":text});
   }
 
   static Future<SubComment> addSubComment(int commentID, String text) async {

@@ -24,12 +24,23 @@ class ReviewScreenState extends State<ReviewScreen> {
   List<ReviewElement> _actualReviews = [];
   bool _showButton = true;
 
-  addNewReview(Review review, BuildContext ctx, ReviewShow reviewInfo) {
+  addNewReview(Review review,User user, BuildContext ctx, ReviewShow reviewInfo) async {
+    var responsereview = await APIManager.createReview(reviewInfo.id, review.text);
+    responsereview.user = user;
     setState(() {
-      _actualReviews.insert(0, ReviewElement(review, ctx));
+      _actualReviews.insert(0, ReviewElement(responsereview,user,(id){
+        for(var i = 0; i < _actualReviews.length; i++){
+          if(_actualReviews[i].review.id == id){
+            setState(() {
+              _actualReviews.removeAt(i);
+              _showButton = true;
+            });
+            break;
+          }
+        }
+      }, ctx));
       _showButton = false;
     });
-    APIManager.createReview(reviewInfo.id, review.text);
   }
 
   ReviewScreenState(this.url) {
@@ -47,7 +58,17 @@ class ReviewScreenState extends State<ReviewScreen> {
             var reviewedAnime = snapshot.data.reviewShow;
             if (_actualReviews.length < 1) {
               for (var review in reviewedAnime.reviews) {
-                _actualReviews.add(ReviewElement(review, ctx));
+                _actualReviews.add(ReviewElement(review,snapshot.data.user,(id){
+                  for(var i = 0; i < _actualReviews.length; i++){
+                    if(_actualReviews[i].review.id == id){
+                      setState(() {
+                        _actualReviews.removeAt(i);
+                        _showButton = true;
+                      });
+                      break;
+                    }
+                  }
+                }, ctx));
                 if (review.user_id == snapshot.data.user.id) {
                   _showButton = false;
                 }
@@ -104,7 +125,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                                   context: ctx,
                                   builder: (BuildContext context) {
                                     return WriteReviewDialog((review) {
-                                      addNewReview(review, ctx, reviewedAnime);
+                                      addNewReview(review,snapshot.data.user, ctx, reviewedAnime);
                                     }, reviewedAnime, snapshot.data.user);
                                   });
                             },

@@ -3,6 +3,7 @@ import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/custom/dialogs/reportDialog.dart';
 import 'package:aniflix_app/main.dart';
 
 class EpisodeBar extends StatefulWidget {
@@ -59,6 +60,17 @@ class EpisodeBarState extends State<EpisodeBar> {
     setState(() {
       this._episode = episode;
       init();
+    });
+  }
+
+  report(int id, BuildContext ctx) {
+    setState(() {
+      showDialog(context: ctx,builder: (BuildContext ctx){
+        return ReportDialog((text){
+          APIManager.reportEpisode(id, text);
+          this._isReported = !_isReported;
+        });
+      });
     });
   }
 
@@ -127,9 +139,7 @@ class EpisodeBarState extends State<EpisodeBar> {
                   ),
                   onPressed: () {
                     if (!_isReported) {
-                      setState(() {
-                        _isReported = !_isReported;
-                      });
+                      report(_episode.id, ctx);
                     }
                   },
                 )

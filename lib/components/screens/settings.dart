@@ -20,21 +20,26 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext ctx) {
     ThemeManager manager = ThemeManager.getInstance();
     return Container(
+      key: Key("settings_screen"),
       color: Theme.of(ctx).backgroundColor,
       child: ListView(
         children: [
           ListElement("Profil",ctx,onTap: () {
             state.changePage(Profil(), 6);
-          }),
+          },
+            key:Key("Profil")),
           ListElement("Verlauf",ctx,onTap: () {
             state.changePage(Verlauf(state), 7);
-          }),
+          },
+              key:Key("Verlauf")),
           ListElement("Watchlist",ctx,onTap: () {
             state.changePage(Watchlist(state), 8);
-          }),
+          },
+              key:Key("Watchlist")),
           ListElement("Favoriten",ctx,onTap: () {
             state.changePage(Favoriten(state), 9);
-          }),
+          },
+              key:Key("Favoriten")),
           ListElement("Theme",ctx,onTap: () {},
             child:Theme(
                 data: Theme.of(ctx).copyWith(

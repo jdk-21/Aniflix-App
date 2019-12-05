@@ -19,7 +19,7 @@ class Favoriten extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      key: Key("favourites"),
+      key: Key("favourites_screen"),
       child: FutureBuilder(
         future: favouriteData,
         builder: (context, snapshot) {

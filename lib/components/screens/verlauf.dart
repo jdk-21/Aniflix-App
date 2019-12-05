@@ -17,7 +17,7 @@ class Verlauf extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      key: Key("history"),
+      key: Key("history_screen"),
       child: FutureBuilder(
         future: historyData,
         builder: (context, snapshot) {

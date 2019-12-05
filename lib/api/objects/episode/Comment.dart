@@ -14,6 +14,7 @@ class Comment{
   User user;
   List<Vote> votes;
   List<SubComment> comments;
+  bool needAnswer = false;
 
   Comment(this.id,this.text,this.user_id,this.commentable_type,this.commentable_id,this.created_at,this.updated_at,this.deleted_at,this.voted,this.user,this.votes,this.comments){
     if(votes == null) votes = [];

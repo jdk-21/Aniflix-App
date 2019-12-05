@@ -10,7 +10,6 @@ import 'package:aniflix_app/components/custom/episode/comments/commentList.dart'
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class EpisodeScreen extends StatefulWidget {
   MainWidgetState state;
@@ -30,8 +29,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   AnimeStream _stream;
   List<String> _hosters;
   List<String> _langs;
-  List<Comment> _comments;
-  bool _isReported;
+  List<Comment> comments;
   Future<LoadInfo> episodeInfo;
   String name;
   int season;
@@ -51,12 +49,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     });
   }
 
-  report() {
-    setState(() {
-      this._isReported = !_isReported;
-    });
-  }
-
   updateEpisodeData(String name, int season, int number) {
     setState(() {
       print(name);
@@ -67,9 +59,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this.number = number;
       this._hosters = null;
       this._langs = null;
-      this._isReported = null;
       this._stream = null;
-      this._comments = null;
+      this.comments = null;
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
 
       this.episodeInfo.then((episode) {
@@ -81,11 +72,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
           if (episodeHeaderState != null) {
             episodeHeaderState.updateEpisode(episode.episodeInfo);
           }
-        } else {
-          print("Test null");
+          comments = episode.episodeInfo.comments;
         }
       }).catchError((error) {
-        print("Test");
         print(error);
       });
     });
@@ -130,8 +119,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 }
               }
             }
-            if (_comments == null) {
-              _comments = episode.comments;
+            if (comments == null) {
+              comments = episode.comments;
             }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
@@ -157,12 +146,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       this.barState = state;
                     }),
                     new CommentList(
-                        snapshot.data.user, episode, this._comments, ctx,
+                        snapshot.data.user, episode, this.comments, ctx,
                         (text) {
                       APIManager.addComment(episode.id, text).then((comment) {
                         if (comment != null) {
                           setState(() {
-                            _comments.insert(0, comment);
+                            comments.insert(0, comment);
                           });
                         }
                       });
@@ -170,7 +159,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       APIManager.addSubComment(id, text).then((comment) {
                         if (comment != null) {
                           setState(() {
-                            for (var c in _comments) {
+                            for (var c in comments) {
                               if (c.id == id) {
                                 c.comments.add(comment);
                               }
@@ -178,7 +167,31 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           });
                         }
                       });
-                    })
+                    },(id){
+                          setState(() {
+                            for(var i = 0; i < comments.length; i++){
+                              if(comments[i].id == id){
+                                comments.removeAt(i);
+                                APIManager.deleteComment(id);
+                                break;
+                              }
+                            }
+                          });
+                    },(id,sub_id){
+                      setState(() {
+                        for(var i = 0; i < comments.length; i++){
+                          if(comments[i].id == id){
+                            for(var j = 0; j < comments[i].comments.length; j++){
+                              if(comments[i].comments[j].id == sub_id){
+                                comments[i].comments.removeAt(j);
+                                APIManager.deleteComment(sub_id);
+                                break;
+                              }
+                            }
+                          }
+                        }
+                      });
+                    },this)
                   ],
                 ));
           } else if (snapshot.hasError) {

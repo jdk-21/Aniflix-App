@@ -1,17 +1,24 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
+import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import '../../rating/voteBar.dart';
 import '../../report/reportDeleteBar.dart';
+import '../../dialogs/reportDialog.dart';
+import '../../../screens/episode.dart';
 
 class SubCommentContainer extends StatelessWidget {
   SubComment _comment;
+  EpisodeScreenState episodeScreenState;
   User _user;
+  Function() _onSubDelete;
 
-  SubCommentContainer(this._comment, this._user);
+  SubCommentContainer(
+      this._comment, this._user, this._onSubDelete, this.episodeScreenState);
+
   @override
   Widget build(BuildContext ctx) {
     var date = DateTime.parse(this._comment.created_at);
@@ -34,25 +41,25 @@ class SubCommentContainer extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: (_comment.user.avatar == null)
                       ? IconButton(
-                    icon: Icon(
-                      Icons.person,
-                      color: Theme.of(ctx).primaryIconTheme.color,
-                    ),
-                    onPressed: () {},
-                  )
+                          icon: Icon(
+                            Icons.person,
+                            color: Theme.of(ctx).primaryIconTheme.color,
+                          ),
+                          onPressed: () {},
+                        )
                       : IconButton(
-                    icon: new Container(
-                        decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                "https://www2.aniflix.tv/storage/" +
-                                    _comment.user.avatar,
-                              ),
-                            ))),
-                    onPressed: () {},
-                  ),
+                          icon: new Container(
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      "https://www2.aniflix.tv/storage/" +
+                                          _comment.user.avatar,
+                                    ),
+                                  ))),
+                          onPressed: () {},
+                        ),
                 ),
                 Expanded(
                   child: Column(
@@ -68,24 +75,32 @@ class SubCommentContainer extends StatelessWidget {
                             ),
                             (this._comment.created_at != null)
                                 ? Text(
-                                date.day.toString() +
-                                    "." +
-                                    date.month.toString() +
-                                    "." +
-                                    date.year.toString() +
-                                    " " +
-                                    hour +
-                                    ":" +
-                                    minute,
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 9.0))
+                                    date.day.toString() +
+                                        "." +
+                                        date.month.toString() +
+                                        "." +
+                                        date.year.toString() +
+                                        " " +
+                                        hour +
+                                        ":" +
+                                        minute,
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 9.0))
                                 : Text("",
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(ctx).textTheme.title.color,
-                                    fontSize:
-                                    10.0)),
-                            ReportDeleteBar((_user.id == _comment.user_id),false,(){},(){},(state){})
+                                    style: TextStyle(
+                                        color:
+                                            Theme.of(ctx).textTheme.title.color,
+                                        fontSize: 10.0)),
+                            ReportDeleteBar(
+                                (_user.id == _comment.user_id), () {
+                                showDialog(context: ctx,builder: (BuildContext ctx){
+                                  return ReportDialog((text){
+                                    APIManager.reportComment(_comment.id, text);
+                                  });
+                                });
+                            }, () {
+                              _onSubDelete();
+                            })
                           ],
                         ),
                         ThemeText(
@@ -94,284 +109,45 @@ class SubCommentContainer extends StatelessWidget {
                           fontSize: 12.0,
                           softWrap: true,
                         ),
-                        Row(children: [
-                          VoteBar(_comment.id, _comment.votes, _comment.voted,
-                                  (prev, next) {
-                                APIManager.setCommentVote(_comment.id, prev, next);
-                              })
-                        ],),
-
+                        Row(
+                          children: [
+                            VoteBar(_comment.id, _comment.votes, _comment.voted,
+                                (prev, next) {
+                              var commentlist = episodeScreenState.comments;
+                              for (int i = 0; i < commentlist.length; i++) {
+                                for(int k = 0; k < commentlist[i].comments.length; k++) {
+                                  if (commentlist[i].comments[k].id == _comment.id) {
+                                    episodeScreenState.setState(() {
+                                      episodeScreenState.comments[i].comments[k].voted = next;
+                                      var contained = false;
+                                      for(int j = 0; j < commentlist[i].comments[k].votes.length; i++){
+                                        if(commentlist[i].comments[k].votes[j].user_id == _user.id){
+                                          if(next != null){
+                                            commentlist[i].comments[k].votes[j].value = next;
+                                          }else{
+                                            commentlist[i].comments[k].votes.removeAt(j);
+                                          }
+                                          contained = true;
+                                          break;
+                                        }
+                                      }
+                                      if(!contained && next != null){
+                                        commentlist[i].comments[k].votes.add(Vote(0, "Comment", 0, _user.id, next, DateTime.now().toString(), null, null));
+                                      }
+                                    });
+                                  }
+                                }
+                              }
+                              APIManager.setCommentVote(
+                                  _comment.id, prev, next);
+                            })
+                          ],
+                        ),
                       ]),
                 ),
-
-
               ])
             ],
           ),
         ]));
   }
 }
-/*
-class SubCommentContainerState extends State<SubCommentContainer> {
-  int id;
-  String text;
-  User user;
-  List<SubComment> subComments = [];
-  List<Vote> votes = [];
-  String createdAt;
-  int voted;
-  String _actualVote;
-  List<String> possibleVotes = [null, "+", "-"];
-  int _numberOfUpVotes;
-  int _numberOfDownVotes;
-  bool _isReported;
-  User currentUser;
-
-  SubCommentContainerState(SubComment comment, this.currentUser) {
-    this.id = comment.id;
-    this.text = comment.text;
-    this.user = comment.user;
-    this.votes = comment.votes;
-    this.voted = comment.voted;
-    this.createdAt = comment.created_at;
-  }
-
-  getSubCommentsAsContainers() {
-    List<SubCommentContainer> containers = [];
-    for (var comment in subComments) {
-      SubCommentContainer cont = SubCommentContainer(comment, this.currentUser);
-      containers.add(cont);
-    }
-    return containers;
-  }
-
-  report() {
-    setState(() {
-      this._isReported = !_isReported;
-    });
-  }
-
-  makeUpVote() {
-    setState(() {
-      if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-        _actualVote = possibleVotes.elementAt(1);
-        _numberOfUpVotes = _numberOfUpVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-        _actualVote = possibleVotes.elementAt(0);
-        _numberOfUpVotes = _numberOfUpVotes - 1;
-      } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-        _actualVote = possibleVotes.elementAt(1);
-        _numberOfDownVotes = _numberOfDownVotes - 1;
-        _numberOfUpVotes = _numberOfUpVotes + 1;
-      }
-    });
-  }
-
-  makeDownVote() {
-    setState(() {
-      if (_actualVote == possibleVotes.elementAt(0) /*null*/) {
-        _actualVote = possibleVotes.elementAt(2);
-        _numberOfDownVotes = _numberOfDownVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(1) /*+*/) {
-        _actualVote = possibleVotes.elementAt(2);
-        _numberOfUpVotes = _numberOfUpVotes - 1;
-        _numberOfDownVotes = _numberOfDownVotes + 1;
-      } else if (_actualVote == possibleVotes.elementAt(2) /*-*/) {
-        _actualVote = possibleVotes.elementAt(0);
-        _numberOfDownVotes = _numberOfDownVotes - 1;
-      }
-    });
-  }
-
-  sortVotes() {
-    if (_numberOfDownVotes == null || _numberOfUpVotes == null) {
-      _numberOfDownVotes = 0;
-      _numberOfUpVotes = 0;
-      for (var votes in this.votes) {
-        if (votes.value == 0) {
-          _numberOfDownVotes = _numberOfDownVotes + 1;
-        } else if (votes.value == 1) {
-          _numberOfUpVotes = _numberOfUpVotes + 1;
-        }
-      }
-      if (this.voted == 0) {
-        _actualVote = possibleVotes.elementAt(2);
-      } else if (this.voted == 1) {
-        _actualVote = possibleVotes.elementAt(1);
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext ctx) {
-    sortVotes();
-    var date = DateTime.parse(this.createdAt);
-    String minute = date.minute.toString();
-    String hour = date.hour.toString();
-    if (date.minute < 10) {
-      minute = "0" + date.minute.toString();
-    }
-    if (date.hour < 10) {
-      hour = "0" + date.hour.toString();
-    }
-    return Container(
-      padding: EdgeInsets.only(left: 55),
-      color: Theme.of(ctx).backgroundColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Row(children: [
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  (user.avatar == null)
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.person,
-                            color: Theme.of(ctx).primaryIconTheme.color,
-                          ),
-                          onPressed: () {},
-                        )
-                      : IconButton(
-                          icon: new Container(
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      "https://www2.aniflix.tv/storage/" +
-                                          user.avatar,
-                                    ),
-                                  ))),
-                          onPressed: () {},
-                        ),
-                ]),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    textDirection: TextDirection.ltr,
-                    children: [
-                      Row(
-                        children: [
-                          ThemeText(user.name + " ", ctx, fontSize: 12.0),
-                          (this.createdAt != null)
-                              ? Text(
-                                  date.day.toString() +
-                                      "." +
-                                      date.month.toString() +
-                                      "." +
-                                      date.year.toString() +
-                                      " " +
-                                      hour +
-                                      ":" +
-                                      minute,
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 9.0))
-                              : Text("",
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 10.0)),
-                          IconButton(
-                            padding: EdgeInsets.all(0),
-                            iconSize: 15,
-                            icon: Icon(
-                              Icons.report,
-                              color: Theme.of(ctx).primaryIconTheme.color,
-                            ),
-                            onPressed: () {
-                              if (!_isReported) {
-                                report();
-                              }
-                            },
-                          )
-                        ],
-                      ),
-                      ThemeText(
-                        this.text,
-                        ctx,
-                        fontSize: 12.0,
-                        softWrap: true,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              IconButton(
-                                iconSize: 12,
-                                icon: Icon(
-                                  Icons.thumb_up,
-                                  color: _actualVote == null ||
-                                          _actualVote ==
-                                              possibleVotes.elementAt(2)
-                                      ? Theme.of(ctx).primaryIconTheme.color
-                                      : Theme.of(ctx).accentIconTheme.color,
-                                ),
-                                onPressed: () {
-                                  if (_actualVote ==
-                                      possibleVotes.elementAt(0) /*null*/) {
-                                    APIManager.setCommentVote(this.id, null, 1);
-                                  } else if (_actualVote ==
-                                      possibleVotes.elementAt(1) /*+*/) {
-                                    APIManager.setCommentVote(this.id, 1, null);
-                                  } else if (_actualVote ==
-                                      possibleVotes.elementAt(2) /*-*/) {
-                                    APIManager.setCommentVote(this.id, 0, 1);
-                                  }
-                                  makeUpVote();
-                                },
-                              ),
-                              ThemeText(
-                                _numberOfUpVotes.toString(),
-                                ctx,
-                                fontSize: 12,
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              IconButton(
-                                iconSize: 12,
-                                icon: Icon(
-                                  Icons.thumb_down,
-                                  color: (_actualVote == null ||
-                                          _actualVote ==
-                                              possibleVotes.elementAt(1))
-                                      ? Theme.of(ctx).primaryIconTheme.color
-                                      : Theme.of(ctx).accentIconTheme.color,
-                                ),
-                                onPressed: () {
-                                  if (_actualVote ==
-                                      possibleVotes.elementAt(0) /*null*/) {
-                                    APIManager.setCommentVote(this.id, null, 0);
-                                  } else if (_actualVote ==
-                                      possibleVotes.elementAt(1) /*+*/) {
-                                    APIManager.setCommentVote(this.id, 1, 0);
-                                  } else if (_actualVote ==
-                                      possibleVotes.elementAt(2) /*-*/) {
-                                    APIManager.setCommentVote(this.id, 0, null);
-                                  }
-                                  makeDownVote();
-                                },
-                              ),
-                              ThemeText(
-                                _numberOfDownVotes.toString(),
-                                ctx,
-                                fontSize: 12,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ]),
-            ],
-          ),
-          Column(
-            children: getSubCommentsAsContainers(),
-          )
-        ],
-      ),
-    );
-  }
-}*/

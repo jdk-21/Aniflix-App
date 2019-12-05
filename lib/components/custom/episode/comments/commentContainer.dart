@@ -2,6 +2,7 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/api/objects/anime/Vote.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +10,19 @@ import 'package:flutter/material.dart';
 import 'answerBar.dart';
 import 'SubCommentContainer.dart';
 import '../../rating/voteBar.dart';
+import '../../dialogs/reportDialog.dart';
 import '../../report/reportDeleteBar.dart';
+import '../../../screens/episode.dart';
 
 class CommentContainer extends Container {
   Comment _comment;
   User _user;
-  AnswerBarState answerBarState;
+  EpisodeScreenState episodeScreenState;
   Function(int,String) _onSubSend;
+  Function(int) _onDelete;
+  Function(int,int) _onSubDelete;
 
-  CommentContainer(this._comment, this._user,this._onSubSend);
+  CommentContainer(this._comment, this._user,this._onSubSend,this._onDelete,this._onSubDelete,this.episodeScreenState);
 
   @override
   Widget build(BuildContext ctx) {
@@ -91,7 +96,15 @@ class CommentContainer extends Container {
                                             Theme.of(ctx).textTheme.title.color,
                                         fontSize:
                                             10.0)),
-                            ReportDeleteBar((_user.id == _comment.user_id),false,(){},(){},(state){})
+                            ReportDeleteBar((_user.id == _comment.user_id),() {
+                              showDialog(context: ctx,builder: (BuildContext ctx){
+                                return ReportDialog((text){
+                                  APIManager.reportComment(_comment.id, text);
+                                });
+                              });
+                            },(){
+                              _onDelete(_comment.id);
+                            })
                           ],
                         ),
                         ThemeText(
@@ -103,13 +116,41 @@ class CommentContainer extends Container {
                         Row(children: [
                           VoteBar(_comment.id, _comment.votes, _comment.voted,
                                   (prev, next) {
+                                    var commentlist = episodeScreenState.comments;
+                                    for (int i = 0; i < commentlist.length; i++) {
+                                      if (commentlist[i].id == _comment.id) {
+                                        episodeScreenState.setState(() {
+                                          episodeScreenState.comments[i].voted = next;
+                                          var contained = false;
+                                          for(int j = 0; j < commentlist[i].votes.length; i++){
+                                            if(commentlist[i].votes[j].user_id == _user.id){
+                                              if(next != null){
+                                                commentlist[i].votes[j].value = next;
+                                              }else{
+                                                commentlist[i].votes.removeAt(j);
+                                              }
+                                              contained = true;
+                                              break;
+                                            }
+                                          }
+                                          if(!contained && next != null){
+                                            commentlist[i].votes.add(Vote(0, "Comment", 0, _user.id, next, DateTime.now().toString(), null, null));
+                                          }
+                                        });
+                                      }
+                                    }
                                 APIManager.setCommentVote(_comment.id, prev, next);
                               }),
                           FlatButton(
                               onPressed: () {
-                                if (this.answerBarState != null) {
-                                  this.answerBarState.toggleState();
-                                }
+                                episodeScreenState.setState((){
+                                  var comments = episodeScreenState.comments;
+                                  for(int i = 0; i < comments.length; i++){
+                                    if(comments[i].id == _comment.id){
+                                      episodeScreenState.comments[i].needAnswer = !episodeScreenState.comments[i].needAnswer;
+                                    }
+                                  }
+                                });
                               },
                               child: ThemeText(
                                 "Antworten",
@@ -123,14 +164,14 @@ class CommentContainer extends Container {
 
 
               ]),
-              AnswerBar(this._user, (state) {
-                this.answerBarState = state;
-              },(text){
+              AnswerBar(this._user,_comment.needAnswer,(text){
                 _onSubSend(_comment.id,text);
               }),
               Column(
                 children: _comment.comments.map((comment) {
-                  return new SubCommentContainer(comment, _user);
+                  return new SubCommentContainer(comment, _user, (){
+                    _onSubDelete(_comment.id,comment.id);
+                  },episodeScreenState);
                 }).toList(),
               )
             ],

@@ -6,7 +6,7 @@ import 'steps/steps.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()
-    ..features = [Glob(r"test_driver/features/navigationbar.feature")]
+    ..features = [Glob(r"test_driver/features/appbar.feature"),Glob(r"test_driver/features/navigationbar.feature"),Glob(r"test_driver/features/settings.feature")]
     ..stepDefinitions = [NavigationButtonValidation(), ScreenValidation()]
     ..reporters = [ProgressReporter(), TestRunSummaryReporter()]
     ..restartAppBetweenScenarios = true

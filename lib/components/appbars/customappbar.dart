@@ -20,6 +20,7 @@ class AniflixAppbar extends AppBar {
       ]),
       actions: <Widget>[
         IconButton(
+          key: Key("Search"),
           icon: Icon(Icons.search),
           onPressed: () {state.changePage(SearchAnime(state), 9);},
           color: Theme
@@ -28,6 +29,7 @@ class AniflixAppbar extends AppBar {
               .color,
         ),
         IconButton(
+          key: Key("News"),
           icon: Icon(Icons.notifications),
           onPressed: () {state.changePage(NewsPage(), 6);},
           color: Theme
@@ -36,6 +38,7 @@ class AniflixAppbar extends AppBar {
               .color,
         ),
         IconButton(
+          key: Key("Calendar"),
           icon: Icon(Icons.calendar_today),
           onPressed: () {
             state.changePage(Calendar(state), 10);
@@ -50,6 +53,7 @@ class AniflixAppbar extends AppBar {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return IconButton(
+                  key: Key("Settings"),
                   icon: new Container(
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
