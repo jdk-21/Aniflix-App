@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
+import 'package:aniflix_app/components/custom/chat/chatRulesDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -27,6 +28,7 @@ class ChatInput extends StatelessWidget {
         padding: EdgeInsets.only(left: 5, right: 5),
         child: Row(
           children: <Widget>[
+            IconButton(icon: Icon(Icons.assignment, color: Theme.of(context).primaryIconTheme.color,),onPressed: (){showDialog(context: context, builder: (BuildContext ctx) {return ChatRulesDialog();});}),
             Expanded(child: textField),
             IconButton(
                 icon: Icon(Icons.send),

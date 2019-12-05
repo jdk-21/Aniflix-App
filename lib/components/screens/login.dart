@@ -87,8 +87,6 @@ class Login extends StatelessWidget {
                   child: ThemeText("Noch keinen Account?",ctx),
                   onPressed: () {
                     _launchURL();
-                    //state.changePage(5);
-                    //ScreenManager.getInstance(state).setCurrentTab(5);
                     resetTextController();
                   },
                 ),
@@ -113,7 +111,6 @@ class Login extends StatelessWidget {
     showDialog(
       context: ctx,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
           backgroundColor: Theme.of(context).backgroundColor,
           title: new ThemeText("Error",context),
