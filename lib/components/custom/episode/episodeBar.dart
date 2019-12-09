@@ -67,6 +67,8 @@ class EpisodeBarState extends State<EpisodeBar> {
     setState(() {
       showDialog(context: ctx,builder: (BuildContext ctx){
         return ReportDialog((text){
+          var analytics = _state.analytics;
+          analytics.logEvent(name: "episode_report",parameters: {"episode_id": id});
           APIManager.reportEpisode(id, text);
           this._isReported = !_isReported;
         });
@@ -158,16 +160,21 @@ class EpisodeBarState extends State<EpisodeBar> {
                             : Theme.of(ctx).accentIconTheme.color,
                       ),
                       onPressed: () {
+                        var vote;
                         if (_actualVote ==
                             possibleVotes.elementAt(0) /*null*/) {
                           APIManager.setEpisodeVote(_episode.id, null, 1);
+                          vote = 1;
                         } else if (_actualVote ==
                             possibleVotes.elementAt(1) /*+*/) {
                           APIManager.setEpisodeVote(_episode.id, 1, null);
                         } else if (_actualVote ==
                             possibleVotes.elementAt(2) /*-*/) {
                           APIManager.setEpisodeVote(_episode.id, 0, 1);
+                          vote = 1;
                         }
+                        var analytics = _state.analytics;
+                        analytics.logEvent(name: "episode_vote",parameters: {"episode_id": _episode.id,"vote_value":vote});
                         makeUpVote();
                       },
                     ),
@@ -189,16 +196,21 @@ class EpisodeBarState extends State<EpisodeBar> {
                             : Theme.of(ctx).accentIconTheme.color,
                       ),
                       onPressed: () {
+                        var vote;
                         if (_actualVote ==
                             possibleVotes.elementAt(0) /*null*/) {
                           APIManager.setEpisodeVote(_episode.id, null, 0);
+                          vote = 0;
                         } else if (_actualVote ==
                             possibleVotes.elementAt(1) /*+*/) {
                           APIManager.setEpisodeVote(_episode.id, 1, 0);
+                          vote = 0;
                         } else if (_actualVote ==
                             possibleVotes.elementAt(2) /*-*/) {
                           APIManager.setEpisodeVote(_episode.id, 0, null);
                         }
+                        var analytics = _state.analytics;
+                        analytics.logEvent(name: "episode_vote",parameters: {"episode_id": _episode.id,"vote_value":vote});
                         makeDownVote();
                       },
                     ),

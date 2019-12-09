@@ -3,13 +3,19 @@ import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/components/custom/chat/chatComponent.dart';
 import 'package:aniflix_app/components/custom/chat/chatInput.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatefulWidget implements Screen{
   MainWidgetState state;
 
   ChatScreen(this.state);
+
+  @override
+  getScreenName() {
+    return "chat_screen";
+  }
 
   @override
   ChatState createState() => ChatState(state);
@@ -18,13 +24,16 @@ class ChatScreen extends StatefulWidget {
 class ChatState extends State<ChatScreen> {
   Future<ChatInfo> chatdata;
   List<ChatMessage> _messages;
+  MainWidgetState state;
 
-  ChatState(MainWidgetState state) {
+  ChatState(this.state) {
     chatdata = APIManager.getChatInfo();
   }
 
   addMessage(text) async {
     var message = await APIManager.addMessage(text);
+    var analytics = state.analytics;
+    analytics.logEvent(name: "send_chat_mesage",parameters: {"message_id":message.id});
     setState(() {
       _messages.insert(
           0, message);

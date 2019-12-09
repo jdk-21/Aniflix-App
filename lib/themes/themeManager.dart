@@ -51,6 +51,7 @@ class ThemeManager {
     List<DropdownMenuItem<int>> namelist = [];
     for (int l = 0; l < Themes.length; l++) {
       namelist.add(DropdownMenuItem(
+        key: Key(Themes.elementAt(l).themeName),
           value: l, child: Text(Themes.elementAt(l).themeName)));
     }
     return namelist;

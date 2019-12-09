@@ -5,14 +5,20 @@ import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/components/custom/dialogs/writeReviewDialog.dart';
 import 'package:aniflix_app/components/custom/review/reviewElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ReviewScreen extends StatefulWidget {
+class ReviewScreen extends StatefulWidget implements Screen{
   String url;
 
   ReviewScreen(this.url);
+
+  @override
+  getScreenName() {
+    return "review_screen";
+  }
 
   @override
   ReviewScreenState createState() => ReviewScreenState(url);
@@ -50,7 +56,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      key: Key("home_screen"),
+      key: Key("review_screen"),
       child: FutureBuilder<ReviewInfo>(
         future: reviewData,
         builder: (context, snapshot) {

@@ -52,28 +52,32 @@ class AniflixAppbar extends AppBar {
           future: APIManager.getUser(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return IconButton(
-                  key: Key("Settings"),
-                  icon: new Container(
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                                "https://www2.aniflix.tv/storage/" + snapshot.data.avatar,
-                              ),
-                          )
-                      )),
-
-                  onPressed: () {
-                    state.changePage(Settings(state), 3);
-                  },
-                  color: Theme
-                      .of(ctx)
-                      .primaryIconTheme
-                      .color);
+              return (snapshot.data.avatar == null)
+                  ? IconButton(
+                key: Key("Settings"),
+                icon: Icon(
+                  Icons.person,
+                  color: Theme.of(ctx).primaryIconTheme.color,
+                ),
+                onPressed: () {state.changePage(Settings(state), 3);},
+              )
+                  : IconButton(
+                key: Key("Settings"),
+                icon: new Container(
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            "https://www2.aniflix.tv/storage/" +
+                                snapshot.data.avatar,
+                          ),
+                        ))),
+                onPressed: () {state.changePage(Settings(state), 3);},
+              );
             } else if (snapshot.hasError) {
               return IconButton(
+                  key: Key("Settings"),
                   icon: Icon(Icons.person),
                   onPressed: () {
                     state.changePage(Settings(state), 3);
@@ -84,6 +88,7 @@ class AniflixAppbar extends AppBar {
               );
             }
             return IconButton(
+                key: Key("Settings"),
             icon: Icon(Icons.person),
             onPressed: () {
             state.changePage(Settings(state), 3);

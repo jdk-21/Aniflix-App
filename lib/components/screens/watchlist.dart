@@ -3,17 +3,23 @@ import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Watchlist extends StatelessWidget {
+class Watchlist extends StatelessWidget implements Screen{
   MainWidgetState state;
   Future<List<Show>> watchlistdata;
   List<Show> watchlist;
 
   Watchlist(this.state) {
     watchlistdata = APIManager.getWatchlist();
+  }
+
+  @override
+  getScreenName() {
+    return "watchlist_screen";
   }
 
   @override

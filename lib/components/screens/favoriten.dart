@@ -3,17 +3,23 @@ import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Favoriten extends StatelessWidget {
+class Favoriten extends StatelessWidget implements Screen{
   MainWidgetState state;
   Future<List<Show>> favouriteData;
   List<Show> favouriteList;
 
   Favoriten(this.state) {
     favouriteData = APIManager.getFavourite();
+  }
+
+  @override
+  getScreenName() {
+    return "favourites_screen";
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,20 @@ import 'package:url_launcher/url_launcher.dart';
 import './home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatelessWidget implements Screen{
   MainWidgetState state;
+  FirebaseAnalytics analytics;
 
-  Login(this.state);
+  Login(this.state){
+    this.analytics = state.analytics;
+  }
+
+  @override
+  getScreenName() {
+    return "login_screen";
+  }
 
   final emailController = TextEditingController();
   final passwortController = TextEditingController();
@@ -70,6 +80,7 @@ class Login extends StatelessWidget {
                     onPressed: () async {
                       var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
                       if(response.hasError()){
+                        APIManager.login = null;
                         showErrorDialog(ctx,response.error);
                       }else{
                         state.changePage(Home(state),0);
@@ -77,6 +88,7 @@ class Login extends StatelessWidget {
                         prefs.setString("access_token", response.access_token);
                         prefs.setString("token_type", response.token_type);
                         resetTextController();
+                        analytics.logLogin();
                       }
                     },
                   )),

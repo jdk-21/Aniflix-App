@@ -1,6 +1,10 @@
 Feature: App Bar
   User should be able to switch between different Screens using the App Bar.
 
+  Scenario: User Taps on "Search"
+    Given I expect the user taps on "Search"
+    Then user should land on "search_screen"
+
   Scenario: User Taps on "News"
     Given I expect the user taps on "News"
     Then user should land on "news_screen"

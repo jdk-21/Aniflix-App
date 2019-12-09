@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
 import 'package:aniflix_app/components/custom/anime/animeHeader.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
 import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import '../../api/objects/anime/Anime.dart';
 import '../../api/APIManager.dart';
 
-class AnimeScreen extends StatefulWidget {
+class AnimeScreen extends StatefulWidget implements Screen{
   var name;
   MainWidgetState state;
 
@@ -19,6 +20,11 @@ class AnimeScreen extends StatefulWidget {
 
   @override
   AnimeScreenState createState() => AnimeScreenState(name, state);
+
+  @override
+  getScreenName() {
+    return "anime_screen";
+  }
 }
 
 class AnimeScreenState extends State<AnimeScreen> {
@@ -31,6 +37,7 @@ class AnimeScreenState extends State<AnimeScreen> {
   bool _isInWatchlist;
   bool _isFavorite;
   bool _useData;
+  bool _sendAnalytics = false;
   double _rating;
 
   toggleSubButton(bool isSubscribed) {
@@ -70,6 +77,11 @@ class AnimeScreenState extends State<AnimeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var anime = snapshot.data;
+              if(!_sendAnalytics){
+                _sendAnalytics = true;
+                var itemName = "Show_"+anime.name;
+                state.analytics.logViewItem(itemId: anime.id.toString(), itemName: itemName, itemCategory: "Show");
+              }
               var episodeCount = 0;
               if (anime.seasons != null) {
                 for (var season in anime.seasons) {
@@ -112,6 +124,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                               children: <Widget>[
                                 OutlineButton(
                                   onPressed: () {
+                                    var analytics = state.analytics;
+                                    analytics.logEvent(name: "change_subscription",parameters: {"show_id":anime.id,"sub_value":!_isSubscribed});
                                     APIManager.setSubscription(
                                         anime.id, !_isSubscribed);
                                     toggleSubButton(!_isSubscribed);
@@ -131,6 +145,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 ),
                                 IconButton(
                                     onPressed: () {
+                                      var analytics = state.analytics;
+                                      analytics.logEvent(name: "change_watchlist",parameters: {"show_id":anime.id,"watchlist_value":!_isInWatchlist});
                                       APIManager.setWatchlist(
                                           anime.id, !_isInWatchlist);
                                       addToWatchlist(!_isInWatchlist);
@@ -143,6 +159,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         : Theme.of(ctx).primaryIconTheme.color),
                                 IconButton(
                                     onPressed: () {
+                                      var analytics = state.analytics;
+                                      analytics.logEvent(name: "change_favorite",parameters: {"show_id":anime.id,"favorite_value":!_isFavorite});
                                       APIManager.setFavourite(
                                           anime.id, !_isFavorite);
                                       addAsFavorite();
@@ -164,6 +182,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                           context: ctx,
                                           builder: (BuildContext ctx) {
                                             return RatingDialog(anime, (x) {
+                                              var analytics = state.analytics;
+                                              analytics.logEvent(name: "change_rating",parameters: {"show_id":anime.id,"rating_value": x});
                                               this._rating = x;
                                             }, _rating);
                                           });
@@ -184,8 +204,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                               .title
                                               .color,
                                           fontSize: 15),
-                                      items: getSeasonsAsDropdownList(
-                                          anime.seasonCount, anime.seasons),
+                                      items: getSeasonsAsDropdownList(anime.seasons),
                                       onChanged: (newValue) {
                                         changeSeason(newValue);
                                       },
@@ -220,13 +239,18 @@ class AnimeScreenState extends State<AnimeScreen> {
   }
 }
 
-List<DropdownMenuItem<int>> getSeasonsAsDropdownList(
-    int seasonCount, List<AnimeSeason> seasons) {
+List<DropdownMenuItem<int>> getSeasonsAsDropdownList(List<AnimeSeason> seasons) {
   List<DropdownMenuItem<int>> namelist = [];
-  for (int l = 0; l < seasonCount; l++) {
-    namelist.add(DropdownMenuItem(
-        value: l,
-        child: Text("Season " + (seasons.elementAt(l).number).toString())));
+  for (int l = 0; l < seasons.length; l++) {
+    if(seasons[l].number == 0){
+      namelist.add(DropdownMenuItem(
+          value: l,
+          child: Text("Specials")));
+    }else{
+      namelist.add(DropdownMenuItem(
+          value: l,
+          child: Text("Season " + (seasons.elementAt(l).number).toString())));
+    }
   }
   return namelist;
 }

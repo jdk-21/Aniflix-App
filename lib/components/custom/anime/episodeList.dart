@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -49,7 +50,7 @@ class EpisodeList extends StatelessWidget {
           }
           if (jap && ger) break;
         }
-        var image;
+        Widget image = SizedBox();
         if (ger && jap) {
           image = Image.asset('assets/images/gerjap.png', scale: 10);
         } else if (ger) {

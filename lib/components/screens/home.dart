@@ -1,3 +1,4 @@
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
@@ -13,10 +14,16 @@ class Homedata{
   Homedata(this.continues,this.airings,this.newshows,this.discover);
 }
 
-class Home extends StatefulWidget {
+class Home extends StatefulWidget implements Screen{
   MainWidgetState state;
 
   Home(this.state);
+
+
+  @override
+  getScreenName() {
+    return "home_screen";
+  }
 
   @override
   HomeState createState() => HomeState(state);

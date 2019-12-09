@@ -11,4 +11,4 @@ Feature: Navigation Bar
 
   Scenario: User Taps on "Alle"
     Given I expect the user taps on "Alle"
-    Then user should land on "all_screen"
+    Then user should land on "allAnime_screen"

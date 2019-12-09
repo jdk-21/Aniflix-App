@@ -1,3 +1,4 @@
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
 import '../../api/APIManager.dart';
 import '../../api/objects/subbox/SubEpisode.dart';
@@ -6,7 +7,7 @@ import '../custom/slider/slider_with_headline.dart';
 import '../../main.dart';
 import './episode.dart';
 
-class SubBox extends StatelessWidget {
+class SubBox extends StatelessWidget implements Screen{
   Future<List<SubEpisode>> episodes;
   List<HeadlineSlider> days;
   List<List<SliderElement>> lists;
@@ -15,6 +16,11 @@ class SubBox extends StatelessWidget {
     days = [];
     lists = [];
     this.episodes = APIManager.getSubData();
+  }
+
+  @override
+  getScreenName() {
+    return "sub_screen";
   }
 
   getDays(List<SubEpisode> episodes) {

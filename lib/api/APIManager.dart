@@ -262,7 +262,6 @@ class APIManager {
     var review;
     if (response.statusCode != 404) {
       var json = jsonDecode(response.body);
-      print(json);
       review = Review.fromJson(json);
     }
     return review;

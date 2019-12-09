@@ -1,4 +1,4 @@
-package xyz.dommy.aniflix_app
+package xyz.dommi.aniflix_app
 
 import android.os.Bundle
 

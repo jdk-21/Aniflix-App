@@ -1,5 +1,6 @@
 import 'package:aniflix_app/components/custom/listelements/listElement.dart';
 import 'package:aniflix_app/components/custom/dialogs/logoutDialog.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,10 +12,15 @@ import './watchlist.dart';
 import './favoriten.dart';
 
 
-class Settings extends StatelessWidget {
+class Settings extends StatelessWidget implements Screen{
   MainWidgetState state;
 
   Settings(this.state);
+
+  @override
+  getScreenName() {
+    return "settings_screen";
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -45,6 +51,7 @@ class Settings extends StatelessWidget {
                 data: Theme.of(ctx).copyWith(
                     canvasColor: Theme.of(ctx).backgroundColor),
                 child: DropdownButton<int>(
+                  key: Key("themes"),
                   style: TextStyle(
                       color: Theme.of(ctx).textTheme.title.color,
                       fontSize: 20),

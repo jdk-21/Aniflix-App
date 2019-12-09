@@ -7,17 +7,23 @@ import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class EpisodeScreen extends StatefulWidget {
+class EpisodeScreen extends StatefulWidget implements Screen{
   MainWidgetState state;
   String name;
   int season;
   int number;
 
   EpisodeScreen(this.state, this.name, this.season, this.number);
+
+  @override
+  getScreenName() {
+    return "episode_screen";
+  }
 
   @override
   EpisodeScreenState createState() =>
@@ -42,6 +48,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       for (var stream in episodeInfo.streams) {
         if (_hosters[hoster] == stream.hoster.name &&
             _langs[lang] == stream.lang) {
+
+          var analytics = mainState.analytics;
+          analytics.logEvent(name: "episode_change_stream",parameters: {"episode_id": episodeInfo.id,"lang":stream.lang,"hoster_id": stream.hoster_id,"hoster_name": stream.hoster.name});
           this._stream = stream;
           return;
         }
@@ -51,9 +60,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   updateEpisodeData(String name, int season, int number) {
     setState(() {
-      print(name);
-      print(season);
-      print(number);
       this.name = name;
       this.season = season;
       this.number = number;
@@ -65,6 +71,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
       this.episodeInfo.then((episode) {
         if (episode.episodeInfo != null) {
+          var info = episode.episodeInfo;
+          var itemName = "Show_"+info.season.show.name+"_Season_"+info.season.number.toString()+"_Episode_"+info.number.toString();
+          mainState.analytics.logViewItem(itemId: info.id.toString(), itemName: itemName, itemCategory: "Episode");
           if (barState != null) {
             barState.updateEpisode(episode.episodeInfo);
           }
@@ -121,6 +130,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
             if (comments == null) {
               comments = episode.comments;
+              var info = episode;
+              var itemName = "Show_"+info.season.show.name+"_Season_"+info.season.number.toString()+"_Episode_"+info.number.toString();
+              mainState.analytics.logViewItem(itemId: info.id.toString(), itemName: itemName, itemCategory: "Episode");
             }
             return Container(
                 color: Theme.of(ctx).backgroundColor,
@@ -150,6 +162,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         (text) {
                       APIManager.addComment(episode.id, text).then((comment) {
                         if (comment != null) {
+                          var analytics = mainState.analytics;
+                          analytics.logEvent(name: "episode_comment_send",parameters: {"comment_id": comment.id});
                           setState(() {
                             comments.insert(0, comment);
                           });
@@ -158,6 +172,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                     }, (id, text) {
                       APIManager.addSubComment(id, text).then((comment) {
                         if (comment != null) {
+                          var analytics = mainState.analytics;
+                          analytics.logEvent(name: "episode_comment_answer",parameters: {"comment_id": comment.id});
                           setState(() {
                             for (var c in comments) {
                               if (c.id == id) {
@@ -171,6 +187,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           setState(() {
                             for(var i = 0; i < comments.length; i++){
                               if(comments[i].id == id){
+                                var analytics = mainState.analytics;
+                                analytics.logEvent(name: "episode_comment_delete",parameters: {"comment_id": id});
                                 comments.removeAt(i);
                                 APIManager.deleteComment(id);
                                 break;
@@ -183,6 +201,8 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           if(comments[i].id == id){
                             for(var j = 0; j < comments[i].comments.length; j++){
                               if(comments[i].comments[j].id == sub_id){
+                                var analytics = mainState.analytics;
+                                analytics.logEvent(name: "episode_comment_delete",parameters: {"comment_id": sub_id});
                                 comments[i].comments.removeAt(j);
                                 APIManager.deleteComment(sub_id);
                                 break;

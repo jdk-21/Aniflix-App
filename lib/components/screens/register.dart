@@ -1,11 +1,17 @@
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatelessWidget implements Screen{
   MainWidgetState state;
 
   Register(this.state);
+
+  @override
+  getScreenName() {
+    return "register_screen";
+  }
 
   final usernameController = TextEditingController();
   final emailController = TextEditingController();

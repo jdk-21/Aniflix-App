@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../slider/SliderElement.dart';
@@ -6,7 +7,7 @@ import '../custom/slider/slider_with_headline.dart';
 import '../../api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
 
-class Calendar extends StatelessWidget {
+class Calendar extends StatelessWidget implements Screen{
 
   MainWidgetState state;
 
@@ -23,6 +24,11 @@ class Calendar extends StatelessWidget {
 
   Calendar(this.state) {
     this.calendarData = APIManager.getCalendarData();
+  }
+
+  @override
+  getScreenName() {
+    return "calendar_screen";
   }
 
   @override

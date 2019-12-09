@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/home.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 import './components/screens/login.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 void main() async {
   ThemeManager manager = ThemeManager.getInstance();
@@ -27,8 +30,11 @@ class App extends StatefulWidget {
 
   static void setTheme(BuildContext context, int i) {
     _AppState state = context.ancestorStateOfType(TypeMatcher<_AppState>());
+    var analytics = _AppState.analytics;
     var manager = ThemeManager.getInstance();
+    String old = manager.actualTheme.getThemeName();
     manager.setActualTheme(i);
+    analytics.logEvent(name: "change_theme",parameters: {"old_theme":old,"new_theme": manager.actualTheme.getThemeName()});
     state.setState(() {
       state._theme = manager.getActualThemeData();
     });
@@ -37,35 +43,49 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   ThemeData _theme = ThemeManager.getInstance().getActualThemeData();
-
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =  FirebaseAnalyticsObserver(analytics: analytics);
+  _AppState(){
+    analytics.logAppOpen();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Aniflix App',
-      home: MainWidget(),
+      home: MainWidget(analytics,observer),
       theme: _theme,
+      navigatorObservers: [
+        observer
+      ],
     );
   }
 }
 
 class MainWidget extends StatefulWidget {
+  final FirebaseAnalyticsObserver observer;
+  final FirebaseAnalytics analytics;
   static MainWidgetState of (BuildContext ctx) => ctx.ancestorStateOfType(const TypeMatcher<MainWidgetState>());
+  MainWidget(this.analytics,this.observer);
   @override
-  MainWidgetState createState() => MainWidgetState();
+  MainWidgetState createState() => MainWidgetState(this.analytics,this.observer);
 }
 
 class MainWidgetState extends State<MainWidget> {
+  final FirebaseAnalyticsObserver observer;
+final FirebaseAnalytics analytics;
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget _screen;
+  Screen _screen;
   int index = 0;
 
   Future<SharedPreferences> sharedPreferencesData;
 
-  MainWidgetState() {
+  MainWidgetState(this.analytics,this.observer) {
     this.sharedPreferencesData = SharedPreferences.getInstance();
   }
 
-  changePage(Widget screen, int i) {
+  changePage(Screen screen, int i) {
+    analytics.logEvent(name: "change_page",parameters: {"page_name":screen.getScreenName()});
+    analytics.setCurrentScreen(screenName: screen.getScreenName());
     setState(() {
       _screen = screen;
       index = i;
@@ -88,6 +108,11 @@ class MainWidgetState extends State<MainWidget> {
               }
             }
             if (APIManager.login != null) {
+              APIManager.getUser().then((user){
+                analytics.setUserId(user.id.toString());
+                analytics.setUserProperty(name: "user_name", value: user.name);
+                analytics.setUserProperty(name: "user_created", value: user.created_at);
+              });
               _screen = Home(this);
               return Scaffold(
                   appBar: AniflixAppbar(this, ctx),

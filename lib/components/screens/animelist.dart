@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
 import 'package:aniflix_app/components/screens/anime.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,10 +17,14 @@ class AnimeListData {
   AnimeListData(this.allShows, this.allShowsWithGenres);
 }
 
-class AnimeList extends StatefulWidget {
+class AnimeList extends StatefulWidget implements Screen{
   MainWidgetState state;
 
   AnimeList(this.state);
+  @override
+  getScreenName() {
+    return "allAnime_screen";
+  }
 
   @override
   AnimeListState createState() => AnimeListState(state);
@@ -55,27 +60,32 @@ class AnimeListState extends State<AnimeList> {
   }
 
   updateAnimeList(filterCriteria) {
+    var analytics = state.analytics;
     setState(() {
       switch (filterCriteria) {
         case 0:
           {
+            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"Genre","filter_airing": _onlyAiring});
             _actualSortedAnimeList =
                 _onlyAiring ? sortedGenreAiring : sortedGenre;
           }
           break;
         case 1:
           {
+            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedAZ","filter_airing": _onlyAiring});
             _actualSortedAnimeList = _onlyAiring ? sortedAZAiring : sortedAZ;
           }
           break;
         case 2:
           {
+            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedBewertung","filter_airing": _onlyAiring});
             _actualSortedAnimeList =
                 _onlyAiring ? sortedBewertungAiring : sortedBewertung;
           }
           break;
         case 3:
           {
+            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedAbos","filter_airing": _onlyAiring});
             _actualSortedAnimeList =
                 _onlyAiring ? sortedAbosAiring : sortedAbos;
           }

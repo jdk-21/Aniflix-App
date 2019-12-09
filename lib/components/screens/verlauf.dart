@@ -3,15 +3,21 @@ import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
-class Verlauf extends StatelessWidget {
+class Verlauf extends StatelessWidget implements Screen{
   MainWidgetState state;
   Future<List<HistoryEpisode>> historyData;
 
   Verlauf(this.state) {
     historyData = APIManager.getHistory();
+  }
+
+  @override
+  getScreenName() {
+    return "history_screen";
   }
 
   @override

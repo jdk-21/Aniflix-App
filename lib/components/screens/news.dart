@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,16 @@ import 'package:aniflix_app/api/objects/news/News.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/news/newsContainer.dart';
 
-class NewsPage extends StatelessWidget {
+class NewsPage extends StatelessWidget implements Screen{
   Future<List<News>> news;
 
   NewsPage() {
     this.news = APIManager.getNews();
+  }
+
+  @override
+  getScreenName() {
+    return "news_screen";
   }
 
   @override

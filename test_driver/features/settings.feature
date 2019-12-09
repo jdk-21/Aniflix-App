@@ -20,3 +20,12 @@ Feature: App Bar
     Given I expect the user taps on "Settings"
     Then I expect the user taps on "Favoriten"
     Then user should land on "favourites_screen"
+
+  Scenario: User switches "Theme"
+    Given I expect the user taps on "Settings"
+    Then I expect the user taps on "themes"
+    Then I expect the user taps on "Dark Theme"
+    Then I expect the user taps on "themes"
+    Then I expect the user taps on "Light Theme"
+    Then I expect the user taps on "themes"
+    Then I expect the user taps on "Blue Dark Theme"
