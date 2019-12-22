@@ -9,8 +9,8 @@ You go to the settings page and click on the Change Theme Dropdown-Button. The S
 n/a
 
 ## 1.3 Screenshot
-![Screenshot](https://raw.githubusercontent.com/d0mmi/Aniflix-App/update-docs/docs/change_theme(1).PNG)
-![Screenshot](https://raw.githubusercontent.com/d0mmi/Aniflix-App/update-docs/docs/change_theme(2).PNG)
+![Screenshot](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/change_theme(1).PNG)
+![Screenshot](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/change_theme(2).PNG)
 
 # 2. Flow of Events
 
@@ -40,10 +40,6 @@ The main preconditions for this use case are:
 The main postconditions for this use case are:
 
  - The Theme of the complete App has changed to the chosen one.
-
-# 6. Function Points
-
-(n/a)
 
 # 6. Function Points
 (n/a)
