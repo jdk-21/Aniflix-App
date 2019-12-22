@@ -74,6 +74,9 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 - [UC Get last seen, Get new episodes, Get airing animes, Get discover animes](../UC/UC_Get_Anime_HomePage.md)
 - [UC See subscribed animes](../UC/UC_See_sub_box.md)
 - [UC Switch between main pages](../UC/UC_Switch%20pages.md)
+- [UC Play Episode](../UC/UC_Play_Episode.md)
+- [UC Write Comments](../UC/UC_Write_Comments.md)
+- [UC Change Theme](../UC/UC_Change_Theme.md)
 
 ## 5. Logical View
 ### 5.1 Overview
