@@ -10,6 +10,7 @@ You open the subscription box and send a request to the system which will search
 
 ## 1.3 Screenshot
 
+![Screenshot](https://aniflixapp.files.wordpress.com/2019/11/subbox.png)
 
 # 2. Flow of Events
 
@@ -21,7 +22,6 @@ You open the subscription box and send a request to the system which will search
 ### .feature File
 
 ![.feature file](../feature%20files/feature%20subscribedAnimes.PNG)
-
 
 ## 2.2 Alternative Flows
 n/a
@@ -41,11 +41,8 @@ The main preconditions for this use case are:
 
 The main postconditions for this use case are:
 
-<<<<<<< Updated upstream
- - Their will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
-=======
  - There will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
->>>>>>> Stashed changes
+
 
 # 6. Function Points
 (n/a)
