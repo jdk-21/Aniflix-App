@@ -5,7 +5,7 @@
 - [1. Introduction](#1-introduction)
   * [1.1 Purpose](#11-purpose)
   * [1.2 Scope](#12-scope)
-  * [1.2.1 Actors] (#121-actors)
+  * [1.2.1 Actors](#121-actors)
   * [1.3 Definitions, Acronyms, and Abbreviations](#13-definitions--acronyms--and-abbreviations)
   * [1.4 References](#14-references)
   * [1.5 Overview](#15-overview)
