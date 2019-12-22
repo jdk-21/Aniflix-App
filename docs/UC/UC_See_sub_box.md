@@ -41,11 +41,7 @@ The main preconditions for this use case are:
 
 The main postconditions for this use case are:
 
-<<<<<<< Updated upstream
- - Their will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
-=======
  - There will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
->>>>>>> Stashed changes
 
 # 6. Function Points
 (n/a)

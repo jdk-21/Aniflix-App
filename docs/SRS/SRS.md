@@ -107,6 +107,9 @@ The following picture shows the overall use case diagram of our software:
 *  [Navigation](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Switch%20pages.md)
 *  [Subscription Box](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_See_sub_box.md)
 *  [Home Page](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Get_Anime_HomePage.md)
+*  [Play Episode](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Play_Episode.md)
+*  [Write Comments](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Write_Comments.md)
+*  [Change Theme](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Change_Theme.md)
 
 ## 3. Specific Requirements
 ### 3.1 Functionality
