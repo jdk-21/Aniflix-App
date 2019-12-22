@@ -1,6 +1,6 @@
 # Use-Case Specification: See subscribed anime
 
-# 1. Get home page anime
+# 1. See sub box
 
 ## 1.1 Brief Description
 You open the subscription box and send a request to the system which will search your subscribed animes based on your user and returns a list of the newest episodes of your subscribed animes.
