@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:aniflix_app/api/objects/Season.dart';
+import 'package:aniflix_app/api/objects/UserListData.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -7,6 +7,8 @@ import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/api/objects/news/Notification.dart' as n;
+import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -367,8 +369,23 @@ class APIManager {
   }
 
   static Future<User> getUser() async {
-    var response = await _authPostRequest("user/me", login);
+    var response = await _authPostRequest("user", login);
     return User.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<User> getUserProfile(int userID) async {
+    var response = await _authPostRequest("user/"+userID.toString(), login);
+    return User.fromJson(jsonDecode(response.body));//TODO
+  }
+
+  static Future<UserListData> getUserList() async {
+    var response = await _authGetRequest("user/me", login);
+    return UserListData(User.getUsers(jsonDecode(response.body)));
+  }
+
+  static Future<NotificationListData> getNotifications() async {
+    var response = await _authGetRequest("user/me", login);
+    return NotificationListData(n.Notification.getNotifications(jsonDecode(response.body)));
   }
 
   static void setShowVote(int showID, int previous_vote, int value) {
