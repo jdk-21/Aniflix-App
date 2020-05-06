@@ -1,49 +1,88 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
-import 'package:aniflix_app/components/screens/anime.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Watchlist extends StatelessWidget implements Screen{
-  MainWidgetState state;
-  Future<List<Show>> watchlistdata;
-  List<Show> watchlist;
+import '../../main.dart';
 
-  Watchlist(this.state) {
-    watchlistdata = APIManager.getWatchlist();
-  }
+class Watchlistdata {
+  List<Show> shows;
+  Watchlistdata(this.shows);
+}
 
+class Watchlist extends StatefulWidget implements Screen {
   @override
   getScreenName() {
     return "watchlist_screen";
   }
 
   @override
+  State<StatefulWidget> createState() => WatchlistState();
+}
+
+class WatchlistState extends State<Watchlist> {
+  Future<Watchlistdata> watchlistdata;
+  Watchlistdata cache;
+
+  WatchlistState() {
+    if (CacheManager.watchlistdata == null) {
+      watchlistdata = APIManager.getWatchlist();
+    } else {
+      cache = CacheManager.watchlistdata;
+    }
+  }
+
+  @override
   Widget build(BuildContext ctx) {
-    return Container(
-      key: Key("watchlist_screen"),
-      child: FutureBuilder(
-        future: watchlistdata,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            watchlist = snapshot.data;
-            return Container(
-              padding: EdgeInsets.all(5),
-              color: Theme.of(ctx).backgroundColor,
-              child: ListView(
-                children: getWatchlistAsWidgets(ctx, watchlist),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return CircularProgressIndicator();
-        },
-      ),
+    if (cache == null) {
+      return Container(
+        key: Key("watchlist_screen"),
+        color: Theme.of(ctx).backgroundColor,
+        child: FutureBuilder(
+          future: watchlistdata,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return getLayout(snapshot.data, ctx);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+      );
+    } else {
+      return Container(
+          key: Key("watchlist_screen"),
+          color: Theme.of(ctx).backgroundColor,
+          child: getLayout(cache, ctx));
+    }
+  }
+
+  getLayout(Watchlistdata data, BuildContext ctx) {
+    return Column(
+      children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        Expanded(
+            child: Container(
+                padding: EdgeInsets.all(5),
+                color: Theme.of(ctx).backgroundColor,
+                child: RefreshIndicator(
+                    child: ListView(
+                      children: getWatchlistAsWidgets(ctx, data.shows),
+                    ),
+                    onRefresh: () async {
+                      APIManager.getWatchlist().then((data) {
+                        setState(() {
+                          CacheManager.watchlistdata = data;
+                          cache = data;
+                        });
+                      });
+                    })))
+      ],
     );
   }
 
@@ -55,8 +94,9 @@ class Watchlist extends StatelessWidget implements Screen{
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var anime in watchlist) {
-      watchlistWidget.add(ImageListElement(anime.name,anime.cover_portrait,ctx,onTap: (){
-        state.changePage(AnimeScreen(anime.url, state), 6);
+      watchlistWidget.add(
+          ImageListElement(anime.name, anime.cover_portrait, ctx, onTap: () {
+        Navigator.pushNamed(ctx, "anime", arguments: anime.url);
       }));
     }
     return watchlistWidget;

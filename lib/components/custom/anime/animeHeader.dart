@@ -7,7 +7,7 @@ import 'package:aniflix_app/main.dart';
 
 class AnimeHeader extends Container {
   AnimeHeader(
-      Anime anime, int episodeCount, BuildContext ctx, MainWidgetState state)
+      Anime anime, int episodeCount, BuildContext ctx)
       : super(
             child: Row(children: [
           AniflixImage(
@@ -55,7 +55,7 @@ class AnimeHeader extends Container {
                         fontSize: 15, fontWeight: FontWeight.normal),
                   ),
                   onTap: () {
-                    state.changePage(ReviewScreen(anime.url), 9);
+                    Navigator.pushNamed(ctx, "review",arguments: anime.url);
                   },
                 ),
               ],

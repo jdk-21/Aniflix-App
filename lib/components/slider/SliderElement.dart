@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import '../custom/text/highlighted_text_box.dart';
 
-class SliderElement extends Container {
-  GestureTapCallback onTap;
+class SliderElement extends StatelessWidget {
+  Function(BuildContext) onTap;
   String name;
   String description;
   String image;
   Function close;
+  Color desccolor;
 
-  SliderElement(
-      {this.name, this.description, this.image, this.onTap, this.close})
-      : super(
-            child: InkWell(
-          onTap: onTap,
+  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 19, 1)});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: InkWell(
+          onTap: (){
+            onTap(context);
+          },
           child: Container(
               margin: EdgeInsets.only(left: 3, right: 3),
               decoration: BoxDecoration(
@@ -32,6 +36,7 @@ class SliderElement extends Container {
                               width: 25,
                               height: 25,
                                 child: FittedBox(child: FloatingActionButton(
+                                  heroTag: null,
                                   backgroundColor: Color.fromRGBO(15, 15, 19, 1),
                                   child: Icon(Icons.close,
                                     color: Colors.white,
@@ -48,10 +53,13 @@ class SliderElement extends Container {
                     (description != "" && description != null)
                         ? Align(
                             alignment: AlignmentDirectional.topEnd,
-                            child: HighlightedTextBox(description))
+                            child: HighlightedTextBox(description,color: desccolor))
                         : Align(alignment: AlignmentDirectional.topEnd),
                   ],
                 ),
               )),
         ));
+  }
+
+    
 }

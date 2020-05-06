@@ -14,7 +14,7 @@ class ReportDeleteBar extends StatelessWidget {
         (_delete)
             ? IconButton(
                 padding: EdgeInsets.all(0),
-                iconSize: 15,
+                iconSize: 20,
                 icon: Icon(
                   Icons.delete,
                   color: Theme.of(ctx).primaryIconTheme.color,
@@ -24,7 +24,7 @@ class ReportDeleteBar extends StatelessWidget {
             : Container(),
         IconButton(
           padding: EdgeInsets.all(0),
-          iconSize: 15,
+          iconSize: 20,
           icon: Icon(
             Icons.report,
             color: Theme.of(ctx).primaryIconTheme.color,

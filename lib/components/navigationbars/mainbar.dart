@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
-import '../screens/home.dart';
-import '../screens/subbox.dart';
-import '../screens/animelist.dart';
 import '../../main.dart';
 
 class AniflixNavigationbar extends BottomNav {
-  AniflixNavigationbar(MainWidgetState state, int index, BuildContext ctx)
+  Function(AniflixNavState) _onCreated;
+
+  AniflixNavigationbar(int index, this._onCreated, ThemeData theme)
       : super(
           index: index,
-          onTap: (i) {
-            switch(i){
-              case 0:
-                state.changePage(Home(state),i);
-                break;
-              case 1:
-                state.changePage(SubBox(),i);
-                break;
-              case 2:
-                state.changePage(AnimeList(state),i);
-                break;
-              default:
-                break;
-            }
-          },
           items: getItems(),
-          color: Theme.of(ctx).bottomAppBarTheme.color,
+          color: theme.bottomAppBarTheme.color,
           iconStyle: IconStyle(
-              color: Theme.of(ctx).primaryIconTheme.color,
-              onSelectColor: Theme.of(ctx).accentIconTheme.color),
+              color: theme.primaryIconTheme.color,
+              onSelectColor: theme.accentIconTheme.color),
           labelStyle: LabelStyle(
-              textStyle: TextStyle(color: Theme.of(ctx).primaryIconTheme.color),
-              onSelectTextStyle:
-                  TextStyle(color: Theme.of(ctx).accentIconTheme.color)),
+              textStyle: TextStyle(color: theme.primaryIconTheme.color),
+              onSelectTextStyle: TextStyle(color: theme.accentIconTheme.color)),
         );
 
   static getItems() {
@@ -42,15 +25,25 @@ class AniflixNavigationbar extends BottomNav {
       BottomNavItem(Icons.list, label: 'Alle'),
     ];
   }
-  
+
   @override
-  BottomNavState createState() => AniflixNavState();
+  BottomNavState createState() {
+    var state = AniflixNavState();
+    _onCreated(state);
+    return state;
+  }
 }
 
 class AniflixNavState extends BottomNavState {
   int currentIndex;
   IconStyle iconStyle;
   LabelStyle labelStyle;
+
+  updateIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +64,29 @@ class AniflixNavState extends BottomNavState {
               iconSize:
                   selected ? iconStyle.getSelectedSize() : iconStyle.getSize(),
               label: parseLabel(b.label, labelStyle, selected),
-              onTap: () => onItemClick(i),
+              onTap: () {
+                onItemClick(i);
+
+                switch (i) {
+                  case 0:
+                    if(currentIndex != 0){
+                    Navigator.pushNamed(context, "home");
+                    }
+                    break;
+                  case 1:
+                    if(currentIndex != 1){
+                    Navigator.pushNamed(context, "subbox");
+                    }
+                    break;
+                  case 2:
+                    if(currentIndex != 2){
+                    Navigator.pushNamed(context, "animelist");
+                    }
+                    break;
+                  default:
+                    break;
+                }
+              },
               textStyle: selected
                   ? labelStyle.getOnSelectTextStyle()
                   : labelStyle.getTextStyle(),
@@ -85,7 +100,7 @@ class AniflixNavState extends BottomNavState {
 
   onItemClick(int i) {
     setState(() {
-      currentIndex = i;
+      AppState.setIndex(i);
     });
     if (widget.onTap != null) widget.onTap(i);
   }
@@ -131,8 +146,18 @@ class AniflixNavItem extends BMNavItem {
       child: Padding(
           padding: getPadding(),
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Icon(icon, size: iconSize, color: (selected)?Theme.of(context).accentIconTheme.color : Theme.of(context).primaryIconTheme.color),
-            label != null ? Text(label, style: TextStyle(color: (selected)?Theme.of(context).accentIconTheme.color : Theme.of(context).primaryIconTheme.color)) : Container()
+            Icon(icon,
+                size: iconSize,
+                color: (selected)
+                    ? Theme.of(context).accentIconTheme.color
+                    : Theme.of(context).primaryIconTheme.color),
+            label != null
+                ? Text(label,
+                    style: TextStyle(
+                        color: (selected)
+                            ? Theme.of(context).accentIconTheme.color
+                            : Theme.of(context).primaryIconTheme.color))
+                : Container()
           ])),
       highlightColor: Theme.of(context).highlightColor,
       splashColor: Theme.of(context).splashColor,

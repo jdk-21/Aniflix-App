@@ -14,6 +14,7 @@ class Episode {
   String deleted_at;
   String avgVotes;
   int hasReports;
+  int seen;
   List<AnimeStream> streams;
   Season season;
 
@@ -28,6 +29,7 @@ class Episode {
       this.deleted_at,
       this.avgVotes,
       this.hasReports,
+      this.seen,
       this.streams,
       this.season);
 
@@ -44,6 +46,7 @@ class Episode {
         json["deleted_at"],
         json["avgVotes"],
         json["hasReports"],
+        (json["seen"] == null)?0:int.parse(json["seen"].toString()),
         AnimeStream.getStreams(json["streams"]),
         Season.fromJson(json["season"]));
   }

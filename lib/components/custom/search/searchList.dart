@@ -8,9 +8,8 @@ import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class SearchList extends StatelessWidget{
   Future<List<Show>> shows;
-  MainWidgetState state;
 
-  SearchList(this.shows, this.state);
+  SearchList(this.shows);
 
   @override
   Widget build(BuildContext ctx) {
@@ -23,7 +22,7 @@ class SearchList extends StatelessWidget{
              children:
                snapshot.data.map((show){
                  return ImageListElement(show.name, show.cover_portrait, ctx, descLine1: show.description, onTap: (){
-                   state.changePage(AnimeScreen(show.url, state), 7);
+                   Navigator.pushNamed(ctx, "anime", arguments: show.url);
                  });
                }).toList()
            );
@@ -32,7 +31,7 @@ class SearchList extends StatelessWidget{
           }
 
           // By default, show a loading spinner.
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),);
   }

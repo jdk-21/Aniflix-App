@@ -6,11 +6,10 @@ import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class SearchAnime extends StatefulWidget implements Screen{
-  MainWidgetState state;
-
-  SearchAnime(this.state);
+class SearchAnime extends StatefulWidget implements Screen {
+  SearchAnime();
 
   @override
   getScreenName() {
@@ -18,16 +17,14 @@ class SearchAnime extends StatefulWidget implements Screen{
   }
 
   @override
-  SearchAnimeState createState() => SearchAnimeState(state);
+  SearchAnimeState createState() => SearchAnimeState();
 }
 
 class SearchAnimeState extends State<SearchAnime> {
   Future<SearchAnime> searchAnimeData;
-  MainWidgetState state;
   Future<List<Show>> shows;
 
-
-  SearchAnimeState(this.state);
+  SearchAnimeState();
 
   updateSearchList(String searchText) {
     setState(() {
@@ -38,50 +35,61 @@ class SearchAnimeState extends State<SearchAnime> {
   @override
   Widget build(BuildContext ctx) {
     var controller = TextEditingController();
-
-
     return Container(
-      key: Key("search_screen"),
-      color: Theme
-          .of(ctx)
-          .backgroundColor,
-      child: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
-                  keyboardType: TextInputType.multiline,
-                  controller: controller,
-                  maxLines: null,
-                  maxLength: 100,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      hintText: 'Search..'),
+        key: Key("search_screen"),
+        color: Theme.of(ctx).backgroundColor,
+        child: Column(
+          children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+            Expanded(
+                child: ListView(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (text) {
+                          submit(controller);
+                        },
+                        style: TextStyle(
+                            color: Theme.of(ctx).textTheme.title.color),
+                        keyboardType: TextInputType.multiline,
+                        controller: controller,
+                        maxLines: null,
+                        maxLength: 100,
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border: InputBorder.none,
+                            hintText: 'Search..'),
+                        autofocus: true,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      color: Theme.of(ctx).primaryIconTheme.color,
+                      onPressed: () {
+                        submit(controller);
+                      },
+                    )
+                  ],
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.search),
-                color: Theme.of(ctx).primaryIconTheme.color,
-                onPressed: () {
-                  var analytics = state.analytics;
-                  analytics.logSearch(searchTerm: controller.text);
-                  updateSearchList(controller.text);
-                  controller.text = "";
-                },
-              )
-            ],
-          ),
-          (shows == null)?Container()
-          : SearchList(shows, state)
-        ],
-      )
+                (shows == null) ? Container() : SearchList(shows)
+              ],
+            ))
+          ],
+        ));
+  }
 
-
-    );
-
+  submit(
+    TextEditingController controller,
+  ) {
+    var text = controller.text;
+    if (RegExp("^[a-zA-Z0-9_: ]*\$").hasMatch(text)) {
+      var analytics = AppState.analytics;
+      analytics.logSearch(searchTerm: controller.text);
+      updateSearchList(controller.text);
+    }
   }
 }

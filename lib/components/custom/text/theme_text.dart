@@ -6,7 +6,7 @@ class ThemeText extends Text {
       FontWeight fontWeight = FontWeight.normal,
       bool softWrap = false,
       TextAlign textAlign,
-      int maxLines})
+      int maxLines, TextOverflow overflow})
       : super(text,
             style: TextStyle(
                 color: Theme.of(ctx).textTheme.title.color,
@@ -14,6 +14,8 @@ class ThemeText extends Text {
                 fontWeight: fontWeight),
             softWrap: softWrap,
             textAlign: textAlign,
-            maxLines: maxLines
+            maxLines: maxLines,
+            overflow: overflow
+
   );
 }

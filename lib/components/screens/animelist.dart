@@ -1,6 +1,6 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
-import 'package:aniflix_app/components/screens/anime.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/main.dart';
@@ -17,25 +17,24 @@ class AnimeListData {
   AnimeListData(this.allShows, this.allShowsWithGenres);
 }
 
-class AnimeList extends StatefulWidget implements Screen{
-  MainWidgetState state;
-
-  AnimeList(this.state);
+class AnimeList extends StatefulWidget implements Screen {
+  AnimeList();
   @override
   getScreenName() {
     return "allAnime_screen";
   }
 
   @override
-  AnimeListState createState() => AnimeListState(state);
+  AnimeListState createState() => AnimeListState();
 }
 
 class AnimeListState extends State<AnimeList> {
-  MainWidgetState state;
   Future<AnimeListData> animeListData;
+  AnimeListData cache;
   List<String> filterCriteria = ["Genre", "A - Z", "Bewertung", "Abos"];
   bool _onlyAiring = false;
   int _actualFilterCriteria;
+  int _maxShows = 25;
   List<Widget> sortedGenre = [];
   List<Widget> sortedAZ = [];
   List<Widget> sortedBewertung = [];
@@ -60,117 +59,163 @@ class AnimeListState extends State<AnimeList> {
   }
 
   updateAnimeList(filterCriteria) {
-    var analytics = state.analytics;
+    var analytics = AppState.analytics;
     setState(() {
       switch (filterCriteria) {
         case 0:
           {
-            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"Genre","filter_airing": _onlyAiring});
-            _actualSortedAnimeList =
-                _onlyAiring ? sortedGenreAiring : sortedGenre;
+            analytics.logEvent(name: "change_allanime_filter", parameters: {
+              "filter_name": "Genre",
+              "filter_airing": _onlyAiring
+            });
+            if (_onlyAiring) {
+              _actualSortedAnimeList = sortedGenreAiring;
+            } else {
+              _actualSortedAnimeList = sortedGenre;
+            }
           }
           break;
         case 1:
           {
-            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedAZ","filter_airing": _onlyAiring});
-            _actualSortedAnimeList = _onlyAiring ? sortedAZAiring : sortedAZ;
+            analytics.logEvent(name: "change_allanime_filter", parameters: {
+              "filter_name": "SortedAZ",
+              "filter_airing": _onlyAiring
+            });
+            if (_onlyAiring) {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedAZAiring.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedAZAiring[i]);
+                }
+              }
+            } else {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedAZ.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedAZ[i]);
+                }
+              }
+            }
           }
           break;
         case 2:
           {
-            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedBewertung","filter_airing": _onlyAiring});
-            _actualSortedAnimeList =
-                _onlyAiring ? sortedBewertungAiring : sortedBewertung;
+            analytics.logEvent(name: "change_allanime_filter", parameters: {
+              "filter_name": "SortedBewertung",
+              "filter_airing": _onlyAiring
+            });
+            if (_onlyAiring) {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedBewertungAiring.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedBewertungAiring[i]);
+                }
+              }
+            } else {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedBewertung.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedBewertung[i]);
+                }
+              }
+            }
           }
           break;
         case 3:
           {
-            analytics.logEvent(name: "change_allanime_filter",parameters: {"filter_name":"SortedAbos","filter_airing": _onlyAiring});
-            _actualSortedAnimeList =
-                _onlyAiring ? sortedAbosAiring : sortedAbos;
+            analytics.logEvent(name: "change_allanime_filter", parameters: {
+              "filter_name": "SortedAbos",
+              "filter_airing": _onlyAiring
+            });
+
+            if (_onlyAiring) {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedAbosAiring.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedAbosAiring[i]);
+                }
+              }
+            } else {
+              _actualSortedAnimeList = [];
+              for (var i = 0; i < sortedAbos.length; i++) {
+                if (i < _maxShows) {
+                  _actualSortedAnimeList.add(sortedAbos[i]);
+                }
+              }
+            }
           }
       }
     });
   }
 
-  AnimeListState(this.state) {
-    this.animeListData = APIManager.getAnimeListData();
+  AnimeListState() {
+    if (CacheManager.animeListData == null) {
+      this.animeListData = APIManager.getAnimeListData();
+    } else {
+      cache = CacheManager.animeListData;
+    }
   }
 
   @override
   Widget build(BuildContext ctx) {
-    return Container(
-      key: Key("allAnime_screen"),
-      child: FutureBuilder<AnimeListData>(
-        future: animeListData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (sortedGenre.length < 1 &&
-                sortedAZ.length < 1 &&
-                sortedBewertung.length < 1 &&
-                sortedAbos.length < 1 &&
-                sortedGenreAiring.length < 1 &&
-                sortedAZAiring.length < 1 &&
-                sortedBewertungAiring.length < 1 &&
-                sortedAbosAiring.length < 1) {
-              sortedGenre = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  0,
-                  false);
-              sortedAZ = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  1,
-                  false);
-              sortedBewertung = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  2,
-                  false);
-              sortedAbos = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  3,
-                  false);
-              sortedGenreAiring = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  0,
-                  true);
-              sortedAZAiring = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  1,
-                  true);
-              sortedBewertungAiring = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  2,
-                  true);
-              sortedAbosAiring = getAllAnimeAsSortedList(
-                  ctx,
-                  state,
-                  snapshot.data.allShows,
-                  snapshot.data.allShowsWithGenres,
-                  3,
-                  true);
+    if (cache == null) {
+      return Container(
+        key: Key("allAnime_screen"),
+        color: Theme.of(ctx).backgroundColor,
+        child: FutureBuilder<AnimeListData>(
+          future: animeListData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              CacheManager.animeListData = snapshot.data;
+              return getLayout(snapshot.data, ctx);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
             }
-            return Container(
+
+            // By default, show a loading spinner.
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+      );
+    } else {
+      return Container(
+          key: Key("allAnime_screen"),
+          color: Theme.of(ctx).backgroundColor,
+          child: getLayout(cache, ctx));
+    }
+  }
+
+  getLayout(AnimeListData data, BuildContext ctx) {
+    if (sortedGenre.length < 1 &&
+        sortedAZ.length < 1 &&
+        sortedBewertung.length < 1 &&
+        sortedAbos.length < 1 &&
+        sortedGenreAiring.length < 1 &&
+        sortedAZAiring.length < 1 &&
+        sortedBewertungAiring.length < 1 &&
+        sortedAbosAiring.length < 1) {
+      sortedGenre = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 0, false);
+      sortedAZ = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 1, false);
+      sortedBewertung = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 2, false);
+      sortedAbos = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 3, false);
+      sortedGenreAiring = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 0, true);
+      sortedAZAiring = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 1, true);
+      sortedBewertungAiring = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 2, true);
+      sortedAbosAiring = getAllAnimeAsSortedList(
+          ctx, data.allShows, data.allShowsWithGenres, 3, true);
+    }
+    return Column(
+      children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        Expanded(
+            child: Container(
                 color: Theme.of(ctx).backgroundColor,
                 child: ListView(
                   padding: EdgeInsets.only(left: 5, right: 5),
@@ -218,17 +263,23 @@ class AnimeListState extends State<AnimeList> {
                     Column(
                         children: _actualSortedAnimeList == null
                             ? []
-                            : _actualSortedAnimeList)
+                            : _actualSortedAnimeList),
+                    (_actualSortedAnimeList == null ||
+                            (_actualFilterCriteria == null ||
+                                _actualFilterCriteria == 0))
+                        ? Container()
+                        : FlatButton(
+                            child: ThemeText("Mehr anzeigen", ctx),
+                            onPressed: () {
+                              setState(() {
+                                this._maxShows += 25;
+                                updateAnimeList(_actualFilterCriteria);
+                              });
+                            },
+                          )
                   ],
-                ));
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          // By default, show a loading spinner.
-          return CircularProgressIndicator();
-        },
-      ),
+                )))
+      ],
     );
   }
 
@@ -244,7 +295,6 @@ class AnimeListState extends State<AnimeList> {
 
   List<Widget> getAllAnimeAsSortedList(
       BuildContext ctx,
-      MainWidgetState state,
       List<Show> allShows,
       List<GenreWithShows> allShowsWithGenres,
       int filterCriteria,
@@ -262,8 +312,8 @@ class AnimeListState extends State<AnimeList> {
                       image: "https://www2.aniflix.tv/storage/" +
                           show.cover_portrait,
                       name: show.name,
-                      onTap: () {
-                        state.changePage(AnimeScreen(show.url, state), 7);
+                      onTap: (ctx) {
+                        Navigator.pushNamed(ctx, "anime", arguments: show.url);
                       }));
                 }
               }
@@ -273,13 +323,13 @@ class AnimeListState extends State<AnimeList> {
                     image: "https://www2.aniflix.tv/storage/" +
                         show.cover_portrait,
                     name: show.name,
-                    onTap: () {
-                      state.changePage(AnimeScreen(show.url, state), 7);
+                    onTap: (ctx) {
+                      Navigator.pushNamed(ctx, "anime", arguments: show.url);
                     }));
               }
             }
             if (showsAsSlider.length >= 1) {
-              sortedList.add(HeadlineSlider(genre.name, ctx, showsAsSlider,
+              sortedList.add(HeadlineSlider(genre.name, showsAsSlider,
                   aspectRatio: 200 / 300, size: 0.4));
             }
           }
@@ -310,7 +360,7 @@ class AnimeListState extends State<AnimeList> {
                               style: BorderStyle.solid))),
                   child: FlatButton(
                     onPressed: () {
-                      state.changePage(AnimeScreen(show.url, state), 6);
+                      Navigator.pushNamed(ctx, "anime", arguments: show.url);
                     },
                     child: Row(
                       children: <Widget>[
@@ -389,7 +439,7 @@ class AnimeListState extends State<AnimeList> {
                           style: BorderStyle.solid))),
               child: FlatButton(
                 onPressed: () {
-                  state.changePage(AnimeScreen(shows.url, state), 6);
+                  Navigator.pushNamed(ctx, "anime", arguments: shows.url);
                 },
                 child: Row(
                   children: <Widget>[
@@ -474,7 +524,7 @@ class AnimeListState extends State<AnimeList> {
                           style: BorderStyle.solid))),
               child: FlatButton(
                 onPressed: () {
-                  state.changePage(AnimeScreen(show.url, state), 6);
+                  Navigator.pushNamed(ctx, "anime", arguments: show.url);
                 },
                 child: Row(
                   children: <Widget>[

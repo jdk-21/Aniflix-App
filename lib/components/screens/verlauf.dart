@@ -1,47 +1,91 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
-class Verlauf extends StatelessWidget implements Screen{
-  MainWidgetState state;
-  Future<List<HistoryEpisode>> historyData;
+import '../../main.dart';
 
-  Verlauf(this.state) {
-    historyData = APIManager.getHistory();
-  }
+class Historydata {
+  List<HistoryEpisode> episodes;
+  Historydata(this.episodes);
+}
 
+class Verlauf extends StatefulWidget implements Screen {
   @override
   getScreenName() {
     return "history_screen";
   }
 
   @override
+  State<StatefulWidget> createState() => VerlaufState();
+}
+
+class VerlaufState extends State<Verlauf> {
+  Future<Historydata> historyData;
+  Historydata cache;
+
+  VerlaufState() {
+    if (CacheManager.historydata == null) {
+      historyData = APIManager.getHistory();
+    } else {
+      cache = CacheManager.historydata;
+    }
+  }
+
+  @override
   Widget build(BuildContext ctx) {
-    return Container(
-      key: Key("history_screen"),
-      child: FutureBuilder(
-        future: historyData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<HistoryEpisode> history = snapshot.data;
-            return Container(
-              padding: EdgeInsets.all(5),
-              color: Theme.of(ctx).backgroundColor,
-              child: ListView(
-                children: getHistoryAsWidgets(ctx, history),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return CircularProgressIndicator();
-        },
-      ),
+    if (cache == null) {
+      return Container(
+        key: Key("history_screen"),
+        color: Theme.of(ctx).backgroundColor,
+        child: FutureBuilder(
+          future: historyData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              CacheManager.historydata = snapshot.data;
+              return getLayout(snapshot.data, ctx);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+      );
+    } else {
+      return Container(
+          key: Key("history_screen"),
+          color: Theme.of(ctx).backgroundColor,
+          child: getLayout(cache, ctx));
+    }
+  }
+
+  getLayout(Historydata data, BuildContext ctx) {
+    List<HistoryEpisode> history = data.episodes;
+    return Column(
+      children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        Expanded(
+            child: Container(
+                padding: EdgeInsets.all(5),
+                color: Theme.of(ctx).backgroundColor,
+                child: RefreshIndicator(
+                  child: ListView(
+                    children: getHistoryAsWidgets(ctx, history),
+                  ),
+                  onRefresh: () async {
+                    APIManager.getHistory().then((data) {
+                      setState(() {
+                        CacheManager.historydata = data;
+                        cache = data;
+                      });
+                    });
+                  },
+                )))
+      ],
     );
   }
 
@@ -60,10 +104,9 @@ class Verlauf extends StatelessWidget implements Screen{
         anime.season.show.cover_portrait,
         ctx,
         onTap: () {
-          state.changePage(
-              EpisodeScreen(state, anime.season.show.url, anime.season.number,
-                  anime.number),
-              6);
+          Navigator.pushNamed(ctx, "episode",
+              arguments: EpisodeScreenArguments(
+                  anime.season.show.url, anime.season.number, anime.number));
         },
         descLine1: anime.season.show.name,
         descLine2: "Episode " +

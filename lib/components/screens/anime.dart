@@ -1,6 +1,8 @@
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
 import 'package:aniflix_app/components/custom/anime/animeHeader.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
@@ -13,13 +15,12 @@ import '../../api/objects/anime/Anime.dart';
 import '../../api/APIManager.dart';
 
 class AnimeScreen extends StatefulWidget implements Screen{
-  var name;
-  MainWidgetState state;
+  String name;
 
-  AnimeScreen(this.name, this.state);
+  AnimeScreen(this.name);
 
   @override
-  AnimeScreenState createState() => AnimeScreenState(name, state);
+  AnimeScreenState createState() => AnimeScreenState(name);
 
   @override
   getScreenName() {
@@ -28,7 +29,6 @@ class AnimeScreen extends StatefulWidget implements Screen{
 }
 
 class AnimeScreenState extends State<AnimeScreen> {
-  MainWidgetState state;
   Future<Anime> anime;
   List<TextboxSliderElement> genres = [];
   List<String> genreNames = [];
@@ -64,7 +64,7 @@ class AnimeScreenState extends State<AnimeScreen> {
     });
   }
 
-  AnimeScreenState(String name, this.state) {
+  AnimeScreenState(String name) {
     this.anime = APIManager.getAnime(name);
   }
 
@@ -72,7 +72,10 @@ class AnimeScreenState extends State<AnimeScreen> {
   Widget build(BuildContext ctx) {
     return Container(
         key: Key("anime_screen"),
-        child: FutureBuilder<Anime>(
+        color: Theme.of(ctx).backgroundColor,
+        child: Column(children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+      Expanded(child: FutureBuilder<Anime>(
           future: anime,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -80,7 +83,7 @@ class AnimeScreenState extends State<AnimeScreen> {
               if(!_sendAnalytics){
                 _sendAnalytics = true;
                 var itemName = "Show_"+anime.name;
-                state.analytics.logViewItem(itemId: anime.id.toString(), itemName: itemName, itemCategory: "Show");
+                AppState.analytics.logViewItem(itemId: anime.id.toString(), itemName: itemName, itemCategory: "Show");
               }
               var episodeCount = 0;
               if (anime.seasons != null) {
@@ -102,12 +105,15 @@ class AnimeScreenState extends State<AnimeScreen> {
                   }
                 }
               }
+              if(_actualSeason == null){
+                if(anime.seasons.length > 0) _actualSeason = 0;
+              }
               return Container(
                   color: Theme.of(ctx).backgroundColor,
                   child: ListView(
                       padding: EdgeInsets.only(top: 10, left: 5),
                       children: [
-                        AnimeHeader(anime, episodeCount, ctx, state),
+                        AnimeHeader(anime, episodeCount, ctx),
                         SizedBox(
                           height: 10,
                         ),
@@ -124,15 +130,15 @@ class AnimeScreenState extends State<AnimeScreen> {
                               children: <Widget>[
                                 OutlineButton(
                                   onPressed: () {
-                                    var analytics = state.analytics;
+                                    var analytics = AppState.analytics;
                                     analytics.logEvent(name: "change_subscription",parameters: {"show_id":anime.id,"sub_value":!_isSubscribed});
                                     APIManager.setSubscription(
                                         anime.id, !_isSubscribed);
                                     toggleSubButton(!_isSubscribed);
                                   },
                                   child: Text(_isSubscribed
-                                      ? "Deabonnieren"
-                                      : "Abonnieren"),
+                                      ? "Deabonnieren " + anime.howManyAbos.toString()
+                                      : "Abonnieren " + anime.howManyAbos.toString()),
                                   textColor: _isSubscribed
                                       ? Theme.of(ctx).primaryIconTheme.color
                                       : Theme.of(ctx).accentIconTheme.color,
@@ -145,7 +151,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                 ),
                                 IconButton(
                                     onPressed: () {
-                                      var analytics = state.analytics;
+                                      var analytics = AppState.analytics;
                                       analytics.logEvent(name: "change_watchlist",parameters: {"show_id":anime.id,"watchlist_value":!_isInWatchlist});
                                       APIManager.setWatchlist(
                                           anime.id, !_isInWatchlist);
@@ -159,7 +165,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         : Theme.of(ctx).primaryIconTheme.color),
                                 IconButton(
                                     onPressed: () {
-                                      var analytics = state.analytics;
+                                      var analytics = AppState.analytics;
                                       analytics.logEvent(name: "change_favorite",parameters: {"show_id":anime.id,"favorite_value":!_isFavorite});
                                       APIManager.setFavourite(
                                           anime.id, !_isFavorite);
@@ -182,7 +188,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                           context: ctx,
                                           builder: (BuildContext ctx) {
                                             return RatingDialog(anime, (x) {
-                                              var analytics = state.analytics;
+                                              var analytics = AppState.analytics;
                                               analytics.logEvent(name: "change_rating",parameters: {"show_id":anime.id,"rating_value": x});
                                               this._rating = x;
                                             }, _rating);
@@ -222,22 +228,62 @@ class AnimeScreenState extends State<AnimeScreen> {
                                     ))
                               ],
                             )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                              OutlineButton(onPressed: (){setSeen(anime);},
+                               child: ThemeText("Staffel Gesehen", ctx,fontSize: 15),
+                               borderSide: BorderSide(color: Theme.of(ctx).primaryIconTheme.color),
+                               ),
+                              OutlineButton(onPressed: (){setUnseen(anime);},
+                               child: Text("Staffel nicht Gesehen",style: TextStyle(fontSize: 15, color: Theme.of(ctx).accentIconTheme.color),),
+                               borderSide: BorderSide(color: Theme.of(ctx).accentIconTheme.color),
+                               )
+                               ],),
                         EpisodeList(
                             (_actualSeason == null || anime.seasons == null)
                                 ? null
                                 : anime.seasons.elementAt(_actualSeason),
-                            anime,
-                            state)
+                            anime)
                       ]));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
             // By default, show a loading spinner.
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
-        ));
+        ))
+        ],));
+        
+  }
+  
+setSeen(Anime anime){
+  if(_actualSeason != null && anime.seasons != null){
+    int seasonNumber = _actualSeason;
+    APIManager.setSeasonSeen(anime.seasons.elementAt(seasonNumber).id).then((value){
+      setState(() {
+        anime.seasons[seasonNumber] = value;
+        for(var episode in anime.seasons[seasonNumber].episodes){
+          episode.seen = 1;
+        }
+      });
+    });
   }
 }
+
+setUnseen(Anime anime){
+  if(_actualSeason != null && anime.seasons != null){
+    int seasonNumber = _actualSeason;
+    APIManager.setSeasonUnSeen(anime.seasons.elementAt(seasonNumber).id).then((value){
+      setState(() {
+        anime.seasons[seasonNumber] = value;
+        
+      });
+    });
+  }
+}
+}
+
 
 List<DropdownMenuItem<int>> getSeasonsAsDropdownList(List<AnimeSeason> seasons) {
   List<DropdownMenuItem<int>> namelist = [];

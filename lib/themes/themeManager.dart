@@ -40,7 +40,16 @@ class ThemeManager {
             unselectedIconColor: Color.fromRGBO(0, 150, 255, 1),
             selectedIconColor: Color.fromRGBO(200, 0, 200, 1),
             textColor: Color.fromRGBO(0, 150, 255, 1),
-            chatButtonColor: Color.fromRGBO(0, 150, 255, 1))
+            chatButtonColor: Color.fromRGBO(0, 150, 255, 1)),
+        CustomTheme(
+            themeName: "Red Dark Theme",
+            screenBackgroundColor: Colors.black,
+            mainbarColor: Colors.black,
+            appbarColor: Colors.black,
+            unselectedIconColor: Colors.orange,
+            selectedIconColor: Colors.red,
+            textColor: Colors.red,
+            chatButtonColor: Colors.red)
       ]);
       instance.setActualTheme(0);
     }

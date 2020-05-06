@@ -10,7 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ReviewScreen extends StatefulWidget implements Screen{
+import '../../main.dart';
+
+class ReviewScreen extends StatefulWidget implements Screen {
   String url;
 
   ReviewScreen(this.url);
@@ -30,21 +32,25 @@ class ReviewScreenState extends State<ReviewScreen> {
   List<ReviewElement> _actualReviews = [];
   bool _showButton = true;
 
-  addNewReview(Review review,User user, BuildContext ctx, ReviewShow reviewInfo) async {
-    var responsereview = await APIManager.createReview(reviewInfo.id, review.text);
+  addNewReview(
+      Review review, User user, BuildContext ctx, ReviewShow reviewInfo) async {
+    var responsereview =
+        await APIManager.createReview(reviewInfo.id, review.text);
     responsereview.user = user;
     setState(() {
-      _actualReviews.insert(0, ReviewElement(responsereview,user,(id){
-        for(var i = 0; i < _actualReviews.length; i++){
-          if(_actualReviews[i].review.id == id){
-            setState(() {
-              _actualReviews.removeAt(i);
-              _showButton = true;
-            });
-            break;
-          }
-        }
-      }, ctx));
+      _actualReviews.insert(
+          0,
+          ReviewElement(responsereview, user, (id) {
+            for (var i = 0; i < _actualReviews.length; i++) {
+              if (_actualReviews[i].review.id == id) {
+                setState(() {
+                  _actualReviews.removeAt(i);
+                  _showButton = true;
+                });
+                break;
+              }
+            }
+          }, ctx));
       _showButton = false;
     });
   }
@@ -57,6 +63,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("review_screen"),
+      color: Theme.of(ctx).backgroundColor,
       child: FutureBuilder<ReviewInfo>(
         future: reviewData,
         builder: (context, snapshot) {
@@ -64,9 +71,10 @@ class ReviewScreenState extends State<ReviewScreen> {
             var reviewedAnime = snapshot.data.reviewShow;
             if (_actualReviews.length < 1) {
               for (var review in reviewedAnime.reviews) {
-                _actualReviews.add(ReviewElement(review,snapshot.data.user,(id){
-                  for(var i = 0; i < _actualReviews.length; i++){
-                    if(_actualReviews[i].review.id == id){
+                _actualReviews
+                    .add(ReviewElement(review, snapshot.data.user, (id) {
+                  for (var i = 0; i < _actualReviews.length; i++) {
+                    if (_actualReviews[i].review.id == id) {
                       setState(() {
                         _actualReviews.removeAt(i);
                         _showButton = true;
@@ -80,72 +88,82 @@ class ReviewScreenState extends State<ReviewScreen> {
                 }
               }
             }
-            return Container(
-              color: Theme.of(ctx).backgroundColor,
-              child: ListView(
-                children: <Widget>[
-                  Column(
+            return Column(
+              children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+                Expanded(
+                    child: Container(
+                  color: Theme.of(ctx).backgroundColor,
+                  child: ListView(
                     children: <Widget>[
-                      Align(
-                          alignment: Alignment.center,
-                          child: ThemeText(
-                            "Reviews zu",
-                            ctx,
-                            fontWeight: FontWeight.bold,
-                            softWrap: true,
-                          )),
-                      Align(
-                        alignment: Alignment.center,
-                        child: ThemeText(
-                          reviewedAnime.name,
-                          ctx,
-                          fontWeight: FontWeight.bold,
-                          softWrap: true,
-                        ),
+                      Column(
+                        children: <Widget>[
+                          Align(
+                              alignment: Alignment.center,
+                              child: ThemeText(
+                                "Reviews zu",
+                                ctx,
+                                fontWeight: FontWeight.bold,
+                                softWrap: true,
+                              )),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ThemeText(
+                              reviewedAnime.name,
+                              ctx,
+                              fontWeight: FontWeight.bold,
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(children: _actualReviews),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(
+                                    width: 1,
+                                    color: Theme.of(ctx).hintColor,
+                                    style: BorderStyle.solid))),
+                        height: 10,
+                      ),
+                      _showButton
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: OutlineButton(
+                                textColor: Theme.of(ctx).textTheme.title.color,
+                                borderSide: BorderSide(
+                                    color: Theme.of(ctx).textTheme.title.color),
+                                child: ThemeText("Review schreiben", ctx),
+                                onPressed: () {
+                                  showDialog(
+                                      context: ctx,
+                                      builder: (BuildContext context) {
+                                        return WriteReviewDialog((review) {
+                                          addNewReview(
+                                              review,
+                                              snapshot.data.user,
+                                              ctx,
+                                              reviewedAnime);
+                                        }, reviewedAnime, snapshot.data.user);
+                                      });
+                                },
+                              ))
+                          : SizedBox()
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Column(children: _actualReviews),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(
-                                width: 1,
-                                color: Theme.of(ctx).hintColor,
-                                style: BorderStyle.solid))),
-                    height: 10,
-                  ),
-                  _showButton
-                      ? Align(
-                          alignment: Alignment.center,
-                          child: OutlineButton(
-                            textColor: Theme.of(ctx).textTheme.title.color,
-                            borderSide: BorderSide(
-                                color: Theme.of(ctx).textTheme.title.color),
-                            child: ThemeText("Review schreiben",ctx),
-                            onPressed: () {
-                              showDialog(
-                                  context: ctx,
-                                  builder: (BuildContext context) {
-                                    return WriteReviewDialog((review) {
-                                      addNewReview(review,snapshot.data.user, ctx, reviewedAnime);
-                                    }, reviewedAnime, snapshot.data.user);
-                                  });
-                            },
-                          ))
-                      : SizedBox()
-                ],
-              ),
+                ))
+              ],
             );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
 
           // By default, show a loading spinner.
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

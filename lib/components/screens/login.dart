@@ -10,11 +10,10 @@ import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class Login extends StatelessWidget implements Screen{
-  MainWidgetState state;
   FirebaseAnalytics analytics;
 
-  Login(this.state){
-    this.analytics = state.analytics;
+  Login(){
+    this.analytics = AppState.analytics;
   }
 
   @override
@@ -83,7 +82,7 @@ class Login extends StatelessWidget implements Screen{
                         APIManager.login = null;
                         showErrorDialog(ctx,response.error);
                       }else{
-                        state.changePage(Home(state),0);
+                        AppState.updateLoggedIn(true);
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setString("access_token", response.access_token);
                         prefs.setString("token_type", response.token_type);

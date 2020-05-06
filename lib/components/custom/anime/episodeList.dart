@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -9,8 +8,8 @@ import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 class EpisodeList extends StatelessWidget {
   AnimeSeason season;
   Anime anime;
-  MainWidgetState state;
-  EpisodeList(this.season, this.anime, this.state);
+
+  EpisodeList(this.season, this.anime);
 
   @override
   Widget build(BuildContext ctx) {
@@ -25,10 +24,8 @@ class EpisodeList extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ThemeText("Episodes",
-                      ctx,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+              ThemeText("Episodes", ctx,
+                  fontWeight: FontWeight.bold, fontSize: 20),
               Icon(
                 Icons.thumbs_up_down,
                 color: Theme.of(ctx).primaryIconTheme.color,
@@ -58,6 +55,17 @@ class EpisodeList extends StatelessWidget {
         } else if (jap) {
           image = Image.asset('assets/images/jap.png', scale: 50);
         }
+        Widget seen = Container();
+        if (actualEpisode.seen == 1) {
+          seen = Container(
+            padding: EdgeInsets.all(5),
+            color: Colors.blue,
+            child: Text(
+              "Gesehen",
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        }
         episodeList.add(Container(
           decoration: BoxDecoration(
               border: Border(
@@ -72,44 +80,44 @@ class EpisodeList extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Row(
-                      children: <Widget>[
-                        image,
-                        SizedBox(
-                          width: 5,
-                        ),
+                  children: <Widget>[
+                    image,
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ThemeText(
+                        actualEpisode == null
+                            ? "---"
+                            : actualEpisode.number.toString() + ". ",
+                        ctx,
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal),
+                    Expanded( child:
                         ThemeText(
-                          actualEpisode == null
-                              ? "---"
-                              : actualEpisode.number.toString() + ". ",
+                          actualEpisode == null ? "---" : actualEpisode.name,
                           ctx,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        Expanded(
-                            child: ThemeText(
-                              actualEpisode == null ? "---" : actualEpisode.name,
-                              ctx,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                              softWrap: true,
-                            ))
-                      ],
-                    )),
+                    ),
+                    seen
+                  ],
+                )),
+                SizedBox(width: 5,),
                 ThemeText(
                     actualEpisode.avgVotes == null
                         ? ""
                         : (double.parse(actualEpisode.avgVotes) * 100)
-                        .round()
-                        .toString() +
-                        "%",
+                                .round()
+                                .toString() +
+                            "%",
                     ctx)
               ],
             ),
             onPressed: () {
-              state.changePage(
-                  EpisodeScreen(
-                      state, anime.url, season.number, actualEpisode.number),
-                  6);
+              Navigator.pushNamed(ctx, "episode",arguments: EpisodeScreenArguments(anime.url,season.number, actualEpisode.number));
             },
           ),
         ));

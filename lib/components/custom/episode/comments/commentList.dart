@@ -42,7 +42,7 @@ class CommentList extends Container {
       ]),
       headerAlignment: ExpandablePanelHeaderAlignment.center,
       tapHeaderToExpand: true,
-      tapBodyToCollapse: true,
+      tapBodyToCollapse: false,
       hasIcon: false,
     ));
   }

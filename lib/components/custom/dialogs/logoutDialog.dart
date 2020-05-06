@@ -6,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class LogoutDialog extends StatelessWidget {
-MainWidgetState state;
-LogoutDialog(this.state);
+LogoutDialog();
 
   @override
   Widget build(BuildContext ctx) {
@@ -33,7 +32,7 @@ LogoutDialog(this.state);
             prefs.remove("access_token");
             prefs.remove("token_type");
             APIManager.login = null;
-            state.changePage(Login(state), 0);
+            AppState.updateLoggedIn(false);
           },
         )
       ],

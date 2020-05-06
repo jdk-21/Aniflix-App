@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/objects/Hoster.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -7,36 +8,56 @@ class EpisodeHeader extends StatefulWidget {
   EpisodeInfo episode;
   Function prev;
   Function next;
-  Function(int lang,int hoster) change;
+  Function(int lang, int hoster, int view) change;
   Function(EpisodeHeaderState) _created;
 
-  EpisodeHeader(this.episode, this.prev, this.next, this.change,this._created);
+  EpisodeHeader(this.episode, this.prev, this.next, this.change, this._created);
 
   @override
-  EpisodeHeaderState createState() =>
-      EpisodeHeaderState(this.episode, this.prev, this.next, this.change,this._created);
+  EpisodeHeaderState createState() => EpisodeHeaderState(
+      this.episode, this.prev, this.next, this.change, this._created);
 }
 
 class EpisodeHeaderState extends State<EpisodeHeader> {
   EpisodeInfo episode;
   Function prev;
   Function next;
-  Function(int lang,int hoster) change;
+  Function(int lang, int hoster, int view) change;
   Function(EpisodeHeaderState) _created;
   int _language;
   int _hoster;
+  int _view;
   List<String> _hosters;
 
-  EpisodeHeaderState(this.episode, this.prev, this.next, this.change,this._created){
+  EpisodeHeaderState(
+      this.episode, this.prev, this.next, this.change, this._created) {
     _hosters = [];
+    _view = 0;
   }
 
-  void init(){
+  void init() {
     _language = 0;
     _hoster = 0;
+    List<Hoster> hosters = [];
     for (var stream in episode.streams) {
-      if (!_hosters.contains(stream.hoster.name)) {
-        _hosters.add(stream.hoster.name);
+      if (hosters.length > 0) {
+        for (int i = hosters.length - 1; i >= 0; i--) {
+          var other = hosters[i];
+          if (other.preferred >= stream.hoster.preferred) {
+            hosters.add(stream.hoster);
+            break;
+          } else if (i == 0) {
+            hosters.insert(0, stream.hoster);
+            break;
+          }
+        }
+      } else {
+        hosters.add(stream.hoster);
+      }
+    }
+    for (var hoster in hosters) {
+      if (!_hosters.contains(hoster.name)) {
+        _hosters.add(hoster.name);
       }
     }
     _created(this);
@@ -57,79 +78,103 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
 
   @override
   Widget build(BuildContext ctx) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: <Widget>[
-        (episode.number > 1)
-            ? IconButton(
-                icon: Icon(
-                  Icons.navigate_before,
-                  color: Theme.of(ctx).textTheme.title.color,
-                ),
-                color: Theme.of(ctx).textTheme.title.color,
-                onPressed: prev,
-              )
-            : IconButton(
-                icon: Icon(
-                  Icons.navigate_before,
-                  color: Theme.of(ctx).backgroundColor,
-                ),
-                color: Theme.of(ctx).backgroundColor,
-                onPressed: () {},
-              ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Theme(
-              data: Theme.of(ctx)
-                  .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
-              child: DropdownButton(
-                style: TextStyle(
-                    color: Theme.of(ctx).textTheme.title.color, fontSize: 15),
-                onChanged: (val) {
-                  setState(() {
-                    _language = val;
-                  });
-                  change(_language,_hoster);
-                },
-                items: getLanguagesAsDropdownList(episode.streams,ctx),
-                value: _language,
-              ),
+            (episode.number > 1)
+                ? IconButton(
+                    icon: Icon(
+                      Icons.navigate_before,
+                      color: Theme.of(ctx).textTheme.title.color,
+                    ),
+                    color: Theme.of(ctx).textTheme.title.color,
+                    onPressed: prev,
+                  )
+                : IconButton(
+                    icon: Icon(
+                      Icons.navigate_before,
+                      color: Theme.of(ctx).backgroundColor,
+                    ),
+                    color: Theme.of(ctx).backgroundColor,
+                    onPressed: () {},
+                  ),
+            Row(
+              children: <Widget>[
+                Theme(
+                  data: Theme.of(ctx)
+                      .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
+                  child: DropdownButton(
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.title.color,
+                        fontSize: 15),
+                    onChanged: (val) {
+                      setState(() {
+                        _language = val;
+                      });
+                      change(_language, _hoster, _view);
+                    },
+                    items: getLanguagesAsDropdownList(episode.streams, ctx),
+                    value: _language,
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Theme(
+                  data: Theme.of(ctx)
+                      .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
+                  child: DropdownButton(
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.title.color,
+                        fontSize: 15),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _hoster = newValue;
+                      });
+                      change(_language, _hoster, _view);
+                    },
+                    items: getHosters(ctx),
+                    value: _hoster,
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+              ],
             ),
-            SizedBox(
-              width: 5,
-            ),
-            Theme(
-              data: Theme.of(ctx)
-                  .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
-              child: DropdownButton(
-                style: TextStyle(
-                    color: Theme.of(ctx).textTheme.title.color, fontSize: 15),
-                onChanged: (newValue) {
-                  setState(() {
-                    _hoster = newValue;
-                  });
-                  change(_language,_hoster);
-                },
-                items: getHosters(ctx),
-                value: _hoster,
-              ),
+            IconButton(
+              icon: (episode.next != "")
+                  ? Icon(
+                      Icons.navigate_next,
+                      color: Theme.of(ctx).textTheme.title.color,
+                    )
+                  : Icon(
+                      Icons.navigate_before,
+                      color: Theme.of(ctx).backgroundColor,
+                    ),
+              color: (episode.next != "")
+                  ? Theme.of(ctx).textTheme.title.color
+                  : Theme.of(ctx).backgroundColor,
+              onPressed: (episode.next != "") ? next : () {},
             ),
           ],
         ),
-        IconButton(
-          icon: (episode.next != "")
-              ? Icon(
-                  Icons.navigate_next,
-                  color: Theme.of(ctx).textTheme.title.color,
-                )
-              : Icon(
-                  Icons.navigate_before,
-                  color: Theme.of(ctx).backgroundColor,
-                ),
-          color: (episode.next != "")
-              ? Theme.of(ctx).textTheme.title.color
-              : Theme.of(ctx).backgroundColor,
-          onPressed: (episode.next != "") ? next : () {},
+        Theme(
+          data: Theme.of(ctx)
+              .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
+          child: DropdownButton(
+              style: TextStyle(
+                  color: Theme.of(ctx).textTheme.title.color, fontSize: 15),
+              onChanged: (newValue) {
+                setState(() {
+                  _view = newValue;
+                });
+                change(_language, _hoster, _view);
+              },
+              items: getPlayers(ctx),
+              value: _view),
         ),
       ],
     );
@@ -145,18 +190,29 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
       }
     }
     for (int l = 0; l < languages.length; l++) {
-      namelist
-          .add(DropdownMenuItem(value: l, child: ThemeText(languages.elementAt(l),ctx)));
+      namelist.add(DropdownMenuItem(
+          value: l, child: ThemeText(languages.elementAt(l), ctx)));
     }
     return namelist;
   }
-  List<DropdownMenuItem> getHosters(BuildContext ctx){
+
+  List<DropdownMenuItem> getHosters(BuildContext ctx) {
     var list = <DropdownMenuItem>[];
     var i = 0;
     for (var hoster in _hosters) {
-      list.add(DropdownMenuItem(value: i, child: ThemeText(hoster,ctx)));
+      list.add(DropdownMenuItem(value: i, child: ThemeText(hoster, ctx)));
       i++;
     }
+    return list;
+  }
+
+  List<DropdownMenuItem> getPlayers(BuildContext ctx) {
+    var list = <DropdownMenuItem>[];
+    list.add(
+        DropdownMenuItem(value: 0, child: ThemeText("InApp Browser", ctx)));
+    list.add(DropdownMenuItem(value: 1, child: ThemeText("Browser", ctx)));
+    list.add(DropdownMenuItem(
+        value: 2, child: ThemeText("InAppView (Unstable)", ctx)));
     return list;
   }
 }

@@ -7,7 +7,9 @@ import 'package:aniflix_app/api/objects/news/News.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/news/newsContainer.dart';
 
-class NewsPage extends StatelessWidget implements Screen{
+import '../../main.dart';
+
+class NewsPage extends StatelessWidget implements Screen {
   Future<List<News>> news;
 
   NewsPage() {
@@ -22,21 +24,27 @@ class NewsPage extends StatelessWidget implements Screen{
   @override
   Widget build(BuildContext ctx) {
     return Container(
-      color: Theme.of(ctx).backgroundColor,
+        color: Theme.of(ctx).backgroundColor,
         key: Key("news_screen"),
-        child: FutureBuilder<List<News>>(
-            future: news,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var news = snapshot.data;
-                return ListView(
-                    children: getNotificationsAsList(context, news));
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            }));
+        child: Column(
+          children: <Widget>[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+            Expanded(
+                child: FutureBuilder<List<News>>(
+                    future: news,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var news = snapshot.data;
+                        return ListView(
+                            children: getNotificationsAsList(context, news));
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      // By default, show a loading spinner.
+                      return Center(child: CircularProgressIndicator());
+                    }))
+          ],
+        ));
   }
 
   List<Widget> getNotificationsAsList(BuildContext ctx, List<News> news) {

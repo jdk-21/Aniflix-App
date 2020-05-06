@@ -44,6 +44,7 @@ class VoteBar extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.thumb_up,
+                size: 20,
                 color: _actualVote == null ||
                         _actualVote == possibleVotes.elementAt(2)
                     ? Theme.of(ctx).primaryIconTheme.color
@@ -71,6 +72,7 @@ class VoteBar extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.thumb_down,
+                size: 20,
                 color: (_actualVote == null ||
                         _actualVote == possibleVotes.elementAt(1))
                     ? Theme.of(ctx).primaryIconTheme.color

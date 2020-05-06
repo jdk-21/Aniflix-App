@@ -7,7 +7,10 @@ class AnimeCarousel extends CarouselSlider{
     aspectRatio: aspectRatio / size,
       items: data,
       enlargeCenterPage: true,
-      viewportFraction: size
+      viewportFraction: size,
+      enableInfiniteScroll: false,
+      reverse: false,
+      initialPage: (data.length > 1)? 1 : 0
   );
 
 }

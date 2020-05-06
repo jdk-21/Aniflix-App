@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatelessWidget implements Screen{
-  MainWidgetState state;
 
-  Register(this.state);
+  Register();
 
   @override
   getScreenName() {

@@ -37,76 +37,99 @@ class SubCommentContainer extends StatelessWidget {
           Column(
             children: [
               Row(children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: (_comment.user.avatar == null)
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.person,
-                            color: Theme.of(ctx).primaryIconTheme.color,
-                          ),
-                          onPressed: () {},
-                        )
-                      : IconButton(
-                          icon: new Container(
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      "https://www2.aniflix.tv/storage/" +
-                                          _comment.user.avatar,
-                                    ),
-                                  ))),
-                          onPressed: () {},
-                        ),
-                ),
                 Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       textDirection: TextDirection.ltr,
                       children: [
-                        Row(
+                        Column(
                           children: [
-                            ThemeText(
-                              _comment.user.name + " ",
-                              ctx,
-                              fontSize: 12.0,
-                            ),
-                            (this._comment.created_at != null)
-                                ? Text(
-                                    date.day.toString() +
-                                        "." +
-                                        date.month.toString() +
-                                        "." +
-                                        date.year.toString() +
-                                        " " +
-                                        hour +
-                                        ":" +
-                                        minute,
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 9.0))
-                                : Text("",
-                                    style: TextStyle(
-                                        color:
-                                            Theme.of(ctx).textTheme.title.color,
-                                        fontSize: 10.0)),
-                            ReportDeleteBar(
-                                (_user.id == _comment.user_id), () {
-                                showDialog(context: ctx,builder: (BuildContext ctx){
-                                  return ReportDialog((text){
-                                    APIManager.reportComment(_comment.id, text);
-                                  });
-                                });
-                            }, () {
-                              _onSubDelete();
-                            })
+                            Row(children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: (_comment.user.avatar == null)
+                                    ? IconButton(
+                                        icon: Icon(
+                                          Icons.person,
+                                          color: Theme.of(ctx)
+                                              .primaryIconTheme
+                                              .color,
+                                        ),
+                                        onPressed: () {},
+                                      )
+                                    : IconButton(
+                                        iconSize: 40,
+                                        icon: new Container(
+                                            decoration: new BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: new DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(
+                                                    "https://www2.aniflix.tv/storage/" +
+                                                        _comment.user.avatar,
+                                                  ),
+                                                ))),
+                                        onPressed: () {},
+                                      ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ThemeText(
+                                    _comment.user.name + " ",
+                                    ctx,
+                                    fontSize: 20.0,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Row(
+                                    children: [
+                                      (this._comment.created_at != null)
+                                          ? Text(
+                                              date.day.toString() +
+                                                  "." +
+                                                  date.month.toString() +
+                                                  "." +
+                                                  date.year.toString() +
+                                                  " " +
+                                                  hour +
+                                                  ":" +
+                                                  minute,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 15.0))
+                                          : Text("",
+                                              style: TextStyle(
+                                                  color: Theme.of(ctx)
+                                                      .textTheme
+                                                      .title
+                                                      .color,
+                                                  fontSize: 10.0)),
+                                      ReportDeleteBar(
+                                          (_user.id == _comment.user_id), () {
+                                        showDialog(
+                                            context: ctx,
+                                            builder: (BuildContext ctx) {
+                                              return ReportDialog((text) {
+                                                APIManager.reportComment(
+                                                    _comment.id, text);
+                                              });
+                                            });
+                                      }, () {
+                                        _onSubDelete();
+                                      })
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ]),
                           ],
                         ),
                         ThemeText(
                           this._comment.text,
                           ctx,
-                          fontSize: 12.0,
+                          fontSize: 18.0,
                           softWrap: true,
                         ),
                         Row(
@@ -114,33 +137,62 @@ class SubCommentContainer extends StatelessWidget {
                             VoteBar(_comment.id, _comment.votes, _comment.voted,
                                 (prev, next) {
                               var commentlist = episodeScreenState.comments;
+                              print("size: " + commentlist.length.toString());
                               for (int i = 0; i < commentlist.length; i++) {
-                                for(int k = 0; k < commentlist[i].comments.length; k++) {
-                                  if (commentlist[i].comments[k].id == _comment.id) {
+                                print(i);
+                                for (int k = 0;
+                                    k < commentlist[i].comments.length;
+                                    k++) {
+                                  if (commentlist[i].comments[k].id ==
+                                      _comment.id) {
                                     episodeScreenState.setState(() {
-                                      episodeScreenState.comments[i].comments[k].voted = next;
+                                      episodeScreenState
+                                          .comments[i].comments[k].voted = next;
                                       var contained = false;
-                                      for(int j = 0; j < commentlist[i].comments[k].votes.length; i++){
-                                        if(commentlist[i].comments[k].votes[j].user_id == _user.id){
-                                          if(next != null){
-                                            commentlist[i].comments[k].votes[j].value = next;
-                                          }else{
-                                            commentlist[i].comments[k].votes.removeAt(j);
+                                      for (int j = 0;
+                                          j <
+                                              commentlist[i]
+                                                  .comments[k]
+                                                  .votes
+                                                  .length;
+                                          j++) {
+                                        if (commentlist[i]
+                                                .comments[k]
+                                                .votes[j]
+                                                .user_id ==
+                                            _user.id) {
+                                          if (next != null) {
+                                            commentlist[i]
+                                                .comments[k]
+                                                .votes[j]
+                                                .value = next;
+                                          } else {
+                                            commentlist[i]
+                                                .comments[k]
+                                                .votes
+                                                .removeAt(j);
                                           }
                                           contained = true;
                                           break;
                                         }
                                       }
-                                      if(!contained && next != null){
-                                        commentlist[i].comments[k].votes.add(Vote(0, "Comment", 0, _user.id, next, DateTime.now().toString(), null, null));
+                                      if (!contained && next != null) {
+                                        commentlist[i].comments[k].votes.add(
+                                            Vote(
+                                                0,
+                                                "Comment",
+                                                0,
+                                                _user.id,
+                                                next,
+                                                DateTime.now().toString(),
+                                                null,
+                                                null));
                                       }
                                     });
                                   }
                                 }
                               }
-                              APIManager.setCommentVote(
-                                  _comment.id, prev, next);
-                            })
+                            }),
                           ],
                         ),
                       ]),
