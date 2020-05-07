@@ -9,6 +9,10 @@ import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/api/objects/news/Notification.dart' as n;
 import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
+import 'package:aniflix_app/api/objects/profile/Friend.dart';
+import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/api/objects/profile/UserSubData.dart';
+import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -373,9 +377,70 @@ class APIManager {
     return User.fromJson(jsonDecode(response.body));
   }
 
-  static Future<User> getUserProfile(int userID) async {
+  static Future<UserProfile> getUserProfile(int userID) async {
     var response = await _authPostRequest("user/"+userID.toString(), login);
-    return User.fromJson(jsonDecode(response.body));//TODO
+    return UserProfile.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<Historydata> getUserHistory(int userID) async {
+
+    List<HistoryEpisode> episodes = [];
+    var response = await _authPostRequest("show/history/"+userID.toString()+"/0", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var episode = HistoryEpisode.fromJson(entry);
+        episodes.add(episode);
+      }
+    }
+    return Historydata(episodes);
+  }
+
+  static Future<Favouritedata> getUserFavorites(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authPostRequest("favorites/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return Favouritedata(shows);
+  }
+
+  static Future<UserSubData> getUserSubs(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authPostRequest("abos/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return UserSubData(shows);
+  }
+
+  static Future<UserWatchlistData> getUserWatchlist(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authPostRequest("watchlist/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return UserWatchlistData(shows);
+  }
+
+  static Future<FriendListData> getUserFriends(int userID) async {
+    var response = await _authPostRequest("friend/user/friends?id="+userID.toString(), login);
+    List<Friend> friends = [];
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      friends = Friend.getFriends(json);
+    }
+    return FriendListData(friends);
   }
 
   static Future<UserListData> getUserList() async {
