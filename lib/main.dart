@@ -46,17 +46,19 @@ class App extends StatefulWidget {
 
   static void setTheme(BuildContext context, int i) {
     AppState state = context.ancestorStateOfType(TypeMatcher<AppState>());
-    var analytics = AppState.analytics;
     var manager = ThemeManager.getInstance();
     String old = manager.actualTheme.getThemeName();
     manager.setActualTheme(i);
-    analytics.logEvent(name: "change_theme", parameters: {
-      "old_theme": old,
-      "new_theme": manager.actualTheme.getThemeName()
-    });
-    state.setState(() {
-      state._theme = manager.getActualThemeData();
-    });
+    if(state != null){
+      var analytics = AppState.analytics;
+      analytics.logEvent(name: "change_theme", parameters: {
+        "old_theme": old,
+        "new_theme": manager.actualTheme.getThemeName()
+      });
+      state.setState(() {
+        state._theme = manager.getActualThemeData();
+      });
+    }
   }
 }
 
