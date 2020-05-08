@@ -61,6 +61,7 @@ class Login extends StatelessWidget implements Screen{
               TextField(
                   style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
                   controller: passwortController,
+                  autocorrect: false,
                   obscureText: true,
                   decoration: InputDecoration(
                       hintText: "Passwort",

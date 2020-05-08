@@ -95,6 +95,8 @@ class AppState extends State<App> {
     adFailed = false;
     if (!isDesktop()) {
       analytics.logAppOpen();
+    }else{
+      adFailed = true;
     }
   }
 
