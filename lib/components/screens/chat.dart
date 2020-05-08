@@ -30,8 +30,9 @@ class ChatState extends State<ChatScreen> {
   addMessage(text) async {
     var message = await APIManager.addMessage(text);
     var analytics = AppState.analytics;
-    analytics.logEvent(
-        name: "send_chat_mesage", parameters: {"message_id": message.id});
+    if (!isDesktop()) {
+      analytics.logEvent(name: "send_chat_mesage");
+    }
     setState(() {
       _messages.insert(0, message);
     });
@@ -59,7 +60,11 @@ class ChatState extends State<ChatScreen> {
             });
             return Column(
               children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+                (AppState.adFailed)
+                    ? Container()
+                    : SizedBox(
+                        height: 50,
+                      ),
                 Expanded(
                     child: Container(
                         color: Theme.of(ctx).backgroundColor,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
@@ -32,6 +34,10 @@ void main() async {
   runApp(App());
 }
 
+bool isDesktop() {
+  return !(Platform.isAndroid || Platform.isIOS);
+}
+
 class App extends StatefulWidget {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
       keywords: <String>['aniflix', 'anime', 'weeb', 'japan'],
@@ -49,12 +55,15 @@ class App extends StatefulWidget {
     var manager = ThemeManager.getInstance();
     String old = manager.actualTheme.getThemeName();
     manager.setActualTheme(i);
-    if(state != null){
+    if (state != null) {
       var analytics = AppState.analytics;
-      analytics.logEvent(name: "change_theme", parameters: {
-        "old_theme": old,
-        "new_theme": manager.actualTheme.getThemeName()
-      });
+      if (!isDesktop()) {
+        analytics.logEvent(name: "change_theme", parameters: {
+          "old_theme": old,
+          "new_theme": manager.actualTheme.getThemeName()
+        });
+      }
+
       state.setState(() {
         state._theme = manager.getActualThemeData();
       });
@@ -84,7 +93,9 @@ class AppState extends State<App> {
     _state = this;
     _adLoaded = false;
     adFailed = false;
-    analytics.logAppOpen();
+    if (!isDesktop()) {
+      analytics.logAppOpen();
+    }
   }
 
   @override
@@ -99,7 +110,7 @@ class AppState extends State<App> {
             size: AdSize.banner,
             targetingInfo: App.targetingInfo,
             listener: (MobileAdEvent event) {
-              if(event == MobileAdEvent.failedToLoad){
+              if (event == MobileAdEvent.failedToLoad) {
                 setState(() {
                   adFailed = true;
                 });
@@ -140,20 +151,29 @@ class AppState extends State<App> {
   Widget build(BuildContext buildcontext) {
     if (_prefs == null) {
       ThemeManager manager = ThemeManager.getInstance();
-      SharedPreferences.getInstance().then((prefs) {
-        setState(() {
-          manager.setActualTheme(prefs.getInt("actualTheme") ?? 0);
-          _theme = ThemeManager.getInstance().getActualThemeData();
-          _prefs = prefs;
-          _loading = false;
-          if (prefs.getString("access_token") != null &&
-              prefs.getString("token_type") != null) {
-            APIManager.login = LoginResponse(prefs.getString("access_token"),
-                prefs.getString("token_type"), null);
-            _loggedIn = true;
-          }
+      if (!isDesktop()) {
+        SharedPreferences.getInstance().then((prefs) {
+          setState(() {
+            manager.setActualTheme(prefs.getInt("actualTheme") ?? 0);
+            _theme = ThemeManager.getInstance().getActualThemeData();
+            _prefs = prefs;
+            _loading = false;
+            if (prefs.getString("access_token") != null &&
+                prefs.getString("token_type") != null) {
+              APIManager.login = LoginResponse(prefs.getString("access_token"),
+                  prefs.getString("token_type"), null);
+              _loggedIn = true;
+            }
+          });
         });
-      });
+      } else {
+        setState(() {
+          manager.setActualTheme(0);
+          _theme = ThemeManager.getInstance().getActualThemeData();
+          _prefs = null;
+          _loading = false;
+        });
+      }
     }
     if (_loading) {
       return MaterialApp(
@@ -165,21 +185,21 @@ class AppState extends State<App> {
     } else {
       if (_loggedIn) {
         if (ad != null) {
-            if (!_adLoaded) {
-              ad.load().then((loaded) {
-                if (loaded) {
-                  _adLoaded = true;
-                  ad.show(anchorType: AnchorType.top, anchorOffset: 75);
-                  print("Show Ad!");
-                }
-              });
-            }
+          if (!_adLoaded) {
+            ad.load().then((loaded) {
+              if (loaded) {
+                _adLoaded = true;
+                ad.show(anchorType: AnchorType.top, anchorOffset: 75);
+                print("Show Ad!");
+              }
+            });
+          }
         }
         return MaterialApp(
             title: 'Aniflix',
             color: _theme.backgroundColor,
             theme: _theme,
-            navigatorObservers: [observer],
+            navigatorObservers: (isDesktop()) ? [] : [observer],
             home: Builder(
               builder: (context) => getScaffold(Home(), context, button: true),
             ),

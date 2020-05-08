@@ -64,10 +64,13 @@ class AnimeListState extends State<AnimeList> {
       switch (filterCriteria) {
         case 0:
           {
-            analytics.logEvent(name: "change_allanime_filter", parameters: {
-              "filter_name": "Genre",
-              "filter_airing": _onlyAiring
-            });
+            if (!isDesktop()) {
+              analytics.logEvent(name: "change_allanime_filter", parameters: {
+                "filter_name": "Genre",
+                "filter_airing": _onlyAiring
+              });
+            }
+
             if (_onlyAiring) {
               _actualSortedAnimeList = sortedGenreAiring;
             } else {
@@ -77,10 +80,12 @@ class AnimeListState extends State<AnimeList> {
           break;
         case 1:
           {
-            analytics.logEvent(name: "change_allanime_filter", parameters: {
-              "filter_name": "SortedAZ",
-              "filter_airing": _onlyAiring
-            });
+            if (!isDesktop()) {
+              analytics.logEvent(name: "change_allanime_filter", parameters: {
+                "filter_name": "SortedAZ",
+                "filter_airing": _onlyAiring
+              });
+            }
             if (_onlyAiring) {
               _actualSortedAnimeList = [];
               for (var i = 0; i < sortedAZAiring.length; i++) {
@@ -100,10 +105,12 @@ class AnimeListState extends State<AnimeList> {
           break;
         case 2:
           {
-            analytics.logEvent(name: "change_allanime_filter", parameters: {
-              "filter_name": "SortedBewertung",
-              "filter_airing": _onlyAiring
-            });
+            if (!isDesktop()) {
+              analytics.logEvent(name: "change_allanime_filter", parameters: {
+                "filter_name": "SortedBewertung",
+                "filter_airing": _onlyAiring
+              });
+            }
             if (_onlyAiring) {
               _actualSortedAnimeList = [];
               for (var i = 0; i < sortedBewertungAiring.length; i++) {
@@ -123,10 +130,12 @@ class AnimeListState extends State<AnimeList> {
           break;
         case 3:
           {
-            analytics.logEvent(name: "change_allanime_filter", parameters: {
-              "filter_name": "SortedAbos",
-              "filter_airing": _onlyAiring
-            });
+            if (!isDesktop()) {
+              analytics.logEvent(name: "change_allanime_filter", parameters: {
+                "filter_name": "SortedAbos",
+                "filter_airing": _onlyAiring
+              });
+            }
 
             if (_onlyAiring) {
               _actualSortedAnimeList = [];
@@ -213,7 +222,11 @@ class AnimeListState extends State<AnimeList> {
     }
     return Column(
       children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        (AppState.adFailed)
+            ? Container()
+            : SizedBox(
+                height: 50,
+              ),
         Expanded(
             child: Container(
                 color: Theme.of(ctx).backgroundColor,

@@ -83,11 +83,13 @@ class Login extends StatelessWidget implements Screen{
                         showErrorDialog(ctx,response.error);
                       }else{
                         AppState.updateLoggedIn(true);
+                        if(!isDesktop()){
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.setString("access_token", response.access_token);
                         prefs.setString("token_type", response.token_type);
-                        resetTextController();
                         analytics.logLogin();
+                      }
+                        resetTextController();
                       }
                     },
                   )),
@@ -97,7 +99,9 @@ class Login extends StatelessWidget implements Screen{
                   textColor: Theme.of(ctx).textTheme.title.color,
                   child: ThemeText("Noch keinen Account?",ctx),
                   onPressed: () {
-                    _launchURL();
+                    if(!isDesktop()){
+                      _launchURL();
+                    }
                     resetTextController();
                   },
                 ),

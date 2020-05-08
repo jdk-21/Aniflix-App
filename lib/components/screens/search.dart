@@ -40,7 +40,11 @@ class SearchAnimeState extends State<SearchAnime> {
         color: Theme.of(ctx).backgroundColor,
         child: Column(
           children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+            (AppState.adFailed)
+                ? Container()
+                : SizedBox(
+                    height: 50,
+                  ),
             Expanded(
                 child: ListView(
               children: [
@@ -87,8 +91,10 @@ class SearchAnimeState extends State<SearchAnime> {
   ) {
     var text = controller.text;
     if (RegExp("^[a-zA-Z0-9_: ]*\$").hasMatch(text)) {
-      var analytics = AppState.analytics;
-      analytics.logSearch(searchTerm: controller.text);
+      if (!isDesktop()) {
+        var analytics = AppState.analytics;
+        analytics.logSearch(searchTerm: controller.text);
+      }
       updateSearchList(controller.text);
     }
   }

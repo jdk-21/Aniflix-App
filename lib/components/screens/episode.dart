@@ -66,13 +66,15 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       for (var stream in episodeInfo.streams) {
         if (_hosters[hoster] == stream.hoster.name &&
             _langs[lang] == stream.lang) {
-          var analytics = AppState.analytics;
-          analytics.logEvent(name: "episode_change_stream", parameters: {
-            "episode_id": episodeInfo.id,
-            "lang": stream.lang,
-            "hoster_id": stream.hoster_id,
-            "hoster_name": stream.hoster.name
-          });
+          if (!isDesktop()) {
+            var analytics = AppState.analytics;
+            analytics.logEvent(name: "episode_change_stream", parameters: {
+              "episode_id": episodeInfo.id,
+              "lang": stream.lang,
+              "hoster_id": stream.hoster_id,
+              "hoster_name": stream.hoster.name
+            });
+          }
           this._stream = stream;
           return;
         }
@@ -96,17 +98,19 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
       this.episodeInfo.then((episode) {
         if (episode.episodeInfo != null) {
-          var info = episode.episodeInfo;
-          var itemName = "Show_" +
-              info.season.show.name +
-              "_Season_" +
-              info.season.number.toString() +
-              "_Episode_" +
-              info.number.toString();
-          AppState.analytics.logViewItem(
-              itemId: info.id.toString(),
-              itemName: itemName,
-              itemCategory: "Episode");
+          if (!isDesktop()) {
+            var info = episode.episodeInfo;
+            var itemName = "Show_" +
+                info.season.show.name +
+                "_Season_" +
+                info.season.number.toString() +
+                "_Episode_" +
+                info.number.toString();
+            AppState.analytics.logViewItem(
+                itemId: info.id.toString(),
+                itemName: itemName,
+                itemCategory: "Episode");
+          }
           if (barState != null) {
             barState.updateEpisode(episode.episodeInfo);
           }
@@ -186,18 +190,22 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
             if (comments == null) {
               comments = episode.comments;
-              var info = episode;
-              var itemName = "Show_" +
-                  info.season.show.name +
-                  "_Season_" +
-                  info.season.number.toString() +
-                  "_Episode_" +
-                  info.number.toString();
-              AppState.analytics.logViewItem(
-                  itemId: info.id.toString(),
-                  itemName: itemName,
-                  itemCategory: "Episode");
+
+              if (!isDesktop()) {
+                var info = episode;
+                var itemName = "Show_" +
+                    info.season.show.name +
+                    "_Season_" +
+                    info.season.number.toString() +
+                    "_Episode_" +
+                    info.number.toString();
+                AppState.analytics.logViewItem(
+                    itemId: info.id.toString(),
+                    itemName: itemName,
+                    itemCategory: "Episode");
+              }
             }
+
             if (view == 2 && _inApp == null) {
               _inApp = InAppWebView(
                   initialHeaders: {},
@@ -212,7 +220,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
 
             return Column(children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+              (AppState.adFailed)
+                  ? Container()
+                  : SizedBox(
+                      height: 50,
+                    ),
               Expanded(
                   child: Container(
                       color: Theme.of(ctx).backgroundColor,
@@ -260,10 +272,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                             APIManager.addComment(episode.id, text)
                                 .then((comment) {
                               if (comment != null) {
-                                var analytics = AppState.analytics;
-                                analytics.logEvent(
-                                    name: "episode_comment_send",
-                                    parameters: {"comment_id": comment.id});
+                                if (!isDesktop()) {
+                                  var analytics = AppState.analytics;
+                                  analytics.logEvent(
+                                      name: "episode_comment_send",
+                                      parameters: {"comment_id": comment.id});
+                                }
+
                                 setState(() {
                                   comments.insert(0, comment);
                                 });
@@ -272,10 +287,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (id, text) {
                             APIManager.addSubComment(id, text).then((comment) {
                               if (comment != null) {
-                                var analytics = AppState.analytics;
-                                analytics.logEvent(
-                                    name: "episode_comment_answer",
-                                    parameters: {"comment_id": comment.id});
+                                if (!isDesktop()) {
+                                  var analytics = AppState.analytics;
+                                  analytics.logEvent(
+                                      name: "episode_comment_answer",
+                                      parameters: {"comment_id": comment.id});
+                                }
+
                                 setState(() {
                                   for (var c in comments) {
                                     if (c.id == id) {
@@ -289,10 +307,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                             setState(() {
                               for (var i = 0; i < comments.length; i++) {
                                 if (comments[i].id == id) {
-                                  var analytics = AppState.analytics;
-                                  analytics.logEvent(
-                                      name: "episode_comment_delete",
-                                      parameters: {"comment_id": id});
+                                  if (!isDesktop()) {
+                                    var analytics = AppState.analytics;
+                                    analytics.logEvent(
+                                        name: "episode_comment_delete",
+                                        parameters: {"comment_id": id});
+                                  }
+
                                   comments.removeAt(i);
                                   APIManager.deleteComment(id);
                                   break;
@@ -307,10 +328,13 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                       j < comments[i].comments.length;
                                       j++) {
                                     if (comments[i].comments[j].id == sub_id) {
-                                      var analytics = AppState.analytics;
-                                      analytics.logEvent(
-                                          name: "episode_comment_delete",
-                                          parameters: {"comment_id": sub_id});
+                                      if (!isDesktop()) {
+                                        var analytics = AppState.analytics;
+                                        analytics.logEvent(
+                                            name: "episode_comment_delete",
+                                            parameters: {"comment_id": sub_id});
+                                      }
+
                                       comments[i].comments.removeAt(j);
                                       APIManager.deleteComment(sub_id);
                                       break;
