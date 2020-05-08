@@ -23,7 +23,11 @@ class Settings extends StatelessWidget implements Screen {
         color: Theme.of(ctx).backgroundColor,
         child: Column(
           children: <Widget>[
-          (AppState.adFailed == null || AppState.adFailed) ? Container() : SizedBox(height: 50,),
+            (AppState.adFailed == null || AppState.adFailed)
+                ? Container()
+                : SizedBox(
+                    height: 50,
+                  ),
             Expanded(
               child: ListView(
                 children: [
@@ -49,10 +53,12 @@ class Settings extends StatelessWidget implements Screen {
                             items: manager.getThemeNames(),
                             onChanged: (newValue) async {
                               App.setTheme(ctx, newValue);
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setInt(
-                                  "actualTheme", manager.actualThemeIndex);
+                              if (!isDesktop()) {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setInt(
+                                    "actualTheme", manager.actualThemeIndex);
+                              }
                             },
                             value: manager.actualThemeIndex,
                             hint: Text(

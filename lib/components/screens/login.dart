@@ -21,11 +21,12 @@ class Login extends StatelessWidget implements Screen{
     return "login_screen";
   }
 
-  final emailController = TextEditingController();
-  final passwortController = TextEditingController();
+  final emailController = TextEditingController(text: "");
+  final passwortController = TextEditingController(text: "");
 
   @override
   Widget build(BuildContext ctx) {
+
     return new Container(
       color: Theme.of(ctx).backgroundColor,
       child: Padding(

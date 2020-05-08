@@ -101,24 +101,26 @@ class AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance
-        .initialize(appId: "ca-app-pub-1740246956609068~4725713221")
-        .then((init) {
-      setState(() {
-        ad = BannerAd(
-            adUnitId: "ca-app-pub-1740246956609068/1140216654",
-            size: AdSize.banner,
-            targetingInfo: App.targetingInfo,
-            listener: (MobileAdEvent event) {
-              if (event == MobileAdEvent.failedToLoad) {
-                setState(() {
-                  adFailed = true;
-                });
-              }
-              print("BannerAd event is $event");
-            });
+    if (!isDesktop()) {
+      FirebaseAdMob.instance
+          .initialize(appId: "ca-app-pub-1740246956609068~4725713221")
+          .then((init) {
+        setState(() {
+          ad = BannerAd(
+              adUnitId: "ca-app-pub-1740246956609068/1140216654",
+              size: AdSize.banner,
+              targetingInfo: App.targetingInfo,
+              listener: (MobileAdEvent event) {
+                if (event == MobileAdEvent.failedToLoad) {
+                  setState(() {
+                    adFailed = true;
+                  });
+                }
+                print("BannerAd event is $event");
+              });
+        });
       });
-    });
+    }
   }
 
   static updateLoggedIn(bool value) {

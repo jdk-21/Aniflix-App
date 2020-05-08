@@ -25,7 +25,6 @@ class AnimePlayer extends StatelessWidget {
   }
 
   getPlayer(BuildContext ctx) {
-    var onpress;
     if (_view == 0) {
       return Center(
               child: IconButton(
