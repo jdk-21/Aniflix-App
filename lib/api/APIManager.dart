@@ -373,12 +373,12 @@ class APIManager {
   }
 
   static Future<User> getUser() async {
-    var response = await _authPostRequest("user", login);
+    var response = await _authPostRequest("user/me", login);
     return User.fromJson(jsonDecode(response.body));
   }
 
   static Future<UserProfile> getUserProfile(int userID) async {
-    var response = await _authPostRequest("user/"+userID.toString(), login);
+    var response = await _authGetRequest("user/"+userID.toString(), login);
     return UserProfile.fromJson(jsonDecode(response.body));
   }
 
@@ -400,7 +400,7 @@ class APIManager {
   static Future<Favouritedata> getUserFavorites(int userID) async {
 
     List<Show> shows = [];
-    var response = await _authPostRequest("favorites/"+userID.toString(), login);
+    var response = await _authGetRequest("favorites/"+userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -412,7 +412,7 @@ class APIManager {
   static Future<UserSubData> getUserSubs(int userID) async {
 
     List<Show> shows = [];
-    var response = await _authPostRequest("abos/"+userID.toString(), login);
+    var response = await _authGetRequest("abos/"+userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -424,7 +424,7 @@ class APIManager {
   static Future<UserWatchlistData> getUserWatchlist(int userID) async {
 
     List<Show> shows = [];
-    var response = await _authPostRequest("watchlist/"+userID.toString(), login);
+    var response = await _authGetRequest("watchlist/"+userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -433,14 +433,46 @@ class APIManager {
     return UserWatchlistData(shows);
   }
 
+  static updateAboutMe(String message) {
+    _authPatchRequest("user/user-about-me", login, bodyObject: {"about_me": message});
+  }
+
+  static updateName(String name) {
+    _authPatchRequest("user/user-update", login, bodyObject: {"name": name, "about_me":null});
+  }
+
+  static updatePassword(int id, String pw) {
+    _authPatchRequest("user/update-passwort/"+id.toString(), login, bodyObject: {"password": pw});
+  }
+
   static Future<FriendListData> getUserFriends(int userID) async {
-    var response = await _authPostRequest("friend/user/friends?id="+userID.toString(), login);
+    var response = await _authGetRequest("friend/user/friends?id="+userID.toString(), login);
     List<Friend> friends = [];
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
       friends = Friend.getFriends(json);
     }
     return FriendListData(friends);
+  }
+
+  static addFriend(int friendId) {
+    _authPostRequest("friend/create", login, bodyObject: {"friend_id": friendId});
+  }
+
+  static confirmFriendRequest(int id) {
+    _answerFriendRequest(id, 0);
+  }
+
+  static blockFriendRequest(int id) {
+    _answerFriendRequest(id, 2);
+  }
+
+  static _answerFriendRequest(int id, int status) {
+    _authPostRequest("friend/update/"+id.toString(), login, bodyObject: {"status": status});
+  }
+
+  static cancelFriendRequest(int friendId) {
+    _authDeleteRequest("friend/destroy?id=" + friendId.toString(), login);
   }
 
   static Future<UserListData> getUserList() async {
@@ -612,6 +644,16 @@ class APIManager {
 
   static Future<http.Response> _postRequest(String query, bodyObject) {
     return http.post('https://www2.aniflix.tv/api/' + query, body: bodyObject);
+  }
+
+  static Future<http.Response> _authPatchRequest(
+      String query, LoginResponse user,
+      {bodyObject = const {}}) {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    return http.patch('https://www2.aniflix.tv/api/' + query,body: bodyObject,
+        headers: headers);
   }
 
   static Future<http.Response> _authDeleteRequest(
