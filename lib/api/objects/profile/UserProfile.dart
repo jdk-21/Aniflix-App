@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/Group.dart';
+import 'package:aniflix_app/api/objects/Show.dart';
 
-class User {
+class UserProfile{
   int id;
   String name;
   String avatar;
@@ -10,10 +11,10 @@ class User {
   String deleted_at;
   String banreason;
   String about_me;
-  String access_key;
   List<Group> groups;
+  List<Show> favorites;
 
-  User(
+  UserProfile(
       this.id,
       this.name,
       this.avatar,
@@ -23,12 +24,12 @@ class User {
       this.deleted_at,
       this.banreason,
       this.about_me,
-      this.access_key,
-      this.groups);
+      this.groups,
+      this.favorites);
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
-    return User(
+    return UserProfile(
         json["id"],
         json["name"],
         json["avatar"],
@@ -38,15 +39,7 @@ class User {
         json["deleted_at"],
         json["banreason"],
         json["about_me"],
-        json["access_key"],
-        Group.getGroups(json["groups"]));
-  }
-
-  static List<User> getUsers(List<dynamic> json) {
-    List<User> users = [];
-    for (var entry in json) {
-      users.add(User.fromJson(entry));
-    }
-    return users;
+        Group.getGroups(json["groups"]),
+        Show.getShows(json["favorites"]));
   }
 }

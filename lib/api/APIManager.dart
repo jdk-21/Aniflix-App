@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:aniflix_app/api/objects/Season.dart';
+import 'package:aniflix_app/api/objects/UserListData.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -7,6 +7,12 @@ import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/api/objects/news/Notification.dart' as n;
+import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
+import 'package:aniflix_app/api/objects/profile/Friend.dart';
+import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/api/objects/profile/UserSubData.dart';
+import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -371,6 +377,114 @@ class APIManager {
     return User.fromJson(jsonDecode(response.body));
   }
 
+  static Future<UserProfile> getUserProfile(int userID) async {
+    var response = await _authGetRequest("user/"+userID.toString(), login);
+    return UserProfile.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<Historydata> getUserHistory(int userID) async {
+
+    List<HistoryEpisode> episodes = [];
+    var response = await _authPostRequest("show/history/"+userID.toString()+"/0", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        var episode = HistoryEpisode.fromJson(entry);
+        episodes.add(episode);
+      }
+    }
+    return Historydata(episodes);
+  }
+
+  static Future<Favouritedata> getUserFavorites(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authGetRequest("favorites/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return Favouritedata(shows);
+  }
+
+  static Future<UserSubData> getUserSubs(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authGetRequest("abos/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return UserSubData(shows);
+  }
+
+  static Future<UserWatchlistData> getUserWatchlist(int userID) async {
+
+    List<Show> shows = [];
+    var response = await _authGetRequest("watchlist/"+userID.toString(), login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = Show.getShows(json);
+    }
+    return UserWatchlistData(shows);
+  }
+
+  static updateAboutMe(String message) {
+    _authPatchRequest("user/user-about-me", login, bodyObject: {"about_me": message});
+  }
+
+  static updateName(String name) {
+    _authPatchRequest("user/user-update", login, bodyObject: {"name": name, "about_me":null});
+  }
+
+  static updatePassword(int id, String pw) {
+    _authPatchRequest("user/update-passwort/"+id.toString(), login, bodyObject: {"password": pw});
+  }
+
+  static Future<FriendListData> getUserFriends(int userID) async {
+    var response = await _authGetRequest("friend/user/friends?id="+userID.toString(), login);
+    List<Friend> friends = [];
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      friends = Friend.getFriends(json);
+    }
+    return FriendListData(friends);
+  }
+
+  static addFriend(int friendId) {
+    _authPostRequest("friend/create", login, bodyObject: {"friend_id": friendId});
+  }
+
+  static confirmFriendRequest(int id) {
+    _answerFriendRequest(id, 0);
+  }
+
+  static blockFriendRequest(int id) {
+    _answerFriendRequest(id, 2);
+  }
+
+  static _answerFriendRequest(int id, int status) {
+    _authPostRequest("friend/update/"+id.toString(), login, bodyObject: {"status": status});
+  }
+
+  static cancelFriendRequest(int friendId) {
+    _authDeleteRequest("friend/destroy?id=" + friendId.toString(), login);
+  }
+
+  static Future<UserListData> getUserList() async {
+    var response = await _authGetRequest("user/me", login);
+    return UserListData(User.getUsers(jsonDecode(response.body)));
+  }
+
+  static Future<NotificationListData> getNotifications() async {
+    var response = await _authGetRequest("user/me", login);
+    return NotificationListData(n.Notification.getNotifications(jsonDecode(response.body)));
+  }
+
   static void setShowVote(int showID, int previous_vote, int value) {
     _authPostRequest("vote/show/" + showID.toString(), login, bodyObject: {
       "value": value.toString(),
@@ -530,6 +644,16 @@ class APIManager {
 
   static Future<http.Response> _postRequest(String query, bodyObject) {
     return http.post('https://www2.aniflix.tv/api/' + query, body: bodyObject);
+  }
+
+  static Future<http.Response> _authPatchRequest(
+      String query, LoginResponse user,
+      {bodyObject = const {}}) {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    return http.patch('https://www2.aniflix.tv/api/' + query,body: bodyObject,
+        headers: headers);
   }
 
   static Future<http.Response> _authDeleteRequest(
