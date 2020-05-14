@@ -27,6 +27,9 @@ class Settings extends StatelessWidget implements Screen {
             Expanded(
               child: ListView(
                 children: [
+                  ListElement("Userlist", ctx, onTap: () {
+                    Navigator.pushNamed(ctx, "userlist");
+                  }, key: Key("Userlist")),
                   ListElement("Verlauf", ctx, onTap: () {
                     Navigator.pushNamed(ctx, "history");
                   }, key: Key("Verlauf")),
@@ -44,7 +47,7 @@ class Settings extends StatelessWidget implements Screen {
                           child: DropdownButton<int>(
                             key: Key("themes"),
                             style: TextStyle(
-                                color: Theme.of(ctx).textTheme.title.color,
+                                color: Theme.of(ctx).textTheme.caption.color,
                                 fontSize: 20),
                             items: manager.getThemeNames(),
                             onChanged: (newValue) async {
@@ -58,7 +61,7 @@ class Settings extends StatelessWidget implements Screen {
                             hint: Text(
                               manager.actualTheme.getThemeName(),
                               style: TextStyle(
-                                  color: Theme.of(ctx).textTheme.title.color),
+                                  color: Theme.of(ctx).textTheme.caption.color),
                             ),
                           ))),
                   ListElement("Logout", ctx, onTap: () {

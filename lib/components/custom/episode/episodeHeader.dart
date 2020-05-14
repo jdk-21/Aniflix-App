@@ -87,9 +87,9 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                 ? IconButton(
                     icon: Icon(
                       Icons.navigate_before,
-                      color: Theme.of(ctx).textTheme.title.color,
+                      color: Theme.of(ctx).textTheme.caption.color,
                     ),
-                    color: Theme.of(ctx).textTheme.title.color,
+                    color: Theme.of(ctx).textTheme.caption.color,
                     onPressed: prev,
                   )
                 : IconButton(
@@ -107,7 +107,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                       .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
                   child: DropdownButton(
                     style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
+                        color: Theme.of(ctx).textTheme.caption.color,
                         fontSize: 15),
                     onChanged: (val) {
                       setState(() {
@@ -127,7 +127,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                       .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
                   child: DropdownButton(
                     style: TextStyle(
-                        color: Theme.of(ctx).textTheme.title.color,
+                        color: Theme.of(ctx).textTheme.caption.color,
                         fontSize: 15),
                     onChanged: (newValue) {
                       setState(() {
@@ -148,14 +148,14 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
               icon: (episode.next != "")
                   ? Icon(
                       Icons.navigate_next,
-                      color: Theme.of(ctx).textTheme.title.color,
+                      color: Theme.of(ctx).textTheme.caption.color,
                     )
                   : Icon(
                       Icons.navigate_before,
                       color: Theme.of(ctx).backgroundColor,
                     ),
               color: (episode.next != "")
-                  ? Theme.of(ctx).textTheme.title.color
+                  ? Theme.of(ctx).textTheme.caption.color
                   : Theme.of(ctx).backgroundColor,
               onPressed: (episode.next != "") ? next : () {},
             ),
@@ -166,7 +166,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
               .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
           child: DropdownButton(
               style: TextStyle(
-                  color: Theme.of(ctx).textTheme.title.color, fontSize: 15),
+                  color: Theme.of(ctx).textTheme.caption.color, fontSize: 15),
               onChanged: (newValue) {
                 setState(() {
                   _view = newValue;

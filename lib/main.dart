@@ -9,6 +9,7 @@ import 'package:aniflix_app/components/screens/news.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
+import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
@@ -214,6 +215,9 @@ class AppState extends State<App> {
               },
               'chat': (context) {
                 return getScaffold(ChatScreen(), context, setIndex: true);
+              },
+              'userlist': (context) {
+                return getScaffold(Userlist(), context, setIndex: true);
               }
             },
             onGenerateRoute: generateRoute);

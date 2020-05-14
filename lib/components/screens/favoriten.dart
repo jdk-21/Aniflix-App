@@ -58,7 +58,7 @@ class FavoritenState extends State<Favoriten> {
     } else {
       return getLayout(cache, ctx);
     }
-  }
+}
 
   getLayout(Favouritedata data, BuildContext ctx) {
     return Column(

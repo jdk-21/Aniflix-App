@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:aniflix_app/api/objects/UserListData.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -27,6 +26,7 @@ import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/api/objects/subbox/SubEpisode.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/home.dart';
+import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
@@ -476,12 +476,12 @@ class APIManager {
   }
 
   static Future<UserListData> getUserList() async {
-    var response = await _authGetRequest("user/me", login);
+    var response = await _authGetRequest("user", login);
     return UserListData(User.getUsers(jsonDecode(response.body)));
   }
 
   static Future<NotificationListData> getNotifications() async {
-    var response = await _authGetRequest("user/me", login);
+    var response = await _authGetRequest("notification", login);
     return NotificationListData(n.Notification.getNotifications(jsonDecode(response.body)));
   }
 

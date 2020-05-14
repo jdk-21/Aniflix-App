@@ -9,7 +9,7 @@ class ThemeText extends Text {
       int maxLines, TextOverflow overflow})
       : super(text,
             style: TextStyle(
-                color: Theme.of(ctx).textTheme.title.color,
+                color: Theme.of(ctx).textTheme.caption.color,
                 fontSize: fontSize,
                 fontWeight: fontWeight),
             softWrap: softWrap,
