@@ -11,28 +11,39 @@ import '../../main.dart';
 
 class Favouritedata {
   List<Show> list;
+
   Favouritedata(this.list);
 }
 
 class Favoriten extends StatefulWidget implements Screen {
+  Favouritedata favouritedata;
+
+  Favoriten({this.favouritedata});
+
   @override
   getScreenName() {
     return "favourites_screen";
   }
 
   @override
-  State<StatefulWidget> createState() => FavoritenState();
+  State<StatefulWidget> createState() => FavoritenState(cache: favouritedata);
 }
 
 class FavoritenState extends State<Favoriten> {
   Future<Favouritedata> favouriteData;
   Favouritedata cache;
+  bool external;
 
-  FavoritenState() {
-    if (CacheManager.favouritedata == null) {
-      favouriteData = APIManager.getFavourite();
+  FavoritenState({this.cache}) {
+    if (cache == null) {
+      external = false;
+      if (CacheManager.favouritedata == null) {
+        favouriteData = APIManager.getFavourite();
+      } else {
+        cache = CacheManager.favouritedata;
+      }
     } else {
-      cache = CacheManager.favouritedata;
+      external = true;
     }
   }
 
@@ -58,12 +69,16 @@ class FavoritenState extends State<Favoriten> {
     } else {
       return getLayout(cache, ctx);
     }
-}
+  }
 
   getLayout(Favouritedata data, BuildContext ctx) {
     return Column(
       children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        (AppState.adFailed || external)
+            ? Container()
+            : SizedBox(
+                height: 50,
+              ),
         Expanded(
             child: Container(
           padding: EdgeInsets.all(5),
@@ -73,12 +88,14 @@ class FavoritenState extends State<Favoriten> {
               children: getFavouritesAsWidgets(ctx, data.list),
             ),
             onRefresh: () async {
-              APIManager.getFavourite().then((data) {
-                setState(() {
-                  CacheManager.favouritedata = data;
-                  cache = data;
+              if (!external) {
+                APIManager.getFavourite().then((data) {
+                  setState(() {
+                    CacheManager.favouritedata = data;
+                    cache = data;
+                  });
                 });
-              });
+              }
             },
           ),
         ))

@@ -29,6 +29,7 @@ import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:flutter/widgets.dart';
@@ -431,6 +432,15 @@ class APIManager {
       shows = Show.getShows(json);
     }
     return UserWatchlistData(shows);
+  }
+
+  static Future<UserProfileData> getUserProfileData(int userID) async{
+    var profile = await getUserProfile(userID);
+    var history = await getUserHistory(userID);
+    var favourite = await getUserFavorites(userID);
+    var sub = await getUserSubs(userID);
+    var watchlist = await getUserWatchlist(userID);
+    return UserProfileData(profile,history,favourite,sub,watchlist);
   }
 
   static updateAboutMe(String message) {
