@@ -15,16 +15,18 @@ import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/components/custom/dialogs/aboutMeDialog.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 
-class UserProfileData{
-
+class UserProfileData {
   UserProfile userProfile;
   Historydata historydata;
   Favouritedata favouritedata;
   UserSubData userSubData;
   UserWatchlistData userWatchlistData;
 
-  UserProfileData(this.userProfile,this.historydata,this.favouritedata,this.userSubData,this.userWatchlistData);
+  UserProfileData(this.userProfile, this.historydata, this.favouritedata,
+      this.userSubData, this.userWatchlistData);
 }
 
 class Profile extends StatefulWidget implements Screen {
@@ -44,6 +46,7 @@ class Profile extends StatefulWidget implements Screen {
 class ProfileState extends State<Profile> {
   int userID;
   Future<UserProfileData> profileData;
+  String aboutMe;
 
   ProfileState(this.userID) {
     profileData = APIManager.getUserProfileData(userID);
@@ -82,80 +85,130 @@ class ProfileState extends State<Profile> {
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     var joined = DateTime.parse(profile.created_at);
-    return Column(children: [
-      (AppState.adFailed) ? Container() : SizedBox(height: 50),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          (profile.avatar == null)
-              ? IconButton(
-            iconSize: 50,
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(ctx).primaryIconTheme.color,
-            ),
-            onPressed: () {},
-          )
-              : IconButton(
-              iconSize: 50,
-              icon: new Container(
-                  decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(
-                          "https://www2.aniflix.tv/storage/" + profile.avatar,
-                        ),
-                      ))),
-              onPressed: () {}),
-          Column(children: [
-            ThemeText(profile.name, ctx),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    if(aboutMe != null){
+      data.userProfile.about_me = aboutMe;
+    }
+    return Column(
+      children: [
+        (AppState.adFailed) ? Container() : SizedBox(height: 50),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            (profile.avatar == null)
+                ? IconButton(
+                    iconSize: 50,
+                    icon: Icon(
+                      Icons.person,
+                      color: Theme.of(ctx).primaryIconTheme.color,
+                    ),
+                    onPressed: () {},
+                  )
+                : IconButton(
+                    iconSize: 50,
+                    icon: new Container(
+                        decoration: new BoxDecoration(
+                            image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        "https://www2.aniflix.tv/storage/" + profile.avatar,
+                      ),
+                    ))),
+                    onPressed: () {}),
+            Column(
               children: [
-                (profile.groups.length > 0)
-                    ? TextboxSliderElement(profile.groups[0].name)
-                    : Container(),
-                TextboxSliderElement(
-                  "Mitglied seit " +
-                      joined.day.toString() +
-                      "." +
-                      joined.month.toString() +
-                      "." +
-                      joined.year.toString(),
+                ThemeText(profile.name, ctx),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    (profile.groups.length > 0)
+                        ? TextboxSliderElement(profile.groups[0].name)
+                        : Container(),
+                    TextboxSliderElement(
+                      "Mitglied seit " +
+                          joined.day.toString() +
+                          "." +
+                          joined.month.toString() +
+                          "." +
+                          joined.year.toString(),
+                    )
+                  ],
                 )
               ],
-            )
-          ],),
-          Container()
-        ],
-      ),
-      Expanded(child:  PageView(controller: PageController(initialPage: 0),children: [ProfileMainPage(data),Favoriten(favouritedata: data.favouritedata),Watchlist(watchlistdata: data.userWatchlistData,)]))
-
-    ],);
+            ),
+            Container()
+          ],
+        ),
+        Expanded(
+            child:
+                PageView(controller: PageController(initialPage: 0), children: [
+          ProfileMainPage(data,(){
+            showDialog(
+                context: ctx,
+                builder: (BuildContext context) {
+                  return AboutMeDialog((text) {
+                    APIManager.updateAboutMe(text);
+                    setState(() {
+                      aboutMe = text;
+                    });
+                  });
+                });
+          }),
+          Favoriten(favouritedata: data.favouritedata),
+          Watchlist(
+            watchlistdata: data.userWatchlistData,
+          )
+        ]))
+      ],
+    );
   }
 }
 
-class ProfileMainPage extends StatelessWidget{
-
+class ProfileMainPage extends StatelessWidget {
   UserProfileData _userProfileData;
+  Function _onPressed;
 
-  ProfileMainPage(this._userProfileData);
+  ProfileMainPage(this._userProfileData,this._onPressed);
 
   @override
   Widget build(BuildContext ctx) {
     var profile = _userProfileData.userProfile;
+    var minLenght = 30;
     var widgets = <Widget>[
-      SizedBox(height: 10,),
-      ThemeText("Über mich:", ctx),
-      SizedBox(height: 5,),
-      (profile.about_me.length < 20)?ThemeText(profile.about_me,ctx,fontSize: 15,):AnimeDescription(profile.about_me, ctx),
-      SizedBox(height: 10,),
+      SizedBox(
+        height: 10,
+      ),
+      Row(
+        children: [
+          ThemeText("Über mich:", ctx),
+          (_userProfileData.userProfile.id == CacheManager.userData.id)?IconButton(
+            icon: Icon(Icons.edit, color: Theme.of(ctx).primaryIconTheme.color),
+            onPressed: _onPressed,
+          ):Container()
+        ],
+      ),
+      (profile.about_me.length < minLenght)
+          ? SizedBox(
+              height: 5,
+            )
+          : Container(),
+      (profile.about_me.length < minLenght)
+          ? ThemeText(
+              profile.about_me,
+              ctx,
+              fontSize: 15,
+            )
+          : AnimeDescription(profile.about_me, ctx),
+      SizedBox(
+        height: 10,
+      ),
       ThemeText("Lieblings Anime:", ctx),
-      SizedBox(height: 5,),
+      SizedBox(
+        height: 5,
+      ),
     ];
     var count = 0;
     for (var anime in profile.favorites) {
-      if(count >= 3){
+      if (count >= 3) {
         break;
       }
       widgets.add(ImageListElement(
@@ -169,10 +222,14 @@ class ProfileMainPage extends StatelessWidget{
       count++;
     }
     var history = <SliderElement>[];
-    for(var episode in _userProfileData.historydata.episodes){
+    for (var episode in _userProfileData.historydata.episodes) {
       var desc = "";
       var date = DateTime.parse(episode.created_at);
-      desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+      desc = date.day.toString() +
+          "." +
+          date.month.toString() +
+          "." +
+          date.year.toString();
       history.add(SliderElement(
           name: episode.season.show.name +
               " S" +
@@ -183,16 +240,24 @@ class ProfileMainPage extends StatelessWidget{
           image: "https://www2.aniflix.tv/storage/" +
               episode.season.show.cover_landscape,
           onTap: (ctx) {
-            Navigator.pushNamed(ctx, "episode", arguments: EpisodeScreenArguments(episode.season.show.url,episode.season.number, episode.number));
+            Navigator.pushNamed(ctx, "episode",
+                arguments: EpisodeScreenArguments(episode.season.show.url,
+                    episode.season.number, episode.number));
           }));
     }
     widgets.addAll([
-      Container(child: SizedBox(height: 15,),decoration: BoxDecoration(border: Border(top: BorderSide(width: 1,color: Theme.of(ctx).textTheme.caption.color))),),
-      HeadlineSlider("Zuletzt gesehen:",history)
-    ]
-    );
+      Container(
+        child: SizedBox(
+          height: 15,
+        ),
+        decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(
+                    width: 1, color: Theme.of(ctx).textTheme.caption.color))),
+      ),
+      HeadlineSlider("Zuletzt gesehen:", history)
+    ]);
 
     return ListView(children: widgets);
   }
-
 }

@@ -12,6 +12,7 @@ class ReportDialog extends StatelessWidget {
       backgroundColor: Theme.of(ctx).backgroundColor,
       contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.title.color),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[Text("Report schreiben"),
         TextField(
           style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
