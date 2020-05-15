@@ -1,7 +1,6 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
 import 'package:aniflix_app/components/custom/search/searchList.dart';
-import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,7 +53,7 @@ class SearchAnimeState extends State<SearchAnime> {
                           submit(controller);
                         },
                         style: TextStyle(
-                            color: Theme.of(ctx).textTheme.title.color),
+                            color: Theme.of(ctx).textTheme.caption.color),
                         keyboardType: TextInputType.multiline,
                         controller: controller,
                         maxLines: null,

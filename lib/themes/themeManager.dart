@@ -16,7 +16,7 @@ class ThemeManager {
       instance.addNewThemes([
         CustomTheme(
             themeName: "Dark Theme",
-            screenBackgroundColor: Color.fromRGBO(15, 15, 19, 1),
+            screenBackgroundColor: Color.fromRGBO(15, 15, 15, 1),
             mainbarColor: Colors.black,
             appbarColor: Colors.black,
             unselectedIconColor: Colors.white,

@@ -4,7 +4,7 @@ class HighlightedTextBox extends Container {
 
   Color color;
 
-  HighlightedTextBox(String text, {this.color = const Color.fromRGBO(15, 15, 19, 1)})
+  HighlightedTextBox(String text, {this.color = const Color.fromRGBO(15, 15, 15, 1)})
       : super(
           padding: EdgeInsets.all(5),
           decoration: new BoxDecoration(

@@ -6,6 +6,7 @@ import 'package:aniflix_app/components/screens/subbox.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/components/screens/userlist.dart';
 
 class CacheManager{
 
@@ -17,5 +18,6 @@ class CacheManager{
   static Favouritedata favouritedata;
   static Historydata historydata;
   static Watchlistdata watchlistdata;
+  static UserListData userlistdata;
 
 }

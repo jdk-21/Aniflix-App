@@ -55,7 +55,7 @@ class CustomTheme {
 
   ThemeData getThemeData() {
     return new ThemeData(
-        textTheme: TextTheme(title: TextStyle(color: this.textColor)),
+        textTheme: TextTheme(caption: TextStyle(color: this.textColor)),
         appBarTheme: AppBarTheme(color: this.appbarColor),
         bottomAppBarTheme: BottomAppBarTheme(color: this.mainbarColor),
         backgroundColor: this.screenBackgroundColor,

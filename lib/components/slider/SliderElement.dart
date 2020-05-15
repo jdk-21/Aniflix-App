@@ -9,7 +9,7 @@ class SliderElement extends StatelessWidget {
   Function close;
   Color desccolor;
 
-  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 19, 1)});
+  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 15, 1)});
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,12 @@ class SliderElement extends StatelessWidget {
                               height: 25,
                                 child: FittedBox(child: FloatingActionButton(
                                   heroTag: null,
-                                  backgroundColor: Color.fromRGBO(15, 15, 19, 1),
+                                  backgroundColor: Theme.of(context).backgroundColor,
                                   child: Icon(Icons.close,
                                     color: Colors.white,
                                   ),
                                   onPressed: close,)),
-                              color: Color.fromRGBO(15, 15, 19, 0),
+                              color: Theme.of(context).backgroundColor,
                             )),
                     //IconButton(icon: Icon(Icons.close, color: Colors.white,), onPressed: close)),
                     (name != "" && name != null)
