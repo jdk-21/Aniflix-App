@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
