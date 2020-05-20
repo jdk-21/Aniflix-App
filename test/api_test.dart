@@ -16,7 +16,7 @@ void main() {
     expect(APIManager.login.error, null);
   });
   test("Test News",() async {
-    var news = await APIManager.getNews();
+    var news = await APIManager.getNewShows();
     expect(news, isNotNull);
   });
 }

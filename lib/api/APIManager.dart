@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -40,7 +41,7 @@ import 'package:http/http.dart' as http;
 class APIManager {
   static LoginResponse login;
 
-  static Future<List<News>> getNews() async {
+  static Future<List<News>> _getNews() async {
     List<News> news = [];
     var response = await _getRequest("news");
 
@@ -493,7 +494,12 @@ class APIManager {
 
   static Future<NotificationListData> getNotifications() async {
     var response = await _authGetRequest("notification", login);
-    return NotificationListData(n.Notification.getNotifications(jsonDecode(response.body)));
+    var news = await _getNews();
+    return NotificationListData(news, n.Notification.getNotifications(jsonDecode(response.body)));
+  }
+
+  static deleteNotification(int id){
+    _authDeleteRequest("notification/delete?id=" + id.toString(), login);
   }
 
   static void setShowVote(int showID, int previous_vote, int value) {
