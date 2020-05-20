@@ -58,7 +58,7 @@ class CommentContainer extends Container {
                                       Icons.person,
                                       color: Theme.of(ctx).primaryIconTheme.color,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
                                   )
                                       : IconButton(
                                     iconSize: 40,
@@ -72,7 +72,7 @@ class CommentContainer extends Container {
                                                     _comment.user.avatar,
                                               ),
                                             ))),
-                                    onPressed: () {},
+                                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
                                   ),
                                 ),
                                 Column(

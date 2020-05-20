@@ -7,9 +7,7 @@ class IconListElement extends Container {
     String icon,
     BuildContext ctx, {
     Function onTap,
-    String descLine1,
-    String descLine2,
-    String descLine3,
+    Widget button,
   }) : super(
             decoration: BoxDecoration(
                 border: Border(
@@ -17,75 +15,46 @@ class IconListElement extends Container {
                         width: 1,
                         color: Theme.of(ctx).hintColor,
                         style: BorderStyle.solid))),
-            child: FlatButton(
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
-              onPressed: onTap,
-              child: Row(children: <Widget>[
-                (icon == null)
-                    ? IconButton(
-                        key: Key("Settings"),
-                        icon: Icon(
-                          Icons.person,
-                          color: Theme.of(ctx).primaryIconTheme.color,
-                        ),
-                        onPressed: () {},
-                      )
-                    : IconButton(
-                        key: Key("Settings"),
-                        icon: new Container(
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(
-                                    "https://www2.aniflix.tv/storage/" + icon,
-                                  ),
-                                ))),
-                        onPressed: () {}),
-                SizedBox(width: 10),
-                Expanded(
-                    child: Column(
-                  children: <Widget>[
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FlatButton(
+                  padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                  onPressed: onTap,
+                  child: Row(children: <Widget>[
+                    (icon == null)
+                        ? IconButton(
+                            key: Key("Settings"),
+                            icon: Icon(
+                              Icons.person,
+                              color: Theme.of(ctx).primaryIconTheme.color,
+                            ),
+                            onPressed: () {onTap();},
+                          )
+                        : IconButton(
+                            key: Key("Settings"),
+                            icon: new Container(
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        "https://www2.aniflix.tv/storage/" +
+                                            icon,
+                                      ),
+                                    ))),
+                            onPressed: () {onTap();}),
+                    SizedBox(width: 10),
                     Align(
-                        alignment: Alignment.centerLeft,
-                        child: ThemeText(
-                          title,
-                          ctx,
-                          softWrap: true,
-                        )),
-                    (descLine1 != null)
-                        ? Align(
                             alignment: Alignment.centerLeft,
                             child: ThemeText(
-                              descLine1,
+                              title,
                               ctx,
-                              fontSize: 15,
                               softWrap: true,
-                              maxLines: 5,
-                            ))
-                        : Container(),
-                    (descLine2 != null)
-                        ? Align(
-                            alignment: Alignment.centerLeft,
-                            child: ThemeText(
-                              descLine2,
-                              ctx,
-                              fontSize: 15,
-                              softWrap: true,
-                            ))
-                        : Container(),
-                    (descLine3 != null)
-                        ? Align(
-                            alignment: Alignment.centerLeft,
-                            child: ThemeText(
-                              descLine3,
-                              ctx,
-                              fontSize: 15,
-                              softWrap: true,
-                            ))
-                        : Container()
-                  ],
-                )),
-              ]),
+                            )),
+                  ]),
+                ),
+                (button == null) ? Container() : button,
+              ],
             ));
 }

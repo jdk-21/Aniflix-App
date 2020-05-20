@@ -1,4 +1,3 @@
-import '../../screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
@@ -12,7 +11,7 @@ LogoutDialog();
   Widget build(BuildContext ctx) {
     return AlertDialog(
       backgroundColor: Theme.of(ctx).backgroundColor,
-      contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+      contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
       content: ThemeText("Wirklich ausloggen?",ctx),
       actions: <Widget>[
         FlatButton(

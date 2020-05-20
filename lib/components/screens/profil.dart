@@ -1,5 +1,10 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/api/objects/profile/Friend.dart';
+import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/components/screens/friendlist.dart';
+import 'package:aniflix_app/components/screens/profilesettings.dart';
+import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
@@ -24,9 +29,10 @@ class UserProfileData {
   Favouritedata favouritedata;
   UserSubData userSubData;
   UserWatchlistData userWatchlistData;
+  FriendListData friendListData;
 
   UserProfileData(this.userProfile, this.historydata, this.favouritedata,
-      this.userSubData, this.userWatchlistData);
+      this.userSubData, this.userWatchlistData, this.friendListData);
 }
 
 class Profile extends StatefulWidget implements Screen {
@@ -85,8 +91,45 @@ class ProfileState extends State<Profile> {
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     var joined = DateTime.parse(profile.created_at);
-    if(aboutMe != null){
+    if (aboutMe != null) {
       data.userProfile.about_me = aboutMe;
+    }
+    var isAlreadyFriend = false;
+    for(var friend in data.friendListData.friendlist){
+      var id = (friend.user.id == userID) ? friend.friend.id : friend.user.id;
+      if(id == CacheManager.userData.id){
+        isAlreadyFriend = true;
+      }
+    }
+
+    var pages = [
+      ProfileMainPage(data, () {
+        showDialog(
+            context: ctx,
+            builder: (BuildContext context) {
+              return AboutMeDialog((text) {
+                APIManager.updateAboutMe(text);
+                setState(() {
+                  if (text == null) {
+                    aboutMe = "";
+                  } else {
+                    aboutMe = text;
+                  }
+                });
+              });
+            });
+      }),
+      FriendList(userID, (){setState(() {
+        profileData = APIManager.getUserProfileData(userID);
+      });}),
+      Favoriten(favouritedata: data.favouritedata),
+      ProfileSubBox(userID),
+      Watchlist(
+        watchlistdata: data.userWatchlistData,
+      ),
+    ];
+    if (CacheManager.userData.id == userID) {
+      pages.add(ProfileSettings());
     }
     return Column(
       children: [
@@ -116,7 +159,12 @@ class ProfileState extends State<Profile> {
                     onPressed: () {}),
             Column(
               children: [
-                ThemeText(profile.name, ctx),
+                Row(children: <Widget>[
+                  ThemeText(profile.name, ctx),
+                  (CacheManager.userData.id == userID || isAlreadyFriend) ? Container() : IconButton(icon: Icon(Icons.person_add),onPressed: () {APIManager.addFriend(profile.id); setState(() {
+                    profileData = APIManager.getUserProfileData(userID);
+                  });},color: Theme.of(ctx).primaryIconTheme.color,)
+                ],),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -139,25 +187,8 @@ class ProfileState extends State<Profile> {
           ],
         ),
         Expanded(
-            child:
-                PageView(controller: PageController(initialPage: 0), children: [
-          ProfileMainPage(data,(){
-            showDialog(
-                context: ctx,
-                builder: (BuildContext context) {
-                  return AboutMeDialog((text) {
-                    APIManager.updateAboutMe(text);
-                    setState(() {
-                      aboutMe = text;
-                    });
-                  });
-                });
-          }),
-          Favoriten(favouritedata: data.favouritedata),
-          Watchlist(
-            watchlistdata: data.userWatchlistData,
-          )
-        ]))
+            child: PageView(
+                controller: PageController(initialPage: 0), children: pages))
       ],
     );
   }
@@ -167,11 +198,14 @@ class ProfileMainPage extends StatelessWidget {
   UserProfileData _userProfileData;
   Function _onPressed;
 
-  ProfileMainPage(this._userProfileData,this._onPressed);
+  ProfileMainPage(this._userProfileData, this._onPressed);
 
   @override
   Widget build(BuildContext ctx) {
     var profile = _userProfileData.userProfile;
+    if (profile.about_me == null) {
+      profile.about_me = "";
+    }
     var minLenght = 30;
     var widgets = <Widget>[
       SizedBox(
@@ -180,10 +214,13 @@ class ProfileMainPage extends StatelessWidget {
       Row(
         children: [
           ThemeText("Über mich:", ctx),
-          (_userProfileData.userProfile.id == CacheManager.userData.id)?IconButton(
-            icon: Icon(Icons.edit, color: Theme.of(ctx).primaryIconTheme.color),
-            onPressed: _onPressed,
-          ):Container()
+          (_userProfileData.userProfile.id == CacheManager.userData.id)
+              ? IconButton(
+                  icon: Icon(Icons.edit,
+                      color: Theme.of(ctx).primaryIconTheme.color),
+                  onPressed: _onPressed,
+                )
+              : Container()
         ],
       ),
       (profile.about_me.length < minLenght)

@@ -55,7 +55,7 @@ class SubCommentContainer extends StatelessWidget {
                                               .primaryIconTheme
                                               .color,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
                                       )
                                     : IconButton(
                                         iconSize: 40,
@@ -69,7 +69,7 @@ class SubCommentContainer extends StatelessWidget {
                                                         _comment.user.avatar,
                                                   ),
                                                 ))),
-                                        onPressed: () {},
+                                        onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
                                       ),
                               ),
                               Column(

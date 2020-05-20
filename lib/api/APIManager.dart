@@ -440,7 +440,8 @@ class APIManager {
     var favourite = await getUserFavorites(userID);
     var sub = await getUserSubs(userID);
     var watchlist = await getUserWatchlist(userID);
-    return UserProfileData(profile,history,favourite,sub,watchlist);
+    var friendlistdata = await getUserFriends(userID);
+    return UserProfileData(profile,history,favourite,sub,watchlist, friendlistdata);
   }
 
   static updateAboutMe(String message) {
@@ -448,7 +449,7 @@ class APIManager {
   }
 
   static updateName(String name) {
-    _authPatchRequest("user/user-update", login, bodyObject: {"name": name, "about_me":null});
+    _authPatchRequest("user/user-update", login, bodyObject: {"name": name, "about_me":""});
   }
 
   static updatePassword(int id, String pw) {
@@ -466,7 +467,7 @@ class APIManager {
   }
 
   static addFriend(int friendId) {
-    _authPostRequest("friend/create", login, bodyObject: {"friend_id": friendId});
+    _authPostRequest("friend/create", login, bodyObject: {"friend_id": friendId.toString()});
   }
 
   static confirmFriendRequest(int id) {
@@ -478,7 +479,7 @@ class APIManager {
   }
 
   static _answerFriendRequest(int id, int status) {
-    _authPostRequest("friend/update/"+id.toString(), login, bodyObject: {"status": status});
+    _authPostRequest("friend/update/"+id.toString(), login, bodyObject: {"status": status.toString()});
   }
 
   static cancelFriendRequest(int friendId) {

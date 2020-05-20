@@ -6,6 +6,8 @@ import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/news.dart';
+import 'package:aniflix_app/components/screens/profilesettings.dart';
+import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
@@ -48,17 +50,19 @@ class App extends StatefulWidget {
 
   static void setTheme(BuildContext context, int i) {
     AppState state = context.ancestorStateOfType(TypeMatcher<AppState>());
-    var analytics = AppState.analytics;
     var manager = ThemeManager.getInstance();
     String old = manager.actualTheme.getThemeName();
     manager.setActualTheme(i);
-    analytics.logEvent(name: "change_theme", parameters: {
-      "old_theme": old,
-      "new_theme": manager.actualTheme.getThemeName()
-    });
-    state.setState(() {
-      state._theme = manager.getActualThemeData();
-    });
+    if(state != null){
+      var analytics = AppState.analytics;
+      analytics.logEvent(name: "change_theme", parameters: {
+        "old_theme": old,
+        "new_theme": manager.actualTheme.getThemeName()
+      });
+      state.setState(() {
+        state._theme = manager.getActualThemeData();
+      });
+    }
   }
 }
 
