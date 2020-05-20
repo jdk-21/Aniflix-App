@@ -4,7 +4,6 @@ import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import './home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -47,7 +46,7 @@ class Login extends StatelessWidget implements Screen{
                   ])),
               SizedBox(height: 30),
               TextField(
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                   controller: emailController,
                   decoration: InputDecoration(
                       hintText: "E-Mail",
@@ -58,7 +57,7 @@ class Login extends StatelessWidget implements Screen{
                               BorderSide(color: Theme.of(ctx).hintColor)))),
               SizedBox(height: 30),
               TextField(
-                  style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                  style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                   controller: passwortController,
                   obscureText: true,
                   decoration: InputDecoration(
@@ -72,9 +71,9 @@ class Login extends StatelessWidget implements Screen{
               Align(
                   alignment: Alignment.center,
                   child: OutlineButton(
-                    textColor: Theme.of(ctx).textTheme.title.color,
+                    textColor: Theme.of(ctx).textTheme.caption.color,
                     borderSide:
-                        BorderSide(color: Theme.of(ctx).textTheme.title.color),
+                        BorderSide(color: Theme.of(ctx).textTheme.caption.color),
                     child: ThemeText("Login",ctx),
                     onPressed: () async {
                       var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
@@ -94,7 +93,7 @@ class Login extends StatelessWidget implements Screen{
               Align(
                 alignment: Alignment.center,
                 child: FlatButton(
-                  textColor: Theme.of(ctx).textTheme.title.color,
+                  textColor: Theme.of(ctx).textTheme.caption.color,
                   child: ThemeText("Noch keinen Account?",ctx),
                   onPressed: () {
                     _launchURL();

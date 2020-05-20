@@ -23,14 +23,14 @@ class ChatComponent extends StatelessWidget {
           children: <Widget>[
             (message.user.avatar == null)
                 ? IconButton(
-                    onPressed: () {},
+                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: message.user.id);},
                     icon: Icon(
                       Icons.person,
                       color: Theme.of(ctx).primaryIconTheme.color,
                     ),
                   )
                 : IconButton(
-                    onPressed: () {},
+                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: message.user.id);},
                     icon: new Container(
                         decoration: new BoxDecoration(
                             shape: BoxShape.circle,

@@ -43,7 +43,7 @@ class CommentComponent extends StatelessWidget {
                               "https://www2.aniflix.tv/storage/" + user.avatar,
                             ),
                           ))),
-                  onPressed: () => {},
+                  onPressed: () {},
                 ),
           Expanded(child: textField),
           IconButton(

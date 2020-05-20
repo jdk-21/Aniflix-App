@@ -6,12 +6,15 @@ import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/news.dart';
+import 'package:aniflix_app/components/screens/profilesettings.dart';
+import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
 import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -253,6 +256,11 @@ class AppState extends State<App> {
       case "review":
         return MaterialPageRoute(builder: (ctx) {
           return getScaffold(ReviewScreen(settings.arguments), ctx,
+              setIndex: true);
+        });
+      case "profil":
+        return MaterialPageRoute(builder: (ctx) {
+          return getScaffold(new Profile(settings.arguments), ctx,
               setIndex: true);
         });
     }

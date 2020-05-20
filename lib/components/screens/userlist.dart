@@ -117,7 +117,7 @@ class UserlistState extends State<Userlist> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            ThemeText("Favoriten", ctx, fontSize: 30, fontWeight: FontWeight.bold),
+            ThemeText("Userlist", ctx, fontSize: 30, fontWeight: FontWeight.bold),
             Row(children: <Widget>[
               (actualPage > 1)
                   ? IconButton(
@@ -225,8 +225,6 @@ class UserlistState extends State<Userlist> {
       ),
     ];
 
-    //((filterText == null || filterText == "") ? (userlist.length/entriesPerPage).ceil() : (filteredUserList.length < entriesPerPage ? "1" : (filteredUserList.length/entriesPerPage).ceil()))
-
     if (filterText == null || filterText == ""){
       for (var user in userlist.getRange(((actualPage - 1) * entriesPerPage), ((actualPage * entriesPerPage) > userlist.length ? userlist.length : (actualPage * entriesPerPage)))) {
           userWidget.add(IconListElement(
@@ -234,7 +232,7 @@ class UserlistState extends State<Userlist> {
             user.avatar,
             ctx,
             onTap: () {
-              //Navigator.pushNamed(ctx, "user", arguments: user.url);
+              Navigator.pushNamed(ctx, "profil",arguments: user.id);
             },
           ));
       }
@@ -252,7 +250,7 @@ class UserlistState extends State<Userlist> {
           user.avatar,
           ctx,
           onTap: () {
-            //Navigator.pushNamed(ctx, "user", arguments: user.url);
+            Navigator.pushNamed(ctx, "profil",arguments: user.id);
           },
         ));
       }
