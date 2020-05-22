@@ -103,7 +103,7 @@ class CommentContainer extends Container {
                                         : Text("",
                                         style: TextStyle(
                                             color:
-                                            Theme.of(ctx).textTheme.title.color,
+                                            Theme.of(ctx).textTheme.caption.color,
                                             fontSize: 10.0)),
                                     ReportDeleteBar((_user.id == _comment.user_id), () {
                                       showDialog(

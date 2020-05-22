@@ -19,7 +19,7 @@ class AnimePlayer extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
               style: BorderStyle.solid,
-              color: Theme.of(ctx).textTheme.title.color)),
+              color: Theme.of(ctx).textTheme.caption.color)),
       height: 200,
     );
   }

@@ -231,7 +231,7 @@ class AnimeListState extends State<AnimeList> {
                             items: getFilterCriteriaAsDropdownList(ctx),
                             value: _actualFilterCriteria,
                             style: TextStyle(
-                                color: Theme.of(ctx).textTheme.title.color,
+                                color: Theme.of(ctx).textTheme.caption.color,
                                 fontSize: 15),
                             onChanged: (newValue) {
                               changeActualFilterCriteria(newValue);
@@ -244,7 +244,7 @@ class AnimeListState extends State<AnimeList> {
                             Theme(
                               data: Theme.of(ctx).copyWith(
                                   unselectedWidgetColor:
-                                      Theme.of(ctx).textTheme.title.color),
+                                      Theme.of(ctx).textTheme.caption.color),
                               child: Checkbox(
                                 onChanged: (newValue) {
                                   changeCheckbox();

@@ -27,7 +27,7 @@ class AnswerCommentComponentState extends State<AnswerCommentComponent> {
     var controller = TextEditingController();
 
     var textField = TextField(
-      style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+      style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
       keyboardType: TextInputType.multiline,
       controller: controller,
       maxLines: null,

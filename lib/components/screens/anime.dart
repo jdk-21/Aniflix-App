@@ -207,7 +207,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                       style: TextStyle(
                                           color: Theme.of(ctx)
                                               .textTheme
-                                              .title
+                                              .caption
                                               .color,
                                           fontSize: 15),
                                       items: getSeasonsAsDropdownList(anime.seasons),

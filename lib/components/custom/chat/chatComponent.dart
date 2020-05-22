@@ -89,7 +89,7 @@ class ChatComponent extends StatelessWidget {
       usergroups.add(Container(
         padding: EdgeInsets.all(5),
         margin: EdgeInsets.only(left: 5),
-        color: Theme.of(ctx).textTheme.title.color,
+        color: Theme.of(ctx).textTheme.caption.color,
         child: Text(
           group.name,
           style: TextStyle(color: Theme.of(ctx).backgroundColor),

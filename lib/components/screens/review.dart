@@ -134,9 +134,9 @@ class ReviewScreenState extends State<ReviewScreen> {
                           ? Align(
                               alignment: Alignment.center,
                               child: OutlineButton(
-                                textColor: Theme.of(ctx).textTheme.title.color,
+                                textColor: Theme.of(ctx).textTheme.caption.color,
                                 borderSide: BorderSide(
-                                    color: Theme.of(ctx).textTheme.title.color),
+                                    color: Theme.of(ctx).textTheme.caption.color),
                                 child: ThemeText("Review schreiben", ctx),
                                 onPressed: () {
                                   showDialog(

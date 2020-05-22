@@ -72,7 +72,7 @@ class ReviewElement extends Container {
               review.text,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
-              style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+              style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
               softWrap: true,
             ),
             expanded: ThemeText(

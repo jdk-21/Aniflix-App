@@ -50,7 +50,7 @@ class AnimeHeader extends Container {
                     decoration: BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
-                                color: Theme.of(ctx).textTheme.title.color))),
+                                color: Theme.of(ctx).textTheme.caption.color))),
                     child: ThemeText("Reviews", ctx,
                         fontSize: 15, fontWeight: FontWeight.normal),
                   ),
