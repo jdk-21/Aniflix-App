@@ -232,7 +232,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                               OutlineButton(onPressed: (){setSeen(anime);},
-                               child: ThemeText("Staffel Gesehen", ctx,fontSize: 15),
+                               child: ThemeText("Staffel Gesehen",fontSize: 15),
                                borderSide: BorderSide(color: Theme.of(ctx).primaryIconTheme.color),
                                ),
                               OutlineButton(onPressed: (){setUnseen(anime);},

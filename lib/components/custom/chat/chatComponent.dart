@@ -51,7 +51,6 @@ class ChatComponent extends StatelessWidget {
                         children: <Widget>[
                           ThemeText(
                             message.user.name,
-                            ctx,
                             fontWeight: FontWeight.bold,
                             softWrap: true,
                             fontSize: 20,
@@ -71,7 +70,6 @@ class ChatComponent extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: ThemeText(
                       message.text,
-                      ctx,
                       fontSize: 20,
                       softWrap: true,
                     ),

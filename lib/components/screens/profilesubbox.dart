@@ -73,7 +73,7 @@ class ProfileSubBoxState extends State<ProfileSubBox> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Subbox", ctx,
+          child: ThemeText("Subbox",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var anime in watchlist) {

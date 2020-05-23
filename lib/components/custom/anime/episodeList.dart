@@ -24,7 +24,7 @@ class EpisodeList extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ThemeText("Episodes", ctx,
+              ThemeText("Episodes",
                   fontWeight: FontWeight.bold, fontSize: 20),
               Icon(
                 Icons.thumbs_up_down,
@@ -89,13 +89,11 @@ class EpisodeList extends StatelessWidget {
                         actualEpisode == null
                             ? "---"
                             : actualEpisode.number.toString() + ". ",
-                        ctx,
                         fontSize: 15,
                         fontWeight: FontWeight.normal),
                     Expanded( child:
                         ThemeText(
                           actualEpisode == null ? "---" : actualEpisode.name,
-                          ctx,
                           fontSize: 15,
                           fontWeight: FontWeight.normal,
                           softWrap: true,
@@ -112,8 +110,7 @@ class EpisodeList extends StatelessWidget {
                         : (double.parse(actualEpisode.avgVotes) * 100)
                                 .round()
                                 .toString() +
-                            "%",
-                    ctx)
+                            "%")
               ],
             ),
             onPressed: () {

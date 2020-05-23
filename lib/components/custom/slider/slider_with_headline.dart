@@ -23,7 +23,7 @@ class HeadlineSlider extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(left: 5, bottom: 5),
               alignment: AlignmentDirectional.topStart,
-              child: ThemeText(title, ctx, fontWeight: FontWeight.bold)),
+              child: ThemeText(title, fontWeight: FontWeight.bold)),
           AnimeCarousel(elements, aspectRatio: aspectRatio, size: size),
         ]));
   }

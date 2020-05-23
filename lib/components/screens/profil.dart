@@ -160,7 +160,7 @@ class ProfileState extends State<Profile> {
             Column(
               children: [
                 Row(children: <Widget>[
-                  ThemeText(profile.name, ctx),
+                  ThemeText(profile.name),
                   (CacheManager.userData.id == userID || isAlreadyFriend) ? Container() : IconButton(icon: Icon(Icons.person_add),onPressed: () {APIManager.addFriend(profile.id); setState(() {
                     profileData = APIManager.getUserProfileData(userID);
                   });},color: Theme.of(ctx).primaryIconTheme.color,)
@@ -213,7 +213,7 @@ class ProfileMainPage extends StatelessWidget {
       ),
       Row(
         children: [
-          ThemeText("Über mich:", ctx),
+          ThemeText("Über mich:"),
           (_userProfileData.userProfile.id == CacheManager.userData.id)
               ? IconButton(
                   icon: Icon(Icons.edit,
@@ -231,14 +231,13 @@ class ProfileMainPage extends StatelessWidget {
       (profile.about_me.length < minLenght)
           ? ThemeText(
               profile.about_me,
-              ctx,
               fontSize: 15,
             )
           : AnimeDescription(profile.about_me, ctx),
       SizedBox(
         height: 10,
       ),
-      ThemeText("Lieblings Anime:", ctx),
+      ThemeText("Lieblings Anime:"),
       SizedBox(
         height: 5,
       ),

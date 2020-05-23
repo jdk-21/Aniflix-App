@@ -108,7 +108,7 @@ class FavoritenState extends State<Favoriten> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Favoriten", ctx,
+          child: ThemeText("Favoriten",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
 

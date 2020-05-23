@@ -65,7 +65,7 @@ class HomeState extends State<Home> {
               CacheManager.homedata = snapshot.data;
               return getLayout(ctx, snapshot.data);
             } else if (snapshot.hasError) {
-              return ThemeText("${snapshot.error}", ctx);
+              return ThemeText("${snapshot.error}");
             }
             // By default, show a loading spinner.
             return Center(child: CircularProgressIndicator());

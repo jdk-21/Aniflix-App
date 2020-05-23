@@ -191,7 +191,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
     }
     for (int l = 0; l < languages.length; l++) {
       namelist.add(DropdownMenuItem(
-          value: l, child: ThemeText(languages.elementAt(l), ctx)));
+          value: l, child: ThemeText(languages.elementAt(l))));
     }
     return namelist;
   }
@@ -200,7 +200,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
     var list = <DropdownMenuItem>[];
     var i = 0;
     for (var hoster in _hosters) {
-      list.add(DropdownMenuItem(value: i, child: ThemeText(hoster, ctx)));
+      list.add(DropdownMenuItem(value: i, child: ThemeText(hoster)));
       i++;
     }
     return list;
@@ -209,10 +209,10 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
   List<DropdownMenuItem> getPlayers(BuildContext ctx) {
     var list = <DropdownMenuItem>[];
     list.add(
-        DropdownMenuItem(value: 0, child: ThemeText("InApp Browser", ctx)));
-    list.add(DropdownMenuItem(value: 1, child: ThemeText("Browser", ctx)));
+        DropdownMenuItem(value: 0, child: ThemeText("InApp Browser")));
+    list.add(DropdownMenuItem(value: 1, child: ThemeText("Browser")));
     list.add(DropdownMenuItem(
-        value: 2, child: ThemeText("InAppView (Unstable)", ctx)));
+        value: 2, child: ThemeText("InAppView (Unstable)")));
     return list;
   }
 }

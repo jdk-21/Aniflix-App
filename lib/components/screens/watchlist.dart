@@ -110,7 +110,7 @@ class WatchlistState extends State<Watchlist> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Watchlist", ctx,
+          child: ThemeText("Watchlist",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var anime in watchlist) {

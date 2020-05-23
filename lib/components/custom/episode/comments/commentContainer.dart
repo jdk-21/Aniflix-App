@@ -80,7 +80,6 @@ class CommentContainer extends Container {
                                   children: [
                                   ThemeText(
                                     _comment.user.name + " ",
-                                    ctx,
                                     fontSize: 20.0,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
@@ -127,7 +126,6 @@ class CommentContainer extends Container {
                             ),
                         ThemeText(
                           this._comment.text,
-                          ctx,
                           fontSize: 18.0,
                           softWrap: true,
                         ),
@@ -188,7 +186,6 @@ class CommentContainer extends Container {
                                 },
                                 child: ThemeText(
                                   "Antworten",
-                                  ctx,
                                   fontWeight: FontWeight.normal,
                                 )),
                           ],

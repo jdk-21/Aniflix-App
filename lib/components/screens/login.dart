@@ -40,7 +40,6 @@ class Login extends StatelessWidget implements Screen{
                       size: 50,
                     ),
                     ThemeText("User Login",
-                        ctx,
                             fontWeight: FontWeight.bold,
                             fontSize: 25)
                   ])),
@@ -74,7 +73,7 @@ class Login extends StatelessWidget implements Screen{
                     textColor: Theme.of(ctx).textTheme.caption.color,
                     borderSide:
                         BorderSide(color: Theme.of(ctx).textTheme.caption.color),
-                    child: ThemeText("Login",ctx),
+                    child: ThemeText("Login"),
                     onPressed: () async {
                       var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
                       if(response.hasError()){
@@ -94,7 +93,7 @@ class Login extends StatelessWidget implements Screen{
                 alignment: Alignment.center,
                 child: FlatButton(
                   textColor: Theme.of(ctx).textTheme.caption.color,
-                  child: ThemeText("Noch keinen Account?",ctx),
+                  child: ThemeText("Noch keinen Account?"),
                   onPressed: () {
                     _launchURL();
                     resetTextController();
@@ -123,11 +122,11 @@ class Login extends StatelessWidget implements Screen{
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).backgroundColor,
-          title: new ThemeText("Error",context),
-          content: new ThemeText(message,context),
+          title: new ThemeText("Error"),
+          content: new ThemeText(message),
           actions: <Widget>[
             new FlatButton(
-              child: new ThemeText("Close",context),
+              child: new ThemeText("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
               },

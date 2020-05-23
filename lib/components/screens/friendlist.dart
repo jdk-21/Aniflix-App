@@ -75,7 +75,7 @@ class FriendList extends StatelessWidget implements Screen {
     List<Widget> friendlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Freunde", ctx,
+          child: ThemeText("Freunde",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
 
@@ -111,7 +111,7 @@ class FriendList extends StatelessWidget implements Screen {
     List<Widget> friendlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Freundschaftsanfragen", ctx,
+          child: ThemeText("Freundschaftsanfragen",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
 
@@ -166,7 +166,7 @@ class FriendList extends StatelessWidget implements Screen {
     List<Widget> friendlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Blockierte Freunde", ctx,
+          child: ThemeText("Blockierte Freunde",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var friend in friendList) {

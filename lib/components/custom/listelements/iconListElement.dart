@@ -49,7 +49,6 @@ class IconListElement extends Container {
                             alignment: Alignment.centerLeft,
                             child: ThemeText(
                               title,
-                              ctx,
                               softWrap: true,
                             )),
                   ]),

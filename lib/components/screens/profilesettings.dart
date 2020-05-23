@@ -35,7 +35,6 @@ class ProfileSettings extends StatelessWidget implements Screen {
               padding: EdgeInsets.all(5),
               child: ThemeText(
                 "Settings",
-                ctx,
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
@@ -127,7 +126,7 @@ class ProfileSettings extends StatelessWidget implements Screen {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         borderSide: BorderSide(color: Theme.of(ctx).textTheme.caption.color),
         child: Padding(
-          child: ThemeText(buttonText, ctx),
+          child: ThemeText(buttonText),
           padding: EdgeInsets.only(bottom: 10, top: 10),
         ),
         onPressed: function);
@@ -144,7 +143,7 @@ class ProfileSettings extends StatelessWidget implements Screen {
         context: ctx,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: ThemeText(title, ctx),
+            title: ThemeText(title),
             backgroundColor: Theme.of(ctx).backgroundColor,
             contentTextStyle:
                 TextStyle(color: Theme.of(ctx).textTheme.caption.color),
@@ -179,15 +178,14 @@ class ProfileSettings extends StatelessWidget implements Screen {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).backgroundColor,
-          title: new ThemeText("Error", context),
+          title: new ThemeText("Error"),
           content: new ThemeText(
             message,
-            context,
             softWrap: true,
           ),
           actions: <Widget>[
             new FlatButton(
-              child: new ThemeText("Close", context),
+              child: new ThemeText("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
               },

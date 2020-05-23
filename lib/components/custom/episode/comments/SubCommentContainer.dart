@@ -77,7 +77,6 @@ class SubCommentContainer extends StatelessWidget {
                                 children: [
                                   ThemeText(
                                     _comment.user.name + " ",
-                                    ctx,
                                     fontSize: 20.0,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
@@ -128,7 +127,6 @@ class SubCommentContainer extends StatelessWidget {
                         ),
                         ThemeText(
                           this._comment.text,
-                          ctx,
                           fontSize: 18.0,
                           softWrap: true,
                         ),

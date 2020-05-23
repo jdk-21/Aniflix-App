@@ -10,7 +10,7 @@ class CloseAppDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Theme.of(ctx).backgroundColor,
       contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
-      content: ThemeText("App beenden?",ctx),
+      content: ThemeText("App beenden?"),
       actions: <Widget>[
         FlatButton(
           color: Colors.green,

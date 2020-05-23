@@ -227,7 +227,7 @@ class AnimeListState extends State<AnimeList> {
                           data: Theme.of(ctx).copyWith(
                               canvasColor: Theme.of(ctx).backgroundColor),
                           child: DropdownButton(
-                            hint: ThemeText("Filter", ctx),
+                            hint: ThemeText("Filter"),
                             items: getFilterCriteriaAsDropdownList(ctx),
                             value: _actualFilterCriteria,
                             style: TextStyle(
@@ -252,7 +252,7 @@ class AnimeListState extends State<AnimeList> {
                                 value: _onlyAiring,
                               ),
                             ),
-                            ThemeText("Nur Airing", ctx)
+                            ThemeText("Nur Airing")
                           ]),
                           onPressed: () {
                             changeCheckbox();
@@ -269,7 +269,7 @@ class AnimeListState extends State<AnimeList> {
                                 _actualFilterCriteria == 0))
                         ? Container()
                         : FlatButton(
-                            child: ThemeText("Mehr anzeigen", ctx),
+                            child: ThemeText("Mehr anzeigen"),
                             onPressed: () {
                               setState(() {
                                 this._maxShows += 25;
@@ -288,7 +288,7 @@ class AnimeListState extends State<AnimeList> {
     List<DropdownMenuItem<int>> filterCriteriaAsDropdown = [];
     for (int l = 0; l < filterCriteria.length; l++) {
       filterCriteriaAsDropdown.add(DropdownMenuItem(
-          value: l, child: ThemeText(filterCriteria.elementAt(l), ctx)));
+          value: l, child: ThemeText(filterCriteria.elementAt(l))));
     }
     return filterCriteriaAsDropdown;
   }
@@ -373,7 +373,6 @@ class AnimeListState extends State<AnimeList> {
                         Expanded(
                             child: ThemeText(
                           show.name,
-                          ctx,
                           softWrap: true,
                         ))
                       ],
@@ -461,7 +460,6 @@ class AnimeListState extends State<AnimeList> {
                     Expanded(
                         child: ThemeText(
                       shows.name,
-                      ctx,
                       softWrap: true,
                     ))
                   ],
@@ -540,7 +538,6 @@ class AnimeListState extends State<AnimeList> {
                     Expanded(
                         child: ThemeText(
                       show.name,
-                      ctx,
                       softWrap: true,
                     ))
                   ],

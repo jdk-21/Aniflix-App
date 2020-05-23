@@ -117,7 +117,7 @@ class UserlistState extends State<Userlist> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            ThemeText("Userlist", ctx, fontSize: 30, fontWeight: FontWeight.bold),
+            ThemeText("Userlist", fontSize: 30, fontWeight: FontWeight.bold),
             Row(children: <Widget>[
               (actualPage > 1)
                   ? IconButton(
