@@ -219,6 +219,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       child: ListView(
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
+                          (_stream != null)
+                              ? AnimePlayer(_stream, view, _inApp, _controller)
+                              : Container(),
                           EpisodeHeader(episode, () {
                             var info = APIManager.getEpisodeInfo(
                                 name, season, number - 1);
@@ -245,12 +248,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (state) {
                             episodeHeaderState = state;
                           }),
-                          (_stream != null)
-                              ? AnimePlayer(_stream, view, _inApp, _controller)
-                              : Container(),
-                          SizedBox(
-                            height: 10,
-                          ),
                           EpisodeBar(episode, (state) {
                             this.barState = state;
                           }),
