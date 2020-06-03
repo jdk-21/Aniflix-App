@@ -133,6 +133,7 @@ class APIManager {
           onTap: (ctx) {
               Navigator.pushNamed(ctx, "anime", arguments: show.url);
             },
+          horizontal: false,
         ));
       }
     }
@@ -154,6 +155,7 @@ class APIManager {
           onTap: (ctx) {
               Navigator.pushNamed(ctx, "anime", arguments: show.url);
             },
+          horizontal: false,
         ));
       }
     }

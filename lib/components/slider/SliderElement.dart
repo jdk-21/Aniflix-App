@@ -8,8 +8,9 @@ class SliderElement extends StatelessWidget {
   String image;
   Function close;
   Color desccolor;
+  bool horizontal;
 
-  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 15, 1)});
+  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 15, 1), this.horizontal = true});
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +36,24 @@ class SliderElement extends StatelessWidget {
                             child: Container(
                               width: 25,
                               height: 25,
-                                child: FittedBox(child: FloatingActionButton(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).backgroundColor,
+                                  shape: BoxShape.circle
+                                ),
+                                child: FittedBox(
+                                    child: FloatingActionButton(
                                   heroTag: null,
                                   backgroundColor: Theme.of(context).backgroundColor,
                                   child: Icon(Icons.close,
                                     color: Colors.white,
                                   ),
                                   onPressed: close,)),
-                              color: Theme.of(context).backgroundColor,
                             )),
-                    //IconButton(icon: Icon(Icons.close, color: Colors.white,), onPressed: close)),
                     (name != "" && name != null)
                         ? Align(
-                            alignment: AlignmentDirectional.bottomStart,
+                            alignment: (horizontal) ? AlignmentDirectional.bottomStart : AlignmentDirectional.bottomCenter,
                             child: HighlightedTextBox(name))
-                        : Align(alignment: AlignmentDirectional.bottomStart),
+                        : Align(alignment: (horizontal) ? AlignmentDirectional.bottomStart : AlignmentDirectional.bottomCenter),
                     (description != "" && description != null)
                         ? Align(
                             alignment: AlignmentDirectional.topEnd,
