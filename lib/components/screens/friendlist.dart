@@ -75,8 +75,8 @@ class FriendList extends StatelessWidget implements Screen {
     List<Widget> friendlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Freunde",
-              fontSize: 30, fontWeight: FontWeight.bold))
+          child:
+              ThemeText("Freunde", fontSize: 30, fontWeight: FontWeight.bold))
     ];
 
     for (var friend in friendList) {
@@ -98,7 +98,10 @@ class FriendList extends StatelessWidget implements Screen {
           ctx,
           button: (CacheManager.userData.id == userid) ? button : null,
           onTap: () {
-            Navigator.pushNamed(ctx, "profil", arguments: (friend.user.id == userid) ? friend.friend.id : friend.user.id);
+            Navigator.pushNamed(ctx, "profil",
+                arguments: (friend.user.id == userid)
+                    ? friend.friend.id
+                    : friend.user.id);
           },
         ));
       }
@@ -112,21 +115,38 @@ class FriendList extends StatelessWidget implements Screen {
       Container(
           padding: EdgeInsets.all(5),
           child: ThemeText("Freundschaftsanfragen",
-              fontSize: 30, fontWeight: FontWeight.bold))
+              fontSize: 30, fontWeight: FontWeight.bold)),
+    ];
+    ((data.friendlist.where((element) => (element.status == null && element.friend.id == userid))).length > 0) ?
+    friendlistWidget
+        .addAll(getIncomingFriendRequestsAsWidgets(ctx, friendList)) : Container();
+    ((data.friendlist.where((element) => (element.status == null && element.user.id == userid))).length > 0) ?
+    friendlistWidget
+        .addAll(getOutgoingFriendRequestsAsWidgets(ctx, friendList)) : Container();
+    return friendlistWidget;
+  }
+
+  List<Widget> getIncomingFriendRequestsAsWidgets(
+      BuildContext ctx, List<Friend> friendList) {
+    List<Widget> friendlistWidget = [
+      Container(
+          padding: EdgeInsets.all(5),
+          child: ThemeText("Eingehende",
+              fontSize: 25, fontWeight: FontWeight.normal))
     ];
 
     for (var friend in friendList) {
-      if (friend.status == null) {
+      if (friend.status == null && friend.friend.id == userid) {
         Widget button = Row(
           children: <Widget>[
-            (friend.friend.id == CacheManager.userData.id) ? IconButton(
+            IconButton(
               icon: Icon(Icons.check_circle_outline),
               onPressed: () async {
                 APIManager.confirmFriendRequest(friend.id);
                 refresh();
               },
               color: Theme.of(ctx).primaryIconTheme.color,
-            ) : Container(),
+            ),
             IconButton(
               icon: Icon(Icons.highlight_off),
               onPressed: () async {
@@ -135,25 +155,56 @@ class FriendList extends StatelessWidget implements Screen {
               },
               color: Theme.of(ctx).primaryIconTheme.color,
             ),
-            (friend.friend.id == CacheManager.userData.id) ? IconButton(
+            IconButton(
               icon: Icon(Icons.block),
               onPressed: () async {
                 APIManager.blockFriendRequest(friend.id);
                 refresh();
               },
               color: Theme.of(ctx).primaryIconTheme.color,
-            ) : Container()
+            )
           ],
         );
         friendlistWidget.add(IconListElement(
-          (friend.user.id == userid) ? friend.friend.name : friend.user.name,
-          (friend.user.id == userid)
-              ? friend.friend.avatar
-              : friend.user.avatar,
+          friend.user.name,
+          friend.user.avatar,
           ctx,
           button: (CacheManager.userData.id == userid) ? button : null,
           onTap: () {
-            Navigator.pushNamed(ctx, "profil", arguments: (friend.user.id == userid) ? friend.friend.id : friend.user.id);
+            Navigator.pushNamed(ctx, "profil", arguments: friend.user.id);
+          },
+        ));
+      }
+    }
+    return friendlistWidget;
+  }
+
+  List<Widget> getOutgoingFriendRequestsAsWidgets(
+      BuildContext ctx, List<Friend> friendList) {
+    List<Widget> friendlistWidget = [
+      Container(
+          padding: EdgeInsets.all(5),
+          child: ThemeText("Ausgehende",
+              fontSize: 25, fontWeight: FontWeight.normal))
+    ];
+
+    for (var friend in friendList) {
+      if (friend.status == null && friend.user.id == userid) {
+        Widget button = IconButton(
+          icon: Icon(Icons.highlight_off),
+          onPressed: () async {
+            APIManager.cancelFriendRequest(friend.id);
+            refresh();
+          },
+          color: Theme.of(ctx).primaryIconTheme.color,
+        );
+        friendlistWidget.add(IconListElement(
+          friend.friend.name,
+          friend.friend.avatar,
+          ctx,
+          button: (CacheManager.userData.id == userid) ? button : null,
+          onTap: () {
+            Navigator.pushNamed(ctx, "profil", arguments: friend.friend.id);
           },
         ));
       }
@@ -178,7 +229,10 @@ class FriendList extends StatelessWidget implements Screen {
               : friend.user.avatar,
           ctx,
           onTap: () {
-            Navigator.pushNamed(ctx, "profil", arguments: (friend.user.id == userid) ? friend.friend.id : friend.user.id);
+            Navigator.pushNamed(ctx, "profil",
+                arguments: (friend.user.id == userid)
+                    ? friend.friend.id
+                    : friend.user.id);
           },
         ));
       }
