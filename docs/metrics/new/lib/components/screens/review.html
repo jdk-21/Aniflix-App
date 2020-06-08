@@ -1,0 +1,217 @@
+<html lang="en"><head><title>Metrics report for lib\components\screens\review.dart</title><meta charset="utf-8"><link rel="stylesheet" href="..\..\..\base.css"></head><body><h1 class="metric-header"><a href="..\..\..\index.html">All files</a><span> : </span><a href="index.html">lib\components\screens</a><span>/review.dart</span></h1><div class="metrics-total"><span class="metrics-total__label">Cyclomatic complexity : </span><span class="metrics-total__count">16</span></div><div class="metrics-total metrics-total--violations"><span class="metrics-total__label">Lines of code / violations : </span><span class="metrics-total__count">124 / 1</span></div><div class="metrics-total"><span class="metrics-total__label">Maintainability index : </span><span class="metrics-total__count">74</span></div><div class="metrics-total"><span class="metrics-total__label">Number of Arguments : </span><span class="metrics-total__count">1</span></div><pre><table class="metrics-source-code"><thead class="metrics-source-code__header"><tr><td class="metrics-source-code__number-lines"></td><td class="metrics-source-code__complexity">Complexity</td><td class="metrics-source-code__code">Source code</td></tr></thead><tbody class="metrics-source-code__body"><tr><td class="metrics-source-code__number-lines"><a name="L1"></a><a href="#L1">1</a><br><a name="L2"></a><a href="#L2">2</a><br><a name="L3"></a><a href="#L3">3</a><br><a name="L4"></a><a href="#L4">4</a><br><a name="L5"></a><a href="#L5">5</a><br><a name="L6"></a><a href="#L6">6</a><br><a name="L7"></a><a href="#L7">7</a><br><a name="L8"></a><a href="#L8">8</a><br><a name="L9"></a><a href="#L9">9</a><br><a name="L10"></a><a href="#L10">10</a><br><a name="L11"></a><a href="#L11">11</a><br><a name="L12"></a><a href="#L12">12</a><br><a name="L13"></a><a href="#L13">13</a><br><a name="L14"></a><a href="#L14">14</a><br><a name="L15"></a><a href="#L15">15</a><br><a name="L16"></a><a href="#L16">16</a><br><a name="L17"></a><a href="#L17">17</a><br><a name="L18"></a><a href="#L18">18</a><br><a name="L19"></a><a href="#L19">19</a><br><a name="L20"></a><a href="#L20">20</a><br><a name="L21"></a><a href="#L21">21</a><br><a name="L22"></a><a href="#L22">22</a><br><a name="L23"></a><a href="#L23">23</a><br><a name="L24"></a><a href="#L24">24</a><br><a name="L25"></a><a href="#L25">25</a><br><a name="L26"></a><a href="#L26">26</a><br><a name="L27"></a><a href="#L27">27</a><br><a name="L28"></a><a href="#L28">28</a><br><a name="L29"></a><a href="#L29">29</a><br><a name="L30"></a><a href="#L30">30</a><br><a name="L31"></a><a href="#L31">31</a><br><a name="L32"></a><a href="#L32">32</a><br><a name="L33"></a><a href="#L33">33</a><br><a name="L34"></a><a href="#L34">34</a><br><a name="L35"></a><a href="#L35">35</a><br><a name="L36"></a><a href="#L36">36</a><br><a name="L37"></a><a href="#L37">37</a><br><a name="L38"></a><a href="#L38">38</a><br><a name="L39"></a><a href="#L39">39</a><br><a name="L40"></a><a href="#L40">40</a><br><a name="L41"></a><a href="#L41">41</a><br><a name="L42"></a><a href="#L42">42</a><br><a name="L43"></a><a href="#L43">43</a><br><a name="L44"></a><a href="#L44">44</a><br><a name="L45"></a><a href="#L45">45</a><br><a name="L46"></a><a href="#L46">46</a><br><a name="L47"></a><a href="#L47">47</a><br><a name="L48"></a><a href="#L48">48</a><br><a name="L49"></a><a href="#L49">49</a><br><a name="L50"></a><a href="#L50">50</a><br><a name="L51"></a><a href="#L51">51</a><br><a name="L52"></a><a href="#L52">52</a><br><a name="L53"></a><a href="#L53">53</a><br><a name="L54"></a><a href="#L54">54</a><br><a name="L55"></a><a href="#L55">55</a><br><a name="L56"></a><a href="#L56">56</a><br><a name="L57"></a><a href="#L57">57</a><br><a name="L58"></a><a href="#L58">58</a><br><a name="L59"></a><a href="#L59">59</a><br><a name="L60"></a><a href="#L60">60</a><br><a name="L61"></a><a href="#L61">61</a><br><a name="L62"></a><a href="#L62">62</a><br><a name="L63"></a><a href="#L63">63</a><br><a name="L64"></a><a href="#L64">64</a><br><a name="L65"></a><a href="#L65">65</a><br><a name="L66"></a><a href="#L66">66</a><br><a name="L67"></a><a href="#L67">67</a><br><a name="L68"></a><a href="#L68">68</a><br><a name="L69"></a><a href="#L69">69</a><br><a name="L70"></a><a href="#L70">70</a><br><a name="L71"></a><a href="#L71">71</a><br><a name="L72"></a><a href="#L72">72</a><br><a name="L73"></a><a href="#L73">73</a><br><a name="L74"></a><a href="#L74">74</a><br><a name="L75"></a><a href="#L75">75</a><br><a name="L76"></a><a href="#L76">76</a><br><a name="L77"></a><a href="#L77">77</a><br><a name="L78"></a><a href="#L78">78</a><br><a name="L79"></a><a href="#L79">79</a><br><a name="L80"></a><a href="#L80">80</a><br><a name="L81"></a><a href="#L81">81</a><br><a name="L82"></a><a href="#L82">82</a><br><a name="L83"></a><a href="#L83">83</a><br><a name="L84"></a><a href="#L84">84</a><br><a name="L85"></a><a href="#L85">85</a><br><a name="L86"></a><a href="#L86">86</a><br><a name="L87"></a><a href="#L87">87</a><br><a name="L88"></a><a href="#L88">88</a><br><a name="L89"></a><a href="#L89">89</a><br><a name="L90"></a><a href="#L90">90</a><br><a name="L91"></a><a href="#L91">91</a><br><a name="L92"></a><a href="#L92">92</a><br><a name="L93"></a><a href="#L93">93</a><br><a name="L94"></a><a href="#L94">94</a><br><a name="L95"></a><a href="#L95">95</a><br><a name="L96"></a><a href="#L96">96</a><br><a name="L97"></a><a href="#L97">97</a><br><a name="L98"></a><a href="#L98">98</a><br><a name="L99"></a><a href="#L99">99</a><br><a name="L100"></a><a href="#L100">100</a><br><a name="L101"></a><a href="#L101">101</a><br><a name="L102"></a><a href="#L102">102</a><br><a name="L103"></a><a href="#L103">103</a><br><a name="L104"></a><a href="#L104">104</a><br><a name="L105"></a><a href="#L105">105</a><br><a name="L106"></a><a href="#L106">106</a><br><a name="L107"></a><a href="#L107">107</a><br><a name="L108"></a><a href="#L108">108</a><br><a name="L109"></a><a href="#L109">109</a><br><a name="L110"></a><a href="#L110">110</a><br><a name="L111"></a><a href="#L111">111</a><br><a name="L112"></a><a href="#L112">112</a><br><a name="L113"></a><a href="#L113">113</a><br><a name="L114"></a><a href="#L114">114</a><br><a name="L115"></a><a href="#L115">115</a><br><a name="L116"></a><a href="#L116">116</a><br><a name="L117"></a><a href="#L117">117</a><br><a name="L118"></a><a href="#L118">118</a><br><a name="L119"></a><a href="#L119">119</a><br><a name="L120"></a><a href="#L120">120</a><br><a name="L121"></a><a href="#L121">121</a><br><a name="L122"></a><a href="#L122">122</a><br><a name="L123"></a><a href="#L123">123</a><br><a name="L124"></a><a href="#L124">124</a><br><a name="L125"></a><a href="#L125">125</a><br><a name="L126"></a><a href="#L126">126</a><br><a name="L127"></a><a href="#L127">127</a><br><a name="L128"></a><a href="#L128">128</a><br><a name="L129"></a><a href="#L129">129</a><br><a name="L130"></a><a href="#L130">130</a><br><a name="L131"></a><a href="#L131">131</a><br><a name="L132"></a><a href="#L132">132</a><br><a name="L133"></a><a href="#L133">133</a><br><a name="L134"></a><a href="#L134">134</a><br><a name="L135"></a><a href="#L135">135</a><br><a name="L136"></a><a href="#L136">136</a><br><a name="L137"></a><a href="#L137">137</a><br><a name="L138"></a><a href="#L138">138</a><br><a name="L139"></a><a href="#L139">139</a><br><a name="L140"></a><a href="#L140">140</a><br><a name="L141"></a><a href="#L141">141</a><br><a name="L142"></a><a href="#L142">142</a><br><a name="L143"></a><a href="#L143">143</a><br><a name="L144"></a><a href="#L144">144</a><br><a name="L145"></a><a href="#L145">145</a><br><a name="L146"></a><a href="#L146">146</a><br><a name="L147"></a><a href="#L147">147</a><br><a name="L148"></a><a href="#L148">148</a><br><a name="L149"></a><a href="#L149">149</a><br><a name="L150"></a><a href="#L150">150</a><br><a name="L151"></a><a href="#L151">151</a><br><a name="L152"></a><a href="#L152">152</a><br><a name="L153"></a><a href="#L153">153</a><br><a name="L154"></a><a href="#L154">154</a><br><a name="L155"></a><a href="#L155">155</a><br><a name="L156"></a><a href="#L156">156</a><br><a name="L157"></a><a href="#L157">157</a><br><a name="L158"></a><a href="#L158">158</a><br><a name="L159"></a><a href="#L159">159</a><br><a name="L160"></a><a href="#L160">160</a><br><a name="L161"></a><a href="#L161">161</a><br><a name="L162"></a><a href="#L162">162</a><br><a name="L163"></a><a href="#L163">163</a><br><a name="L164"></a><a href="#L164">164</a><br><a name="L165"></a><a href="#L165">165</a><br><a name="L166"></a><a href="#L166">166</a><br><a name="L167"></a><a href="#L167">167</a><br><a name="L168"></a><a href="#L168">168</a><br><a name="L169"></a><a href="#L169">169</a><br><a name="L170"></a><a href="#L170">170</a><br><a name="L171"></a><a href="#L171">171</a><br><a name="L172"></a><a href="#L172">172</a><br><a name="L173"></a><a href="#L173">173</a><br><a name="L174"></a><a href="#L174">174</a><br><a name="L175"></a><a href="#L175">175</a><br><a name="L176"></a><a href="#L176">176</a><br></td><td class="metrics-source-code__complexity"><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 1
+cyclomatic complexity violation level: none
+lines of code: 1
+lines of code violation level: none
+maintainability index: 99.86549707602339
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 1
+cyclomatic complexity violation level: none
+lines of code: 1
+lines of code violation level: none
+maintainability index: 97.75768108835572
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--noted-complexity" title="Function stats:
+cyclomatic complexity: 3
+cyclomatic complexity violation level: none
+lines of code: 19
+lines of code violation level: none
+maintainability index: 53.244140698795505
+maintainability index violation level: none
+number of arguments: 4
+number of arguments violation level: noted">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--noted-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__line--noted-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--noted-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 1
+cyclomatic complexity violation level: none
+lines of code: 1
+lines of code violation level: none
+maintainability index: 92.40962204246611
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--attention-complexity" title="Function stats:
+cyclomatic complexity: 10
+cyclomatic complexity violation level: none
+lines of code: 102
+lines of code violation level: alarm
+maintainability index: 30.674927094500536
+maintainability index violation level: noted
+number of arguments: 1
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--attention-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--attention-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div></td><td class="metrics-source-code__code"><pre class="prettyprint lang-dart">import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
+import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
+import 'package:aniflix_app/components/custom/dialogs/writeReviewDialog.dart';
+import 'package:aniflix_app/components/custom/review/reviewElement.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../main.dart';
+
+class ReviewScreen extends StatefulWidget implements Screen {
+  String url;
+
+  ReviewScreen(this.url);
+
+  @override
+  getScreenName() {
+    return "review_screen";
+  }
+
+  @override
+  ReviewScreenState createState() =&gt; ReviewScreenState(url);
+}
+
+class ReviewScreenState extends State&lt;ReviewScreen&gt; {
+  Future&lt;ReviewInfo&gt; reviewData;
+  String url;
+  List&lt;ReviewElement&gt; _actualReviews = [];
+  bool _showButton = true;
+
+  addNewReview(
+      Review review, User user, BuildContext ctx, ReviewShow reviewInfo) async {
+    var responsereview =
+        await APIManager.createReview(reviewInfo.id, review.text);
+    responsereview.user = user;
+    setState(() {
+      _actualReviews.insert(
+          0,
+          ReviewElement(responsereview, user, (id) {
+            for (var i = 0; i &lt; _actualReviews.length; i++) {
+              if (_actualReviews[i].review.id == id) {
+                setState(() {
+                  _actualReviews.removeAt(i);
+                  _showButton = true;
+                });
+                break;
+              }
+            }
+          }, ctx));
+      _showButton = false;
+    });
+  }
+
+  ReviewScreenState(this.url) {
+    reviewData = APIManager.getReviewInfo(url);
+  }
+
+  @override
+  Widget build(BuildContext ctx) {
+    return Container(
+      key: Key("review_screen"),
+      color: Theme.of(ctx).backgroundColor,
+      child: FutureBuilder&lt;ReviewInfo&gt;(
+        future: reviewData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var reviewedAnime = snapshot.data.reviewShow;
+            if (_actualReviews.length &lt; 1) {
+              for (var review in reviewedAnime.reviews) {
+                _actualReviews
+                    .add(ReviewElement(review, snapshot.data.user, (id) {
+                  for (var i = 0; i &lt; _actualReviews.length; i++) {
+                    if (_actualReviews[i].review.id == id) {
+                      setState(() {
+                        _actualReviews.removeAt(i);
+                        _showButton = true;
+                      });
+                      break;
+                    }
+                  }
+                }, ctx));
+                if (review.user_id == snapshot.data.user.id) {
+                  _showButton = false;
+                }
+              }
+            }
+            return Column(
+              children: &lt;Widget&gt;[
+          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+                Expanded(
+                    child: Container(
+                  color: Theme.of(ctx).backgroundColor,
+                  child: ListView(
+                    children: &lt;Widget&gt;[
+                      Column(
+                        children: &lt;Widget&gt;[
+                          Align(
+                              alignment: Alignment.center,
+                              child: ThemeText(
+                                "Reviews zu",
+                                fontWeight: FontWeight.bold,
+                                softWrap: true,
+                              )),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ThemeText(
+                              reviewedAnime.name,
+                              fontWeight: FontWeight.bold,
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(children: _actualReviews),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(
+                                    width: 1,
+                                    color: Theme.of(ctx).hintColor,
+                                    style: BorderStyle.solid))),
+                        height: 10,
+                      ),
+                      _showButton
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: OutlineButton(
+                                textColor: Theme.of(ctx).textTheme.caption.color,
+                                borderSide: BorderSide(
+                                    color: Theme.of(ctx).textTheme.caption.color),
+                                child: ThemeText("Review schreiben"),
+                                onPressed: () {
+                                  showDialog(
+                                      context: ctx,
+                                      builder: (BuildContext context) {
+                                        return WriteReviewDialog((review) {
+                                          addNewReview(
+                                              review,
+                                              snapshot.data.user,
+                                              ctx,
+                                              reviewedAnime);
+                                        }, reviewedAnime, snapshot.data.user);
+                                      });
+                                },
+                              ))
+                          : SizedBox()
+                    ],
+                  ),
+                ))
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          // By default, show a loading spinner.
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
+class ReviewInfo {
+  User user;
+  ReviewShow reviewShow;
+
+  ReviewInfo(this.reviewShow, this.user);
+}
+</pre></td></tr></tbody></table></pre><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.min.js"></script><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/lang-dart.min.js"></script></body></html>

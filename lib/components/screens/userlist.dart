@@ -108,61 +108,33 @@ class UserlistState extends State<Userlist> {
   List<Widget> getUserAsWidgets(BuildContext ctx, List<User> userlist) {
     var controller = TextEditingController();
     var entriesPerPage = 50;
-    if(actualPage == null){
-      actualPage = 1;
-    }
-    List<Widget> userWidget = [
+    initActualPage();
+    List<Widget> userWidget =
+        initUserWidget(entriesPerPage, userlist, controller, ctx);
+
+    buildPage(userWidget, entriesPerPage, userlist, ctx);
+    return userWidget;
+  }
+
+  initUserWidget(int entriesPerPage, List<User> userlist,
+      TextEditingController controller, BuildContext ctx) {
+    return [
       Container(
         padding: EdgeInsets.all(5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             ThemeText("Userlist", fontSize: 30, fontWeight: FontWeight.bold),
-            Row(children: <Widget>[
-              (actualPage > 1)
-                  ? IconButton(
-                icon: Icon(
-                  Icons.navigate_before,
-                  color: Theme.of(ctx).textTheme.caption.color,
-                ),
-                color: Theme.of(ctx).textTheme.caption.color,
-                onPressed: (){
-                  setState(() {
-                    actualPage = actualPage - 1;
-                  });
-                },
-              )
-                  : IconButton(
-                icon: Icon(
-                  Icons.navigate_before,
-                  color: Theme.of(ctx).backgroundColor,
-                ),
-                color: Theme.of(ctx).backgroundColor,
-                onPressed: () {},
-              ),
-              Text("${actualPage} of ${((filterText == null || filterText == "") ? (userlist.length/entriesPerPage).ceil() : (filteredUserList.length < entriesPerPage ? "1" : (filteredUserList.length/entriesPerPage).ceil()))}", style: TextStyle(color: Theme.of(ctx).textTheme.caption.color)),
-              (actualPage < ((filterText == null || filterText == "") ? (userlist.length/entriesPerPage).ceil() : (filteredUserList.length < entriesPerPage ? 1 : (filteredUserList.length/entriesPerPage).ceil())))
-                  ? IconButton(
-                icon: Icon(
-                  Icons.navigate_next,
-                  color: Theme.of(ctx).textTheme.caption.color,
-                ),
-                color: Theme.of(ctx).textTheme.caption.color,
-                onPressed: (){
-                  setState(() {
-                    actualPage = actualPage + 1;
-                  });
-                },
-              )
-                  : IconButton(
-                icon: Icon(
-                  Icons.navigate_next,
-                  color: Theme.of(ctx).backgroundColor,
-                ),
-                color: Theme.of(ctx).backgroundColor,
-                onPressed: () {},
-              )
-            ],)
+            Row(
+              children: <Widget>[
+                getPreviousPageButton(ctx),
+                Text(
+                    "${actualPage} of ${getMaxPages(userlist.length, entriesPerPage)}",
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.caption.color)),
+                getNextPageButton(entriesPerPage, userlist, ctx)
+              ],
+            )
           ],
         ),
         decoration: BoxDecoration(
@@ -182,13 +154,8 @@ class UserlistState extends State<Userlist> {
                 setState(() {
                   filterText = text;
                   actualPage = 1;
-                  if(filterText != null && filterText != ""){
-                    filteredUserList = [];
-                    for(var user in userlist){
-                      if (user.name.toLowerCase().contains(filterText.toLowerCase())){
-                        filteredUserList.add(user);
-                      }
-                    }
+                  if (usesFilter()) {
+                    applyFilter(filteredUserList, userlist);
                   }
                 });
               },
@@ -210,13 +177,8 @@ class UserlistState extends State<Userlist> {
               setState(() {
                 filterText = controller.text;
                 actualPage = 1;
-                if(filterText != null && filterText != ""){
-                  filteredUserList = [];
-                  for(var user in userlist){
-                    if (user.name.toLowerCase().contains(filterText.toLowerCase())){
-                      filteredUserList.add(user);
-                    }
-                  }
+                if (usesFilter()) {
+                  applyFilter(filteredUserList, userlist);
                 }
               });
             },
@@ -224,37 +186,145 @@ class UserlistState extends State<Userlist> {
         ],
       ),
     ];
+  }
 
-    if (filterText == null || filterText == ""){
-      for (var user in userlist.getRange(((actualPage - 1) * entriesPerPage), ((actualPage * entriesPerPage) > userlist.length ? userlist.length : (actualPage * entriesPerPage)))) {
-          userWidget.add(IconListElement(
-            user.name,
-            user.avatar,
-            ctx,
-            onTap: () {
-              Navigator.pushNamed(ctx, "profil",arguments: user.id);
-            },
-          ));
-      }
-    }else{
-      if(filteredUserList == null){
-        for(var user in userlist){
-          if (user.name.toLowerCase().contains(filterText.toLowerCase())){
-            filteredUserList.add(user);
-          }
-        }
-      }
-      for (var user in filteredUserList.getRange(((actualPage - 1) * entriesPerPage), ((actualPage * entriesPerPage) > filteredUserList.length ? filteredUserList.length : (actualPage * entriesPerPage)))){
-        userWidget.add(IconListElement(
-          user.name,
-          user.avatar,
-          ctx,
-          onTap: () {
-            Navigator.pushNamed(ctx, "profil",arguments: user.id);
-          },
-        ));
+  initActualPage() {
+    if (actualPage == null) {
+      actualPage = 1;
+    }
+  }
+
+  getNextPageButton(int entriesPerPage, List<User> userlist, BuildContext ctx) {
+    return (canOpenNextPage(userlist.length, entriesPerPage))
+        ? IconButton(
+      icon: Icon(
+        Icons.navigate_next,
+        color: Theme.of(ctx).textTheme.caption.color,
+      ),
+      color: Theme.of(ctx).textTheme.caption.color,
+      onPressed: () {
+        setState(() {
+          actualPage = actualPage + 1;
+        });
+      },
+    )
+        : IconButton(
+      icon: Icon(
+        Icons.navigate_next,
+        color: Theme.of(ctx).backgroundColor,
+      ),
+      color: Theme.of(ctx).backgroundColor,
+      onPressed: () {},
+    );
+  }
+
+  getPreviousPageButton(BuildContext ctx) {
+    return (actualPage > 1)
+        ? IconButton(
+      icon: Icon(
+        Icons.navigate_before,
+        color: Theme.of(ctx).textTheme.caption.color,
+      ),
+      color: Theme.of(ctx).textTheme.caption.color,
+      onPressed: () {
+        setState(() {
+          actualPage = actualPage - 1;
+        });
+      },
+    )
+        : IconButton(
+      icon: Icon(
+        Icons.navigate_before,
+        color: Theme.of(ctx).backgroundColor,
+      ),
+      color: Theme.of(ctx).backgroundColor,
+      onPressed: () {},
+    );
+  }
+
+  getMaxPages(int length, int entriesPerPage) {
+    return ((filterText == null || filterText == "")
+        ? (length / entriesPerPage).ceil()
+        : (filteredUserList.length < entriesPerPage
+            ? "1"
+            : (filteredUserList.length / entriesPerPage).ceil()));
+  }
+
+  canOpenNextPage(int length, int entriesPerPage) {
+    return actualPage <
+        ((filterText == null || filterText == "")
+            ? (length / entriesPerPage).ceil()
+            : (filteredUserList.length < entriesPerPage
+                ? 1
+                : (filteredUserList.length / entriesPerPage).ceil()));
+  }
+
+  applyFilter(List<User> filteredUserList, List<User> userlist) {
+    filteredUserList = [];
+    for (var user in userlist) {
+      if (user.name.toLowerCase().contains(filterText.toLowerCase())) {
+        filteredUserList.add(user);
       }
     }
-    return userWidget;
+  }
+
+  usesFilter() {
+    return filterText != null && filterText != "";
+  }
+
+  addFilteredUsers(List<Widget> userWidget, int entriesPerPage,
+      List<User> userlist, BuildContext ctx) {
+    for (var user in userlist.getRange(
+        ((actualPage - 1) * entriesPerPage),
+        ((actualPage * entriesPerPage) > userlist.length
+            ? userlist.length
+            : (actualPage * entriesPerPage)))) {
+      userWidget.add(IconListElement(
+        user.name,
+        user.avatar,
+        ctx,
+        onTap: () {
+          Navigator.pushNamed(ctx, "profil", arguments: user.id);
+        },
+      ));
+    }
+  }
+
+  addUnfilteredUsers(List<User> userlist) {
+    for (var user in userlist) {
+      if (user.name.toLowerCase().contains(filterText.toLowerCase())) {
+        filteredUserList.add(user);
+      }
+    }
+  }
+
+  addWidgetsforPage(
+      List<Widget> userWidget, int entriesPerPage, BuildContext ctx) {
+    for (var user in filteredUserList.getRange(
+        ((actualPage - 1) * entriesPerPage),
+        ((actualPage * entriesPerPage) > filteredUserList.length
+            ? filteredUserList.length
+            : (actualPage * entriesPerPage)))) {
+      userWidget.add(IconListElement(
+        user.name,
+        user.avatar,
+        ctx,
+        onTap: () {
+          Navigator.pushNamed(ctx, "profil", arguments: user.id);
+        },
+      ));
+    }
+  }
+
+  buildPage(List<Widget> userWidget, int entriesPerPage, List<User> userlist,
+      BuildContext ctx) {
+    if (usesFilter()) {
+      addFilteredUsers(userWidget, entriesPerPage, userlist, ctx);
+    } else {
+      if (filteredUserList == null) {
+        addUnfilteredUsers(userlist);
+      }
+      addWidgetsforPage(userWidget, entriesPerPage, ctx);
+    }
   }
 }

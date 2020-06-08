@@ -1,0 +1,130 @@
+<html lang="en"><head><title>Metrics report for lib\components\custom\dialogs\ratingDialog.dart</title><meta charset="utf-8"><link rel="stylesheet" href="..\..\..\..\base.css"></head><body><h1 class="metric-header"><a href="..\..\..\..\index.html">All files</a><span> : </span><a href="index.html">lib\components\custom\dialogs</a><span>/ratingDialog.dart</span></h1><div class="metrics-total"><span class="metrics-total__label">Cyclomatic complexity : </span><span class="metrics-total__count">7</span></div><div class="metrics-total metrics-total--violations"><span class="metrics-total__label">Lines of code / violations : </span><span class="metrics-total__count">64 / 1</span></div><div class="metrics-total"><span class="metrics-total__label">Maintainability index : </span><span class="metrics-total__count">71</span></div><div class="metrics-total"><span class="metrics-total__label">Number of Arguments : </span><span class="metrics-total__count">0</span></div><pre><table class="metrics-source-code"><thead class="metrics-source-code__header"><tr><td class="metrics-source-code__number-lines"></td><td class="metrics-source-code__complexity">Complexity</td><td class="metrics-source-code__code">Source code</td></tr></thead><tbody class="metrics-source-code__body"><tr><td class="metrics-source-code__number-lines"><a name="L1"></a><a href="#L1">1</a><br><a name="L2"></a><a href="#L2">2</a><br><a name="L3"></a><a href="#L3">3</a><br><a name="L4"></a><a href="#L4">4</a><br><a name="L5"></a><a href="#L5">5</a><br><a name="L6"></a><a href="#L6">6</a><br><a name="L7"></a><a href="#L7">7</a><br><a name="L8"></a><a href="#L8">8</a><br><a name="L9"></a><a href="#L9">9</a><br><a name="L10"></a><a href="#L10">10</a><br><a name="L11"></a><a href="#L11">11</a><br><a name="L12"></a><a href="#L12">12</a><br><a name="L13"></a><a href="#L13">13</a><br><a name="L14"></a><a href="#L14">14</a><br><a name="L15"></a><a href="#L15">15</a><br><a name="L16"></a><a href="#L16">16</a><br><a name="L17"></a><a href="#L17">17</a><br><a name="L18"></a><a href="#L18">18</a><br><a name="L19"></a><a href="#L19">19</a><br><a name="L20"></a><a href="#L20">20</a><br><a name="L21"></a><a href="#L21">21</a><br><a name="L22"></a><a href="#L22">22</a><br><a name="L23"></a><a href="#L23">23</a><br><a name="L24"></a><a href="#L24">24</a><br><a name="L25"></a><a href="#L25">25</a><br><a name="L26"></a><a href="#L26">26</a><br><a name="L27"></a><a href="#L27">27</a><br><a name="L28"></a><a href="#L28">28</a><br><a name="L29"></a><a href="#L29">29</a><br><a name="L30"></a><a href="#L30">30</a><br><a name="L31"></a><a href="#L31">31</a><br><a name="L32"></a><a href="#L32">32</a><br><a name="L33"></a><a href="#L33">33</a><br><a name="L34"></a><a href="#L34">34</a><br><a name="L35"></a><a href="#L35">35</a><br><a name="L36"></a><a href="#L36">36</a><br><a name="L37"></a><a href="#L37">37</a><br><a name="L38"></a><a href="#L38">38</a><br><a name="L39"></a><a href="#L39">39</a><br><a name="L40"></a><a href="#L40">40</a><br><a name="L41"></a><a href="#L41">41</a><br><a name="L42"></a><a href="#L42">42</a><br><a name="L43"></a><a href="#L43">43</a><br><a name="L44"></a><a href="#L44">44</a><br><a name="L45"></a><a href="#L45">45</a><br><a name="L46"></a><a href="#L46">46</a><br><a name="L47"></a><a href="#L47">47</a><br><a name="L48"></a><a href="#L48">48</a><br><a name="L49"></a><a href="#L49">49</a><br><a name="L50"></a><a href="#L50">50</a><br><a name="L51"></a><a href="#L51">51</a><br><a name="L52"></a><a href="#L52">52</a><br><a name="L53"></a><a href="#L53">53</a><br><a name="L54"></a><a href="#L54">54</a><br><a name="L55"></a><a href="#L55">55</a><br><a name="L56"></a><a href="#L56">56</a><br><a name="L57"></a><a href="#L57">57</a><br><a name="L58"></a><a href="#L58">58</a><br><a name="L59"></a><a href="#L59">59</a><br><a name="L60"></a><a href="#L60">60</a><br><a name="L61"></a><a href="#L61">61</a><br><a name="L62"></a><a href="#L62">62</a><br><a name="L63"></a><a href="#L63">63</a><br><a name="L64"></a><a href="#L64">64</a><br><a name="L65"></a><a href="#L65">65</a><br><a name="L66"></a><a href="#L66">66</a><br><a name="L67"></a><a href="#L67">67</a><br><a name="L68"></a><a href="#L68">68</a><br><a name="L69"></a><a href="#L69">69</a><br><a name="L70"></a><a href="#L70">70</a><br><a name="L71"></a><a href="#L71">71</a><br><a name="L72"></a><a href="#L72">72</a><br><a name="L73"></a><a href="#L73">73</a><br><a name="L74"></a><a href="#L74">74</a><br><a name="L75"></a><a href="#L75">75</a><br><a name="L76"></a><a href="#L76">76</a><br><a name="L77"></a><a href="#L77">77</a><br><a name="L78"></a><a href="#L78">78</a><br><a name="L79"></a><a href="#L79">79</a><br><a name="L80"></a><a href="#L80">80</a><br><a name="L81"></a><a href="#L81">81</a><br><a name="L82"></a><a href="#L82">82</a><br><a name="L83"></a><a href="#L83">83</a><br><a name="L84"></a><a href="#L84">84</a><br><a name="L85"></a><a href="#L85">85</a><br><a name="L86"></a><a href="#L86">86</a><br><a name="L87"></a><a href="#L87">87</a><br><a name="L88"></a><a href="#L88">88</a><br><a name="L89"></a><a href="#L89">89</a><br><a name="L90"></a><a href="#L90">90</a><br><a name="L91"></a><a href="#L91">91</a><br><a name="L92"></a><a href="#L92">92</a><br><a name="L93"></a><a href="#L93">93</a><br><a name="L94"></a><a href="#L94">94</a><br><a name="L95"></a><a href="#L95">95</a><br><a name="L96"></a><a href="#L96">96</a><br><a name="L97"></a><a href="#L97">97</a><br><a name="L98"></a><a href="#L98">98</a><br></td><td class="metrics-source-code__complexity"><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 1
+cyclomatic complexity violation level: none
+lines of code: 1
+lines of code violation level: none
+maintainability index: 93.54204911302038
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 3
+cyclomatic complexity violation level: none
+lines of code: 7
+lines of code violation level: none
+maintainability index: 69.27576528494643
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__line--normal-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--normal-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--warning-complexity" title="Function stats:
+cyclomatic complexity: 2
+cyclomatic complexity violation level: none
+lines of code: 54
+lines of code violation level: warning
+maintainability index: 42.27175791547519
+maintainability index violation level: none
+number of arguments: 1
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__line--warning-complexity">+1</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--warning-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--with-icon metrics-source-code__text--normal-complexity" title="Function stats:
+cyclomatic complexity: 1
+cyclomatic complexity violation level: none
+lines of code: 2
+lines of code violation level: none
+maintainability index: 80.888658310858
+maintainability index violation level: none
+number of arguments: 0
+number of arguments violation level: none">ⓘ</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text metrics-source-code__text--normal-complexity">&nbsp;</div><div class="metrics-source-code__text">&nbsp;</div></td><td class="metrics-source-code__code"><pre class="prettyprint lang-dart">import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/objects/anime/Anime.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+class RatingDialog extends StatefulWidget{
+
+  Anime anime;
+  Function(double) onSend;
+  double newRating;
+
+  RatingDialog(this.anime, this.onSend, this.newRating);
+
+  @override
+  RatingDialogState createState() =&gt; RatingDialogState(anime, onSend, newRating);
+}
+
+class RatingDialogState extends State&lt;RatingDialog&gt;{
+
+  double _rating;
+  Anime anime;
+  Function(double) onSend;
+  double newRating;
+
+  RatingDialogState(this.anime, this.onSend, this.newRating){
+    if(newRating != null){
+      _rating = newRating;
+    }else{
+      _rating = anime.ownVote == null
+          ? 0
+          : anime.ownVote.value.floorToDouble();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+          return AlertDialog(
+            backgroundColor:
+            Theme.of(context).backgroundColor,
+            contentTextStyle: TextStyle(
+                color: Theme.of(context)
+                    .textTheme
+                    .title
+                    .color),
+            content: SmoothStarRating(
+              color: Theme.of(context)
+                  .textTheme
+                  .title
+                  .color,
+              allowHalfRating: false,
+              borderColor: Theme.of(context)
+                  .textTheme
+                  .title
+                  .color,
+              starCount: 5,
+              rating: _rating,
+              onRatingChanged: (v){
+                setState(() {
+                  _rating = v;
+                });
+              },
+            ),
+            actions: &lt;Widget&gt;[
+              FlatButton(
+                color: Colors.red,
+                child: Text(
+                  "Abbrechen",
+                  style: TextStyle(
+                      color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _rating = anime.ownVote == null ? 0 : anime.ownVote.value.floorToDouble();
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                child: Text(
+                  "Bewerten",
+                  style: TextStyle(
+                      color: Colors.white),
+                ),
+                onPressed: ()  {
+                  onSend(_rating);
+                  sendData();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+  }
+
+  sendData() async {
+    var newAnimeData = await APIManager.getAnime(anime.url);
+    APIManager.setShowVote(newAnimeData.id, newAnimeData.ownVote.value, _rating.round());
+  }
+}</pre></td></tr></tbody></table></pre><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.min.js"></script><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/lang-dart.min.js"></script></body></html>
