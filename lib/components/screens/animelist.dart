@@ -195,21 +195,21 @@ class AnimeListState extends State<AnimeList> {
         sortedBewertungAiring.length < 1 &&
         sortedAbosAiring.length < 1) {
       sortedGenre = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 0, false);
+          ctx, data, 0, false);
       sortedAZ = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 1, false);
+          ctx, data, 1, false);
       sortedBewertung = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 2, false);
+          ctx, data, 2, false);
       sortedAbos = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 3, false);
+          ctx, data, 3, false);
       sortedGenreAiring = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 0, true);
+          ctx, data, 0, true);
       sortedAZAiring = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 1, true);
+          ctx, data, 1, true);
       sortedBewertungAiring = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 2, true);
+          ctx, data, 2, true);
       sortedAbosAiring = getAllAnimeAsSortedList(
-          ctx, data.allShows, data.allShowsWithGenres, 3, true);
+          ctx, data, 3, true);
     }
     return Column(
       children: <Widget>[
@@ -295,15 +295,14 @@ class AnimeListState extends State<AnimeList> {
 
   List<Widget> getAllAnimeAsSortedList(
       BuildContext ctx,
-      List<Show> allShows,
-      List<GenreWithShows> allShowsWithGenres,
+      AnimeListData data,
       int filterCriteria,
       bool airing) {
     List<Widget> sortedList = [SizedBox(height: 10)];
     switch (filterCriteria) {
       case 0:
         {
-          for (var genre in allShowsWithGenres) {
+          for (var genre in data.allShowsWithGenres) {
             List<SliderElement> showsAsSlider = [];
             if (airing) {
               for (var show in genre.shows) {
@@ -338,7 +337,7 @@ class AnimeListState extends State<AnimeList> {
       case 1:
         {
           List<String> nameList = [];
-          for (var show in allShows) {
+          for (var show in data.allShows) {
             if (airing) {
               if (show.airing == 1) {
                 nameList.add(show.name);
@@ -349,7 +348,7 @@ class AnimeListState extends State<AnimeList> {
           }
           nameList.sort();
           for (var name in nameList) {
-            for (var show in allShows) {
+            for (var show in data.allShows) {
               if (show.name == name) {
                 sortedList.add(Container(
                   decoration: BoxDecoration(
@@ -388,7 +387,7 @@ class AnimeListState extends State<AnimeList> {
         {
           List<Show> sortedShows = [];
           if (airing) {
-            for (var show in allShows) {
+            for (var show in data.allShows) {
               if (show.airing == 1) {
                 if (sortedShows.length < 1) {
                   sortedShows.add(show);
@@ -409,7 +408,7 @@ class AnimeListState extends State<AnimeList> {
               }
             }
           } else {
-            for (var show in allShows) {
+            for (var show in data.allShows) {
               if (sortedShows.length < 1) {
                 sortedShows.add(show);
               } else {
@@ -473,7 +472,7 @@ class AnimeListState extends State<AnimeList> {
         {
           List<Show> sortedShows = [];
           if (airing) {
-            for (var show in allShows) {
+            for (var show in data.allShows) {
               if (show.airing == 1) {
                 if (sortedShows.length < 1) {
                   sortedShows.add(show);
@@ -494,7 +493,7 @@ class AnimeListState extends State<AnimeList> {
               }
             }
           } else {
-            for (var show in allShows) {
+            for (var show in data.allShows) {
               if (sortedShows.length < 1) {
                 sortedShows.add(show);
               } else {
