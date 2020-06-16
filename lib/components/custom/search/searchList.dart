@@ -18,14 +18,23 @@ class SearchList extends StatelessWidget{
         future: shows,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-           return Column(
-             children:
-               snapshot.data.map((show){
-                 return ImageListElement(show.name, show.cover_portrait, ctx, descLine1: show.description, onTap: (){
-                   Navigator.pushNamed(ctx, "anime", arguments: show.url);
-                 });
-               }).toList()
-           );
+           if(snapshot.data.length < 1){
+             return Column(
+               children: <Widget>[
+                 SizedBox(height: 10,),
+                 ThemeText("Keine Ergebnisse für die Eingabe", textAlign: TextAlign.center, fontSize: 25,)
+               ],
+             );
+           }else{
+             return Column(
+                 children:
+                 snapshot.data.map((show){
+                   return ImageListElement(show.name, show.cover_portrait, ctx, descLine1: show.description, onTap: (){
+                     Navigator.pushNamed(ctx, "anime", arguments: show.url);
+                   });
+                 }).toList()
+             );
+           }
           } else if (snapshot.hasError) {
             return ThemeText("${snapshot.error}");
           }
