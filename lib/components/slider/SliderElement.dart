@@ -14,7 +14,8 @@ class SliderElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: InkWell(
+    return Container(
+        child: InkWell(
           onTap: (){
             onTap(context);
           },
@@ -22,7 +23,7 @@ class SliderElement extends StatelessWidget {
               margin: EdgeInsets.only(left: 3, right: 3),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(image), fit: BoxFit.fill)),
+                      image: NetworkImage(image), fit: BoxFit.contain)),
               child: Container(
                 margin: EdgeInsets.all(10),
                 child: Stack(
