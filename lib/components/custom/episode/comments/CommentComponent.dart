@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/components/custom/images/ProfileImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -25,26 +26,7 @@ class CommentComponent extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          (user.avatar == null)
-              ? IconButton(
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(ctx).primaryIconTheme.color,
-            ),
-            onPressed: (){},
-          )
-              : IconButton(
-                  icon: new Container(
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              "https://www2.aniflix.tv/storage/" + user.avatar,
-                            ),
-                          ))),
-                  onPressed: () {},
-                ),
+          ProfileImage(user.avatar,(){}),
           Expanded(child: textField),
           IconButton(
             icon: Icon(Icons.send),

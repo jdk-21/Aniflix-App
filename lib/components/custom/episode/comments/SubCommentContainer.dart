@@ -5,6 +5,7 @@ import 'package:aniflix_app/api/objects/anime/Vote.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/custom/images/ProfileImage.dart';
 import '../../rating/voteBar.dart';
 import '../../report/reportDeleteBar.dart';
 import '../../dialogs/reportDialog.dart';
@@ -47,30 +48,7 @@ class SubCommentContainer extends StatelessWidget {
                             Row(children: [
                               Align(
                                 alignment: Alignment.topLeft,
-                                child: (_comment.user.avatar == null)
-                                    ? IconButton(
-                                        icon: Icon(
-                                          Icons.person,
-                                          color: Theme.of(ctx)
-                                              .primaryIconTheme
-                                              .color,
-                                        ),
-                                        onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
-                                      )
-                                    : IconButton(
-                                        iconSize: 40,
-                                        icon: new Container(
-                                            decoration: new BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: new DecorationImage(
-                                                  fit: BoxFit.fill,
-                                                  image: NetworkImage(
-                                                    "https://www2.aniflix.tv/storage/" +
-                                                        _comment.user.avatar,
-                                                  ),
-                                                ))),
-                                        onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);},
-                                      ),
+                                child: ProfileImage(_comment.user.avatar,(){Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);})
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
