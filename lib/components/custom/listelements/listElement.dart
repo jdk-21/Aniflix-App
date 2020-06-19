@@ -12,12 +12,12 @@ class ListElement extends Container {
               child: (child == null)
                   ? Align(
                       alignment: Alignment.centerLeft,
-                      child: ThemeText(title, ctx,
+                      child: ThemeText(title,
                           fontSize: 35, fontWeight: FontWeight.normal))
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                          ThemeText(title, ctx,
+                          ThemeText(title,
                               fontSize: 35, fontWeight: FontWeight.normal),
                           child
                         ]),

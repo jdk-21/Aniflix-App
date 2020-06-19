@@ -35,13 +35,12 @@ class ImageListElement extends Container {
                         alignment: Alignment.centerLeft,
                         child: ThemeText(
                           title,
-                          ctx,
                           softWrap: true,
                         )),
                     (descLine1 != null)
                         ? Align(
                             alignment: Alignment.centerLeft,
-                            child: ThemeText(descLine1, ctx,
+                            child: ThemeText(descLine1,
                                 fontSize: 15, softWrap: true,maxLines: 5,))
                         : Container(),
                     (descLine2 != null)
@@ -49,7 +48,6 @@ class ImageListElement extends Container {
                             alignment: Alignment.centerLeft,
                             child: ThemeText(
                               descLine2,
-                              ctx,
                               fontSize: 15,
                               softWrap: true,
                             ))
@@ -59,7 +57,6 @@ class ImageListElement extends Container {
                             alignment: Alignment.centerLeft,
                             child: ThemeText(
                               descLine3,
-                              ctx,
                               fontSize: 15,
                               softWrap: true,
                             ))

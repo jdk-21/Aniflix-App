@@ -251,7 +251,8 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         icon: Icon(
                                           Icons.assessment,
                                           color: Theme.of(ctx)
-                                              .primaryIconTheme
+                                              .textTheme
+                                              .caption
                                               .color,
                                         )),
                                     Theme(
@@ -287,49 +288,29 @@ class AnimeScreenState extends State<AnimeScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                OutlineButton(
-                                  onPressed: () {
-                                    setSeen(anime);
-                                  },
-                                  child: ThemeText("Staffel Gesehen", ctx,
-                                      fontSize: 15),
-                                  borderSide: BorderSide(
-                                      color:
-                                          Theme.of(ctx).primaryIconTheme.color),
-                                ),
-                                OutlineButton(
-                                  onPressed: () {
-                                    setUnseen(anime);
-                                  },
-                                  child: Text(
-                                    "Staffel nicht Gesehen",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(ctx)
-                                            .accentIconTheme
-                                            .color),
-                                  ),
-                                  borderSide: BorderSide(
-                                      color:
-                                          Theme.of(ctx).accentIconTheme.color),
-                                )
-                              ],
-                            ),
-                            EpisodeList(
-                                (_actualSeason == null || anime.seasons == null)
-                                    ? null
-                                    : anime.seasons.elementAt(_actualSeason),
-                                anime)
-                          ]));
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                // By default, show a loading spinner.
-                return Center(child: CircularProgressIndicator());
-              },
-            ))
-          ],
-        ));
+                              OutlineButton(onPressed: (){setSeen(anime);},
+                               child: ThemeText("Staffel Gesehen",fontSize: 15),
+                               borderSide: BorderSide(color: Theme.of(ctx).primaryIconTheme.color),
+                               ),
+                              OutlineButton(onPressed: (){setUnseen(anime);},
+                               child: Text("Staffel nicht Gesehen",style: TextStyle(fontSize: 15, color: Theme.of(ctx).accentIconTheme.color),),
+                               borderSide: BorderSide(color: Theme.of(ctx).accentIconTheme.color),
+                               )
+                               ],),
+                        EpisodeList(
+                            (_actualSeason == null || anime.seasons == null)
+                                ? null
+                                : anime.seasons.elementAt(_actualSeason),
+                            anime)
+                      ]));
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner.
+            return Center(child: CircularProgressIndicator());
+          },
+        ))
+        ],));
   }
 
   setSeen(Anime anime) {

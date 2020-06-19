@@ -23,14 +23,14 @@ class ChatComponent extends StatelessWidget {
           children: <Widget>[
             (message.user.avatar == null)
                 ? IconButton(
-                    onPressed: () {},
+                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: message.user.id);},
                     icon: Icon(
                       Icons.person,
                       color: Theme.of(ctx).primaryIconTheme.color,
                     ),
                   )
                 : IconButton(
-                    onPressed: () {},
+                    onPressed: () {Navigator.pushNamed(ctx, "profil",arguments: message.user.id);},
                     icon: new Container(
                         decoration: new BoxDecoration(
                             shape: BoxShape.circle,
@@ -51,7 +51,6 @@ class ChatComponent extends StatelessWidget {
                         children: <Widget>[
                           ThemeText(
                             message.user.name,
-                            ctx,
                             fontWeight: FontWeight.bold,
                             softWrap: true,
                             fontSize: 20,
@@ -71,7 +70,6 @@ class ChatComponent extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: ThemeText(
                       message.text,
-                      ctx,
                       fontSize: 20,
                       softWrap: true,
                     ),
@@ -89,7 +87,7 @@ class ChatComponent extends StatelessWidget {
       usergroups.add(Container(
         padding: EdgeInsets.all(5),
         margin: EdgeInsets.only(left: 5),
-        color: Theme.of(ctx).textTheme.title.color,
+        color: Theme.of(ctx).textTheme.caption.color,
         child: Text(
           group.name,
           style: TextStyle(color: Theme.of(ctx).backgroundColor),

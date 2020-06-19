@@ -88,7 +88,6 @@ class EpisodeBarState extends State<EpisodeBar> {
               alignment: AlignmentDirectional.topStart,
               child: ThemeText(
                 (_episode != null) ? _episode.name : "",
-                ctx,
                 fontWeight: FontWeight.bold,
                 softWrap: true,
               ),
@@ -101,13 +100,11 @@ class EpisodeBarState extends State<EpisodeBar> {
                         _episode.season.number.toString() +
                         " E " +
                         _episode.number.toString(),
-                    ctx,
                     fontWeight: FontWeight.bold),
                 SizedBox(width: 10,),
                 Expanded(
                   child: ThemeText(
                     _episode.season.show.name,
-                    ctx,
                     softWrap: true,
                     textAlign: TextAlign.left,
                   ),
@@ -132,7 +129,6 @@ class EpisodeBarState extends State<EpisodeBar> {
                           formated_date.month.toString() +
                           "." +
                           formated_date.year.toString()),
-                      ctx,
                       fontSize: 15),
                   IconButton(
                     padding: EdgeInsets.all(0),
@@ -185,7 +181,6 @@ class EpisodeBarState extends State<EpisodeBar> {
                       ),
                       ThemeText(
                         _numberOfUpVotes.toString(),
-                        ctx,
                         fontSize: 15,
                       )
                     ],
@@ -223,7 +218,6 @@ class EpisodeBarState extends State<EpisodeBar> {
                       ),
                       ThemeText(
                         _numberOfDownVotes.toString(),
-                        ctx,
                         fontSize: 15,
                       )
                     ],

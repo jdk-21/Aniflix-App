@@ -8,15 +8,14 @@ class AnimeDescription extends Container {
           child: ExpandablePanel(
             header: Align(
                 alignment: Alignment.centerLeft,
-                child: ThemeText("Beschreibung", ctx,
+                child: ThemeText("Beschreibung",
                     fontWeight: FontWeight.bold)),
             headerAlignment: ExpandablePanelHeaderAlignment.center,
-            collapsed: ThemeText(description, ctx, maxLines: 5, fontSize: 15,softWrap: true),
+            collapsed: ThemeText(description, maxLines: 5, fontSize: 15,softWrap: true),
             expanded: Align(
                 alignment: Alignment.centerLeft,
                 child: ThemeText(
                   description,
-                  ctx,
                   fontSize: 15,
                   softWrap: true,
                 )),

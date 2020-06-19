@@ -94,7 +94,7 @@ class VerlaufState extends State<Verlauf> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Verlauf", ctx,
+          child: ThemeText("Verlauf",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
 

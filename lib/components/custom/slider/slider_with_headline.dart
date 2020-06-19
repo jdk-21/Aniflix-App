@@ -23,8 +23,10 @@ class HeadlineSlider extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(left: 5, bottom: 5),
               alignment: AlignmentDirectional.topStart,
-              child: ThemeText(title, ctx, fontWeight: FontWeight.bold)),
-          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size),
+              child: ThemeText(title, fontWeight: FontWeight.bold)),
+          MediaQuery.of(ctx).orientation == Orientation.portrait?
+          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size):
+          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size / 2)
         ]));
   }
 }

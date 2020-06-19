@@ -15,6 +15,6 @@ class DateText extends StatelessWidget{
     if(showTime){
       formattedDate += " " + date.hour.toString() + ":" + date.minute.toString() + ":" + date.second.toString();
     }
-    return ThemeText(formattedDate, context, fontSize: 15,);
+    return ThemeText(formattedDate, fontSize: 15,);
   }
 }

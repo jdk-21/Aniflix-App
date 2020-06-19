@@ -58,7 +58,7 @@ class SearchAnimeState extends State<SearchAnime> {
                           submit(controller);
                         },
                         style: TextStyle(
-                            color: Theme.of(ctx).textTheme.title.color),
+                            color: Theme.of(ctx).textTheme.caption.color),
                         keyboardType: TextInputType.multiline,
                         controller: controller,
                         maxLines: null,
@@ -79,7 +79,7 @@ class SearchAnimeState extends State<SearchAnime> {
                     )
                   ],
                 ),
-                (shows == null) ? Container() : SearchList(shows)
+                (shows == null) ? Container() : SearchList(shows),
               ],
             ))
           ],

@@ -62,7 +62,6 @@ class VoteBar extends StatelessWidget {
             ),
             ThemeText(
               _numberOfUpVotes.toString(),
-              ctx,
               fontSize: 15,
             )
           ],
@@ -90,7 +89,6 @@ class VoteBar extends StatelessWidget {
             ),
             ThemeText(
               _numberOfDownVotes.toString(),
-              ctx,
               fontSize: 15,
             )
           ],

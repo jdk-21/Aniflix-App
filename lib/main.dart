@@ -8,11 +8,16 @@ import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/news.dart';
+import 'package:aniflix_app/components/screens/profilesettings.dart';
+import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
+import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
+import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -102,6 +107,7 @@ class AppState extends State<App> {
 
   @override
   void initState() {
+    HosterParser.initParser();
     super.initState();
     if (!isDesktop()) {
       FirebaseAdMob.instance
@@ -189,17 +195,6 @@ class AppState extends State<App> {
     } else {
       if (_loggedIn) {
         if (ad != null) {
-          if (!_adLoaded) {
-            ad.load().then((loaded) {
-              if (loaded) {
-                _adLoaded = true;
-                ad.show(anchorType: AnchorType.top, anchorOffset: 75);
-                print("Show Ad!");
-              }
-            });
-          }
-        }
-        return MaterialApp(
             title: 'Aniflix',
             color: _theme.backgroundColor,
             theme: _theme,
@@ -209,7 +204,6 @@ class AppState extends State<App> {
             ),
             routes: {
               'home': (context) {
-                return getScaffold(Home(), context, button: true);
               },
               'search': (context) {
                 return getScaffold(SearchAnime(), context, setIndex: true);
@@ -240,6 +234,9 @@ class AppState extends State<App> {
               },
               'chat': (context) {
                 return getScaffold(ChatScreen(), context, setIndex: true);
+              },
+              'userlist': (context) {
+                return getScaffold(Userlist(), context, setIndex: true);
               }
             },
             onGenerateRoute: generateRoute);
@@ -273,6 +270,11 @@ class AppState extends State<App> {
       case "review":
         return MaterialPageRoute(builder: (ctx) {
           return getScaffold(ReviewScreen(settings.arguments), ctx,
+              setIndex: true);
+        });
+      case "profil":
+        return MaterialPageRoute(builder: (ctx) {
+          return getScaffold(new Profile(settings.arguments), ctx,
               setIndex: true);
         });
     }

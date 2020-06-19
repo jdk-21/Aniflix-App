@@ -87,7 +87,7 @@ class CalendarState extends State<Calendar> {
           description: (airing.released) ? "Verlinkt" : airing.details,
           image: "https://www2.aniflix.tv/storage/" + show.cover_landscape,
           desccolor:
-              (airing.released) ? Colors.green : Color.fromRGBO(15, 15, 19, 1),
+              (airing.released) ? Colors.green : Color.fromRGBO(15, 15, 15, 1),
           onTap: (ctx) {
             Navigator.pushNamed(ctx, "anime", arguments: show.url);
           },

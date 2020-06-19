@@ -8,12 +8,14 @@ class SliderElement extends StatelessWidget {
   String image;
   Function close;
   Color desccolor;
+  bool horizontal;
 
-  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 19, 1)});
+  SliderElement({this.name, this.description, this.image, this.onTap, this.close,this.desccolor = const Color.fromRGBO(15, 15, 15, 1), this.horizontal = true});
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: InkWell(
+    return Container(
+        child: InkWell(
           onTap: (){
             onTap(context);
           },
@@ -21,7 +23,7 @@ class SliderElement extends StatelessWidget {
               margin: EdgeInsets.only(left: 3, right: 3),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(image), fit: BoxFit.fill)),
+                      image: NetworkImage(image), fit: BoxFit.contain)),
               child: Container(
                 margin: EdgeInsets.all(10),
                 child: Stack(
@@ -35,21 +37,24 @@ class SliderElement extends StatelessWidget {
                             child: Container(
                               width: 25,
                               height: 25,
-                                child: FittedBox(child: FloatingActionButton(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).backgroundColor,
+                                  shape: BoxShape.circle
+                                ),
+                                child: FittedBox(
+                                    child: FloatingActionButton(
                                   heroTag: null,
-                                  backgroundColor: Color.fromRGBO(15, 15, 19, 1),
+                                  backgroundColor: Theme.of(context).backgroundColor,
                                   child: Icon(Icons.close,
                                     color: Colors.white,
                                   ),
                                   onPressed: close,)),
-                              color: Color.fromRGBO(15, 15, 19, 0),
                             )),
-                    //IconButton(icon: Icon(Icons.close, color: Colors.white,), onPressed: close)),
                     (name != "" && name != null)
                         ? Align(
-                            alignment: AlignmentDirectional.bottomStart,
+                            alignment: (horizontal) ? AlignmentDirectional.bottomStart : AlignmentDirectional.bottomCenter,
                             child: HighlightedTextBox(name))
-                        : Align(alignment: AlignmentDirectional.bottomStart),
+                        : Align(alignment: (horizontal) ? AlignmentDirectional.bottomStart : AlignmentDirectional.bottomCenter),
                     (description != "" && description != null)
                         ? Align(
                             alignment: AlignmentDirectional.topEnd,

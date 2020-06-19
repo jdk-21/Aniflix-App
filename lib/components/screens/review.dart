@@ -102,7 +102,6 @@ class ReviewScreenState extends State<ReviewScreen> {
                               alignment: Alignment.center,
                               child: ThemeText(
                                 "Reviews zu",
-                                ctx,
                                 fontWeight: FontWeight.bold,
                                 softWrap: true,
                               )),
@@ -110,7 +109,6 @@ class ReviewScreenState extends State<ReviewScreen> {
                             alignment: Alignment.center,
                             child: ThemeText(
                               reviewedAnime.name,
-                              ctx,
                               fontWeight: FontWeight.bold,
                               softWrap: true,
                             ),
@@ -134,10 +132,10 @@ class ReviewScreenState extends State<ReviewScreen> {
                           ? Align(
                               alignment: Alignment.center,
                               child: OutlineButton(
-                                textColor: Theme.of(ctx).textTheme.title.color,
+                                textColor: Theme.of(ctx).textTheme.caption.color,
                                 borderSide: BorderSide(
-                                    color: Theme.of(ctx).textTheme.title.color),
-                                child: ThemeText("Review schreiben", ctx),
+                                    color: Theme.of(ctx).textTheme.caption.color),
+                                child: ThemeText("Review schreiben"),
                                 onPressed: () {
                                   showDialog(
                                       context: ctx,

@@ -36,14 +36,14 @@ class Register extends StatelessWidget implements Screen{
                     Text("Registrierung",
                         style: TextStyle(
                             fontFamily: "Poppins-Medium",
-                            color: Theme.of(ctx).textTheme.title.color,
+                            color: Theme.of(ctx).textTheme.caption.color,
                             fontWeight: FontWeight.bold,
                             fontSize: 25))
                   ])),
               SizedBox(height: 30),
               TextField(
                 controller: usernameController,
-                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                 decoration: InputDecoration(
                     hintText: "Username",
                     hintStyle:
@@ -55,7 +55,7 @@ class Register extends StatelessWidget implements Screen{
               SizedBox(height: 30),
               TextField(
                 controller: emailController,
-                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                 decoration: InputDecoration(
                     hintText: "E-Mail",
                     hintStyle:
@@ -67,7 +67,7 @@ class Register extends StatelessWidget implements Screen{
               SizedBox(height: 30),
               TextField(
                 controller: passwortController,
-                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                 obscureText: true,
                 decoration: InputDecoration(
                     hintText: "Passwort",
@@ -80,7 +80,7 @@ class Register extends StatelessWidget implements Screen{
               SizedBox(height: 30),
               TextField(
                 controller: passwortWiederholenController,
-                style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+                style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
                 obscureText: true,
                 decoration: InputDecoration(
                     hintText: "Passwort wiederholen",
@@ -94,9 +94,9 @@ class Register extends StatelessWidget implements Screen{
               Align(
                   alignment: Alignment.center,
                   child: OutlineButton(
-                    textColor: Theme.of(ctx).textTheme.title.color,
+                    textColor: Theme.of(ctx).textTheme.caption.color,
                     borderSide:
-                        BorderSide(color: Theme.of(ctx).textTheme.title.color),
+                        BorderSide(color: Theme.of(ctx).textTheme.caption.color),
                     child: Text("Registrieren"),
                     onPressed: () {
                       resetTextController();
@@ -105,7 +105,7 @@ class Register extends StatelessWidget implements Screen{
               Align(
                 alignment: Alignment.center,
                 child: FlatButton(
-                  textColor: Theme.of(ctx).textTheme.title.color,
+                  textColor: Theme.of(ctx).textTheme.caption.color,
                   child: Text("Schon einen Account?"),
                   onPressed: () {
                     resetTextController();

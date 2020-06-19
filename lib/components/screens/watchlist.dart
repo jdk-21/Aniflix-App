@@ -4,6 +4,7 @@ import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
+import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,34 +12,47 @@ import '../../main.dart';
 
 class Watchlistdata {
   List<Show> shows;
+
   Watchlistdata(this.shows);
 }
 
 class Watchlist extends StatefulWidget implements Screen {
+  UserWatchlistData watchlistdata;
+
+  Watchlist({this.watchlistdata});
+
   @override
   getScreenName() {
     return "watchlist_screen";
   }
 
   @override
-  State<StatefulWidget> createState() => WatchlistState();
+  State<StatefulWidget> createState() =>
+      WatchlistState(userwatchlistdata: this.watchlistdata);
 }
 
 class WatchlistState extends State<Watchlist> {
   Future<Watchlistdata> watchlistdata;
   Watchlistdata cache;
+  UserWatchlistData userwatchlistdata;
+  bool external;
 
-  WatchlistState() {
-    if (CacheManager.watchlistdata == null) {
-      watchlistdata = APIManager.getWatchlist();
+  WatchlistState({this.userwatchlistdata}) {
+    if (userwatchlistdata == null) {
+      external = false;
+      if (CacheManager.watchlistdata == null) {
+        watchlistdata = APIManager.getWatchlist();
+      } else {
+        cache = CacheManager.watchlistdata;
+      }
     } else {
-      cache = CacheManager.watchlistdata;
+      external = true;
     }
   }
 
   @override
   Widget build(BuildContext ctx) {
-    if (cache == null) {
+    if (cache == null && !external) {
       return Container(
         key: Key("watchlist_screen"),
         color: Theme.of(ctx).backgroundColor,
@@ -65,22 +79,28 @@ class WatchlistState extends State<Watchlist> {
   getLayout(Watchlistdata data, BuildContext ctx) {
     return Column(
       children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
+        (AppState.adFailed || external)
+            ? Container()
+            : SizedBox(
+                height: 50,
+              ),
         Expanded(
             child: Container(
                 padding: EdgeInsets.all(5),
                 color: Theme.of(ctx).backgroundColor,
                 child: RefreshIndicator(
                     child: ListView(
-                      children: getWatchlistAsWidgets(ctx, data.shows),
+                      children: getWatchlistAsWidgets(ctx, (external)?userwatchlistdata.shows:data.shows),
                     ),
                     onRefresh: () async {
-                      APIManager.getWatchlist().then((data) {
-                        setState(() {
-                          CacheManager.watchlistdata = data;
-                          cache = data;
+                      if (!external) {
+                        APIManager.getWatchlist().then((data) {
+                          setState(() {
+                            CacheManager.watchlistdata = data;
+                            cache = data;
+                          });
                         });
-                      });
+                      }
                     })))
       ],
     );
@@ -90,7 +110,7 @@ class WatchlistState extends State<Watchlist> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Watchlist", ctx,
+          child: ThemeText("Watchlist",
               fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var anime in watchlist) {

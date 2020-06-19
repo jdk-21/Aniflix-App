@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/components/custom/images/ProfileImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class AnswerCommentComponentState extends State<AnswerCommentComponent> {
     var controller = TextEditingController();
 
     var textField = TextField(
-      style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+      style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
       keyboardType: TextInputType.multiline,
       controller: controller,
       maxLines: null,
@@ -41,32 +42,7 @@ class AnswerCommentComponentState extends State<AnswerCommentComponent> {
       padding: EdgeInsets.only(left: 55),
       child: Row(
         children: <Widget>[
-          (user.avatar == null)
-              ? IconButton(
-            iconSize: 1,
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(ctx).primaryIconTheme.color,
-            ),
-            onPressed: (){},
-          )
-              :Transform.scale(
-            scale: 0.6,
-            child: IconButton(
-              icon: new Container(
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        image: NetworkImage(
-                          "https://www2.aniflix.tv/storage/" +
-                              user.avatar,
-                        ),
-                      ))),
-              onPressed: () => {},
-            ),
-          ),
-
-
+          ProfileImage(user.avatar,(){}),
           Expanded(child: textField,),
           IconButton(
             icon: Icon(Icons.send, size: 15,),

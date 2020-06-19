@@ -14,7 +14,7 @@ class ChatInput extends StatelessWidget {
     var controller = TextEditingController();
 
     var textField = TextField(
-      style: TextStyle(color: Theme.of(context).textTheme.title.color),
+      style: TextStyle(color: Theme.of(context).textTheme.caption.color),
       keyboardType: TextInputType.multiline,
       controller: controller,
       maxLines: null,

@@ -20,27 +20,23 @@ class AnimeHeader extends Container {
               children: [
                 ThemeText(
                   anime.name,
-                  ctx,
                   fontWeight: FontWeight.bold,
                   softWrap: true,
                   textAlign: TextAlign.center,
                 ),
                 ThemeText(
                   "Score: " + anime.rating,
-                  ctx,
                   fontSize: 15,
                   textAlign: TextAlign.left,
                 ),
                 ThemeText(
                   "Status: " +
                       ((anime.airing != null) ? "Airing" : "Not Airing"),
-                  ctx,
                   fontSize: 15,
                   textAlign: TextAlign.left,
                 ),
                 ThemeText(
                   "Episoden: " + episodeCount.toString(),
-                  ctx,
                   fontSize: 15,
                   textAlign: TextAlign.left,
                 ),
@@ -50,8 +46,8 @@ class AnimeHeader extends Container {
                     decoration: BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
-                                color: Theme.of(ctx).textTheme.title.color))),
-                    child: ThemeText("Reviews", ctx,
+                                color: Theme.of(ctx).textTheme.caption.color))),
+                    child: ThemeText("Reviews",
                         fontSize: 15, fontWeight: FontWeight.normal),
                   ),
                   onTap: () {

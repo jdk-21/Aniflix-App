@@ -10,11 +10,12 @@ class ReportDialog extends StatelessWidget {
   Widget build(BuildContext ctx) {
     return AlertDialog(
       backgroundColor: Theme.of(ctx).backgroundColor,
-      contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+      contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[Text("Report schreiben"),
         TextField(
-          style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+          style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
           keyboardType: TextInputType.multiline,
           controller: controller,
           maxLines: 5,

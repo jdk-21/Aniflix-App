@@ -8,7 +8,7 @@ import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
-import 'package:aniflix_app/components/screens/loading.dart';
+import 'package:chewie/chewie.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,9 +60,18 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   EpisodeHeaderState episodeHeaderState;
   var _inApp;
   InAppWebViewController _controller;
+  ChewieController _chewieController;
+
+
 
   updateStream(EpisodeInfo episodeInfo, int lang, int hoster) {
     setState(() {
+      if (_chewieController != null) {
+        _chewieController.videoPlayerController.dispose();
+        _chewieController.dispose();
+        _chewieController = null;
+      }
+
       for (var stream in episodeInfo.streams) {
         if (_hosters[hoster] == stream.hoster.name &&
             _langs[lang] == stream.lang) {
@@ -94,6 +103,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this.view = null;
       this._controller = null;
       this._inApp = null;
+      if (_chewieController != null) {
+        _chewieController.videoPlayerController.dispose();
+        _chewieController.dispose();
+        _chewieController = null;
+      }
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
 
       this.episodeInfo.then((episode) {
@@ -130,6 +144,15 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     if (episodeInfo == null) {
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
     }
+  }
+
+  @override
+  void dispose() {
+    if (_chewieController != null) {
+      _chewieController.videoPlayerController.dispose();
+      _chewieController.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -231,6 +254,16 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                       child: ListView(
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
+                          (_stream != null)
+                              ? AnimePlayer(_stream, view, _inApp, _controller,
+                                  (controller) {
+                                    if (_chewieController != null) {
+                                      _chewieController.videoPlayerController.dispose();
+                                      _chewieController.dispose();
+                                    }
+                                    _chewieController = controller;
+                                })
+                              : Container(),
                           EpisodeHeader(episode, () {
                             var info = APIManager.getEpisodeInfo(
                                 name, season, number - 1);
@@ -257,12 +290,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (state) {
                             episodeHeaderState = state;
                           }),
-                          (_stream != null)
-                              ? AnimePlayer(_stream, view, _inApp, _controller)
-                              : Container(),
-                          SizedBox(
-                            height: 10,
-                          ),
                           EpisodeBar(episode, (state) {
                             this.barState = state;
                           }),

@@ -31,7 +31,6 @@ class CommentList extends Container {
         alignment: Alignment.center,
         child: ThemeText(
           "Kommentare",
-          ctx,
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -51,7 +51,6 @@ class ReviewElement extends Container {
                       ),
                 ThemeText(
                   review.user.name,
-                  ctx,
                   softWrap: true,
                 ),
                 ReportDeleteBar((review.user_id == _user.id),(){},(){
@@ -63,7 +62,6 @@ class ReviewElement extends Container {
                   review.vote == null || review.vote.value == null
                       ? ""
                       : review.vote.value.toString() + "/5",
-                  ctx,
                   softWrap: true,
                 )
               ],
@@ -72,12 +70,11 @@ class ReviewElement extends Container {
               review.text,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
-              style: TextStyle(color: Theme.of(ctx).textTheme.title.color),
+              style: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
               softWrap: true,
             ),
             expanded: ThemeText(
               review.text,
-              ctx,
               softWrap: true,
             ),
           ),
