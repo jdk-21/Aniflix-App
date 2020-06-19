@@ -12,7 +12,7 @@ class LogoutDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Theme.of(ctx).backgroundColor,
       contentTextStyle: TextStyle(color: Theme.of(ctx).textTheme.caption.color),
-      content: ThemeText("Wirklich ausloggen?")
+      content: ThemeText("Wirklich ausloggen?"),
       actions: <Widget>[
         FlatButton(
           color: Colors.red,

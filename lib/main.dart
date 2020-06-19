@@ -195,6 +195,17 @@ class AppState extends State<App> {
     } else {
       if (_loggedIn) {
         if (ad != null) {
+          if (!_adLoaded) {
+            ad.load().then((loaded) {
+              if (loaded) {
+                _adLoaded = true;
+                ad.show(anchorType: AnchorType.top, anchorOffset: 75);
+                print("Show Ad!");
+              }
+            });
+          }
+        }
+        return MaterialApp(
             title: 'Aniflix',
             color: _theme.backgroundColor,
             theme: _theme,
@@ -204,6 +215,7 @@ class AppState extends State<App> {
             ),
             routes: {
               'home': (context) {
+                return getScaffold(Home(), context, button: true);
               },
               'search': (context) {
                 return getScaffold(SearchAnime(), context, setIndex: true);
