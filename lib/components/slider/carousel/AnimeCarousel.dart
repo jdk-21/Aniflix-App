@@ -1,3 +1,4 @@
+import 'package:aniflix_app/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../SliderElement.dart';
 
@@ -9,7 +10,7 @@ class AnimeCarousel extends CarouselSlider{
       viewportFraction: size,
       enableInfiniteScroll: false,
       reverse: false,
-      initialPage: (data.length > 1)? 1 : 0
+      initialPage: isDesktop()?((aspectRatio == 200/110)?(data.length > 2)? 2 : 0 : (data.length > 3)? 3 : 0):((data.length > 1)? 1 : 0)
   );
 
 }

@@ -1,3 +1,4 @@
+import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../slider/carousel/AnimeCarousel.dart';
@@ -24,9 +25,11 @@ class HeadlineSlider extends StatelessWidget {
               margin: EdgeInsets.only(left: 5, bottom: 5),
               alignment: AlignmentDirectional.topStart,
               child: ThemeText(title, fontWeight: FontWeight.bold)),
-          MediaQuery.of(ctx).orientation == Orientation.portrait?
+          isDesktop()?
+          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size / 3.5,):
+          (MediaQuery.of(ctx).orientation == Orientation.portrait?
           AnimeCarousel(elements, aspectRatio: aspectRatio, size: size):
-          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size / 2)
+          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size / 2))
         ]));
   }
 }
