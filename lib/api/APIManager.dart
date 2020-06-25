@@ -507,7 +507,7 @@ class APIManager {
   static addRecommendNotification(User user, User friend, Anime anime) {
     _postRequest("notification/user/create", {
       "user_id": friend.id.toString(),
-      "text": "Dir wurde von " + user.name + " der " + anime.name + " empfohlen. Schau ihn dir doch mal an.",
+      "text": "Dir wurde von " + user.name + " der Anime " + anime.name + " empfohlen. Schau ihn dir doch mal an.",
       "link": "/show/" + anime.name.toLowerCase().replaceAll(" ", "-")
     });
   }
