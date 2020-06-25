@@ -1,7 +1,10 @@
+import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
+import 'package:aniflix_app/api/objects/profile/Friend.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/dialogs/ratingDialog.dart';
 import 'package:aniflix_app/components/custom/anime/animeHeader.dart';
+import 'package:aniflix_app/components/custom/listelements/iconListElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/slider/TextboxSliderElement.dart';
@@ -32,6 +35,7 @@ class AnimeScreenState extends State<AnimeScreen> {
   Future<Anime> anime;
   List<TextboxSliderElement> genres = [];
   List<String> genreNames = [];
+  List<Friend> friendlist = [];
   bool _isSubscribed;
   int _actualSeason;
   bool _isInWatchlist;
@@ -199,6 +203,31 @@ class AnimeScreenState extends State<AnimeScreen> {
                                       color:
                                           Theme.of(ctx).primaryIconTheme.color,
                                     )),
+                                IconButton(
+                                  onPressed: (){
+                                    showDialog(
+                                      context: ctx,
+                                      builder: (BuildContext ctx){
+                                        return FutureBuilder(
+                                          future: APIManager.getUserFriends(CacheManager.userData.id),
+                                          builder: (context, snapshot){
+                                            return AlertDialog(
+                                              backgroundColor: Theme.of(context).backgroundColor,
+                                              contentTextStyle: TextStyle(color: Theme.of(context).textTheme.caption.color),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                child: ListView(
+                                                  children: getFriendsAsList(context, snapshot.data, anime),
+                                                ),
+                                              )
+                                            );
+                                          }
+                                        );
+                                      }
+                                    );
+                                  },
+                                  icon: Icon(Icons.share, color: Theme.of(ctx).primaryIconTheme.color,),
+                                ),
                                 Theme(
                                     data: Theme.of(ctx).copyWith(
                                         canvasColor:
@@ -222,7 +251,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                                         style: TextStyle(
                                             color: Theme.of(ctx)
                                                 .textTheme
-                                                .title
+                                                .caption
                                                 .color),
                                       ),
                                     ))
@@ -299,4 +328,32 @@ List<DropdownMenuItem<int>> getSeasonsAsDropdownList(List<AnimeSeason> seasons) 
     }
   }
   return namelist;
+}
+
+List<Widget> getFriendsAsList(BuildContext ctx, FriendListData friendlistdata, Anime anime) {
+  List<Friend> friendlist = friendlistdata.friendlist;
+  List<Widget> friendlistwidget = [
+    (AppState.adFailed) ? Container() : SizedBox(height: 100),
+  ];
+
+  for(var friend in friendlist){
+    if(friend.status == 0){
+      if(friend.friend.id == CacheManager.userData.id) {
+        friendlistwidget.add(IconListElement(friend.user.name,
+          friend.user.avatar,
+          ctx, onTap: (){
+            APIManager.addRecommendNotification(CacheManager.userData, friend.user, anime);
+            Navigator.of(ctx).pop();
+          },
+        ));
+      }else{
+        friendlistwidget.add(IconListElement(friend.friend.name, friend.friend.avatar, ctx, onTap: (){
+          APIManager.addRecommendNotification(CacheManager.userData, friend.friend, anime);
+          Navigator.of(ctx).pop();
+        },));
+      }
+    }
+  }
+
+  return friendlistwidget;
 }
