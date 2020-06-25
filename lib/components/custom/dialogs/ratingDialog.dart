@@ -41,17 +41,17 @@ class RatingDialogState extends State<RatingDialog>{
             contentTextStyle: TextStyle(
                 color: Theme.of(context)
                     .textTheme
-                    .title
+                    .caption
                     .color),
             content: SmoothStarRating(
               color: Theme.of(context)
                   .textTheme
-                  .title
+                  .caption
                   .color,
               allowHalfRating: false,
               borderColor: Theme.of(context)
                   .textTheme
-                  .title
+                  .caption
                   .color,
               starCount: 5,
               rating: _rating,

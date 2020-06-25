@@ -504,6 +504,14 @@ class APIManager {
     _authDeleteRequest("notification/delete?id=" + id.toString(), login);
   }
 
+  static addRecommendNotification(User user, User friend, Anime anime) {
+    _postRequest("notification/user/create", {
+      "user_id": friend.id.toString(),
+      "text": "Dir wurde von " + user.name + " der " + anime.name + " empfohlen. Schau ihn dir doch mal an.",
+      "link": "/show/" + anime.name.toLowerCase().replaceAll(" ", "-")
+    });
+  }
+
   static void setShowVote(int showID, int previous_vote, int value) {
     _authPostRequest("vote/show/" + showID.toString(), login, bodyObject: {
       "value": value.toString(),
