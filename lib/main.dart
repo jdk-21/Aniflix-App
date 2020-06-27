@@ -175,7 +175,7 @@ class AppState extends State<App> {
               ad.load().then((loaded) {
                 if (loaded) {
                   _adLoaded = true;
-                  ad.show(anchorType: AnchorType.top, anchorOffset: 80);
+                  ad.show(anchorType: AnchorType.top, anchorOffset: 85);
                   print("Show Ad!");
                 }
               });
