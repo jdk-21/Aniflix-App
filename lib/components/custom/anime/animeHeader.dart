@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../api/objects/anime/Anime.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/images/aniflixImage.dart';
-import 'package:aniflix_app/components/screens/review.dart';
-import 'package:aniflix_app/main.dart';
 
 class AnimeHeader extends Container {
   AnimeHeader(
