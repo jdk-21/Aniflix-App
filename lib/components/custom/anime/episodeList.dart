@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:aniflix_app/api/objects/anime/Anime.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 
