@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/custom/images/ProfileImage.dart';
 
 class IconListElement extends Container {
   IconListElement(
@@ -22,35 +23,14 @@ class IconListElement extends Container {
                   padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
                   onPressed: onTap,
                   child: Row(children: <Widget>[
-                    (icon == null)
-                        ? IconButton(
-                            key: Key("Settings"),
-                            icon: Icon(
-                              Icons.person,
-                              color: Theme.of(ctx).primaryIconTheme.color,
-                            ),
-                            onPressed: () {onTap();},
-                          )
-                        : IconButton(
-                            key: Key("Settings"),
-                            icon: new Container(
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                        "https://www2.aniflix.tv/storage/" +
-                                            icon,
-                                      ),
-                                    ))),
-                            onPressed: () {onTap();}),
+                    ProfileImage(icon, () {}),
                     SizedBox(width: 10),
                     Align(
-                            alignment: Alignment.centerLeft,
-                            child: ThemeText(
-                              title,
-                              softWrap: true,
-                            )),
+                        alignment: Alignment.centerLeft,
+                        child: ThemeText(
+                          title,
+                          softWrap: true,
+                        )),
                   ]),
                 ),
                 (button == null) ? Container() : button,

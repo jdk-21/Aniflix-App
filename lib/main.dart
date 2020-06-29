@@ -15,6 +15,7 @@ import 'package:aniflix_app/components/screens/userlist.dart';
 import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/screens/profil.dart';
+import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -93,6 +94,7 @@ class AppState extends State<App> {
 
   @override
   void initState() {
+    HosterParser.initParser();
     super.initState();
     FirebaseAdMob.instance
         .initialize(appId: "ca-app-pub-1740246956609068~4725713221")
@@ -173,7 +175,7 @@ class AppState extends State<App> {
               ad.load().then((loaded) {
                 if (loaded) {
                   _adLoaded = true;
-                  ad.show(anchorType: AnchorType.top, anchorOffset: 80);
+                  ad.show(anchorType: AnchorType.top, anchorOffset: 85);
                   print("Show Ad!");
                 }
               });

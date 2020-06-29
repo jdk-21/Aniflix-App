@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:aniflix_app/components/custom/images/ProfileImage.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 
@@ -51,77 +52,10 @@ class AniflixAppbar extends AppBar {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           CacheManager.userData = snapshot.data;
-                          return (snapshot.data.avatar == null)
-                              ? IconButton(
-                                  key: Key("Settings"),
-                                  icon: Icon(
-                                    Icons.person,
-                                    color: Theme.of(ctx).primaryIconTheme.color,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushNamed(ctx, "settings");
-                                  },
-                                )
-                              : IconButton(
-                                  key: Key("Settings"),
-                                  icon: new Container(
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                              "https://www2.aniflix.tv/storage/" +
-                                                  snapshot.data.avatar,
-                                            ),
-                                          ))),
-                                  onPressed: () {
-                                    Navigator.pushNamed(ctx, "settings");
-                                  },
-                                );
-                        } else if (snapshot.hasError) {
-                          return IconButton(
-                              key: Key("Settings"),
-                              icon: Icon(Icons.person),
-                              onPressed: () {
-                                Navigator.pushNamed(ctx, "settings");
-                              },
-                              color: Theme.of(ctx).primaryIconTheme.color);
                         }
-                        return IconButton(
-                            key: Key("Settings"),
-                            icon: Icon(Icons.person),
-                            onPressed: () {
-                              Navigator.pushNamed(ctx, "settings");
-                            },
-                            color: Theme.of(ctx).primaryIconTheme.color);
+                        return ProfileImage((snapshot.data == null)? null : snapshot.data.avatar, (){ Navigator.pushNamed(ctx, "settings");});
                       },
                     )
-                  : (CacheManager.userData.avatar == null)
-                      ? IconButton(
-                          key: Key("Settings"),
-                          icon: Icon(
-                            Icons.person,
-                            color: Theme.of(ctx).primaryIconTheme.color,
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(ctx, "settings");
-                          },
-                        )
-                      : IconButton(
-                          key: Key("Settings"),
-                          icon: new Container(
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      "https://www2.aniflix.tv/storage/" +
-                                          CacheManager.userData.avatar,
-                                    ),
-                                  ))),
-                          onPressed: () {
-                            Navigator.pushNamed(ctx, "settings");
-                          },
-                        ) //TODO
+                  : ProfileImage(CacheManager.userData.avatar, (){ Navigator.pushNamed(ctx, "settings");})
             ]);
 }
