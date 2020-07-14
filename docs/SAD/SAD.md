@@ -77,6 +77,8 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 - [UC Play Episode](../UC/UC_Play_Episode.md)
 - [UC Write Comments](../UC/UC_Write_Comments.md)
 - [UC Change Theme](../UC/UC_Change_Theme.md)
+- [UC Ads](../UC/UC_Ads.md)
+- [UC Profile Pages](../UC/UC_Profile_Pages.md)
 
 ## 5. Logical View
 ### 5.1 Overview
@@ -111,6 +113,9 @@ We don't use any own database. The data is stored on the aniflix database where 
 tbd
 
 ## 11. Quality
+tbd
+
+## 12. Pattern
 tbd
 
 <!-- Picture-Link definitions: -->

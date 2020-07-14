@@ -43,4 +43,4 @@ The main postconditions for this use case are:
  - There will be different Comments for the same Episode by different Users
 
 # 6. Function Points
-(n/a)
+![Function Points](./Diagrams/uc4_fp.png)

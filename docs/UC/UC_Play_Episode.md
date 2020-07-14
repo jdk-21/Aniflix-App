@@ -42,4 +42,4 @@ The main postconditions for this use case are:
  - There will be different Hosters with streams for the same Episode
 
 # 6. Function Points
-(n/a)
+![Function Points](./Diagrams/uc3_fp.png)

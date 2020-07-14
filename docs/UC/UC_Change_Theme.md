@@ -42,4 +42,4 @@ The main postconditions for this use case are:
  - The Theme of the complete App has changed to the chosen one.
 
 # 6. Function Points
-(n/a)
+![Function Points](./Diagrams/uc5_fp.png)

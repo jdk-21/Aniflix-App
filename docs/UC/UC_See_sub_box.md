@@ -44,4 +44,4 @@ The main postconditions for this use case are:
  - There will be different lists with the newest episodes of my subscribed animes. Each list contains the episodes released on the different days
 
 # 6. Function Points
-(n/a)
+![Function Points](./Diagrams/uc2_fp.png)
