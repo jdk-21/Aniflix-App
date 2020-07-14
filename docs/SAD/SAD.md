@@ -77,6 +77,8 @@ Since we use flutter to create a mobile app MVC is already inhereted. We got our
 - [UC Play Episode](../UC/UC_Play_Episode.md)
 - [UC Write Comments](../UC/UC_Write_Comments.md)
 - [UC Change Theme](../UC/UC_Change_Theme.md)
+- [UC Ads](../UC/UC_Ads.md)
+- [UC Profile Pages](../UC/UC_Profile_Pages.md)
 
 ## 5. Logical View
 ### 5.1 Overview
@@ -98,20 +100,42 @@ n/a
 ![Deployment View](../Diagrams/Development_Diagram.png)
 
 ## 8. Implementation View
-n/a
-### 8.1 Overview
-n/a
-### 8.2 Layers
-n/a
+![Class-Diagram](../Diagrams/class_diagramm.svg)
+[Link to class diagram](../Diagrams/class_diagramm.svg)
+
+[Link to code](../Aniflix-App)
 
 ## 9. Data View
 We don't use any own database. The data is stored on the aniflix database where we only have access to over our API calls. So we can't show the database structure because it is only available for the aniflix admin and development team.
 
 ## 10. Size and Performance
-tbd
+In our application we cache some informations for better performance:  
+-Homepage Start data
+-Subbox data
+-Anime list data
+-Logged in user
+-Calendar data
+-History
+-Watchlist
+-Userlist data
 
 ## 11. Quality
-tbd
+For the project we used MVC with flutter. It helped us maintain the code and run a stable version of our app. It was easy to extend the app with this model.  
+With [dart_metrics](https://pub.dev/packages/dart_code_metrics) we calculated the metrics of our code. It calculates the metrics for following points:
+-Cyclomatic complexity of methods
+-Too long methods
+-Number of arguments
+-Number of methods
+With this tool it was much easier to improve our code. It shows us the spots where the metrics report any errors, so we know where we have to improve our code.
+
+## 12. Pattern
+We used the composite design pattern at some spots in our code.  
+Here is an example the code before:
+![Composite design pattern before](https://aniflixapp.files.wordpress.com/2020/05/before.png)
+And after:
+![Composite design pattern after](https://aniflixapp.files.wordpress.com/2020/05/after.png?w=1024)
+
+This design pattern is built like a tree hierarchy. The lower classes inherit the properties of the classes above them.
 
 <!-- Picture-Link definitions: -->
 [OUCD]: <../UCD_Main.png> "Overall Use Case Diagramm"

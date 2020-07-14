@@ -64,6 +64,8 @@ The AniflixApp is an app for everyone who want to watch anime. It is based on th
 -	A watch history of your watched animes
 -	An anime calendar which show the animes that will release new episodes the next days
 -	A global chat for the website
+- Google Ads
+- User Pages
 
 #### 1.2.1 Actors
 For the moment there are only registered users who can use the app. Maybe there will be the possibility to use the app as a guest later. An admin user or admin user page isn't planned for the moment.
@@ -110,6 +112,8 @@ The following picture shows the overall use case diagram of our software:
 *  [Play Episode](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Play_Episode.md)
 *  [Write Comments](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Write_Comments.md)
 *  [Change Theme](https://github.com/d0mmi/Aniflix-App/blob/master/docs/UC/UC_Change_Theme.md)
+*  [Ads](../UC/UC_Ads.md)
+*  [Profile Pages](../UC/UC_Profile_Pages.md)
 
 ## 3. Specific Requirements
 ### 3.1 Functionality
@@ -145,7 +149,16 @@ Here you will see the news and notifications released by the admin team.
 The Search Page gives you the possibility to search in the whole anime list by a searchstring.
 
 #### 3.1.11 Calendar
-The calendar provides the release infos of the airing animes
+The calendar provides the release infos of the airing animes.
+
+#### 3.1.12 Ads
+The Ads will display Google AdSense Ads that will earn us some money.
+
+#### 3.1.13 User List
+The User List will list all registered Aniflix users.
+
+#### 3.1.14 Profile Pages
+The Profile Pages will display information about the users like their favourite shows.
 
 
 ### 3.2 Usability

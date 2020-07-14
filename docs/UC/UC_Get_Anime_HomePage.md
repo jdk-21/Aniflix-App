@@ -17,11 +17,12 @@ The app will send a request to the server to get the lists of animes that will b
 ## 2.1 Basic Flow
 
 ### Activity Diagram
-![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/Docu-fixes/docs/UC/Diagrams/activity_diagram_get_homepage_anime.png)
+![Activity Diagram](https://raw.githubusercontent.com/d0mmi/Aniflix-App/master/docs/UC/Diagrams/activity_diagram_get_homepage_anime.png)
 
 ### .feature File
 
-![.feature file](../feature%20files/feature%20getHomeVideos.PNG)
+![.feature file](../feature%20files/feature%20HomePage.PNG)  
+[Get homepage animes feature file](../feature%20files/feature%20HomePage.PNG)
 
 ## 2.2 Alternative Flows
 n/a
@@ -39,11 +40,7 @@ The main preconditions for this use case are:
 
 The main postconditions for this use case are:
 
-<<<<<<< Updated upstream
- - The home page shows the different lists returned by the server.
-=======
  - The home page shows the different lists returned by the API.
->>>>>>> Stashed changes
 
 # 6. Function Points
-(n/a)
+![Function Points](./Diagrams/uc1_fp.png)

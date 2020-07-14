@@ -1,0 +1,1943 @@
+[APIManager
+  |
+  <static>+login: LoginResponse
+  |
+  <static>-Future _getNews();
+  <static>+Future getCalendarData();
+  <static>+Future getSubData();
+  <static>+Future getAirings();
+  <static>+Future getNewShows();
+  <static>+Future getDiscover();
+  <static>+Future getAnime();
+  <static>+Future getAllShows();
+  <static>+Future searchShows();
+  <static>+Future getAllShowsByGenres();
+  <static>+Future getEpisode();
+  <static>+Future getEpisodeInfo();
+  <static>+Future setSeasonSeen();
+  <static>+Future setSeasonUnSeen();
+  <static>+Future getReviews();
+  <static>+Future getReviewInfo();
+  <static>+Future createReview();
+  <static>+void deleteReview();
+  <static>+Future getContinue();
+  <static>+Future hideContinue();
+  <static>+Future getHomeData();
+  <static>+Future getAnimeListData();
+  <static>+Future loginRequest();
+  <static>+Future getUser();
+  <static>+Future getUserProfile();
+  <static>+Future getUserHistory();
+  <static>+Future getUserFavorites();
+  <static>+Future getUserSubs();
+  <static>+Future getUserWatchlist();
+  <static>+Future getUserProfileData();
+  <static>+dynamic updateAboutMe();
+  <static>+dynamic updateName();
+  <static>+dynamic updatePassword();
+  <static>+Future getUserFriends();
+  <static>+dynamic addFriend();
+  <static>+dynamic confirmFriendRequest();
+  <static>+dynamic blockFriendRequest();
+  <static>-dynamic _answerFriendRequest();
+  <static>+dynamic cancelFriendRequest();
+  <static>+Future getUserList();
+  <static>+Future getNotifications();
+  <static>+dynamic deleteNotification();
+  <static>+dynamic addRecommendNotification();
+  <static>+void setShowVote();
+  <static>+void setEpisodeVote();
+  <static>+void setCommentVote();
+  <static>+Future addComment();
+  <static>+void deleteComment();
+  <static>+void reportComment();
+  <static>+void reportEpisode();
+  <static>+Future addSubComment();
+  <static>+void setSubscription();
+  <static>+void setWatchlist();
+  <static>+Future getWatchlist();
+  <static>+Future getHistory();
+  <static>+void setFavourite();
+  <static>+Future getFavourite();
+  <static>+Future getChatMessages();
+  <static>+Future getChatInfo();
+  <static>+Future addMessage();
+  <static>-Future _getRequest();
+  <static>-Future _postRequest();
+  <static>-Future _authPatchRequest();
+  <static>-Future _authDeleteRequest();
+  <static>-Future _authPostRequest();
+  <static>-Future _authGetRequest()
+]
+
+[APIManager]o-[LoginResponse]
+
+[Airing
+  |
+  +id: int;
+  +show_id: int;
+  +season: int;
+  +day: int;
+  +details: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String
+]
+
+[GenreWithShows
+  |
+  +id: int;
+  +name: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +shows: List<Show>
+]
+
+[Anime
+  |
+  +id: int;
+  +name: String;
+  +name_alt: String;
+  +url: String;
+  +description: String;
+  +cover_landscape: String;
+  +cover_landscape_original: String;
+  +cover_portrait: String;
+  +visible_since: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +ownVote: Vote;
+  +subscribed: String;
+  +favorite: String;
+  +watchlist: String;
+  +howManyAbos: int;
+  +seasonCount: int;
+  +rating: String;
+  +airing: Airing;
+  +seasons: List<AnimeSeason>;
+  +genres: List<Genre>
+]
+
+[Anime]o-[Vote]
+[Anime]o-[Airing]
+
+[AnimeSeason
+  |
+  +id: int;
+  +number: int;
+  +show_id: int;
+  +type: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +length: int;
+  +episodes: List<Episode>
+  |
+  <static>+List getSeasons()
+]
+
+[Genre
+  |
+  +id: int;
+  +name: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String
+  |
+  <static>+List getGenres()
+]
+
+[Review
+  |
+  +id: int;
+  +show_id: int;
+  +user_id: int;
+  +text: String;
+  +vote: Vote;
+  +user: User
+  |
+  <static>+List getReviews()
+]
+
+[Review]o-[Vote]
+[Review]o-[User]
+
+[ReviewShow
+  |
+  +id: int;
+  +name: String;
+  +name_alt: String;
+  +url: String;
+  +description: String;
+  +cover_landscape: String;
+  +cover_landscape_original: String;
+  +cover_portrait: String;
+  +visible_since: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +howManyAbos: int;
+  +seasonCount: int;
+  +rating: String;
+  +airing: int;
+  +reviews: List<Review>
+]
+
+[Vote
+  |
+  +id: int;
+  +voteable_type: String;
+  +voteable_id: int;
+  +user_id: int;
+  +value: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String
+  |
+  <static>+List getVotes()
+]
+
+[CalendarDay
+  |
+  +day: int;
+  +airings: List<CalendarShow>
+]
+
+[CalendarShow
+  |
+  +id: int;
+  +show_id: int;
+  +season: int;
+  +day: int;
+  +details: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +released: bool;
+  +show: Show
+  |
+  <static>+bool checkReleased();
+  <static>+List getCalendarShows()
+]
+
+[CalendarShow]o-[Show]
+
+[ChatMessage
+  |
+  +id: int;
+  +user_id: int;
+  +chat_id: int;
+  +text: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +user: User
+  |
+  <static>+List getMessages()
+]
+
+[ChatMessage]o-[User]
+
+[Comment
+  |
+  +id: int;
+  +text: String;
+  +user_id: int;
+  +commentable_type: String;
+  +commentable_id: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +voted: int;
+  +user: User;
+  +votes: List<Vote>;
+  +comments: List<SubComment>;
+  +needAnswer: bool
+  |
+  <static>+List getComments()
+]
+
+[Comment]o-[User]
+
+[SubComment
+  |
+  +id: int;
+  +text: String;
+  +user_id: int;
+  +commentable_type: String;
+  +commentable_id: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +voted: int;
+  +user: User;
+  +votes: List<Vote>
+  |
+  <static>+List getComments()
+]
+
+[SubComment]o-[User]
+
+[EpisodeInfo
+  |
+  +id: int;
+  +name: String;
+  +number: int;
+  +season_id: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +voted: int;
+  +previous: String;
+  +next: String;
+  +avgVotes: String;
+  +hasReports: int;
+  +streams: List<AnimeStream>;
+  +comments: List<Comment>;
+  +votes: List<Vote>;
+  +season: Season
+]
+
+[EpisodeInfo]o-[Season]
+
+[Episode
+  |
+  +id: int;
+  +name: String;
+  +number: int;
+  +season_id: int;
+  +user_id: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +avgVotes: String;
+  +hasReports: int;
+  +seen: int;
+  +streams: List<AnimeStream>;
+  +season: Season
+  |
+  <static>+List getEpisodes()
+]
+
+[Episode]o-[Season]
+
+[Group
+  |
+  +id: int;
+  +name: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +pivot: UserPivot
+  |
+  <static>+List getGroups()
+]
+
+[Group]o-[UserPivot]
+
+[HistoryEpisode
+  |
+  +id: int;
+  +name: String;
+  +number: int;
+  +season_id: int;
+  +user_id: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +avgVotes: String;
+  +hasReports: int;
+  +streams: List<AnimeStream>;
+  +season: Season;
+  +seen: String
+  |
+  <static>+List getEpisodes()
+]
+
+[HistoryEpisode]o-[Season]
+
+[Hoster
+  |
+  +id: int;
+  +name: String;
+  +logo: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +preferred: int
+]
+
+[LoginResponse
+  |
+  +access_token: String;
+  +token_type: String;
+  +expires_in: int;
+  +error: String
+  |
+  +bool hasError()
+]
+
+[News
+  |
+  +id: int;
+  +text: String;
+  +user_id: int;
+  +show_from: String;
+  +show_until: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String
+]
+
+[Notification
+  |
+  +id: int;
+  +user_id: int;
+  +text: String;
+  +link: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String
+  |
+  <static>+List getNotifications()
+]
+
+[NotificationListData
+  |
+  +news: List<News>;
+  +notifications: List<Notification>
+]
+
+[UserPivot
+  |
+  +user_id: int;
+  +group_id: int
+]
+
+[Friend
+  |
+  +id: int;
+  +user_id: int;
+  +friend_id: int;
+  +status: int;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +user: User;
+  +friend: User
+  |
+  <static>+List getFriends()
+]
+
+[Friend]o-[User]
+
+[FriendListData
+  |
+  +friendlist: List<Friend>
+]
+
+[UserProfile
+  |
+  +id: int;
+  +name: String;
+  +avatar: String;
+  +banned_until: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +banreason: String;
+  +about_me: String;
+  +groups: List<Group>;
+  +favorites: List<Show>
+]
+
+[UserSubData
+  |
+  +shows: List<Show>
+]
+
+[UserWatchlistData
+  |
+  +shows: List<Show>
+]
+
+[RegisterResponse
+  |
+  +id: String;
+  +name: String;
+  +error: String
+  |
+  +bool hasError()
+]
+
+[Season
+  |
+  +id: int;
+  +number: int;
+  +show_id: int;
+  +type: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +length: int;
+  +show: Show
+]
+
+[Season]o-[Show]
+
+[Show
+  |
+  +id: int;
+  +name: String;
+  +name_alt: String;
+  +url: String;
+  +description: String;
+  +cover_landscape: String;
+  +cover_landscape_original: String;
+  +cover_portrait: String;
+  +visible_since: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +howManyAbos: int;
+  +seasonCount: int;
+  +rating: String;
+  +airing: int
+  |
+  <static>+List getShows()
+]
+
+[AnimeStream
+  |
+  +id: int;
+  +streamable_type: String;
+  +streamable_id: int;
+  +hoster_id: int;
+  +user_id: int;
+  +link: String;
+  +lang: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +hoster: Hoster;
+  +user: User
+  |
+  <static>+List getStreams()
+]
+
+[AnimeStream]o-[Hoster]
+[AnimeStream]o-[User]
+
+[SubEpisode
+  |
+  +id: int;
+  +name: String;
+  +created_at: String;
+  +cover_landscape: String;
+  +season_id: int;
+  +show_id: int;
+  +show_name: String;
+  +season_number: int;
+  +episode_number: int;
+  +show_url: String;
+  +avgVotes: String;
+  +hasReports: int;
+  +streams: List<AnimeStream>
+]
+
+[User
+  |
+  +id: int;
+  +name: String;
+  +avatar: String;
+  +banned_until: String;
+  +created_at: String;
+  +updated_at: String;
+  +deleted_at: String;
+  +banreason: String;
+  +about_me: String;
+  +access_key: String;
+  +groups: List<Group>
+  |
+  <static>+List getUsers()
+]
+
+[UserListData
+  |
+  +userlist: List<User>
+]
+
+[CacheManager
+  |
+  <static>+homedata: Homedata;
+  <static>+subdata: Subdata;
+  <static>+animeListData: AnimeListData;
+  <static>+userData: User;
+  <static>+calendardata: Calendardata;
+  <static>+favouritedata: Favouritedata;
+  <static>+historydata: Historydata;
+  <static>+watchlistdata: Watchlistdata;
+  <static>+userlistdata: UserListData
+]
+
+[CacheManager]o-[Homedata]
+[CacheManager]o-[Subdata]
+[CacheManager]o-[AnimeListData]
+[CacheManager]o-[User]
+[CacheManager]o-[Calendardata]
+[CacheManager]o-[Favouritedata]
+[CacheManager]o-[Historydata]
+[CacheManager]o-[Watchlistdata]
+[CacheManager]o-[UserListData]
+
+[AniflixAppbar
+]
+
+[AppBar]<:-[AniflixAppbar]
+
+[AnimeDescription
+]
+
+[Container]<:-[AnimeDescription]
+
+[AnimeHeader
+]
+
+[Container]<:-[AnimeHeader]
+
+[EpisodeList
+  |
+  +season: AnimeSeason;
+  +anime: Anime
+  |
+  +Widget build()
+]
+
+[EpisodeList]o-[AnimeSeason]
+[EpisodeList]o-[Anime]
+[<abstract>StatelessWidget]<:-[EpisodeList]
+
+[ChatComponent
+  |
+  +message: ChatMessage
+  |
+  +Widget build();
+  +List getUserGroups()
+]
+
+[ChatComponent]o-[ChatMessage]
+[<abstract>StatelessWidget]<:-[ChatComponent]
+
+[ChatInput
+  |
+  +onSend: dynamic Function(String);
+  +chat: List<ChatMessage>
+  |
+  +Widget build()
+]
+
+[ChatInput]o-[dynamic Function(String)]
+[<abstract>StatelessWidget]<:-[ChatInput]
+
+[ChatRulesDialog
+  |
+  +Widget build()
+]
+
+[AlertDialog]<:-[ChatRulesDialog]
+
+[AboutMeDialog
+  |
+  +onSend: dynamic Function(String);
+  +controller: TextEditingController
+  |
+  +Widget build()
+]
+
+[AboutMeDialog]o-[dynamic Function(String)]
+[AboutMeDialog]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[AboutMeDialog]
+
+[CloseAppDialog
+  |
+  -_onPress: dynamic Function(bool)
+  |
+  +Widget build()
+]
+
+[CloseAppDialog]o-[dynamic Function(bool)]
+[<abstract>StatelessWidget]<:-[CloseAppDialog]
+
+[LogoutDialog
+  |
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[LogoutDialog]
+
+[RatingDialog
+  |
+  +anime: Anime;
+  +onSend: dynamic Function(double);
+  +newRating: double
+  |
+  +RatingDialogState createState()
+]
+
+[RatingDialog]o-[Anime]
+[RatingDialog]o-[dynamic Function(double)]
+[<abstract>StatefulWidget]<:-[RatingDialog]
+
+[RatingDialogState
+  |
+  -_rating: double;
+  +anime: Anime;
+  +onSend: dynamic Function(double);
+  +newRating: double
+  |
+  +Widget build();
+  +dynamic sendData()
+]
+
+[RatingDialogState]o-[Anime]
+[RatingDialogState]o-[dynamic Function(double)]
+[<abstract>State<T>]<:-[RatingDialogState]
+
+[ReportDialog
+  |
+  +onSend: dynamic Function(String);
+  +controller: TextEditingController
+  |
+  +Widget build()
+]
+
+[ReportDialog]o-[dynamic Function(String)]
+[ReportDialog]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[ReportDialog]
+
+[WriteReviewDialog
+  |
+  +onSend: dynamic Function(Review);
+  +review: ReviewShow;
+  +user: User;
+  +controller: TextEditingController
+  |
+  +Widget build()
+]
+
+[WriteReviewDialog]o-[dynamic Function(Review)]
+[WriteReviewDialog]o-[ReviewShow]
+[WriteReviewDialog]o-[User]
+[WriteReviewDialog]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[WriteReviewDialog]
+
+[AnimePlayer
+  |
+  -_stream: AnimeStream;
+  -_view: int;
+  -_inApp: InAppWebView;
+  -_controller: InAppWebViewController;
+  -_onControllerInit: dynamic Function(ChewieController)
+  |
+  +Widget build();
+  +dynamic getPlayer();
+  +dynamic openInApp();
+  +dynamic openBrowser();
+  +dynamic open()
+]
+
+[AnimePlayer]o-[AnimeStream]
+[AnimePlayer]o-[InAppWebView]
+[AnimePlayer]o-[InAppWebViewController]
+[AnimePlayer]o-[dynamic Function(ChewieController)]
+[<abstract>StatelessWidget]<:-[AnimePlayer]
+
+[AnswerBar
+  |
+  -_user: User;
+  -_needAnswer: bool;
+  -_callback: dynamic Function(String)
+  |
+  +Widget build()
+]
+
+[AnswerBar]o-[User]
+[AnswerBar]o-[dynamic Function(String)]
+[<abstract>StatelessWidget]<:-[AnswerBar]
+
+[AnswerCommentComponent
+  |
+  +user: User;
+  -_callback: dynamic Function(String)
+  |
+  +AnswerCommentComponentState createState()
+]
+
+[AnswerCommentComponent]o-[User]
+[AnswerCommentComponent]o-[dynamic Function(String)]
+[<abstract>StatefulWidget]<:-[AnswerCommentComponent]
+
+[AnswerCommentComponentState
+  |
+  +user: User;
+  -_callback: dynamic Function(String)
+  |
+  +Widget build()
+]
+
+[AnswerCommentComponentState]o-[User]
+[AnswerCommentComponentState]o-[dynamic Function(String)]
+[<abstract>State<T>]<:-[AnswerCommentComponentState]
+
+[CommentComponent
+  |
+  +user: User;
+  +callback: dynamic Function(String)
+  |
+  +Widget build()
+]
+
+[CommentComponent]o-[User]
+[CommentComponent]o-[dynamic Function(String)]
+[<abstract>StatelessWidget]<:-[CommentComponent]
+
+[CommentContainer
+  |
+  -_comment: Comment;
+  -_user: User;
+  +episodeScreenState: EpisodeScreenState;
+  -_onSubSend: dynamic Function(int, String);
+  -_onDelete: dynamic Function(int);
+  -_onSubDelete: dynamic Function(int, int)
+  |
+  +Widget build()
+]
+
+[CommentContainer]o-[Comment]
+[CommentContainer]o-[User]
+[CommentContainer]o-[EpisodeScreenState]
+[CommentContainer]o-[dynamic Function(int, String)]
+[CommentContainer]o-[dynamic Function(int)]
+[CommentContainer]o-[dynamic Function(int, int)]
+[Container]<:-[CommentContainer]
+
+[CommentList
+  |
+  -_user: User;
+  -_episodeInfo: EpisodeInfo;
+  +episodeScreenState: EpisodeScreenState;
+  -_comments: List<Comment>;
+  -_onSend: dynamic Function(String);
+  -_onSubSend: dynamic Function(int, String);
+  -_onDelete: dynamic Function(int);
+  -_onSubDelete: dynamic Function(int, int)
+  |
+  +Widget build()
+]
+
+[CommentList]o-[User]
+[CommentList]o-[EpisodeInfo]
+[CommentList]o-[EpisodeScreenState]
+[CommentList]o-[dynamic Function(String)]
+[CommentList]o-[dynamic Function(int, String)]
+[CommentList]o-[dynamic Function(int)]
+[CommentList]o-[dynamic Function(int, int)]
+[Container]<:-[CommentList]
+
+[SubCommentContainer
+  |
+  -_comment: SubComment;
+  +episodeScreenState: EpisodeScreenState;
+  -_user: User;
+  -_onSubDelete: dynamic Function()
+  |
+  +Widget build()
+]
+
+[SubCommentContainer]o-[SubComment]
+[SubCommentContainer]o-[EpisodeScreenState]
+[SubCommentContainer]o-[User]
+[SubCommentContainer]o-[dynamic Function()]
+[<abstract>StatelessWidget]<:-[SubCommentContainer]
+
+[EpisodeBar
+  |
+  -_episode: EpisodeInfo;
+  -_created: dynamic Function(EpisodeBarState)
+  |
+  +EpisodeBarState createState()
+]
+
+[EpisodeBar]o-[EpisodeInfo]
+[EpisodeBar]o-[dynamic Function(EpisodeBarState)]
+[<abstract>StatefulWidget]<:-[EpisodeBar]
+
+[EpisodeBarState
+  |
+  -_episode: EpisodeInfo;
+  -_created: dynamic Function(EpisodeBarState);
+  -_isReported: bool;
+  +possibleVotes: List<String>;
+  -_actualVote: String;
+  -_numberOfUpVotes: int;
+  -_numberOfDownVotes: int
+  |
+  +void init();
+  +void initState();
+  +dynamic updateEpisode();
+  +dynamic report();
+  +Widget build();
+  +dynamic makeUpVote();
+  +dynamic makeDownVote()
+]
+
+[EpisodeBarState]o-[EpisodeInfo]
+[EpisodeBarState]o-[dynamic Function(EpisodeBarState)]
+[<abstract>State<T>]<:-[EpisodeBarState]
+
+[EpisodeHeader
+  |
+  +episode: EpisodeInfo;
+  +prev: Function;
+  +next: Function;
+  +change: dynamic Function(int, int, int);
+  -_created: dynamic Function(EpisodeHeaderState)
+  |
+  +EpisodeHeaderState createState()
+]
+
+[EpisodeHeader]o-[EpisodeInfo]
+[EpisodeHeader]o-[dynamic Function(int, int, int)]
+[EpisodeHeader]o-[dynamic Function(EpisodeHeaderState)]
+[<abstract>StatefulWidget]<:-[EpisodeHeader]
+
+[EpisodeHeaderState
+  |
+  +episode: EpisodeInfo;
+  +prev: Function;
+  +next: Function;
+  +change: dynamic Function(int, int, int);
+  -_created: dynamic Function(EpisodeHeaderState);
+  -_language: int;
+  -_hoster: int;
+  -_view: int;
+  -_hosters: List<String>
+  |
+  +void init();
+  +void initState();
+  +dynamic updateEpisode();
+  +Widget build();
+  +List getLanguagesAsDropdownList();
+  +List getHosters();
+  +List getPlayers()
+]
+
+[EpisodeHeaderState]o-[EpisodeInfo]
+[EpisodeHeaderState]o-[dynamic Function(int, int, int)]
+[EpisodeHeaderState]o-[dynamic Function(EpisodeHeaderState)]
+[<abstract>State<T>]<:-[EpisodeHeaderState]
+
+[AniflixImage
+]
+
+[Image]<:-[AniflixImage]
+
+[ProfileImage
+  |
+  +avatar: String;
+  +onTap: Function
+  |
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[ProfileImage]
+
+[IconListElement
+]
+
+[Container]<:-[IconListElement]
+
+[ImageListElement
+]
+
+[Container]<:-[ImageListElement]
+
+[ListElement
+]
+
+[Container]<:-[ListElement]
+
+[<abstract>AniflixNotification
+  |
+  -_body: Widget
+  |
+  +Widget build()
+]
+
+[<abstract>AniflixNotification]o-[<abstract>Widget]
+[<abstract>StatelessWidget]<:-[<abstract>AniflixNotification]
+
+[FriendNotification
+]
+
+[PersonalNotification]<:-[FriendNotification]
+
+[NewsNotification
+  |
+  -_message: String
+]
+
+[<abstract>AniflixNotification]<:-[NewsNotification]
+
+[PersonalNotification
+]
+
+[<abstract>AniflixNotification]<:-[PersonalNotification]
+
+[SubNotification
+]
+
+[PersonalNotification]<:-[SubNotification]
+
+[VoteBar
+  |
+  -_id: int;
+  -_votes: List<Vote>;
+  -_voted: int;
+  -_onVote: dynamic Function(int, int);
+  +possibleVotes: List<String>;
+  -_actualVote: String;
+  -_numberOfUpVotes: int;
+  -_numberOfDownVotes: int
+  |
+  +void init();
+  +Widget build()
+]
+
+[VoteBar]o-[dynamic Function(int, int)]
+[<abstract>StatelessWidget]<:-[VoteBar]
+
+[ReportDeleteBar
+  |
+  -_delete: bool;
+  -_onReport: dynamic Function();
+  -_onDelete: dynamic Function()
+  |
+  +Widget build()
+]
+
+[ReportDeleteBar]o-[dynamic Function()]
+[<abstract>StatelessWidget]<:-[ReportDeleteBar]
+
+[ReviewElement
+  |
+  +review: Review;
+  -_user: User;
+  +ctx: BuildContext;
+  -_onDelete: dynamic Function(int)
+]
+
+[ReviewElement]o-[Review]
+[ReviewElement]o-[User]
+[ReviewElement]o-[<abstract>BuildContext]
+[ReviewElement]o-[dynamic Function(int)]
+[Container]<:-[ReviewElement]
+
+[SearchList
+  |
+  +shows: Future<List<Show>>
+  |
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[SearchList]
+
+[HeadlineSlider
+  |
+  +title: String;
+  +elements: List<SliderElement>;
+  +aspectRatio: double;
+  +size: double
+  |
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[HeadlineSlider]
+
+[DateText
+  |
+  +unformattedDate: String;
+  +showTime: bool
+  |
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[DateText]
+
+[HighlightedTextBox
+  |
+  +color: Color;
+  +text: String
+  |
+  +Widget build()
+]
+
+[HighlightedTextBox]o-[Color]
+[<abstract>StatelessWidget]<:-[HighlightedTextBox]
+
+[ThemeText
+  |
+  +text: String;
+  +fontSize: double;
+  +fontWeight: FontWeight;
+  +softWrap: bool;
+  +textAlign: TextAlign;
+  +maxLines: int;
+  +overflow: TextOverflow
+  |
+  +Widget build()
+]
+
+[ThemeText]o-[FontWeight]
+[ThemeText]o-[TextAlign]
+[ThemeText]o-[TextOverflow]
+[<abstract>StatelessWidget]<:-[ThemeText]
+
+[AniflixNavigationbar
+  |
+  -_onCreated: dynamic Function(AniflixNavState)
+  |
+  <static>+dynamic getItems();
+  +BottomNavState createState()
+]
+
+[AniflixNavigationbar]o-[dynamic Function(AniflixNavState)]
+[BottomNav]<:-[AniflixNavigationbar]
+
+[AniflixNavState
+  |
+  +currentIndex: int;
+  +iconStyle: IconStyle;
+  +labelStyle: LabelStyle
+  |
+  +dynamic updateIndex();
+  +Widget build();
+  +dynamic onItemClick();
+  +dynamic parseLabel()
+]
+
+[AniflixNavState]o-[IconStyle]
+[AniflixNavState]o-[LabelStyle]
+[BottomNavState]<:-[AniflixNavState]
+
+[AniflixNavItem
+  |
+  +key: Key;
+  +selected: bool
+  |
+  +Widget build()
+]
+
+[AniflixNavItem]o-[<abstract>Key]
+[BMNavItem]<:-[AniflixNavItem]
+
+[AnimeScreen
+  |
+  +name: String
+  |
+  +AnimeScreenState createState();
+  +dynamic getScreenName()
+]
+
+[<abstract>StatefulWidget]<:-[AnimeScreen]
+[<abstract>Screen]<:--[AnimeScreen]
+
+[AnimeScreenState
+  |
+  +anime: Future<Anime>;
+  +genres: List<TextboxSliderElement>;
+  +genreNames: List<String>;
+  +friendlist: List<Friend>;
+  -_isSubscribed: bool;
+  -_actualSeason: int;
+  -_isInWatchlist: bool;
+  -_isFavorite: bool;
+  -_useData: bool;
+  -_sendAnalytics: bool;
+  -_rating: double
+  |
+  +dynamic toggleSubButton();
+  +dynamic changeSeason();
+  +dynamic addToWatchlist();
+  +dynamic addAsFavorite();
+  +Widget build();
+  +dynamic setSeen();
+  +dynamic setUnseen()
+]
+
+[<abstract>State<T>]<:-[AnimeScreenState]
+
+[AnimeListData
+  |
+  +allShows: List<Show>;
+  +allShowsWithGenres: List<GenreWithShows>
+]
+
+[AnimeList
+  |
+  +dynamic getScreenName();
+  +AnimeListState createState()
+]
+
+[<abstract>StatefulWidget]<:-[AnimeList]
+[<abstract>Screen]<:--[AnimeList]
+
+[AnimeListState
+  |
+  +animeListData: Future<AnimeListData>;
+  +cache: AnimeListData;
+  +filterCriteria: List<String>;
+  -_onlyAiring: bool;
+  -_actualFilterCriteria: int;
+  -_maxShows: int;
+  +sortedGenre: List<Widget>;
+  +sortedAZ: List<Widget>;
+  +sortedBewertung: List<Widget>;
+  +sortedAbos: List<Widget>;
+  +sortedGenreAiring: List<Widget>;
+  +sortedAZAiring: List<Widget>;
+  +sortedBewertungAiring: List<Widget>;
+  +sortedAbosAiring: List<Widget>;
+  -_actualSortedAnimeList: List<Widget>
+  |
+  +dynamic changeCheckbox();
+  +dynamic changeActualFilterCriteria();
+  +dynamic updateAnimeList();
+  +Widget build();
+  +dynamic getLayout();
+  +List getFilterCriteriaAsDropdownList();
+  +List getAllAnimeAsSortedList()
+]
+
+[AnimeListState]o-[AnimeListData]
+[<abstract>State<T>]<:-[AnimeListState]
+
+[Calendardata
+  |
+  +days: List<CalendarDay>
+]
+
+[Calendar
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[Calendar]
+[<abstract>Screen]<:--[Calendar]
+
+[CalendarState
+  |
+  +calendarData: Future<Calendardata>;
+  +cache: Calendardata;
+  +special: List<SliderElement>;
+  +monday: List<SliderElement>;
+  +tuesday: List<SliderElement>;
+  +wednesday: List<SliderElement>;
+  +thursday: List<SliderElement>;
+  +friday: List<SliderElement>;
+  +saturday: List<SliderElement>;
+  +sunday: List<SliderElement>
+  |
+  +Widget build();
+  +dynamic getLayout()
+]
+
+[CalendarState]o-[Calendardata]
+[<abstract>State<T>]<:-[CalendarState]
+
+[ChatScreen
+  |
+  +dynamic getScreenName();
+  +ChatState createState()
+]
+
+[<abstract>StatefulWidget]<:-[ChatScreen]
+[<abstract>Screen]<:--[ChatScreen]
+
+[ChatState
+  |
+  +chatdata: Future<ChatInfo>;
+  -_messages: List<ChatMessage>
+  |
+  +dynamic addMessage();
+  +Widget build()
+]
+
+[<abstract>State<T>]<:-[ChatState]
+
+[ChatInfo
+  |
+  +user: User;
+  +chatMessage: List<ChatMessage>
+]
+
+[ChatInfo]o-[User]
+
+[EpisodeScreenArguments
+  |
+  +name: String;
+  +season: int;
+  +number: int;
+  +episodeInfo: Future<LoadInfo>
+]
+
+[EpisodeScreen
+  |
+  +name: String;
+  +season: int;
+  +number: int;
+  -_episodeInfo: Future<LoadInfo>
+  |
+  +dynamic getScreenName();
+  +EpisodeScreenState createState()
+]
+
+[<abstract>StatefulWidget]<:-[EpisodeScreen]
+[<abstract>Screen]<:--[EpisodeScreen]
+
+[EpisodeScreenState
+  |
+  -_stream: AnimeStream;
+  -_hosters: List<String>;
+  -_langs: List<String>;
+  +comments: List<Comment>;
+  +episodeInfo: Future<LoadInfo>;
+  +name: String;
+  +season: int;
+  +number: int;
+  +view: int;
+  +barState: EpisodeBarState;
+  +episodeHeaderState: EpisodeHeaderState;
+  -_inApp: dynamic;
+  -_controller: InAppWebViewController;
+  -_chewieController: ChewieController
+  |
+  +dynamic updateStream();
+  +dynamic updateEpisodeData();
+  +void dispose();
+  +Widget build()
+]
+
+[EpisodeScreenState]o-[AnimeStream]
+[EpisodeScreenState]o-[EpisodeBarState]
+[EpisodeScreenState]o-[EpisodeHeaderState]
+[EpisodeScreenState]o-[InAppWebViewController]
+[EpisodeScreenState]o-[ChewieController]
+[<abstract>State<T>]<:-[EpisodeScreenState]
+
+[LoadInfo
+  |
+  +user: User;
+  +episodeInfo: EpisodeInfo
+]
+
+[LoadInfo]o-[User]
+[LoadInfo]o-[EpisodeInfo]
+
+[Favouritedata
+  |
+  +list: List<Show>
+]
+
+[Favoriten
+  |
+  +favouritedata: Favouritedata
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[Favoriten]o-[Favouritedata]
+[<abstract>StatefulWidget]<:-[Favoriten]
+[<abstract>Screen]<:--[Favoriten]
+
+[FavoritenState
+  |
+  +favouriteData: Future<Favouritedata>;
+  +cache: Favouritedata;
+  +external: bool
+  |
+  +Widget build();
+  +dynamic getLayout();
+  +List getFavouritesAsWidgets()
+]
+
+[FavoritenState]o-[Favouritedata]
+[<abstract>State<T>]<:-[FavoritenState]
+
+[FriendList
+  |
+  +userid: int;
+  +friendlistData: Future<FriendListData>;
+  +data: FriendListData;
+  +refresh: Function
+  |
+  +dynamic getScreenName();
+  +Widget build();
+  +dynamic getLayout();
+  +List getFriendsAsWidgets();
+  +List getFriendRequestsAsWidgets();
+  +List getIncomingFriendRequestsAsWidgets();
+  +List getOutgoingFriendRequestsAsWidgets();
+  +List getBlockedFriendsAsWidgets()
+]
+
+[FriendList]o-[FriendListData]
+[<abstract>StatelessWidget]<:-[FriendList]
+[<abstract>Screen]<:--[FriendList]
+
+[Homedata
+  |
+  +continues: List<SliderElement>;
+  +airings: List<SliderElement>;
+  +newshows: List<SliderElement>;
+  +discover: List<SliderElement>
+]
+
+[Home
+  |
+  +dynamic getScreenName();
+  +HomeState createState()
+]
+
+[<abstract>StatefulWidget]<:-[Home]
+[<abstract>Screen]<:--[Home]
+
+[HomeState
+  |
+  +homedata: Future<Homedata>;
+  +cache: Homedata;
+  +ad: NativeAd
+  |
+  +Widget build();
+  +dynamic getLayout()
+]
+
+[HomeState]o-[Homedata]
+[HomeState]o-[NativeAd]
+[<abstract>State<T>]<:-[HomeState]
+
+[LoadingScreen
+  |
+  +dynamic getScreenName();
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[LoadingScreen]
+[<abstract>Screen]<:--[LoadingScreen]
+
+[Login
+  |
+  +analytics: FirebaseAnalytics;
+  +emailController: TextEditingController;
+  +passwortController: TextEditingController
+  |
+  +dynamic getScreenName();
+  +Widget build();
+  -dynamic _launchURL();
+  +void resetTextController();
+  +void showErrorDialog()
+]
+
+[Login]o-[FirebaseAnalytics]
+[Login]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[Login]
+[<abstract>Screen]<:--[Login]
+
+[NewsPage
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[NewsPage]
+[<abstract>Screen]<:--[NewsPage]
+
+[NewsPageState
+  |
+  +news: Future<NotificationListData>;
+  +newsdata: NotificationListData
+  |
+  +dynamic onDelete();
+  +Widget build();
+  +List getNotificationsAsList()
+]
+
+[NewsPageState]o-[NotificationListData]
+[<abstract>State<T>]<:-[NewsPageState]
+
+[UserProfileData
+  |
+  +userProfile: UserProfile;
+  +historydata: Historydata;
+  +favouritedata: Favouritedata;
+  +userSubData: UserSubData;
+  +userWatchlistData: UserWatchlistData;
+  +friendListData: FriendListData
+]
+
+[UserProfileData]o-[UserProfile]
+[UserProfileData]o-[Historydata]
+[UserProfileData]o-[Favouritedata]
+[UserProfileData]o-[UserSubData]
+[UserProfileData]o-[UserWatchlistData]
+[UserProfileData]o-[FriendListData]
+
+[Profile
+  |
+  +userID: int
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[Profile]
+[<abstract>Screen]<:--[Profile]
+
+[ProfileState
+  |
+  +userID: int;
+  +profileData: Future<UserProfileData>;
+  +aboutMe: String
+  |
+  +Widget build();
+  +dynamic getLayout()
+]
+
+[<abstract>State<T>]<:-[ProfileState]
+
+[ProfileMainPage
+  |
+  -_userProfileData: UserProfileData;
+  -_onPressed: Function
+  |
+  +Widget build()
+]
+
+[ProfileMainPage]o-[UserProfileData]
+[<abstract>StatelessWidget]<:-[ProfileMainPage]
+
+[ProfileSettings
+  |
+  +usernameController: TextEditingController;
+  +passwortController: TextEditingController
+  |
+  +dynamic getScreenName();
+  +Widget build();
+  +Widget buildButtons();
+  +void resetTextController();
+  +void showChangeDialog();
+  +void showErrorDialog()
+]
+
+[ProfileSettings]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[ProfileSettings]
+[<abstract>Screen]<:--[ProfileSettings]
+
+[ProfileSubBox
+  |
+  +userid: int
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[ProfileSubBox]
+[<abstract>Screen]<:--[ProfileSubBox]
+
+[ProfileSubBoxState
+  |
+  +profilesubboxdata: Future<UserSubData>;
+  +data: UserSubData;
+  +userid: int
+  |
+  +Widget build();
+  +dynamic getLayout();
+  +List getWatchlistAsWidgets()
+]
+
+[ProfileSubBoxState]o-[UserSubData]
+[<abstract>State<T>]<:-[ProfileSubBoxState]
+
+[Register
+  |
+  +usernameController: TextEditingController;
+  +emailController: TextEditingController;
+  +passwortController: TextEditingController;
+  +passwortWiederholenController: TextEditingController
+  |
+  +dynamic getScreenName();
+  +Widget build();
+  +void resetTextController()
+]
+
+[Register]o-[TextEditingController]
+[<abstract>StatelessWidget]<:-[Register]
+[<abstract>Screen]<:--[Register]
+
+[ReviewScreen
+  |
+  +url: String
+  |
+  +dynamic getScreenName();
+  +ReviewScreenState createState()
+]
+
+[<abstract>StatefulWidget]<:-[ReviewScreen]
+[<abstract>Screen]<:--[ReviewScreen]
+
+[ReviewScreenState
+  |
+  +reviewData: Future<ReviewInfo>;
+  +url: String;
+  -_actualReviews: List<ReviewElement>;
+  -_showButton: bool
+  |
+  +dynamic addNewReview();
+  +Widget build()
+]
+
+[<abstract>State<T>]<:-[ReviewScreenState]
+
+[ReviewInfo
+  |
+  +user: User;
+  +reviewShow: ReviewShow
+]
+
+[ReviewInfo]o-[User]
+[ReviewInfo]o-[ReviewShow]
+
+[<abstract>Screen
+  |
+  +dynamic getScreenName()
+]
+
+[<abstract>Widget]<:-[<abstract>Screen]
+
+[SearchAnime
+  |
+  +dynamic getScreenName();
+  +SearchAnimeState createState()
+]
+
+[<abstract>StatefulWidget]<:-[SearchAnime]
+[<abstract>Screen]<:--[SearchAnime]
+
+[SearchAnimeState
+  |
+  +searchAnimeData: Future<SearchAnime>;
+  +shows: Future<List<Show>>
+  |
+  +dynamic updateSearchList();
+  +Widget build();
+  +dynamic submit()
+]
+
+[<abstract>State<T>]<:-[SearchAnimeState]
+
+[Settings
+  |
+  +dynamic getScreenName();
+  +Widget build()
+]
+
+[<abstract>StatelessWidget]<:-[Settings]
+[<abstract>Screen]<:--[Settings]
+
+[Subdata
+  |
+  +episodes: List<SubEpisode>
+]
+
+[SubBox
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[SubBox]
+[<abstract>Screen]<:--[SubBox]
+
+[SubBoxState
+  |
+  +data: Future<Subdata>;
+  +cache: Subdata;
+  +days: List<HeadlineSlider>;
+  +lists: List<List<SliderElement>>
+  |
+  +dynamic getDays();
+  +Widget build();
+  +dynamic getLayout()
+]
+
+[SubBoxState]o-[Subdata]
+[<abstract>State<T>]<:-[SubBoxState]
+
+[UserListData
+  |
+  +users: List<User>
+]
+
+[Userlist
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[Userlist]
+[<abstract>Screen]<:--[Userlist]
+
+[UserlistState
+  |
+  +userlistdata: Future<UserListData>;
+  +cache: UserListData;
+  +filterText: String;
+  +actualPage: int;
+  +filteredUserList: List<User>
+  |
+  +Widget build();
+  +dynamic getLayout();
+  +List getUserAsWidgets();
+  +dynamic initUserWidget();
+  +dynamic initActualPage();
+  +dynamic getNextPageButton();
+  +dynamic getPreviousPageButton();
+  +dynamic getMaxPages();
+  +dynamic canOpenNextPage();
+  +dynamic applyFilter();
+  +dynamic usesFilter();
+  +dynamic addUnfilteredUsers();
+  +dynamic addWidgetsForPage();
+  +dynamic buildPage()
+]
+
+[UserlistState]o-[UserListData]
+[<abstract>State<T>]<:-[UserlistState]
+
+[Historydata
+  |
+  +episodes: List<HistoryEpisode>
+]
+
+[Verlauf
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[<abstract>StatefulWidget]<:-[Verlauf]
+[<abstract>Screen]<:--[Verlauf]
+
+[VerlaufState
+  |
+  +historyData: Future<Historydata>;
+  +cache: Historydata
+  |
+  +Widget build();
+  +dynamic getLayout();
+  +List getHistoryAsWidgets()
+]
+
+[VerlaufState]o-[Historydata]
+[<abstract>State<T>]<:-[VerlaufState]
+
+[Watchlistdata
+  |
+  +shows: List<Show>
+]
+
+[Watchlist
+  |
+  +watchlistdata: UserWatchlistData
+  |
+  +dynamic getScreenName();
+  +State createState()
+]
+
+[Watchlist]o-[UserWatchlistData]
+[<abstract>StatefulWidget]<:-[Watchlist]
+[<abstract>Screen]<:--[Watchlist]
+
+[WatchlistState
+  |
+  +watchlistdata: Future<Watchlistdata>;
+  +cache: Watchlistdata;
+  +userwatchlistdata: UserWatchlistData;
+  +external: bool
+  |
+  +Widget build();
+  +dynamic getLayout();
+  +List getWatchlistAsWidgets()
+]
+
+[WatchlistState]o-[Watchlistdata]
+[WatchlistState]o-[UserWatchlistData]
+[<abstract>State<T>]<:-[WatchlistState]
+
+[AnimeCarousel
+]
+
+[CarouselSlider]<:-[AnimeCarousel]
+
+[TextboxCarousel
+]
+
+[CarouselSlider]<:-[TextboxCarousel]
+
+[SliderElement
+  |
+  +onTap: dynamic Function(BuildContext);
+  +name: String;
+  +description: String;
+  +image: String;
+  +close: Function;
+  +desccolor: Color;
+  +horizontal: bool
+  |
+  +Widget build()
+]
+
+[SliderElement]o-[dynamic Function(BuildContext)]
+[SliderElement]o-[Color]
+[<abstract>StatelessWidget]<:-[SliderElement]
+
+[TextboxSliderElement
+]
+
+[Container]<:-[TextboxSliderElement]
+
+[App
+  |
+  <static>+targetingInfo: MobileAdTargetingInfo
+  |
+  +AppState createState();
+  <static>+void setTheme()
+]
+
+[App]o-[MobileAdTargetingInfo]
+[<abstract>StatefulWidget]<:-[App]
+
+[AppState
+  |
+  -_theme: ThemeData;
+  <static>+analytics: FirebaseAnalytics;
+  <static>+observer: FirebaseAnalyticsObserver;
+  -_navState: AniflixNavState;
+  +bucket: PageStorageBucket;
+  <static>-_index: int;
+  -_prefs: SharedPreferences;
+  <static>-_loading: bool;
+  <static>-_state: AppState;
+  <static>-_loggedIn: bool;
+  <static>+adFailed: bool;
+  -_adLoaded: bool;
+  +ad: BannerAd
+  |
+  +void initState();
+  <static>+dynamic updateLoggedIn();
+  <static>+dynamic setLoading();
+  <static>+dynamic setIndex();
+  +dynamic checkLoginStatus();
+  +dynamic showChat();
+  +Widget build();
+  +Route generateRoute();
+  +Scaffold getScaffold()
+]
+
+[AppState]o-[ThemeData]
+[AppState]o-[FirebaseAnalytics]
+[AppState]o-[FirebaseAnalyticsObserver]
+[AppState]o-[AniflixNavState]
+[AppState]o-[PageStorageBucket]
+[AppState]o-[SharedPreferences]
+[AppState]o-[AppState]
+[AppState]o-[BannerAd]
+[<abstract>State<T>]<:-[AppState]
+
+[GoUnlimitedParser
+  |
+  -dynamic _getMP4();
+  +Future onParse()
+]
+
+[<abstract>HosterParser]<:-[GoUnlimitedParser]
+
+[<abstract>HosterParser
+  |
+  +hosterID: int;
+  <static>+parser: Map<int, HosterParser>
+  |
+  <static>+dynamic initParser();
+  +Future parseHoster();
+  #Future onParse()
+]
+
+[StreamTapeParser
+  |
+  +Future onParse()
+]
+
+[<abstract>HosterParser]<:-[StreamTapeParser]
+
+[VivoParser
+  |
+  +Future onParse()
+]
+
+[<abstract>HosterParser]<:-[VivoParser]
+
+[CustomTheme
+  |
+  +themeName: String;
+  +mainbarColor: Color;
+  +appbarColor: Color;
+  +screenBackgroundColor: Color;
+  +unselectedIconColor: Color;
+  +selectedIconColor: Color;
+  +chatButtonColor: Color;
+  +textColor: Color
+  |
+  +String getThemeName();
+  +Color getMainbarColor();
+  +Color getAppbarColor();
+  +Color getScreenBackgroundColor();
+  +Color getUnselectedIconColor();
+  +Color getSelectedIconColor();
+  +Color getChatButtonColor();
+  +Color getTextColor();
+  +ThemeData getThemeData()
+]
+
+[CustomTheme]o-[Color]
+
+[ThemeManager
+  |
+  <static>+instance: ThemeManager;
+  +Themes: List<CustomTheme>;
+  +actualTheme: CustomTheme;
+  +actualThemeIndex: int
+  |
+  <static>+ThemeManager getInstance();
+  +List getThemeNames();
+  +void setActualTheme();
+  +void addNewTheme();
+  +void addNewThemes();
+  +ThemeData getActualThemeData()
+]
+
+[ThemeManager]o-[ThemeManager]
+[ThemeManager]o-[CustomTheme]
