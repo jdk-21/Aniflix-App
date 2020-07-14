@@ -21,7 +21,8 @@ The app will send a request to the server to get the lists of animes that will b
 
 ### .feature File
 
-![.feature file](../feature%20files/feature%20getHomeVideos.PNG)
+![.feature file](../feature%20files/feature%20HomePage.PNG)  
+[Get homepage animes](../feature%20files/feature%20HomePage.PNG)
 
 ## 2.2 Alternative Flows
 n/a
