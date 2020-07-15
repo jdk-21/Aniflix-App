@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
@@ -170,6 +171,9 @@ class AppState extends State<App> {
       );
     } else {
       if (_loggedIn) {
+        if(CacheManager.hosters == null){
+          APIManager.getHoster().then((hosters) => CacheManager.hosters = hosters);
+        }
         if (ad != null) {
             if (!_adLoaded) {
               ad.load().then((loaded) {

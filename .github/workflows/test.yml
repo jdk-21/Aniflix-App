@@ -1,4 +1,4 @@
-name: Build App
+name: Test App
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -11,14 +11,19 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  test:
     # The type of runner that the job will run on
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Install Flutter
-      uses: subosito/flutter-action@v1.3.2
-    - name: Install app dependencies
-      run: flutter pub get
-    - name: Build app
-      run: flutter build apk
+      - uses: actions/checkout@v1
+      - name: Install Flutter
+        uses: subosito/flutter-action@v1.3.2
+      - name: Install app dependencies
+        run: flutter pub get
+      - name: Test app
+        run: flutter test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage/lcov.info

@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/objects/Hoster.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
@@ -19,5 +20,6 @@ class CacheManager{
   static Historydata historydata;
   static Watchlistdata watchlistdata;
   static UserListData userlistdata;
+  static List<Hoster> hosters;
 
 }

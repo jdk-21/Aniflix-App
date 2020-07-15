@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
+import 'package:aniflix_app/api/objects/Hoster.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -10,7 +10,10 @@ import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
 import 'package:aniflix_app/api/objects/news/Notification.dart' as n;
 import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
+import 'package:aniflix_app/api/objects/profile/UserAnimeListData.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
+import 'package:aniflix_app/api/objects/profile/UserStats.dart';
 import 'package:aniflix_app/api/objects/profile/UserSubData.dart';
 import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
@@ -54,6 +57,19 @@ class APIManager {
     return news;
   }
 
+  static Future<List<Hoster>> getHoster() async {
+    List<Hoster> hoster = [];
+    var response = await _authGetRequest("hosters", login);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      for (var entry in json) {
+        hoster.add(Hoster.fromJson(entry));
+      }
+    }
+    return hoster;
+  }
+
   static Future<Calendardata> getCalendarData() async {
     List<CalendarDay> elements = [];
     var response = await _getRequest("airing");
@@ -90,16 +106,22 @@ class APIManager {
         var ep = Episode.fromJson(entry);
         var desc = "";
         var date;
-        if(ep.created_at != null){
+        if (ep.created_at != null) {
           date = DateTime.parse(ep.created_at);
         }
 
         var now = DateTime.now();
 
-        if(now.day == date.day && now.month == date.month && now.year == date.year){
+        if (now.day == date.day &&
+            now.month == date.month &&
+            now.year == date.year) {
           desc = "Heute";
-        }else{
-          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        } else {
+          desc = date.day.toString() +
+              "." +
+              date.month.toString() +
+              "." +
+              date.year.toString();
         }
         airings.add(SliderElement(
             name: ep.season.show.name +
@@ -111,7 +133,9 @@ class APIManager {
             image: "https://www2.aniflix.tv/storage/" +
                 ep.season.show.cover_landscape,
             onTap: (ctx) {
-              Navigator.pushNamed(ctx, "episode", arguments: EpisodeScreenArguments(ep.season.show.url,ep.season.number, ep.number));
+              Navigator.pushNamed(ctx, "episode",
+                  arguments: EpisodeScreenArguments(
+                      ep.season.show.url, ep.season.number, ep.number));
             }));
       }
     }
@@ -131,8 +155,8 @@ class APIManager {
           name: show.name,
           image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: (ctx) {
-              Navigator.pushNamed(ctx, "anime", arguments: show.url);
-            },
+            Navigator.pushNamed(ctx, "anime", arguments: show.url);
+          },
           horizontal: false,
         ));
       }
@@ -153,8 +177,8 @@ class APIManager {
           name: show.name,
           image: "https://www2.aniflix.tv/storage/" + show.cover_portrait,
           onTap: (ctx) {
-              Navigator.pushNamed(ctx, "anime", arguments: show.url);
-            },
+            Navigator.pushNamed(ctx, "anime", arguments: show.url);
+          },
           horizontal: false,
         ));
       }
@@ -189,10 +213,11 @@ class APIManager {
 
     return shows;
   }
-  
+
   static Future<List<Show>> searchShows(String search) async {
     List<Show> shows = [];
-    var response = await _authPostRequest("show/search", login,bodyObject: {"search":search});
+    var response = await _authPostRequest("show/search", login,
+        bodyObject: {"search": search});
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -249,7 +274,8 @@ class APIManager {
   }
 
   static Future<AnimeSeason> setSeasonSeen(int seasonId) async {
-    var response = await _authPostRequest("show/set-season-seen/"+seasonId.toString(), login);
+    var response = await _authPostRequest(
+        "show/set-season-seen/" + seasonId.toString(), login);
     AnimeSeason season;
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -259,7 +285,8 @@ class APIManager {
   }
 
   static Future<AnimeSeason> setSeasonUnSeen(int seasonId) async {
-    var response = await _authPostRequest("show/set-season-unseen/"+seasonId.toString(), login);
+    var response = await _authPostRequest(
+        "show/set-season-unseen/" + seasonId.toString(), login);
     AnimeSeason season;
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -287,7 +314,7 @@ class APIManager {
     return ReviewInfo(info, user);
   }
 
-  static Future<Review> createReview(int show_id, String text) async{
+  static Future<Review> createReview(int show_id, String text) async {
     var response = await _authPostRequest("review", login,
         bodyObject: {"show_id": show_id.toString(), "text": text});
     var review;
@@ -299,10 +326,11 @@ class APIManager {
   }
 
   static void deleteReview(int id) {
-    _authDeleteRequest("review/"+id.toString(), login);
+    _authDeleteRequest("review/" + id.toString(), login);
   }
 
-  static Future<List<SliderElement>> getContinue(Function(List<SliderElement>) reload) async {
+  static Future<List<SliderElement>> getContinue(
+      Function(List<SliderElement>) reload) async {
     List<SliderElement> continues = [];
     var response = await _authPostRequest("show/continue", login);
 
@@ -312,18 +340,24 @@ class APIManager {
         var ep = Episode.fromJson(entry);
         var desc = "";
         var date;
-        if(ep.updated_at != null){
+        if (ep.updated_at != null) {
           date = DateTime.parse(ep.updated_at);
-        }else{
+        } else {
           date = DateTime.parse(ep.created_at);
         }
 
         var now = DateTime.now();
 
-        if(now.day == date.day && now.month == date.month && now.year == date.year){
+        if (now.day == date.day &&
+            now.month == date.month &&
+            now.year == date.year) {
           desc = "Heute";
-        }else{
-          desc = date.day.toString()+"."+date.month.toString()+"."+date.year.toString();
+        } else {
+          desc = date.day.toString() +
+              "." +
+              date.month.toString() +
+              "." +
+              date.year.toString();
         }
         continues.add(SliderElement(
           name: ep.season.show.name +
@@ -335,13 +369,15 @@ class APIManager {
           image: "https://www2.aniflix.tv/storage/" +
               ep.season.show.cover_landscape,
           onTap: (ctx) {
-              Navigator.pushNamed(ctx, "episode", arguments: EpisodeScreenArguments(ep.season.show.url,ep.season.number, ep.number));
+            Navigator.pushNamed(ctx, "episode",
+                arguments: EpisodeScreenArguments(
+                    ep.season.show.url, ep.season.number, ep.number));
           },
           close: () async {
             var continues =
                 await APIManager.hideContinue(ep.season.show_id, reload);
             reload(continues);
-         },
+          },
         ));
       }
     }
@@ -355,7 +391,8 @@ class APIManager {
     return getContinue(reload);
   }
 
-  static Future<Homedata> getHomeData(Function(List<SliderElement>) reload) async {
+  static Future<Homedata> getHomeData(
+      Function(List<SliderElement>) reload) async {
     var continues = await getContinue(reload);
     var airings = await getAirings();
     var newShows = await getNewShows();
@@ -382,14 +419,20 @@ class APIManager {
   }
 
   static Future<UserProfile> getUserProfile(int userID) async {
-    var response = await _authGetRequest("user/"+userID.toString(), login);
+    var response = await _authGetRequest("user/" + userID.toString(), login);
     return UserProfile.fromJson(jsonDecode(response.body));
   }
 
-  static Future<Historydata> getUserHistory(int userID) async {
+  static Future<UserStats> getUserStats(int userID) async {
+    var response =
+        await _authGetRequest("userstats/" + userID.toString(), login);
+    return UserStats.fromJson(jsonDecode(response.body));
+  }
 
+  static Future<Historydata> getUserHistory(int userID) async {
     List<HistoryEpisode> episodes = [];
-    var response = await _authPostRequest("show/history/"+userID.toString()+"/0", login);
+    var response = await _authPostRequest(
+        "show/history/" + userID.toString() + "/0", login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -402,9 +445,9 @@ class APIManager {
   }
 
   static Future<Favouritedata> getUserFavorites(int userID) async {
-
     List<Show> shows = [];
-    var response = await _authGetRequest("favorites/"+userID.toString(), login);
+    var response =
+        await _authGetRequest("favorites/" + userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -414,9 +457,8 @@ class APIManager {
   }
 
   static Future<UserSubData> getUserSubs(int userID) async {
-
     List<Show> shows = [];
-    var response = await _authGetRequest("abos/"+userID.toString(), login);
+    var response = await _authGetRequest("abos/" + userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -425,10 +467,22 @@ class APIManager {
     return UserSubData(shows);
   }
 
-  static Future<UserWatchlistData> getUserWatchlist(int userID) async {
+  static Future<UserAnimeListData> getUserSeen(int userID) async {
+    List<UserSeenShow> shows = [];
+    var response =
+        await _authPostRequest("show/seen?user_id=" + userID.toString(), login);
 
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body) as List;
+      shows = UserSeenShow.getShows(json);
+    }
+    return UserAnimeListData(shows);
+  }
+
+  static Future<UserWatchlistData> getUserWatchlist(int userID) async {
     List<Show> shows = [];
-    var response = await _authGetRequest("watchlist/"+userID.toString(), login);
+    var response =
+        await _authGetRequest("watchlist/" + userID.toString(), login);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -437,30 +491,51 @@ class APIManager {
     return UserWatchlistData(shows);
   }
 
-  static Future<UserProfileData> getUserProfileData(int userID) async{
+  static Future<UserProfileData> getUserProfileData(int userID) async {
     var profile = await getUserProfile(userID);
+    var stats = await getUserStats(userID);
     var history = await getUserHistory(userID);
     var favourite = await getUserFavorites(userID);
     var sub = await getUserSubs(userID);
     var watchlist = await getUserWatchlist(userID);
     var friendlistdata = await getUserFriends(userID);
-    return UserProfileData(profile,history,favourite,sub,watchlist, friendlistdata);
+    return UserProfileData(
+        profile, stats, history, favourite, sub, watchlist, friendlistdata);
+  }
+
+  static updateSettings(UserSettings settings) async {
+    var response = await _authPatchRequest("user/settings/" + settings.id.toString(), login,
+        bodyObject: {
+          "show_friends": settings.show_friends ? "1" : "0",
+          "show_watchlist": settings.show_watchlist ? "1" : "0",
+          "show_abos": settings.show_abos ? "1" : "0",
+          "show_favorites": settings.show_favorites ? "1" : "0",
+          "show_list": settings.show_list ? "1" : "0",
+          "preferred_lang": settings.preferred_lang,
+          "preferred_hoster_id": settings.preferred_hoster_id.toString()
+        });
+    print(response.statusCode);
+    print(response.body);
   }
 
   static updateAboutMe(String message) {
-    _authPatchRequest("user/user-about-me", login, bodyObject: {"about_me": message});
+    _authPatchRequest("user/user-about-me", login,
+        bodyObject: {"about_me": message});
   }
 
   static updateName(String name) {
-    _authPatchRequest("user/user-update", login, bodyObject: {"name": name, "about_me":""});
+    _authPatchRequest("user/user-update", login,
+        bodyObject: {"name": name, "about_me": ""});
   }
 
   static updatePassword(int id, String pw) {
-    _authPatchRequest("user/update-passwort/"+id.toString(), login, bodyObject: {"password": pw});
+    _authPatchRequest("user/update-passwort/" + id.toString(), login,
+        bodyObject: {"password": pw});
   }
 
   static Future<FriendListData> getUserFriends(int userID) async {
-    var response = await _authGetRequest("friend/user/friends?id="+userID.toString(), login);
+    var response = await _authGetRequest(
+        "friend/user/friends?id=" + userID.toString(), login);
     List<Friend> friends = [];
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
@@ -470,7 +545,8 @@ class APIManager {
   }
 
   static addFriend(int friendId) {
-    _authPostRequest("friend/create", login, bodyObject: {"friend_id": friendId.toString()});
+    _authPostRequest("friend/create", login,
+        bodyObject: {"friend_id": friendId.toString()});
   }
 
   static confirmFriendRequest(int id) {
@@ -482,7 +558,8 @@ class APIManager {
   }
 
   static _answerFriendRequest(int id, int status) {
-    _authPostRequest("friend/update/"+id.toString(), login, bodyObject: {"status": status.toString()});
+    _authPostRequest("friend/update/" + id.toString(), login,
+        bodyObject: {"status": status.toString()});
   }
 
   static cancelFriendRequest(int friendId) {
@@ -497,17 +574,22 @@ class APIManager {
   static Future<NotificationListData> getNotifications() async {
     var response = await _authGetRequest("notification", login);
     var news = await _getNews();
-    return NotificationListData(news, n.Notification.getNotifications(jsonDecode(response.body)));
+    return NotificationListData(
+        news, n.Notification.getNotifications(jsonDecode(response.body)));
   }
 
-  static deleteNotification(int id){
+  static deleteNotification(int id) {
     _authDeleteRequest("notification/delete?id=" + id.toString(), login);
   }
 
   static addRecommendNotification(User user, User friend, Anime anime) {
     _postRequest("notification/user/create", {
       "user_id": friend.id.toString(),
-      "text": "Dir wurde von " + user.name + " der Anime " + anime.name + " empfohlen. Schau ihn dir doch mal an.",
+      "text": "Dir wurde von " +
+          user.name +
+          " der Anime " +
+          anime.name +
+          " empfohlen. Schau ihn dir doch mal an.",
       "link": "/show/" + anime.name.toLowerCase().replaceAll(" ", "-")
     });
   }
@@ -536,8 +618,11 @@ class APIManager {
   }
 
   static Future<Comment> addComment(int episodeID, String text) async {
-    var response = await _authPostRequest("comment", login,
-        bodyObject: {"text":text,"commentable_type":"Episode","commentable_id":episodeID.toString()});
+    var response = await _authPostRequest("comment", login, bodyObject: {
+      "text": text,
+      "commentable_type": "Episode",
+      "commentable_id": episodeID.toString()
+    });
     var result;
     if (response.statusCode != 404) {
       result = Comment.fromJson(jsonDecode(response.body));
@@ -546,20 +631,31 @@ class APIManager {
   }
 
   static void deleteComment(int id) {
-    _authDeleteRequest("comment/"+id.toString(), login);
+    _authDeleteRequest("comment/" + id.toString(), login);
   }
 
   static void reportComment(int id, String text) {
-    _authPostRequest("report", login,bodyObject: {"reportable_type":"Comment","reportable_id":id.toString(),"text":text});
+    _authPostRequest("report", login, bodyObject: {
+      "reportable_type": "Comment",
+      "reportable_id": id.toString(),
+      "text": text
+    });
   }
 
   static void reportEpisode(int id, String text) {
-    _authPostRequest("report", login,bodyObject: {"reportable_type":"Episode","reportable_id":id.toString(),"text":text});
+    _authPostRequest("report", login, bodyObject: {
+      "reportable_type": "Episode",
+      "reportable_id": id.toString(),
+      "text": text
+    });
   }
 
   static Future<SubComment> addSubComment(int commentID, String text) async {
-    var response = await _authPostRequest("comment", login,
-        bodyObject: {"text":text,"commentable_type":"Comment","commentable_id":commentID.toString()});
+    var response = await _authPostRequest("comment", login, bodyObject: {
+      "text": text,
+      "commentable_type": "Comment",
+      "commentable_id": commentID.toString()
+    });
     var result;
     if (response.statusCode != 404) {
       result = SubComment.fromJson(jsonDecode(response.body));
@@ -660,7 +756,7 @@ class APIManager {
 
   static Future<ChatMessage> addMessage(String text) async {
     var result = await _authPostRequest("chat", login,
-        bodyObject: {"chat_id":"1","message":text});
+        bodyObject: {"chat_id": "1", "message": text});
     var json = jsonDecode(result.body);
     return ChatMessage.fromJson(json);
   }
@@ -679,8 +775,8 @@ class APIManager {
     Map<String, String> headers = {
       "Authorization": user.token_type + " " + user.access_token
     };
-    return http.patch('https://www2.aniflix.tv/api/' + query,body: bodyObject,
-        headers: headers);
+    return http.patch('https://www2.aniflix.tv/api/' + query,
+        body: bodyObject, headers: headers);
   }
 
   static Future<http.Response> _authDeleteRequest(

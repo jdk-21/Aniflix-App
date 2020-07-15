@@ -1,7 +1,8 @@
 import 'package:aniflix_app/api/objects/Group.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 
-class UserProfile{
+class UserProfile {
   int id;
   String name;
   String avatar;
@@ -13,6 +14,7 @@ class UserProfile{
   String about_me;
   List<Group> groups;
   List<Show> favorites;
+  UserSettings settings;
 
   UserProfile(
       this.id,
@@ -25,7 +27,8 @@ class UserProfile{
       this.banreason,
       this.about_me,
       this.groups,
-      this.favorites);
+      this.favorites,
+      this.settings);
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
@@ -40,6 +43,9 @@ class UserProfile{
         json["banreason"],
         json["about_me"],
         Group.getGroups(json["groups"]),
-        Show.getShows(json["favorites"]));
+        Show.getShows(json["favorites"]),
+        (json["settings"] is List)
+            ? UserSettings.fromJsonList(json["settings"])
+            : UserSettings.fromJson(json["settings"]));
   }
 }

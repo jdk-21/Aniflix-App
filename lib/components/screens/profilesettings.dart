@@ -1,5 +1,8 @@
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:aniflix_app/components/custom/checkbox/SettingsCheckbox.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +11,11 @@ import 'package:flutter/painting.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 
 class ProfileSettings extends StatelessWidget implements Screen {
-  ProfileSettings(){
+  UserSettings data;
+  Function(UserSettings) onSettingsChange;
+  Function onSave;
+
+  ProfileSettings(this.data, this.onSettingsChange, this.onSave) {
     if (CacheManager.userlistdata == null) {
       APIManager.getUserList().then((data) {
         CacheManager.userlistdata = data;
@@ -71,12 +78,18 @@ class ProfileSettings extends StatelessWidget implements Screen {
                         showErrorDialog(
                             ctx, "Der neue Username muss Zeichen enthalten.");
                       } else {
-                        var a = (CacheManager.userlistdata.users.where((element) => (element.name.toLowerCase().compareTo(usernameController.value.text) == 0)));
-                        if(a.length > 0) {
-                          showErrorDialog(ctx, "Dieser Username existiert bereits. Bitte wähle einen anderen.");
+                        var a = (CacheManager.userlistdata.users.where(
+                            (element) => (element.name
+                                    .toLowerCase()
+                                    .compareTo(usernameController.value.text) ==
+                                0)));
+                        if (a.length > 0) {
+                          showErrorDialog(ctx,
+                              "Dieser Username existiert bereits. Bitte wähle einen anderen.");
                         } else {
                           APIManager.updateName(usernameController.value.text);
-                          CacheManager.userData.name = usernameController.value.text;
+                          CacheManager.userData.name =
+                              usernameController.value.text;
                           resetTextController();
                           Navigator.of(ctx).pop();
                         }
@@ -113,11 +126,107 @@ class ProfileSettings extends StatelessWidget implements Screen {
                       }
                     });
                   }, ctx),
+                  SizedBox(height: 5),
+                  getSettingsLayout(ctx),
+                  buildButtons("Save Settings", onSave, ctx)
                 ],
               ),
             ),
           ],
         ));
+  }
+
+  Widget getSettingsLayout(BuildContext ctx) {
+    return Row(
+      children: [
+        Column(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SettingsCheckbox("Abos Öffentlich anzeigen", (newVal) {
+                  data.show_abos = newVal;
+                  onSettingsChange(data);
+                }, value: data.show_abos),
+                SettingsCheckbox("Favoriten öffentlich anzeigen", (newVal) {
+                  data.show_favorites = newVal;
+                  onSettingsChange(data);
+                }, value: data.show_favorites),
+                SettingsCheckbox("Watchlist öffentlich anzeigen", (newVal) {
+                  data.show_watchlist = newVal;
+                  onSettingsChange(data);
+                }, value: data.show_watchlist),
+                SettingsCheckbox("Freunde öffentlich anzeigen", (newVal) {
+                  data.show_friends = newVal;
+                  onSettingsChange(data);
+                }, value: data.show_friends),
+                SettingsCheckbox("Anime Liste öffentlich anzeigen", (newVal) {
+                  data.show_list = newVal;
+                  onSettingsChange(data);
+                }, value: data.show_list),
+              ],
+            ),
+            Theme(
+                data: Theme.of(ctx)
+                    .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
+                child: DropdownButton(
+                    value: data.preferred_hoster_id,
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.caption.color,
+                        fontSize: 15),
+                    hint: Text(
+                      "Bevorzogter Hoster",
+                      style: TextStyle(
+                          color: Theme.of(ctx).textTheme.caption.color),
+                    ),
+                    items: CacheManager.hosters
+                        .map((hoster) => DropdownMenuItem<int>(
+                              child: Text(hoster.name),
+                              value: hoster.id,
+                              onTap: () {
+                                data.preferred_hoster_id = hoster.id;
+                                onSettingsChange(data);
+                              },
+                            ))
+                        .toList(),
+                    onChanged: (value) {})),
+            Theme(
+                data: Theme.of(ctx)
+                    .copyWith(canvasColor: Theme.of(ctx).backgroundColor),
+                child: DropdownButton(
+                    value: data.preferred_lang,
+                    style: TextStyle(
+                        color: Theme.of(ctx).textTheme.caption.color,
+                        fontSize: 15),
+                    hint: Text(
+                      "Bevorzogte Sprache",
+                      style: TextStyle(
+                          color: Theme.of(ctx).textTheme.caption.color),
+                    ),
+                    items: [
+                      DropdownMenuItem<String>(
+                        child: Text("Sub"),
+                        value: "SUB",
+                        onTap: () {
+                          data.preferred_lang = "SUB";
+                          onSettingsChange(data);
+                        },
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Dub"),
+                        value: "DUB",
+                        onTap: () {
+                          data.preferred_lang = "DUB";
+                          onSettingsChange(data);
+                        },
+                      )
+                    ],
+                    onChanged: (value) {})),
+          ],
+        )
+      ],
+    );
   }
 
   Widget buildButtons(String buttonText, Function function, BuildContext ctx) {

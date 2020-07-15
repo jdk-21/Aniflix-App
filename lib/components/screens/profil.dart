@@ -2,7 +2,10 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
+import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
+import 'package:aniflix_app/api/objects/profile/UserStats.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
+import 'package:aniflix_app/components/screens/profileanimelist.dart';
 import 'package:aniflix_app/components/screens/profilesettings.dart';
 import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
@@ -11,6 +14,7 @@ import 'package:aniflix_app/components/custom/listelements/imageListElement.dart
 import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
+import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -25,14 +29,21 @@ import 'package:aniflix_app/cache/cacheManager.dart';
 
 class UserProfileData {
   UserProfile userProfile;
+  UserStats userstats;
   Historydata historydata;
   Favouritedata favouritedata;
   UserSubData userSubData;
   UserWatchlistData userWatchlistData;
   FriendListData friendListData;
 
-  UserProfileData(this.userProfile, this.historydata, this.favouritedata,
-      this.userSubData, this.userWatchlistData, this.friendListData);
+  UserProfileData(
+      this.userProfile,
+      this.userstats,
+      this.historydata,
+      this.favouritedata,
+      this.userSubData,
+      this.userWatchlistData,
+      this.friendListData);
 }
 
 class Profile extends StatefulWidget implements Screen {
@@ -53,9 +64,17 @@ class ProfileState extends State<Profile> {
   int userID;
   Future<UserProfileData> profileData;
   String aboutMe;
+  PageController controller;
+  UserSettings modifiedSettings;
 
   ProfileState(this.userID) {
     profileData = APIManager.getUserProfileData(userID);
+  }
+
+  @override
+  void initState() {
+    controller = PageController(initialPage: 0);
+    super.initState();
   }
 
   @override
@@ -88,21 +107,32 @@ class ProfileState extends State<Profile> {
     );
   }
 
+  updateSettings() async {
+    await APIManager.updateSettings(this.modifiedSettings);
+    setState(() {
+      this.profileData = APIManager.getUserProfileData(userID);
+      controller.jumpToPage(controller.initialPage);
+    });
+  }
+
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
+    if (modifiedSettings == null) {
+      modifiedSettings = new UserSettings.fromObject(profile.settings);
+    }
     var joined = DateTime.parse(profile.created_at);
     if (aboutMe != null) {
       data.userProfile.about_me = aboutMe;
     }
     var isAlreadyFriend = false;
-    for(var friend in data.friendListData.friendlist){
+    for (var friend in data.friendListData.friendlist) {
       var id = (friend.user.id == userID) ? friend.friend.id : friend.user.id;
-      if(id == CacheManager.userData.id){
+      if (id == CacheManager.userData.id) {
         isAlreadyFriend = true;
       }
     }
 
-    var pages = [
+    List<Widget> pages = [
       ProfileMainPage(data, () {
         showDialog(
             context: ctx,
@@ -119,58 +149,95 @@ class ProfileState extends State<Profile> {
               });
             });
       }),
-      FriendList(userID, (){setState(() {
-        profileData = APIManager.getUserProfileData(userID);
-      });}),
-      Favoriten(favouritedata: data.favouritedata),
-      ProfileSubBox(userID),
-      Watchlist(
-        watchlistdata: data.userWatchlistData,
-      ),
     ];
-    if (CacheManager.userData.id == userID) {
-      pages.add(ProfileSettings());
+
+    if (data.userProfile.settings.show_friends) {
+      pages.add(FriendList(userID, () {
+        setState(() {
+          profileData = APIManager.getUserProfileData(userID);
+        });
+      }));
     }
+
+    if (data.userProfile.settings.show_favorites) {
+      pages.add(Favoriten(favouritedata: data.favouritedata));
+    }
+
+    if (data.userProfile.settings.show_abos) {
+      pages.add(ProfileSubBox(userID));
+    }
+
+    if (data.userProfile.settings.show_watchlist) {
+      pages.add(Watchlist(
+        watchlistdata: data.userWatchlistData,
+      ));
+    }
+
+    if (data.userProfile.settings.show_list) {
+      pages.add(ProfileAnimeList(userID));
+    }
+
+    if (CacheManager.userData.id == userID) {
+      pages.add(ProfileSettings(modifiedSettings, (newData) {
+        setState(() {
+          this.modifiedSettings = newData;
+        });
+      }, () {
+        updateSettings();
+      }));
+    }
+
+    List<TextboxSliderElement> carouseldata = profile.groups
+        .map((group) => TextboxSliderElement(group.name))
+        .toList();
+
     return Column(
       children: [
         (AppState.adFailed) ? Container() : SizedBox(height: 50),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            (profile.avatar == null)
-                ? IconButton(
-                    iconSize: 50,
-                    icon: Icon(
-                      Icons.person,
-                      color: Theme.of(ctx).primaryIconTheme.color,
-                    ),
-                    onPressed: () {},
-                  )
-                : IconButton(
-                    iconSize: 50,
-                    icon: new Container(
-                        decoration: new BoxDecoration(
-                            image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        "https://www2.aniflix.tv/storage/" + profile.avatar,
-                      ),
-                    ))),
-                    onPressed: () {}),
             Column(
               children: [
-                Row(children: <Widget>[
-                  ThemeText(profile.name),
-                  (CacheManager.userData.id == userID || isAlreadyFriend) ? Container() : IconButton(icon: Icon(Icons.person_add),onPressed: () {APIManager.addFriend(profile.id); setState(() {
-                    profileData = APIManager.getUserProfileData(userID);
-                  });},color: Theme.of(ctx).primaryIconTheme.color,)
-                ],),
+                (profile.avatar == null)
+                    ? IconButton(
+                        iconSize: 50,
+                        icon: Icon(
+                          Icons.person,
+                          color: Theme.of(ctx).primaryIconTheme.color,
+                        ),
+                        onPressed: () {},
+                      )
+                    : IconButton(
+                        iconSize: 50,
+                        icon: new Container(
+                            decoration: new BoxDecoration(
+                                image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            "https://www2.aniflix.tv/storage/" + profile.avatar,
+                          ),
+                        ))),
+                        onPressed: () {}),
+                ThemeText(profile.name),
+                (CacheManager.userData.id == userID || isAlreadyFriend)
+                    ? Container()
+                    : IconButton(
+                        icon: Icon(Icons.person_add),
+                        onPressed: () {
+                          APIManager.addFriend(profile.id);
+                          setState(() {
+                            profileData = APIManager.getUserProfileData(userID);
+                          });
+                        },
+                        color: Theme.of(ctx).primaryIconTheme.color,
+                      ),
+              ],
+            ),
+            Column(
+              children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    (profile.groups.length > 0)
-                        ? TextboxSliderElement(profile.groups[0].name)
-                        : Container(),
                     TextboxSliderElement(
                       "Mitglied seit " +
                           joined.day.toString() +
@@ -178,6 +245,22 @@ class ProfileState extends State<Profile> {
                           joined.month.toString() +
                           "." +
                           joined.year.toString(),
+                    ),
+                    TextboxSliderElement(
+                        "Punkte: " + data.userstats.points.toString()),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      child: TextboxCarousel(carouseldata),
+                      width: MediaQuery.of(ctx).size.width * 0.75,
                     )
                   ],
                 )
@@ -186,9 +269,11 @@ class ProfileState extends State<Profile> {
             Container()
           ],
         ),
-        Expanded(
-            child: PageView(
-                controller: PageController(initialPage: 0), children: pages))
+        TextboxSliderElement("Anime geschaut: " + data.userstats.time),
+        SizedBox(
+          height: 5,
+        ),
+        Expanded(child: PageView(controller: controller, children: pages))
       ],
     );
   }
@@ -237,26 +322,33 @@ class ProfileMainPage extends StatelessWidget {
       SizedBox(
         height: 10,
       ),
-      ThemeText("Lieblings Anime:"),
-      SizedBox(
-        height: 5,
-      ),
     ];
-    var count = 0;
-    for (var anime in profile.favorites) {
-      if (count >= 3) {
-        break;
+
+    if (profile.settings.show_favorites) {
+      widgets.addAll([
+        ThemeText("Lieblings Anime:"),
+        SizedBox(
+          height: 5,
+        ),
+      ]);
+
+      var count = 0;
+      for (var anime in profile.favorites) {
+        if (count >= 3) {
+          break;
+        }
+        widgets.add(ImageListElement(
+          anime.name,
+          anime.cover_portrait,
+          ctx,
+          onTap: () {
+            Navigator.pushNamed(ctx, "anime", arguments: anime.url);
+          },
+        ));
+        count++;
       }
-      widgets.add(ImageListElement(
-        anime.name,
-        anime.cover_portrait,
-        ctx,
-        onTap: () {
-          Navigator.pushNamed(ctx, "anime", arguments: anime.url);
-        },
-      ));
-      count++;
     }
+
     var history = <SliderElement>[];
     for (var episode in _userProfileData.historydata.episodes) {
       var desc = "";
