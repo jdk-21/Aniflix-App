@@ -25,13 +25,14 @@ LogoutDialog();
           color: Colors.green,
           child: Text("Ausloggen", style: TextStyle(color: Colors.white),),
           onPressed: () async {
-            Navigator.of(ctx).pop();
             SharedPreferences prefs =
             await SharedPreferences.getInstance();
-            prefs.remove("access_token");
-            prefs.remove("token_type");
+            await prefs.remove("access_token");
+            await prefs.remove("token_type");
             APIManager.login = null;
             AppState.updateLoggedIn(false);
+            Navigator.of(ctx).pop();
+            Navigator.of(ctx).pushNamed("login");
           },
         )
       ],

@@ -82,10 +82,11 @@ class Login extends StatelessWidget implements Screen{
                       }else{
                         AppState.updateLoggedIn(true);
                         SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setString("access_token", response.access_token);
-                        prefs.setString("token_type", response.token_type);
+                        await prefs.setString("access_token", response.access_token);
+                        await prefs.setString("token_type", response.token_type);
                         resetTextController();
                         analytics.logLogin();
+                        Navigator.of(ctx).pushNamed("/");
                       }
                     },
                   )),

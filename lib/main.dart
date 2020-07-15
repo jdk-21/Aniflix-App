@@ -229,7 +229,10 @@ class AppState extends State<App> {
               },
               'userlist': (context) {
                 return getScaffold(Userlist(), context, setIndex: true);
-              }
+              },
+              'login': (context) {
+                return Scaffold(body: Login());
+              },
             },
             onGenerateRoute: generateRoute);
       } else {
