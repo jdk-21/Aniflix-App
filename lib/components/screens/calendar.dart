@@ -84,13 +84,14 @@ class CalendarState extends State<Calendar> {
 
         SliderElement element = new SliderElement(
           name: show.name,
-          description: (airing.released) ? "Verlinkt" : airing.details,
+          description: (airing.released) ? "Verlinkt" : (airing.details.length > 25) ? airing.details.substring(0,24) : airing.details,
           image: "https://www2.aniflix.tv/storage/" + show.cover_landscape,
           desccolor:
               (airing.released) ? Colors.green : Color.fromRGBO(15, 15, 15, 1),
           onTap: (ctx) {
             Navigator.pushNamed(ctx, "anime", arguments: show.url);
           },
+          highlight: airing.highlight,
         );
         switch (day.day) {
           case 0:

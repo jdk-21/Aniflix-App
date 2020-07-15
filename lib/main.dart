@@ -152,12 +152,14 @@ class AppState extends State<App> {
           manager.setActualTheme(prefs.getInt("actualTheme") ?? 0);
           _theme = ThemeManager.getInstance().getActualThemeData();
           _prefs = prefs;
-          _loading = false;
           if (prefs.getString("access_token") != null &&
               prefs.getString("token_type") != null) {
             APIManager.login = LoginResponse(prefs.getString("access_token"),
                 prefs.getString("token_type"), null);
-            _loggedIn = true;
+            APIManager.getUser().then((value) => setState(() {
+              if(value != null) _loggedIn = true;
+              _loading = false;
+            }));
           }
         });
       });

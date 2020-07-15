@@ -1,3 +1,4 @@
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -51,8 +52,7 @@ class AnimePlayer extends StatelessWidget {
                 var chewieController = ChewieController(
                   videoPlayerController: controller,
                   aspectRatio: 3 / 2,
-                  autoPlay: true,
-                  looping: true
+                  looping: false
                 );
                 _onControllerInit(chewieController);
                 return Chewie(controller: chewieController);
@@ -65,7 +65,8 @@ class AnimePlayer extends StatelessWidget {
       if (_controller != null) {
         _controller.loadUrl(url: _stream.link);
       }
-      return _inApp;
+      return ThemeText("Der Hoster unterstützt noch nicht den InApp-Player!");
+      //return _inApp;
     }
   }
 

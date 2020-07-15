@@ -5,8 +5,9 @@ class HighlightedTextBox extends StatelessWidget {
 
   Color color;
   String text;
+  double size;
 
-  HighlightedTextBox(this.text, {this.color = const Color.fromRGBO(15, 15, 15, 1)});
+  HighlightedTextBox(this.text, {this.color = const Color.fromRGBO(15, 15, 15, 1), this.size = 14.0});
 
   @override
   Widget build(BuildContext context){
@@ -15,7 +16,7 @@ class HighlightedTextBox extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: color,),
-          child: Text(text, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis,),
+          child: Text(text, style: TextStyle(color: Colors.white,fontSize: size), overflow: TextOverflow.ellipsis,),
     );
   }
 }

@@ -415,7 +415,10 @@ class APIManager {
 
   static Future<User> getUser() async {
     var response = await _authPostRequest("user/me", login);
-    return User.fromJson(jsonDecode(response.body));
+    if(response.statusCode == 200){
+      return User.fromJson(jsonDecode(response.body));
+    }
+    return null;
   }
 
   static Future<UserProfile> getUserProfile(int userID) async {

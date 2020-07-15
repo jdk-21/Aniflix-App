@@ -78,7 +78,7 @@ class Login extends StatelessWidget implements Screen{
                       var response = await APIManager.loginRequest(emailController.value.text, passwortController.value.text);
                       if(response.hasError()){
                         APIManager.login = null;
-                        showErrorDialog(ctx,response.error);
+                        showErrorDialog(ctx,(response.error == "Unauthorized")?"Email oder Passwort falsch!":response.error);
                       }else{
                         AppState.updateLoggedIn(true);
                         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -86,7 +86,9 @@ class Login extends StatelessWidget implements Screen{
                         await prefs.setString("token_type", response.token_type);
                         resetTextController();
                         analytics.logLogin();
-                        Navigator.of(ctx).pushNamed("/");
+                        Navigator.pushNamedAndRemoveUntil(
+                            ctx, '/', (Route<dynamic> route) => false);
+                        AppState.setIndex(0);
                       }
                     },
                   )),
