@@ -1,5 +1,7 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/AppErrorScreen.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
@@ -7,8 +9,6 @@ import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/news.dart';
-import 'package:aniflix_app/components/screens/profilesettings.dart';
-import 'package:aniflix_app/components/screens/profilesubbox.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
@@ -19,9 +19,11 @@ import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
@@ -34,15 +36,13 @@ import 'components/screens/loading.dart';
 import 'components/screens/review.dart';
 import 'components/screens/search.dart';
 
+const adUnitID = "ca-app-pub-1740246956609068/6617765772";
+
 void main() async {
   runApp(App());
 }
 
 class App extends StatefulWidget {
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-      keywords: <String>['aniflix', 'anime', 'weeb', 'japan'],
-      contentUrl: 'https://www2.aniflix.tv/',
-      childDirected: false);
   App({
     Key key,
   }) : super(key: key);
@@ -55,7 +55,7 @@ class App extends StatefulWidget {
     var manager = ThemeManager.getInstance();
     String old = manager.actualTheme.getThemeName();
     manager.setActualTheme(i);
-    if(state != null){
+    if (state != null) {
       var analytics = AppState.analytics;
       analytics.logEvent(name: "change_theme", parameters: {
         "old_theme": old,
@@ -75,46 +75,34 @@ class AppState extends State<App> {
       FirebaseAnalyticsObserver(analytics: analytics);
   AniflixNavState _navState;
   final PageStorageBucket bucket = PageStorageBucket();
+  NativeAdmob _ad;
   static int _index = 0;
   SharedPreferences _prefs;
   static bool _loading;
+  static String _error;
   static AppState _state;
   static bool _loggedIn;
-  static bool adFailed;
-  bool _adLoaded;
-  BannerAd ad;
 
   AppState() {
     _loading = true;
     _loggedIn = false;
     _state = this;
-    _adLoaded = false;
-    adFailed = false;
     analytics.logAppOpen();
   }
 
   @override
   void initState() {
     HosterParser.initParser();
+    _ad = NativeAdmob(
+      adUnitID: adUnitID,
+      loading: Center(child: CircularProgressIndicator()),
+      error: ThemeText("Failed to load the ad"),
+      controller: NativeAdmobController(),
+      type: NativeAdmobType.banner,
+      options: NativeAdmobOptions(
+          ratingColor: Colors.red, showMediaContent: true),
+    );
     super.initState();
-    FirebaseAdMob.instance
-        .initialize(appId: "ca-app-pub-1740246956609068~4725713221")
-        .then((init) {
-      setState(() {
-        ad = BannerAd(
-            adUnitId: "ca-app-pub-1740246956609068/1140216654",
-            size: AdSize.banner,
-            targetingInfo: App.targetingInfo,
-            listener: (MobileAdEvent event) {
-              if(event == MobileAdEvent.failedToLoad){
-                setState(() {
-                  adFailed = true;
-                });
-              }
-              print("BannerAd event is $event");
-            });
-      });
-    });
   }
 
   static updateLoggedIn(bool value) {
@@ -156,10 +144,16 @@ class AppState extends State<App> {
               prefs.getString("token_type") != null) {
             APIManager.login = LoginResponse(prefs.getString("access_token"),
                 prefs.getString("token_type"), null);
-            APIManager.getUser().then((value) => setState(() {
-              if(value != null) _loggedIn = true;
+            APIManager.getUser()
+                .then((value) => setState(() {
+                      if (value != null) _loggedIn = true;
+                      _loading = false;
+                    }))
+                .catchError((object, trace) {
+              print("Error: " + object.toString());
+              _error = object.message;
               _loading = false;
-            }));
+            });
           }
         });
       });
@@ -171,21 +165,11 @@ class AppState extends State<App> {
         color: _theme.backgroundColor,
         theme: _theme,
       );
-    } else {
+    } else if (_error == null) {
       if (_loggedIn) {
-        if(CacheManager.hosters == null){
-          APIManager.getHoster().then((hosters) => CacheManager.hosters = hosters);
-        }
-        if (ad != null) {
-            if (!_adLoaded) {
-              ad.load().then((loaded) {
-                if (loaded) {
-                  _adLoaded = true;
-                  ad.show(anchorType: AnchorType.top, anchorOffset: 85);
-                  print("Show Ad!");
-                }
-              });
-            }
+        if (CacheManager.hosters == null) {
+          APIManager.getHoster()
+              .then((hosters) => CacheManager.hosters = hosters);
         }
         return MaterialApp(
             title: 'Aniflix',
@@ -245,6 +229,13 @@ class AppState extends State<App> {
           theme: _theme,
         );
       }
+    } else {
+      return MaterialApp(
+        title: 'Aniflix',
+        home: AppErrorScreen(_error),
+        color: _theme.backgroundColor,
+        theme: _theme,
+      );
     }
   }
 
@@ -300,6 +291,14 @@ class AppState extends State<App> {
                 ),
               )
             : Container(),
-        body: widget);
+        body: Column(children: [
+          Container(
+            child: _ad,
+            width: MediaQuery.of(ctx).size.width,
+            height: 50,
+            color: Theme.of(ctx).backgroundColor,
+          ),
+          Expanded(child: widget)
+        ]));
   }
 }

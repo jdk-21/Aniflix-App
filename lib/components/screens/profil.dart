@@ -193,7 +193,6 @@ class ProfileState extends State<Profile> {
 
     return Column(
       children: [
-        (AppState.adFailed) ? Container() : SizedBox(height: 50),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

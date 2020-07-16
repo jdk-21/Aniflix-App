@@ -40,7 +40,6 @@ class SearchAnimeState extends State<SearchAnime> {
         color: Theme.of(ctx).backgroundColor,
         child: Column(
           children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
             Expanded(
                 child: ListView(
               children: [

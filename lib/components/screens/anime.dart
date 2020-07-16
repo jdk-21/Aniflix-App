@@ -78,7 +78,6 @@ class AnimeScreenState extends State<AnimeScreen> {
         key: Key("anime_screen"),
         color: Theme.of(ctx).backgroundColor,
         child: Column(children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
       Expanded(child: FutureBuilder<Anime>(
           future: anime,
           builder: (context, snapshot) {
@@ -333,7 +332,6 @@ List<DropdownMenuItem<int>> getSeasonsAsDropdownList(List<AnimeSeason> seasons) 
 List<Widget> getFriendsAsList(BuildContext ctx, FriendListData friendlistdata, Anime anime) {
   List<Friend> friendlist = friendlistdata.friendlist;
   List<Widget> friendlistwidget = [
-    (AppState.adFailed) ? Container() : SizedBox(height: 100),
   ];
 
   for(var friend in friendlist){

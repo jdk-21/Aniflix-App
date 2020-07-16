@@ -417,8 +417,18 @@ class APIManager {
     var response = await _authPostRequest("user/me", login);
     if(response.statusCode == 200){
       return User.fromJson(jsonDecode(response.body));
+    }else{
+
+      if(response.statusCode == 503){
+        throw Exception("Die App ist derzeit Offline, versuche es bitte später wieder.");
+      }
+
+      if(response.statusCode == 403){
+        return null;
+      }
+
+      throw Exception("Status Code: " + response.statusCode.toString());
     }
-    return null;
   }
 
   static Future<UserProfile> getUserProfile(int userID) async {

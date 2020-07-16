@@ -135,7 +135,6 @@ class SubBoxState extends State<SubBox> {
 
     return Column(
       children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
         Expanded(
             child: Container(
                 color: Theme.of(ctx).backgroundColor,

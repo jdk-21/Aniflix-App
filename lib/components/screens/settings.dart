@@ -24,7 +24,6 @@ class Settings extends StatelessWidget implements Screen {
         color: Theme.of(ctx).backgroundColor,
         child: Column(
           children: <Widget>[
-          (AppState.adFailed == null || AppState.adFailed) ? Container() : SizedBox(height: 50,),
             Expanded(
               child: ListView(
                 children: [

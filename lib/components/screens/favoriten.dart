@@ -74,11 +74,6 @@ class FavoritenState extends State<Favoriten> {
   getLayout(Favouritedata data, BuildContext ctx) {
     return Column(
       children: <Widget>[
-        (AppState.adFailed || external)
-            ? Container()
-            : SizedBox(
-                height: 50,
-              ),
         Expanded(
             child: Container(
           padding: EdgeInsets.all(5),

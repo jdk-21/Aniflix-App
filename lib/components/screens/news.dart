@@ -42,11 +42,6 @@ class NewsPageState extends State<NewsPage> {
         key: Key("news_screen"),
         child: Column(
           children: <Widget>[
-            (AppState.adFailed)
-                ? Container()
-                : SizedBox(
-                    height: 50,
-                  ),
             Expanded(
                 child: FutureBuilder<NotificationListData>(
                     future: news,

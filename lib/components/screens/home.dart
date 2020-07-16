@@ -1,7 +1,6 @@
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../slider/SliderElement.dart';
@@ -32,12 +31,8 @@ class Home extends StatefulWidget implements Screen {
 class HomeState extends State<Home> {
   Future<Homedata> homedata;
   Homedata cache;
-  NativeAd ad;
 
   HomeState() {
-    ad = new NativeAd(adUnitId: NativeAd.testAdUnitId, factoryId: 'adFactoryExample',targetingInfo: App.targetingInfo,listener: (MobileAdEvent event) {
-      print("$NativeAd event $event");
-    });
     if (CacheManager.homedata == null) {
       this.homedata = APIManager.getHomeData((continues) {
         setState(() {
@@ -82,7 +77,6 @@ class HomeState extends State<Home> {
 
   getLayout(BuildContext ctx, Homedata data) {
     return Column(children: <Widget>[
-          (AppState.adFailed) ? Container() : SizedBox(height: 50,),
       Expanded(child: Container(
         color: Theme.of(ctx).backgroundColor,
         child: RefreshIndicator(

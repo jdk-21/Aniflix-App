@@ -78,11 +78,6 @@ class UserlistState extends State<Userlist> {
   getLayout(UserListData data, BuildContext ctx) {
     return Column(
       children: <Widget>[
-        (AppState.adFailed)
-            ? Container()
-            : SizedBox(
-                height: 50,
-              ),
         Expanded(
             child: Container(
           padding: EdgeInsets.all(5),
