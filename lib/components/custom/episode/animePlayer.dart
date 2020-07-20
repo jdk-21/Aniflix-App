@@ -1,20 +1,78 @@
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 
-class AnimePlayer extends StatelessWidget {
-  final AnimeStream _stream;
-  final int _view;
-  final InAppWebView _inApp;
-  final InAppWebViewController _controller;
-  final Function(ChewieController) _onControllerInit;
+class AnimePlayerController {
+  AnimeStream stream;
+  int view;
+  AnimePlayerState state;
 
-  AnimePlayer(this._stream, this._view, this._inApp, this._controller, this._onControllerInit);
+  AnimePlayerController(this.stream, this.view);
+
+  changeStream(AnimeStream stream) {
+    this.stream = stream;
+    if (state != null) {
+      state.setStream(stream);
+    }
+  }
+
+  changeView(int view) {
+    this.view = view;
+    if (state != null) {
+      state.setView(view);
+    }
+  }
+}
+
+class AnimePlayer extends StatefulWidget {
+  final AnimePlayerController _controller;
+
+  AnimePlayer(this._controller);
+
+  @override
+  State<StatefulWidget> createState() => AnimePlayerState(this._controller);
+}
+
+class AnimePlayerState extends State<AnimePlayer> {
+  AnimeStream _stream;
+  int _view;
+  final AnimePlayerController _controller;
+  InAppWebViewController _webcontroller;
+
+  AnimePlayerState(this._controller) {
+    this._stream = _controller.stream;
+    this._view = _controller.view;
+    if (_controller.state == null) {
+      _controller.state = this;
+    }
+  }
+
+  setStream(AnimeStream stream) {
+    setState(() {
+      print("setStream");
+      this._stream = stream;
+    });
+  }
+
+  setView(int view) {
+    setState(() {
+      print("setView");
+      this._view = view;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -29,7 +87,7 @@ class AnimePlayer extends StatelessWidget {
     );
   }
 
-  getPlayer(BuildContext ctx) {
+  Widget getPlayer(BuildContext ctx) {
     if (_view == 0) {
       return Center(
           child: IconButton(
@@ -44,30 +102,31 @@ class AnimePlayer extends StatelessWidget {
               onPressed: () => openBrowser()));
     } else if (_view == 2) {
       if (HosterParser.parser.containsKey(_stream.hoster_id)) {
-        var parser = HosterParser.parser[_stream.hoster_id];
         return FutureBuilder(
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                var controller = VideoPlayerController.network(snapshot.data);
-                var chewieController = ChewieController(
-                  videoPlayerController: controller,
-                  aspectRatio: 3 / 2,
-                  looping: false
-                );
-                _onControllerInit(chewieController);
-                return Chewie(controller: chewieController);
+                var source = snapshot.data;
+                if (_webcontroller != null) {
+                  _webcontroller.loadUrl(url: source);
+                }
+                return InAppWebView(
+                    initialOptions: InAppWebViewWidgetOptions(),
+                    initialUrl: source,
+                    onWebViewCreated: (controller) => setState(() {
+                          _webcontroller = controller;
+                        }));
               }
               return Center(child: CircularProgressIndicator());
             },
-            future: parser.parseHoster(_stream.link));
+            future: HosterParser.parser[_stream.hoster_id]
+                .parseHoster(_stream.link));
       }
-
-      if (_controller != null) {
-        _controller.loadUrl(url: _stream.link);
-      }
-      return ThemeText("Der Hoster unterstützt noch nicht den InApp-Player!");
-      //return _inApp;
+      return Center(
+          child:
+              ThemeText("Der Hoster unterstützt noch nicht den InApp-Player!"));
     }
+    print("8");
+    return Center(child: ThemeText("Player konnte nicht geladen werden!"));
   }
 
   openInApp() {
@@ -84,7 +143,7 @@ class AnimePlayer extends StatelessWidget {
 
   open(url) async {
     if (await canLaunch(url)) {
-      await launch(url);
+      launch(url);
     }
   }
 }

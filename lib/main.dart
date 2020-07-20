@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
+import 'package:neeko/neeko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
@@ -99,8 +100,8 @@ class AppState extends State<App> {
       error: ThemeText("Failed to load the ad"),
       controller: NativeAdmobController(),
       type: NativeAdmobType.banner,
-      options: NativeAdmobOptions(
-          ratingColor: Colors.red, showMediaContent: true),
+      options:
+          NativeAdmobOptions(ratingColor: Colors.red, showMediaContent: true),
     );
     super.initState();
   }

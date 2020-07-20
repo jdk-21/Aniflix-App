@@ -8,12 +8,10 @@ import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
-import 'package:chewie/chewie.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class EpisodeScreenArguments {
   String name;
@@ -58,20 +56,12 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   int view;
   EpisodeBarState barState;
   EpisodeHeaderState episodeHeaderState;
-  var _inApp;
-  InAppWebViewController _controller;
-  ChewieController _chewieController;
+  AnimePlayerController _controller;
 
 
 
   updateStream(EpisodeInfo episodeInfo, int lang, int hoster) {
     setState(() {
-      if (_chewieController != null) {
-        _chewieController.videoPlayerController.dispose();
-        _chewieController.dispose();
-        _chewieController = null;
-      }
-
       for (var stream in episodeInfo.streams) {
         if (_hosters[hoster] == stream.hoster.name &&
             _langs[lang] == stream.lang) {
@@ -83,6 +73,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             "hoster_name": stream.hoster.name
           });
           this._stream = stream;
+          _controller.changeStream(stream);
           return;
         }
       }
@@ -100,12 +91,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this.comments = null;
       this.view = null;
       this._controller = null;
-      this._inApp = null;
-      if (_chewieController != null) {
-        _chewieController.videoPlayerController.dispose();
-        _chewieController.dispose();
-        _chewieController = null;
-      }
+      //TODO dispose Player?
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
 
       this.episodeInfo.then((episode) {
@@ -140,15 +126,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
     if (episodeInfo == null) {
       this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
     }
-  }
-
-  @override
-  void dispose() {
-    if (_chewieController != null) {
-      _chewieController.videoPlayerController.dispose();
-      _chewieController.dispose();
-    }
-    super.dispose();
   }
 
   @override
@@ -221,35 +198,22 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                   itemName: itemName,
                   itemCategory: "Episode");
             }
-            if (view == 2 && _inApp == null) {
-              _inApp = InAppWebView(
-                  initialHeaders: {},
-                  initialOptions: InAppWebViewWidgetOptions(
-                      crossPlatform: InAppWebViewOptions()),
-                  onWebViewCreated: (InAppWebViewController controller) {
-                    controller.loadUrl(url: _stream.link);
-                    setState(() {
-                      _controller = controller;
-                    });
-                  });
+
+            if(_controller == null){
+              _controller = AnimePlayerController(_stream, view);
             }
 
-            return Column(children: <Widget>[
+            return Column(
+                children: <Widget>[
               Expanded(
                   child: Container(
                       color: Theme.of(ctx).backgroundColor,
                       child: ListView(
+                        cacheExtent: 1000,
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
                           (_stream != null)
-                              ? AnimePlayer(_stream, view, _inApp, _controller,
-                                  (controller) {
-                                    if (_chewieController != null) {
-                                      _chewieController.videoPlayerController.dispose();
-                                      _chewieController.dispose();
-                                    }
-                                    _chewieController = controller;
-                                })
+                              ? AnimePlayer(_controller)
                               : Container(),
                           EpisodeHeader(episode, () {
                             var info = APIManager.getEpisodeInfo(
@@ -272,6 +236,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (lang, hoster, view) {
                             setState(() {
                               this.view = view;
+                              _controller.changeView(view);
                             });
                             updateStream(episode, lang, hoster);
                           }, (state) {
