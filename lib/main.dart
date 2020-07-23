@@ -83,10 +83,12 @@ class AppState extends State<App> {
   static String _error;
   static AppState _state;
   static bool _loggedIn;
+  static bool _init;
 
   AppState() {
     _loading = true;
     _loggedIn = false;
+    _init = false;
     _state = this;
     analytics.logAppOpen();
   }
@@ -134,10 +136,11 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext buildcontext) {
-    if (_prefs == null) {
+    if (!_init) {
       ThemeManager manager = ThemeManager.getInstance();
       SharedPreferences.getInstance().then((prefs) {
         setState(() {
+          _init = true;
           manager.setActualTheme(prefs.getInt("actualTheme") ?? 0);
           _theme = ThemeManager.getInstance().getActualThemeData();
           _prefs = prefs;
@@ -151,10 +154,13 @@ class AppState extends State<App> {
                       _loading = false;
                     }))
                 .catchError((object, trace) {
-              print("Error: " + object.toString());
-              _error = object.message;
-              _loading = false;
+              setState(() {
+                _error = object.message;
+                _loading = false;
+              });
             });
+          } else {
+            _loading = false;
           }
         });
       });
