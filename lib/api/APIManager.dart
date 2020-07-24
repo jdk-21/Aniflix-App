@@ -325,7 +325,7 @@ class APIManager {
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
     } else {
-      if (response.statusCode == 503) {
+      if (response.statusCode >= 500 && response.statusCode < 600) {
         throw Exception(
             "Die App ist derzeit Offline, versuche es bitte später wieder.");
       }

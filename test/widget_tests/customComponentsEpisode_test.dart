@@ -1,9 +1,11 @@
 import 'package:aniflix_app/api/objects/Season.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -68,7 +70,7 @@ class TestEpisodeHeader extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: EpisodeHeader(new EpisodeInfo(1,"",1,1,"","","",1,"","","",1,[],[],[], new Season(1,1,1,"", "","", "",1, new Show(1,"", "","","","","","","","","","",1,1,"",1))),(){}, (){},(value, value2, value3){},(value){}),
+        body: EpisodeHeader(new LoadInfo(new User(1, "", "","","","","","","","",[],null), new EpisodeInfo(1,"",1,1,"","","",1,"","","",1,[],[],[], new Season(1,1,1,"", "","", "",1, new Show(1,"", "","","","","","","","","","",1,1,"",1)))),(){}, (){},(value, value2, value3){},(value){}),
       ),
     );
   }

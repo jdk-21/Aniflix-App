@@ -58,8 +58,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   EpisodeHeaderState episodeHeaderState;
   AnimePlayerController _controller;
 
-
-
   updateStream(EpisodeInfo episodeInfo, int lang, int hoster) {
     setState(() {
       for (var stream in episodeInfo.streams) {
@@ -176,6 +174,18 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
 
             if (_stream == null) {
+              var user = snapshot.data.user;
+              for (var stream in episode.streams) {
+                if (user.settings.preferred_hoster_id == stream.hoster_id &&
+                    user.settings.preferred_lang == stream.lang) {
+                  this._stream = stream;
+                  break;
+                }
+              }
+            }
+
+
+            if (_stream == null) {
               for (var stream in episode.streams) {
                 if (_hosters[0] == stream.hoster.name &&
                     _langs[0] == stream.lang) {
@@ -184,6 +194,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 }
               }
             }
+
             if (comments == null) {
               comments = episode.comments;
               var info = episode;
@@ -199,12 +210,11 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                   itemCategory: "Episode");
             }
 
-            if(_controller == null){
+            if (_controller == null) {
               _controller = AnimePlayerController(_stream, view);
             }
 
-            return Column(
-                children: <Widget>[
+            return Column(children: <Widget>[
               Expanded(
                   child: Container(
                       color: Theme.of(ctx).backgroundColor,
@@ -215,7 +225,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           (_stream != null)
                               ? AnimePlayer(_controller)
                               : Container(),
-                          EpisodeHeader(episode, () {
+                          EpisodeHeader(snapshot.data, () {
                             var info = APIManager.getEpisodeInfo(
                                 name, season, number - 1);
                             info.then((value) {

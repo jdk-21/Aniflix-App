@@ -151,7 +151,7 @@ class TestWriteReviewDialog extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: WriteReviewDialog((value){}, new ReviewShow(1,"","","","","","","","","","","",1,1,"",1,[]), new User(1,"","","","","","","","","",[])),
+        body: WriteReviewDialog((value){}, new ReviewShow(1,"","","","","","","","","","","",1,1,"",1,[]), new User(1,"","","","","","","","","",[],null)),
       ),
     );
   }
