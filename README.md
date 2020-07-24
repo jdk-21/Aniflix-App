@@ -1,5 +1,7 @@
 # aniflix_app
-[![Build Status](https://dev.azure.com/aniflix/Aniflix%20App/_apis/build/status/d0mmi.Aniflix-App?branchName=master)](https://dev.azure.com/aniflix/Aniflix%20App/_build/latest?definitionId=1&branchName=master)
+
+[![codecov](https://codecov.io/gh/d0mmi/Aniflix-App/branch/master/graph/badge.svg)](https://codecov.io/gh/d0mmi/Aniflix-App)
+
 
 App for Aniflix
 
