@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/AppErrorScreen.dart';
 import 'package:aniflix_app/components/screens/HomeViewSlider.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
@@ -77,6 +78,7 @@ class AppState extends State<App> {
   NativeAdmob _ad;
   PageController controller;
   static int _index = 0;
+  static AniflixProfilebar _profileBar;
   SharedPreferences _prefs;
   static bool _loading;
   static String _error;
@@ -123,6 +125,12 @@ class AppState extends State<App> {
   static setIndex(int value) {
     _state.setState(() {
       _index = value;
+    });
+  }
+
+  static setProfileBar(AniflixProfilebar value) {
+    _state.setState(() {
+      _profileBar = value;
     });
   }
 
@@ -280,13 +288,13 @@ class AppState extends State<App> {
       case "profil":
         return MaterialPageRoute(builder: (ctx) {
           return getScaffold(new Profile(settings.arguments), ctx,
-              setIndex: true);
+              setIndex: true, bottomBar: _profileBar);
         });
     }
   }
 
   Scaffold getScaffold(Screen widget, BuildContext ctx,
-      {bool button = false, bool setIndex = false, Widget bottomBar = null}) {
+      {bool button = false, bool setIndex = false, Widget bottomBar}) {
     if (setIndex) {
       _index = 3;
     }

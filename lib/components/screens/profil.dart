@@ -4,6 +4,7 @@ import 'package:aniflix_app/api/objects/profile/Friend.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 import 'package:aniflix_app/api/objects/profile/UserStats.dart';
+import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
 import 'package:aniflix_app/components/screens/profileanimelist.dart';
 import 'package:aniflix_app/components/screens/profilesettings.dart';
@@ -26,6 +27,7 @@ import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/custom/dialogs/aboutMeDialog.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class UserProfileData {
   UserProfile userProfile;
@@ -62,6 +64,7 @@ class Profile extends StatefulWidget implements Screen {
 
 class ProfileState extends State<Profile> {
   int userID;
+  int barIndex = 0;
   Future<UserProfileData> profileData;
   String aboutMe;
   PageController controller;
@@ -75,6 +78,12 @@ class ProfileState extends State<Profile> {
   void initState() {
     controller = PageController(initialPage: 0);
     super.initState();
+  }
+
+  setIndex(int value) {
+    setState(() {
+      barIndex = value;
+    });
   }
 
   @override
@@ -150,31 +159,55 @@ class ProfileState extends State<Profile> {
             });
       }),
     ];
-
+    List<TitledNavigationBarItem> items = [];
+    /*items.add(TitledNavigationBarItem(
+        icon: Icons.person,
+        title: ThemeText('Profil'),
+        backgroundColor: Theme.of(ctx).backgroundColor));*/
     if (data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
           profileData = APIManager.getUserProfileData(userID);
         });
       }));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.group,
+          title: ThemeText('Freunde'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (data.userProfile.settings.show_favorites) {
       pages.add(Favoriten(favouritedata: data.favouritedata));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.favorite,
+          title: ThemeText('Favoriten'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (data.userProfile.settings.show_abos) {
       pages.add(ProfileSubBox(userID));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.subscriptions,
+          title: ThemeText('Abos'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (data.userProfile.settings.show_watchlist) {
       pages.add(Watchlist(
         watchlistdata: data.userWatchlistData,
       ));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.watch_later,
+          title: ThemeText('Watchlist'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (data.userProfile.settings.show_list) {
       pages.add(ProfileAnimeList(userID));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.list,
+          title: ThemeText('Anime Liste'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (CacheManager.userData.id == userID) {
@@ -185,11 +218,16 @@ class ProfileState extends State<Profile> {
       }, () {
         updateSettings();
       }));
+      /*items.add(TitledNavigationBarItem(
+          icon: Icons.settings,
+          title: ThemeText('Einstellungen'),
+          backgroundColor: Theme.of(ctx).backgroundColor));*/
     }
-
     List<TextboxSliderElement> carouseldata = profile.groups
         .map((group) => TextboxSliderElement(group.name))
         .toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppState.setProfileBar(
+        AniflixProfilebar(barIndex, controller, items, ctx, this)));
 
     return Column(
       children: [
@@ -272,7 +310,7 @@ class ProfileState extends State<Profile> {
         SizedBox(
           height: 5,
         ),
-        Expanded(child: PageView(controller: controller, children: pages))
+        Expanded(child: PageView(controller: controller, children: pages, onPageChanged:(value) => setIndex(value)))
       ],
     );
   }

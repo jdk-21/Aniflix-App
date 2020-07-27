@@ -1,36 +1,22 @@
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class AniflixProfilebar extends TitledBottomNavigationBar {
-  AniflixProfilebar(
-      int index, PageController controller, BuildContext context)
+  List<TitledNavigationBarItem> items = [];
+
+  AniflixProfilebar(int index, PageController controller, this.items,
+      BuildContext context, ProfileState state)
       : super(
           onTap: (i) {
-            AppState.setIndex(i);
-            controller.jumpToPage(i);
+            state.setIndex(i);
+            controller.jumpToPage(i + 1);
           },
-          currentIndex: index,
-          items: getItems(Theme.of(context)),
+          currentIndex: index - 1,
+          items: items,
           activeColor: Theme.of(context).iconTheme.color,
         );
-
-  static getItems(ThemeData theme) {
-    return [
-      TitledNavigationBarItem(
-          icon: Icons.home,
-          title: ThemeText('Home'),
-          backgroundColor: theme.backgroundColor),
-      TitledNavigationBarItem(
-          icon: Icons.subscriptions,
-          title: ThemeText('Abos'),
-          backgroundColor: theme.backgroundColor),
-      TitledNavigationBarItem(
-          icon: Icons.list,
-          title: ThemeText('Alle'),
-          backgroundColor: theme.backgroundColor),
-    ];
-  }
 }
