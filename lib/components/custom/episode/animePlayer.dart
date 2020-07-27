@@ -110,7 +110,7 @@ class AnimePlayerState extends State<AnimePlayer> {
                   _webcontroller.loadUrl(url: source);
                 }
                 return InAppWebView(
-                    initialOptions: InAppWebViewWidgetOptions(),
+                    initialOptions: InAppWebViewGroupOptions(),
                     initialUrl: source,
                     onWebViewCreated: (controller) => setState(() {
                           _webcontroller = controller;
@@ -133,8 +133,8 @@ class AnimePlayerState extends State<AnimePlayer> {
     ChromeSafariBrowser().open(
         url: _stream.link,
         options: ChromeSafariBrowserClassOptions(
-            android: AndroidChromeCustomTabsOptions(addShareButton: false),
-            ios: IOSSafariOptions(barCollapsingEnabled: true)));
+            android: AndroidChromeCustomTabsOptions(),
+            ios: IOSSafariOptions()));
   }
 
   openBrowser() {

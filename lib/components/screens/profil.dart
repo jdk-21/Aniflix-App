@@ -382,7 +382,7 @@ class ProfileMainPage extends StatelessWidget {
                 top: BorderSide(
                     width: 1, color: Theme.of(ctx).textTheme.caption.color))),
       ),
-      HeadlineSlider("Zuletzt gesehen:", history)
+      HeadlineSlider("Zuletzt gesehen:", history, 350)
     ]);
 
     return ListView(children: widgets);

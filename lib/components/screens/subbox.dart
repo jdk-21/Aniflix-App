@@ -3,13 +3,13 @@ import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
 import '../../api/APIManager.dart';
 import '../../api/objects/subbox/SubEpisode.dart';
-import '../../main.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
 import './episode.dart';
 
 class Subdata {
   List<SubEpisode> episodes;
+
   Subdata(this.episodes);
 }
 
@@ -119,7 +119,7 @@ class SubBoxState extends State<SubBox> {
         if (epDays[i].day == now.day &&
             epDays[i].month == now.month &&
             epDays[i].year == now.year) {
-          slider = new HeadlineSlider("Heute", lists[i]);
+          slider = new HeadlineSlider("Heute", lists[i], 200);
         } else {
           slider = new HeadlineSlider(
               epDays[i].day.toString() +
@@ -127,7 +127,8 @@ class SubBoxState extends State<SubBox> {
                   epDays[i].month.toString() +
                   "." +
                   epDays[i].year.toString(),
-              lists[i]);
+              lists[i],
+              200);
         }
         days.add(slider);
       }

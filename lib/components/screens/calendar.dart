@@ -127,23 +127,23 @@ class CalendarState extends State<Calendar> {
     var list = <Widget>[];
 
     list.add(
-        (monday.length > 0) ? HeadlineSlider("Montag", monday) : Container());
+        (monday.length > 0) ? HeadlineSlider("Montag", monday, 200) : Container());
     list.add((tuesday.length > 0)
-        ? HeadlineSlider("Dienstag", tuesday)
+        ? HeadlineSlider("Dienstag", tuesday, 200)
         : Container());
     list.add((wednesday.length > 0)
-        ? HeadlineSlider("Mittwoch", wednesday)
+        ? HeadlineSlider("Mittwoch", wednesday, 200)
         : Container());
     list.add((thursday.length > 0)
-        ? HeadlineSlider("Donnerstag", thursday)
+        ? HeadlineSlider("Donnerstag", thursday, 200)
         : Container());
     list.add(
-        (friday.length > 0) ? HeadlineSlider("Freitag", friday) : Container());
+        (friday.length > 0) ? HeadlineSlider("Freitag", friday, 200) : Container());
     list.add((saturday.length > 0)
-        ? HeadlineSlider("Samstag", saturday)
+        ? HeadlineSlider("Samstag", saturday, 200)
         : Container());
     list.add(
-        (sunday.length > 0) ? HeadlineSlider("Sonntag", sunday) : Container());
+        (sunday.length > 0) ? HeadlineSlider("Sonntag", sunday, 200) : Container());
 
     var date = DateTime.now();
 
@@ -152,7 +152,7 @@ class CalendarState extends State<Calendar> {
       sortedList.addAll(list.sublist(0, date.weekday - 1));
     }
     sortedList.add((special.length > 0)
-        ? HeadlineSlider("Unregelmäßig", special)
+        ? HeadlineSlider("Unregelmäßig", special, 200)
         : Container());
     var i = 0;
     for (var k = 0; k < sortedList.length; k++) {

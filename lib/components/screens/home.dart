@@ -84,19 +84,21 @@ class HomeState extends State<Home> {
                             "Weitersehen",
                             data.continues
                                 .map((ep) => getContinueSliderElement(ep))
-                                .toList())
+                                .toList(),
+                            200)
                         : Container(),
                     HeadlineSlider(
                         "Neue Folgen",
                         data.airings
                             .map((ep) => getAiringSliderElement(ep))
-                            .toList()),
+                            .toList(),
+                        200),
                     HeadlineSlider(
                       "Neu auf Aniflix",
                       data.newshows
                           .map((show) => getShowSliderElement(show))
                           .toList(),
-                      aspectRatio: 200 / 300,
+                      350,
                       size: 0.4,
                     ),
                     HeadlineSlider(
@@ -104,7 +106,7 @@ class HomeState extends State<Home> {
                       data.discover
                           .map((show) => getShowSliderElement(show))
                           .toList(),
-                      aspectRatio: 200 / 300,
+                      350,
                       size: 0.4,
                     ),
                   ]),

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:bmnav/bmnav.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
-class AniflixNavigationbar extends TitledBottomNavigationBar {
-  AniflixNavigationbar(
+class AniflixProfilebar extends TitledBottomNavigationBar {
+  AniflixProfilebar(
       int index, PageController controller, BuildContext context)
       : super(
           onTap: (i) {

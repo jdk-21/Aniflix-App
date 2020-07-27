@@ -19,6 +19,7 @@ class AnimeListData {
 
 class AnimeList extends StatefulWidget implements Screen {
   AnimeList();
+
   @override
   getScreenName() {
     return "allAnime_screen";
@@ -194,22 +195,14 @@ class AnimeListState extends State<AnimeList> {
         sortedAZAiring.length < 1 &&
         sortedBewertungAiring.length < 1 &&
         sortedAbosAiring.length < 1) {
-      sortedGenre = getAllAnimeAsSortedList(
-          ctx, data, 0, false);
-      sortedAZ = getAllAnimeAsSortedList(
-          ctx, data, 1, false);
-      sortedBewertung = getAllAnimeAsSortedList(
-          ctx, data, 2, false);
-      sortedAbos = getAllAnimeAsSortedList(
-          ctx, data, 3, false);
-      sortedGenreAiring = getAllAnimeAsSortedList(
-          ctx, data, 0, true);
-      sortedAZAiring = getAllAnimeAsSortedList(
-          ctx, data, 1, true);
-      sortedBewertungAiring = getAllAnimeAsSortedList(
-          ctx, data, 2, true);
-      sortedAbosAiring = getAllAnimeAsSortedList(
-          ctx, data, 3, true);
+      sortedGenre = getAllAnimeAsSortedList(ctx, data, 0, false);
+      sortedAZ = getAllAnimeAsSortedList(ctx, data, 1, false);
+      sortedBewertung = getAllAnimeAsSortedList(ctx, data, 2, false);
+      sortedAbos = getAllAnimeAsSortedList(ctx, data, 3, false);
+      sortedGenreAiring = getAllAnimeAsSortedList(ctx, data, 0, true);
+      sortedAZAiring = getAllAnimeAsSortedList(ctx, data, 1, true);
+      sortedBewertungAiring = getAllAnimeAsSortedList(ctx, data, 2, true);
+      sortedAbosAiring = getAllAnimeAsSortedList(ctx, data, 3, true);
     }
     return Column(
       children: <Widget>[
@@ -293,10 +286,7 @@ class AnimeListState extends State<AnimeList> {
   }
 
   List<Widget> getAllAnimeAsSortedList(
-      BuildContext ctx,
-      AnimeListData data,
-      int filterCriteria,
-      bool airing) {
+      BuildContext ctx, AnimeListData data, int filterCriteria, bool airing) {
     List<Widget> sortedList = [SizedBox(height: 10)];
     switch (filterCriteria) {
       case 0:
@@ -327,8 +317,8 @@ class AnimeListState extends State<AnimeList> {
               }
             }
             if (showsAsSlider.length >= 1) {
-              sortedList.add(HeadlineSlider(genre.name, showsAsSlider,
-                  aspectRatio: 200 / 300, size: 0.4));
+              sortedList.add(
+                  HeadlineSlider(genre.name, showsAsSlider, 200, size: 0.4));
             }
           }
         }

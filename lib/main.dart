@@ -2,12 +2,12 @@ import 'package:aniflix_app/api/objects/LoginResponse.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/AppErrorScreen.dart';
+import 'package:aniflix_app/components/screens/HomeViewSlider.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
 import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
-import 'package:aniflix_app/components/screens/home.dart';
 import 'package:aniflix_app/components/screens/news.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
-import 'package:neeko/neeko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
@@ -74,9 +73,9 @@ class AppState extends State<App> {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
-  AniflixNavState _navState;
   final PageStorageBucket bucket = PageStorageBucket();
   NativeAdmob _ad;
+  PageController controller;
   static int _index = 0;
   SharedPreferences _prefs;
   static bool _loading;
@@ -91,6 +90,7 @@ class AppState extends State<App> {
     _init = false;
     _state = this;
     analytics.logAppOpen();
+    controller = PageController();
   }
 
   @override
@@ -121,7 +121,9 @@ class AppState extends State<App> {
   }
 
   static setIndex(int value) {
-    _index = value;
+    _state.setState(() {
+      _index = value;
+    });
   }
 
   checkLoginStatus() {
@@ -184,11 +186,17 @@ class AppState extends State<App> {
             theme: _theme,
             navigatorObservers: [observer],
             home: Builder(
-              builder: (context) => getScaffold(Home(), context, button: true),
+              builder: (context) => getScaffold(
+                  HomeViewSlider(controller), context,
+                  bottomBar: AniflixNavigationbar(_index, controller, context),
+                  button: true),
             ),
             routes: {
               'home': (context) {
-                return getScaffold(Home(), context, button: true);
+                return getScaffold(HomeViewSlider(controller), context,
+                    bottomBar:
+                        AniflixNavigationbar(_index, controller, context),
+                    button: true);
               },
               'search': (context) {
                 return getScaffold(SearchAnime(), context, setIndex: true);
@@ -239,7 +247,9 @@ class AppState extends State<App> {
     } else {
       return MaterialApp(
         title: 'Aniflix',
-        home: AppErrorScreen(_error),
+        home: Scaffold(
+            body: AppErrorScreen(_error),
+            backgroundColor: Theme.of(context).backgroundColor),
         color: _theme.backgroundColor,
         theme: _theme,
       );
@@ -276,15 +286,13 @@ class AppState extends State<App> {
   }
 
   Scaffold getScaffold(Screen widget, BuildContext ctx,
-      {bool button = false, bool setIndex = false}) {
+      {bool button = false, bool setIndex = false, Widget bottomBar = null}) {
     if (setIndex) {
       _index = 3;
     }
     return Scaffold(
         appBar: AniflixAppbar(this, ctx),
-        bottomNavigationBar: AniflixNavigationbar(_index, (navstate) {
-          _navState = navstate;
-        }, _theme),
+        bottomNavigationBar: bottomBar,
         floatingActionButton: (button)
             ? FloatingActionButton(
                 heroTag: null,
