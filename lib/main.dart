@@ -20,6 +20,7 @@ import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -73,6 +74,7 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   ThemeData _theme = ThemeManager.getInstance().getActualThemeData();
   static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
   final PageStorageBucket bucket = PageStorageBucket();
