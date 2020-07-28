@@ -22,6 +22,7 @@ import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
@@ -98,6 +99,7 @@ class AppState extends State<App> {
   @override
   void initState() {
     HosterParser.initParser();
+    FlutterDownloader.initialize();
     _ad = NativeAdmob(
       adUnitID: adUnitID,
       loading: Center(child: CircularProgressIndicator()),

@@ -8,6 +8,7 @@ import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -184,7 +185,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-
             if (_stream == null) {
               for (var stream in episode.streams) {
                 if (_hosters[0] == stream.hoster.name &&
@@ -211,7 +211,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
 
             if (_controller == null) {
-              _controller = AnimePlayerController(_stream, view);
+              _controller = AnimePlayerController(episode,_stream, view, this);
             }
 
             return Column(children: <Widget>[

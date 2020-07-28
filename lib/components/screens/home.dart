@@ -87,28 +87,34 @@ class HomeState extends State<Home> {
                                 .toList(),
                             200)
                         : Container(),
-                    HeadlineSlider(
-                        "Neue Folgen",
-                        data.airings
-                            .map((ep) => getAiringSliderElement(ep))
-                            .toList(),
-                        200),
-                    HeadlineSlider(
-                      "Neu auf Aniflix",
-                      data.newshows
-                          .map((show) => getShowSliderElement(show))
-                          .toList(),
-                      350,
-                      size: 0.4,
-                    ),
-                    HeadlineSlider(
-                      "Entdecken",
-                      data.discover
-                          .map((show) => getShowSliderElement(show))
-                          .toList(),
-                      350,
-                      size: 0.4,
-                    ),
+                    (data.airings.length > 0)
+                        ? HeadlineSlider(
+                            "Neue Folgen",
+                            data.airings
+                                .map((ep) => getAiringSliderElement(ep))
+                                .toList(),
+                            200)
+                        : Container(),
+                    (data.newshows.length > 0)
+                        ? HeadlineSlider(
+                            "Neu auf Aniflix",
+                            data.newshows
+                                .map((show) => getShowSliderElement(show))
+                                .toList(),
+                            350,
+                            size: 0.4,
+                          )
+                        : Container(),
+                    (data.discover.length > 0)
+                        ? HeadlineSlider(
+                            "Entdecken",
+                            data.discover
+                                .map((show) => getShowSliderElement(show))
+                                .toList(),
+                            350,
+                            size: 0.4,
+                          )
+                        : Container(),
                   ]),
                   onRefresh: () async {
                     setState(() {
