@@ -1,4 +1,5 @@
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,16 @@ class AppErrorScreen extends StatelessWidget {
                     message,
                     fontSize: 25,
                   )),
+              SizedBox(
+                height: 50,
+              ),Container(child:
+              FlatButton(
+                child: ThemeText("Neu Verbinden"),
+                onPressed: () {
+                  AppState.setLoading(true);
+                  AppState.checkAppStatus();
+                },
+              ),decoration: BoxDecoration(border: Border.all(width: 1, color: Theme.of(ctx).textTheme.caption.color)),)
             ],
           ),
         ]));

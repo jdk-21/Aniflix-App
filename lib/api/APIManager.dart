@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:aniflix_app/api/objects/Hoster.dart';
+import 'package:aniflix_app/api/objects/RegisterResponse.dart';
 import 'package:aniflix_app/api/objects/anime/AnimeSeason.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
@@ -315,9 +316,20 @@ class APIManager {
 
   static Future<LoginResponse> loginRequest(String email, String pw) async {
     var response =
-        await _postRequest("auth/login", {"email": email, "password": pw});
+    await _postRequest("auth/login", {"email": email, "password": pw});
     login = LoginResponse.fromJson(jsonDecode(response.body));
     return login;
+  }
+
+  static Future<RegisterResponse> registerRequest( String email, String pw, String token, String username,) async {
+    /*
+      {"message":"Email already in use"}
+      {"message":"Username already in use"}
+     */
+    var response =
+    await _postRequest("user/register", {"email": email,"password": pw,"token": token,"username": username});
+
+    return RegisterResponse.fromJson(jsonDecode(response.body));
   }
 
   static Future<User> getUser() async {

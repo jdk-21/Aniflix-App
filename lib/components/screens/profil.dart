@@ -226,93 +226,101 @@ class ProfileState extends State<Profile> {
     List<TextboxSliderElement> carouseldata = profile.groups
         .map((group) => TextboxSliderElement(group.name))
         .toList();
-    WidgetsBinding.instance.addPostFrameCallback((_) => AppState.setProfileBar(
-        AniflixProfilebar(barIndex, controller, items, ctx, this)));
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+        backgroundColor: Theme.of(ctx).backgroundColor,
+        body: Column(
           children: [
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                (profile.avatar == null)
-                    ? IconButton(
-                        iconSize: 50,
-                        icon: Icon(
-                          Icons.person,
-                          color: Theme.of(ctx).primaryIconTheme.color,
-                        ),
-                        onPressed: () {},
-                      )
-                    : IconButton(
-                        iconSize: 50,
-                        icon: new Container(
-                            decoration: new BoxDecoration(
-                                image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            "https://www2.aniflix.tv/storage/" + profile.avatar,
-                          ),
-                        ))),
-                        onPressed: () {}),
-                ThemeText(profile.name),
-                (CacheManager.userData.id == userID || isAlreadyFriend)
-                    ? Container()
-                    : IconButton(
-                        icon: Icon(Icons.person_add),
-                        onPressed: () {
-                          APIManager.addFriend(profile.id);
-                          setState(() {
-                            profileData = APIManager.getUserProfileData(userID);
-                          });
-                        },
-                        color: Theme.of(ctx).primaryIconTheme.color,
-                      ),
-              ],
-            ),
-            Column(
-              children: [
-                Row(
+                Column(
                   children: [
-                    TextboxSliderElement(
-                      "Mitglied seit " +
-                          joined.day.toString() +
-                          "." +
-                          joined.month.toString() +
-                          "." +
-                          joined.year.toString(),
-                    ),
-                    TextboxSliderElement(
-                        "Punkte: " + data.userstats.points.toString()),
+                    (profile.avatar == null)
+                        ? IconButton(
+                            iconSize: 50,
+                            icon: Icon(
+                              Icons.person,
+                              color: Theme.of(ctx).primaryIconTheme.color,
+                            ),
+                            onPressed: () {},
+                          )
+                        : IconButton(
+                            iconSize: 50,
+                            icon: new Container(
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                "https://www2.aniflix.tv/storage/" +
+                                    profile.avatar,
+                              ),
+                            ))),
+                            onPressed: () {}),
+                    ThemeText(profile.name),
+                    (CacheManager.userData.id == userID || isAlreadyFriend)
+                        ? Container()
+                        : IconButton(
+                            icon: Icon(Icons.person_add),
+                            onPressed: () {
+                              APIManager.addFriend(profile.id);
+                              setState(() {
+                                profileData =
+                                    APIManager.getUserProfileData(userID);
+                              });
+                            },
+                            color: Theme.of(ctx).primaryIconTheme.color,
+                          ),
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
+                Column(
                   children: [
-                    Container(
-                      child: TextboxCarousel(carouseldata),
-                      width: MediaQuery.of(ctx).size.width * 0.75,
+                    Row(
+                      children: [
+                        TextboxSliderElement(
+                          "Mitglied seit " +
+                              joined.day.toString() +
+                              "." +
+                              joined.month.toString() +
+                              "." +
+                              joined.year.toString(),
+                        ),
+                        TextboxSliderElement(
+                            "Punkte: " + data.userstats.points.toString()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          child: TextboxCarousel(carouseldata),
+                          width: MediaQuery.of(ctx).size.width * 0.75,
+                        )
+                      ],
                     )
                   ],
-                )
+                ),
+                Container()
               ],
             ),
-            Container()
+            TextboxSliderElement("Anime geschaut: " + data.userstats.time),
+            SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: PageView(
+                    controller: controller,
+                    children: pages,
+                    onPageChanged: (value) => setIndex(value)))
           ],
         ),
-        TextboxSliderElement("Anime geschaut: " + data.userstats.time),
-        SizedBox(
-          height: 5,
-        ),
-        Expanded(child: PageView(controller: controller, children: pages, onPageChanged:(value) => setIndex(value)))
-      ],
-    );
+        bottomNavigationBar:
+            AniflixProfilebar(barIndex, controller, items, ctx, this));
   }
 }
 

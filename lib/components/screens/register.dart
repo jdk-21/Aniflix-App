@@ -1,10 +1,9 @@
+import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Register extends StatelessWidget implements Screen{
-
+class Register extends StatelessWidget implements Screen {
   Register();
 
   @override
@@ -95,10 +94,27 @@ class Register extends StatelessWidget implements Screen{
                   alignment: Alignment.center,
                   child: OutlineButton(
                     textColor: Theme.of(ctx).textTheme.caption.color,
-                    borderSide:
-                        BorderSide(color: Theme.of(ctx).textTheme.caption.color),
+                    borderSide: BorderSide(
+                        color: Theme.of(ctx).textTheme.caption.color),
                     child: Text("Registrieren"),
-                    onPressed: () {
+                    onPressed: () async {
+                      if (passwortController.text ==
+                          passwortWiederholenController.text) {
+                        var token = null; //TODO
+                        var response = await APIManager.registerRequest(
+                            emailController.text,
+                            passwortController.text,
+                            token,
+                            usernameController.text);
+                        if (response.hasError()) {
+                          //TODO
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                              ctx, 'login', (Route<dynamic> route) => false);
+                        }
+                      } else {
+                        //TODO
+                      }
                       resetTextController();
                     },
                   )),
@@ -108,6 +124,8 @@ class Register extends StatelessWidget implements Screen{
                   textColor: Theme.of(ctx).textTheme.caption.color,
                   child: Text("Schon einen Account?"),
                   onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        ctx, 'login', (Route<dynamic> route) => false);
                     resetTextController();
                   },
                 ),
@@ -117,7 +135,7 @@ class Register extends StatelessWidget implements Screen{
     );
   }
 
-  void resetTextController(){
+  void resetTextController() {
     usernameController.clear();
     emailController.clear();
     passwortController.clear();

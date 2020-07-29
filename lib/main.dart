@@ -10,6 +10,7 @@ import 'package:aniflix_app/components/screens/chat.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/news.dart';
+import 'package:aniflix_app/components/screens/register.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/components/screens/settings.dart';
 import 'package:aniflix_app/components/screens/subbox.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 import './components/screens/login.dart';
@@ -81,7 +83,6 @@ class AppState extends State<App> {
   NativeAdmob _ad;
   PageController controller;
   static int _index = 0;
-  static AniflixProfilebar _profileBar;
   SharedPreferences _prefs;
   static bool _loading;
   static String _error;
@@ -127,15 +128,11 @@ class AppState extends State<App> {
   }
 
   static setIndex(int value) {
-    _state.setState(() {
-      _index = value;
-    });
-  }
-
-  static setProfileBar(AniflixProfilebar value) {
-    _state.setState(() {
-      _profileBar = value;
-    });
+    if (_index != value) {
+      _state.setState(() {
+        _index = value;
+      });
+    }
   }
 
   checkLoginStatus() {
@@ -146,6 +143,23 @@ class AppState extends State<App> {
 
   showChat(BuildContext ctx) {
     Navigator.pushNamed(ctx, "chat");
+  }
+
+  static checkAppStatus() {
+    APIManager.getUser()
+        .then((value) => _state.setState(() {
+              if (value != null) _loggedIn = true;
+              _error = null;
+              _loading = false;
+            }))
+        .catchError((object, trace) {
+      _state.setState(() {
+        _error = object.message;
+        print("Error:");
+        print(_error);
+        _loading = false;
+      });
+    });
   }
 
   @override
@@ -162,17 +176,7 @@ class AppState extends State<App> {
               prefs.getString("token_type") != null) {
             APIManager.login = LoginResponse(prefs.getString("access_token"),
                 prefs.getString("token_type"), null);
-            APIManager.getUser()
-                .then((value) => setState(() {
-                      if (value != null) _loggedIn = true;
-                      _loading = false;
-                    }))
-                .catchError((object, trace) {
-              setState(() {
-                _error = object.message;
-                _loading = false;
-              });
-            });
+            checkAppStatus();
           } else {
             _loading = false;
           }
@@ -246,6 +250,9 @@ class AppState extends State<App> {
               'login': (context) {
                 return Scaffold(body: Login());
               },
+              'register': (context) {
+                return Scaffold(body: Register());
+              },
             },
             onGenerateRoute: generateRoute);
       } else {
@@ -292,7 +299,7 @@ class AppState extends State<App> {
       case "profil":
         return MaterialPageRoute(builder: (ctx) {
           return getScaffold(new Profile(settings.arguments), ctx,
-              setIndex: true, bottomBar: _profileBar);
+              setIndex: true);
         });
     }
   }
