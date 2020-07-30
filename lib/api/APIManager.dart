@@ -455,10 +455,16 @@ class APIManager {
         });
   }
 
+  static Future<UserProfile> updateAvatar(String imagePath) async {
+    var response = await _authMultipartFilePostRequest(
+        "user/set-avatar", login,"avatar", imagePath);
+    return UserProfile.fromJson(response.data);
+  }
+
   static Future<UserProfile> updateBackground(
       int settingsID, String imagePath) async {
     var response = await _authMultipartFilePostRequest(
-        "user/settings/background_image/" + settingsID.toString(), login, imagePath);
+        "user/settings/background_image/" + settingsID.toString(), login,"" ,imagePath);
     return UserProfile.fromJson(response.data);
   }
 
@@ -750,13 +756,13 @@ class APIManager {
   }
 
   static Future<Response> _authMultipartFilePostRequest(
-      String query, LoginResponse user,String path) async {
+      String query, LoginResponse user,String key,String path) async {
     Map<String, String> headers = {
       "Authorization": user.token_type + " " + user.access_token
     };
     var dio = new Dio(
         BaseOptions(baseUrl: 'https://www2.aniflix.tv/api/', headers: headers));
-    var formdata = FormData.fromMap({"image":  MultipartFile.fromFileSync(path)});
+    var formdata = FormData.fromMap({key :  MultipartFile.fromFileSync(path)});
     return dio.post(query, data: formdata);
   }
 

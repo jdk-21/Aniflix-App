@@ -124,6 +124,12 @@ class ProfileState extends State<Profile> {
     });
   }
 
+  updateAvatar() {
+    setState(() {
+      this.profileData = APIManager.getUserProfileData(userID);
+    });
+  }
+
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     if (modifiedSettings == null) {
@@ -211,7 +217,7 @@ class ProfileState extends State<Profile> {
     }
 
     if (CacheManager.userData.id == userID) {
-      pages.add(ProfileSettings(modifiedSettings, (newData) {
+      pages.add(ProfileSettings(modifiedSettings, updateAvatar, (newData) {
         setState(() {
           this.modifiedSettings = newData;
         });

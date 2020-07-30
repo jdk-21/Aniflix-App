@@ -13,10 +13,11 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileSettings extends StatelessWidget implements Screen {
   UserSettings data;
+  Function onUpdateAvatar;
   Function(UserSettings) onSettingsChange;
   Function onSave;
 
-  ProfileSettings(this.data, this.onSettingsChange, this.onSave) {
+  ProfileSettings(this.data,this.onUpdateAvatar, this.onSettingsChange, this.onSave) {
     if (CacheManager.userlistdata == null) {
       APIManager.getUserList().then((data) {
         CacheManager.userlistdata = data;
@@ -36,7 +37,7 @@ class ProfileSettings extends StatelessWidget implements Screen {
   Widget build(BuildContext ctx) {
     return new Container(
         color: Colors.transparent,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Container(
               alignment: Alignment.centerLeft,
@@ -127,6 +128,14 @@ class ProfileSettings extends StatelessWidget implements Screen {
                       }
                     });
                   }, ctx),
+                  SizedBox(height: 5),
+                  buildButtons("Change Avatar",() async {
+                    var image = await ImagePicker().getImage(source: ImageSource.gallery);
+                    var user = await APIManager.updateAvatar(image.path);
+                    onUpdateAvatar();
+                    CacheManager.userData.avatar = user.avatar;
+                    AppState.updateState();
+                  },ctx),
                   SizedBox(height: 5),
                   buildButtons("Change Background",() async {
                     var image = await ImagePicker().getImage(source: ImageSource.gallery);
