@@ -52,6 +52,7 @@ class AniflixAppbar extends AppBar {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           CacheManager.userData = snapshot.data;
+                          WidgetsBinding.instance.addPostFrameCallback((_) => AppState.updateState());
                         }
                         return ProfileImage((snapshot.data == null)? null : snapshot.data.avatar, (){ Navigator.pushNamed(ctx, "settings");});
                       },

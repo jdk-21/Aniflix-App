@@ -37,7 +37,7 @@ class SearchAnimeState extends State<SearchAnime> {
     var controller = TextEditingController();
     return Container(
         key: Key("search_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: Column(
           children: <Widget>[
             Expanded(

@@ -38,7 +38,7 @@ class NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         key: Key("news_screen"),
         child: Column(
           children: <Widget>[

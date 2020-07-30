@@ -162,7 +162,7 @@ class AnimeListState extends State<AnimeList> {
     if (cache == null) {
       return Container(
         key: Key("allAnime_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder<AnimeListData>(
           future: animeListData,
           builder: (context, snapshot) {
@@ -181,7 +181,7 @@ class AnimeListState extends State<AnimeList> {
     } else {
       return Container(
           key: Key("allAnime_screen"),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: getLayout(cache, ctx));
     }
   }
@@ -208,7 +208,7 @@ class AnimeListState extends State<AnimeList> {
       children: <Widget>[
         Expanded(
             child: Container(
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: ListView(
                   padding: EdgeInsets.only(left: 5, right: 5),
                   children: <Widget>[

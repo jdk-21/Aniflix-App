@@ -36,7 +36,7 @@ class ProfileSubBoxState extends State<ProfileSubBox> {
   Widget build(BuildContext ctx) {
       return Container(
         key: Key("profilesubbox_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: profilesubboxdata,
           builder: (context, snapshot) {
@@ -55,7 +55,7 @@ class ProfileSubBoxState extends State<ProfileSubBox> {
   getLayout(BuildContext ctx) {
     return Container(
                 padding: EdgeInsets.all(5),
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                     child: ListView(
                       children: getWatchlistAsWidgets(ctx, data.shows),

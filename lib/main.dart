@@ -21,6 +21,7 @@ import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,7 @@ class AppState extends State<App> {
     _ad = NativeAdmob(
       adUnitID: adUnitID,
       loading: Center(child: CircularProgressIndicator()),
-      error: ThemeText("Failed to load the ad"),
+      error: Center(child: ThemeText("Failed to load the ad")),
       controller: NativeAdmobController(),
       type: NativeAdmobType.banner,
       options:
@@ -125,6 +126,10 @@ class AppState extends State<App> {
     _state.setState(() {
       _loading = value;
     });
+  }
+
+  static updateState() {
+    _state.setState(() {});
   }
 
   static setIndex(int value) {
@@ -304,12 +309,13 @@ class AppState extends State<App> {
     }
   }
 
-  Scaffold getScaffold(Screen widget, BuildContext ctx,
+  Widget getScaffold(Screen widget, BuildContext ctx,
       {bool button = false, bool setIndex = false, Widget bottomBar}) {
     if (setIndex) {
       _index = 3;
     }
-    return Scaffold(
+    var scaffold = Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AniflixAppbar(this, ctx),
         bottomNavigationBar: bottomBar,
         floatingActionButton: (button)
@@ -330,9 +336,19 @@ class AppState extends State<App> {
             child: _ad,
             width: MediaQuery.of(ctx).size.width,
             height: 50,
-            color: Theme.of(ctx).backgroundColor,
+            color: Colors.transparent,
           ),
           Expanded(child: widget)
         ]));
+    return (CacheManager.userData?.settings?.background_image != null)
+        ? Container(
+            child: scaffold,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                        "https://www2.aniflix.tv/storage/" +
+                            CacheManager.userData.settings.background_image),
+                    fit: BoxFit.fitHeight)))
+        : Container(child: scaffold, color: Theme.of(ctx).backgroundColor);
   }
 }

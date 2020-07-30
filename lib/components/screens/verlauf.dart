@@ -41,7 +41,7 @@ class VerlaufState extends State<Verlauf> {
     if (cache == null) {
       return Container(
         key: Key("history_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: historyData,
           builder: (context, snapshot) {
@@ -58,7 +58,7 @@ class VerlaufState extends State<Verlauf> {
     } else {
       return Container(
           key: Key("history_screen"),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: getLayout(cache, ctx));
     }
   }
@@ -70,7 +70,7 @@ class VerlaufState extends State<Verlauf> {
         Expanded(
             child: Container(
                 padding: EdgeInsets.all(5),
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                   child: ListView(
                     children: getHistoryAsWidgets(ctx, history),

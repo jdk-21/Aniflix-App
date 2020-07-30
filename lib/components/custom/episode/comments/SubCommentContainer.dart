@@ -33,7 +33,7 @@ class SubCommentContainer extends StatelessWidget {
     }
     return Container(
         padding: EdgeInsets.only(left: 55),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: Column(children: [
           Column(
             children: [

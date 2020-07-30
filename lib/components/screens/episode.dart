@@ -131,7 +131,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("episode_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<LoadInfo>(
         future: episodeInfo,
         builder: (context, snapshot) {
@@ -217,7 +217,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             return Column(children: <Widget>[
               Expanded(
                   child: Container(
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                       child: ListView(
                         cacheExtent: 1000,
                         padding: EdgeInsets.only(left: 5, right: 5),

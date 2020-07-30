@@ -55,7 +55,7 @@ class WatchlistState extends State<Watchlist> {
     if (cache == null && !external) {
       return Container(
         key: Key("watchlist_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: watchlistdata,
           builder: (context, snapshot) {
@@ -71,7 +71,7 @@ class WatchlistState extends State<Watchlist> {
     } else {
       return Container(
           key: Key("watchlist_screen"),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: getLayout(cache, ctx));
     }
   }
@@ -82,7 +82,7 @@ class WatchlistState extends State<Watchlist> {
         Expanded(
             child: Container(
                 padding: EdgeInsets.all(5),
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                     child: ListView(
                       children: getWatchlistAsWidgets(ctx, (external)?userwatchlistdata.shows:data.shows),

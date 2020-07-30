@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileSettings extends StatelessWidget implements Screen {
   UserSettings data;
@@ -34,7 +35,7 @@ class ProfileSettings extends StatelessWidget implements Screen {
   @override
   Widget build(BuildContext ctx) {
     return new Container(
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: Column(
           children: <Widget>[
             Container(
@@ -126,6 +127,18 @@ class ProfileSettings extends StatelessWidget implements Screen {
                       }
                     });
                   }, ctx),
+                  SizedBox(height: 5),
+                  buildButtons("Change Background",() async {
+                    var image = await ImagePicker().getImage(source: ImageSource.gallery);
+                    var user = await APIManager.updateBackground(data.id, image.path);
+                    CacheManager.userData.settings = user.settings;
+                    AppState.updateState();
+                  },ctx),
+                  buildButtons("Delete Background",() async {
+                    var user = await APIManager.deleteBackground(data.id);
+                    CacheManager.userData.settings = user.settings;
+                    AppState.updateState();
+                  },ctx),
                   SizedBox(height: 5),
                   getSettingsLayout(ctx),
                   buildButtons("Save Settings", onSave, ctx)

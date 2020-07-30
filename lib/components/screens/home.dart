@@ -47,7 +47,7 @@ class HomeState extends State<Home> {
     if (cache == null) {
       return Container(
         key: Key("home_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder<Homedata>(
           future: homedata,
           builder: (context, snapshot) {
@@ -66,7 +66,7 @@ class HomeState extends State<Home> {
     } else {
       return Container(
           key: Key("home_screen"),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: getLayout(ctx, cache));
     }
   }
@@ -76,7 +76,7 @@ class HomeState extends State<Home> {
       children: <Widget>[
         Expanded(
             child: Container(
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                   child: ListView(padding: EdgeInsets.only(top: 10), children: [
                     (data.continues.length > 0)
@@ -85,7 +85,7 @@ class HomeState extends State<Home> {
                             data.continues
                                 .map((ep) => getContinueSliderElement(ep))
                                 .toList(),
-                            200)
+                            220)
                         : Container(),
                     (data.airings.length > 0)
                         ? HeadlineSlider(
@@ -93,7 +93,7 @@ class HomeState extends State<Home> {
                             data.airings
                                 .map((ep) => getAiringSliderElement(ep))
                                 .toList(),
-                            200)
+                        250)
                         : Container(),
                     (data.newshows.length > 0)
                         ? HeadlineSlider(

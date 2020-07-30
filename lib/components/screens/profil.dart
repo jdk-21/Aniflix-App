@@ -90,7 +90,7 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("profile_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<UserProfileData>(
         future: profileData,
         builder: (context, snapshot) {
@@ -228,7 +228,7 @@ class ProfileState extends State<Profile> {
         .toList();
 
     return Scaffold(
-        backgroundColor: Theme.of(ctx).backgroundColor,
+        backgroundColor: Colors.transparent,
         body: Column(
           children: [
             Row(

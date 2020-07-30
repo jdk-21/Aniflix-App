@@ -80,13 +80,13 @@ class SliderElement extends StatelessWidget {
               (description != "" && description != null)
                   ? Container(
                       child: ThemeText(description,
-                          overflow: TextOverflow.ellipsis),
+                          overflow: TextOverflow.ellipsis, fontSize: 18),
                       color: Color(1),
                     )
                   : Container(),
               (name != "" && name != null)
                   ? Container(
-                      child: ThemeText(name, overflow: TextOverflow.ellipsis),
+                      child: ThemeText(name, overflow: TextOverflow.ellipsis, fontSize: 18,),
                     )
                   : Container(),
             ])));

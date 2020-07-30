@@ -76,9 +76,7 @@ class AnimeScreenState extends State<AnimeScreen> {
   Widget build(BuildContext ctx) {
     return Container(
         key: Key("anime_screen"),
-        color: Theme
-            .of(ctx)
-            .backgroundColor,
+        color: Colors.transparent,
         child: Column(children: <Widget>[
           Expanded(child: FutureBuilder<Anime>(
             future: anime,
@@ -116,9 +114,7 @@ class AnimeScreenState extends State<AnimeScreen> {
                   if (anime.seasons.length > 0) _actualSeason = 0;
                 }
                 return Container(
-                    color: Theme
-                        .of(ctx)
-                        .backgroundColor,
+                    color: Colors.transparent,
                     child: ListView(
                         padding: EdgeInsets.only(top: 10, left: 5),
                         children: [

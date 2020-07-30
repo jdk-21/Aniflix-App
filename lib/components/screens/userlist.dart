@@ -45,7 +45,7 @@ class UserlistState extends State<Userlist> {
     if (cache == null) {
       return Container(
         key: Key("userlist_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: userlistdata,
           builder: (context, snapshot) {
@@ -81,7 +81,7 @@ class UserlistState extends State<Userlist> {
         Expanded(
             child: Container(
           padding: EdgeInsets.all(5),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: RefreshIndicator(
             child: ListView(
               children: getUserAsWidgets(ctx, data.users),

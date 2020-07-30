@@ -41,7 +41,7 @@ class ChatState extends State<ChatScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("chat_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<ChatInfo>(
         future: chatdata,
         builder: (context, snapshot) {
@@ -61,7 +61,7 @@ class ChatState extends State<ChatScreen> {
               children: <Widget>[
                 Expanded(
                     child: Container(
-                        color: Theme.of(ctx).backgroundColor,
+                        color: Colors.transparent,
                         child: ListView(
                             reverse: true,
                             padding: EdgeInsets.only(top: 10),

@@ -37,6 +37,7 @@ import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'objects/anime/Anime.dart';
 import 'objects/allanime/genrewithshow.dart';
@@ -316,18 +317,23 @@ class APIManager {
 
   static Future<LoginResponse> loginRequest(String email, String pw) async {
     var response =
-    await _postRequest("auth/login", {"email": email, "password": pw});
+        await _postRequest("auth/login", {"email": email, "password": pw});
     login = LoginResponse.fromJson(jsonDecode(response.body));
     return login;
   }
 
-  static Future<RegisterResponse> registerRequest( String email, String pw, String token, String username,) async {
+  static Future<RegisterResponse> registerRequest(
+    String email,
+    String pw,
+    String token,
+    String username,
+  ) async {
     /*
       {"message":"Email already in use"}
       {"message":"Username already in use"}
      */
-    var response =
-    await _postRequest("user/register", {"email": email,"password": pw,"token": token,"username": username});
+    var response = await _postRequest("user/register",
+        {"email": email, "password": pw, "token": token, "username": username});
 
     return RegisterResponse.fromJson(jsonDecode(response.body));
   }
@@ -447,8 +453,20 @@ class APIManager {
           "preferred_lang": settings.preferred_lang,
           "preferred_hoster_id": settings.preferred_hoster_id.toString()
         });
-    print(response.statusCode);
-    print(response.body);
+  }
+
+  static Future<UserProfile> updateBackground(
+      int settingsID, String imagePath) async {
+    var response = await _authMultipartFilePostRequest(
+        "user/settings/background_image/" + settingsID.toString(), login, imagePath);
+    return UserProfile.fromJson(response.data);
+  }
+
+  static Future<UserProfile> deleteBackground(int settingsID) async {
+    var response = await _authDeleteRequest(
+        "user/settings/background_image/" + settingsID.toString(), login);
+    var json = jsonDecode(response.body);
+    return UserProfile.fromJson(json);
   }
 
   static updateAboutMe(String message) {
@@ -729,6 +747,17 @@ class APIManager {
     };
     return http.post('https://www2.aniflix.tv/api/' + query,
         body: bodyObject, headers: headers);
+  }
+
+  static Future<Response> _authMultipartFilePostRequest(
+      String query, LoginResponse user,String path) async {
+    Map<String, String> headers = {
+      "Authorization": user.token_type + " " + user.access_token
+    };
+    var dio = new Dio(
+        BaseOptions(baseUrl: 'https://www2.aniflix.tv/api/', headers: headers));
+    var formdata = FormData.fromMap({"image":  MultipartFile.fromFileSync(path)});
+    return dio.post(query, data: formdata);
   }
 
   static Future<http.Response> _authGetRequest(

@@ -52,7 +52,7 @@ class SubBoxState extends State<SubBox> {
   Widget build(BuildContext ctx) {
     if (cache == null) {
       return Container(
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: Center(
               key: Key("sub_screen"),
               child: FutureBuilder<Subdata>(
@@ -71,7 +71,7 @@ class SubBoxState extends State<SubBox> {
               )));
     } else {
       return Container(
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: Center(key: Key("sub_screen"), child: getLayout(cache, ctx)));
     }
   }
@@ -138,7 +138,7 @@ class SubBoxState extends State<SubBox> {
       children: <Widget>[
         Expanded(
             child: Container(
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                   child: ListView(
                       padding: EdgeInsets.only(top: 10), children: days),

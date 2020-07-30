@@ -28,7 +28,7 @@ class FriendList extends StatelessWidget implements Screen {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("friendlist_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder(
         future: friendlistData,
         builder: (context, snapshot) {
@@ -62,7 +62,7 @@ class FriendList extends StatelessWidget implements Screen {
 
     return Container(
         padding: EdgeInsets.all(5),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: RefreshIndicator(
           child: ListView(
             children: friendItems,
