@@ -317,7 +317,7 @@ class APIManager {
 
   static Future<LoginResponse> loginRequest(String email, String pw) async {
     var response =
-        await _postRequest("auth/login", {"email": email, "password": pw});
+    await _postRequest("auth/login", {"email": email, "password": pw});
     login = LoginResponse.fromJson(jsonDecode(response.body));
     return login;
   }
@@ -334,7 +334,6 @@ class APIManager {
      */
     var response = await _postRequest("user/register",
         {"email": email, "password": pw, "token": token, "username": username});
-
     return RegisterResponse.fromJson(jsonDecode(response.body));
   }
 

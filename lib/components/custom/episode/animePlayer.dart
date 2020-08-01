@@ -4,6 +4,7 @@ import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -126,9 +127,6 @@ class AnimePlayerState extends State<AnimePlayer> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 var source = snapshot.data;
-                /*if (_webcontroller != null) {
-                  _webcontroller.loadUrl(url: source);
-                }*/
                 _inApp = Column(
                   children: [
                     Expanded(
@@ -138,12 +136,25 @@ class AnimePlayerState extends State<AnimePlayer> {
                             onWebViewCreated: (controller) => setState(() {
                                   _webcontroller = controller;
                                 }))),
-                    FlatButton(
-                        onPressed: () {
-                          startDownload(source, ctx);
-                        },
-                        child: ThemeText("Download"),
-                        color: Theme.of(ctx).backgroundColor)
+                    (HosterParser.parser[_stream.hoster_id].canDownload)
+                        ? FlatButton(
+                            onPressed: () {
+                              RewardedVideoAd.instance.show();
+                              RewardedVideoAd.instance.listener =
+                                  (RewardedVideoAdEvent event,
+                                      {String rewardType, int rewardAmount}) {
+                                print(event);
+                                if (event == RewardedVideoAdEvent.rewarded ||
+                                    event ==
+                                        RewardedVideoAdEvent.failedToLoad) {
+                                  print("Start Download");
+                                  startDownload(source, ctx);
+                                }
+                              };
+                            },
+                            child: ThemeText("Download nach Werbung"),
+                            color: Theme.of(ctx).backgroundColor)
+                        : Container()
                   ],
                 );
                 return _inApp;

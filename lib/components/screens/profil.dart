@@ -65,6 +65,7 @@ class Profile extends StatefulWidget implements Screen {
 class ProfileState extends State<Profile> {
   int userID;
   int barIndex = 0;
+  bool barInit = false;
   Future<UserProfileData> profileData;
   String aboutMe;
   PageController controller;

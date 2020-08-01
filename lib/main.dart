@@ -22,6 +22,7 @@ import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,18 @@ import 'components/screens/review.dart';
 import 'components/screens/search.dart';
 
 const adUnitID = "ca-app-pub-1740246956609068/6617765772";
+const appID = "ca-app-pub-1740246956609068~4725713221";
 
 void main() async {
   runApp(App());
 }
 
 class App extends StatefulWidget {
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+      keywords: <String>['aniflix', 'anime', 'weeb', 'japan'],
+      contentUrl: 'https://www2.aniflix.tv/',
+      childDirected: false);
+
   App({
     Key key,
   }) : super(key: key);
@@ -113,7 +120,15 @@ class AppState extends State<App> {
       options:
           NativeAdmobOptions(ratingColor: Colors.red, showMediaContent: true),
     );
+    initAds();
     super.initState();
+  }
+
+  initAds() async {
+    await FirebaseAdMob.instance.initialize(appId: appID);
+    RewardedVideoAd.instance.load(
+        adUnitId: "ca-app-pub-1740246956609068/3139132299",
+        targetingInfo: App.targetingInfo);
   }
 
   static updateLoggedIn(bool value) {
@@ -262,11 +277,18 @@ class AppState extends State<App> {
             onGenerateRoute: generateRoute);
       } else {
         return MaterialApp(
-          title: 'Aniflix',
-          home: Scaffold(body: Login()),
-          color: _theme.backgroundColor,
-          theme: _theme,
-        );
+            title: 'Aniflix',
+            home: Scaffold(body: Login()),
+            color: _theme.backgroundColor,
+            theme: _theme,
+            routes: {
+              'login': (context) {
+                return Scaffold(body: Login());
+              },
+              'register': (context) {
+                return Scaffold(body: Register());
+              },
+            });
       }
     } else {
       return MaterialApp(
@@ -335,8 +357,8 @@ class AppState extends State<App> {
           Container(
             child: _ad,
             width: MediaQuery.of(ctx).size.width,
-            height: 50,
-            color: Colors.transparent,
+            height: 60,
+            color: Colors.white,
           ),
           Expanded(child: widget)
         ]));

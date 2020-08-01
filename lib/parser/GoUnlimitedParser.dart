@@ -2,7 +2,7 @@ import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:html/dom.dart';
 
 class GoUnlimitedParser extends HosterParser {
-  GoUnlimitedParser() : super(6);
+  GoUnlimitedParser() : super(6,false);
 
   _getMP4(String prefix, String id) {
     return "https://fs"+prefix+".gounlimited.to/" + id + "/v.mp4";

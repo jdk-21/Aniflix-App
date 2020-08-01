@@ -17,9 +17,9 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  flutter_recaptcha_v2:
   image_picker:
   dio:
-  flutter_bcrypt:
   simple_permissions:
     git:
       url: https://github.com/tq-systems/simple_permissions.git
@@ -42,6 +42,7 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   firebase_analytics:
+  firebase_admob:
   flutter_native_admob:
 
   # The following adds the Cupertino Icons font to your application.

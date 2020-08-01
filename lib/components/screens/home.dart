@@ -86,7 +86,7 @@ class HomeState extends State<Home> {
                                 .map((ep) => getContinueSliderElement(ep))
                                 .toList(),
                             220)
-                        : Container(),
+                        : Container(height: 10,),
                     (data.airings.length > 0)
                         ? HeadlineSlider(
                             "Neue Folgen",
@@ -94,7 +94,7 @@ class HomeState extends State<Home> {
                                 .map((ep) => getAiringSliderElement(ep))
                                 .toList(),
                         250)
-                        : Container(),
+                        : Container(height: 10,),
                     (data.newshows.length > 0)
                         ? HeadlineSlider(
                             "Neu auf Aniflix",
@@ -104,7 +104,7 @@ class HomeState extends State<Home> {
                             350,
                             size: 0.4,
                           )
-                        : Container(),
+                        : Container(height: 10,),
                     (data.discover.length > 0)
                         ? HeadlineSlider(
                             "Entdecken",
@@ -114,7 +114,8 @@ class HomeState extends State<Home> {
                             350,
                             size: 0.4,
                           )
-                        : Container(),
+                        : Container(height: 10,),
+                    Container(height: 10,)
                   ]),
                   onRefresh: () async {
                     setState(() {
