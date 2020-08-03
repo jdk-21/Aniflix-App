@@ -81,41 +81,40 @@ class HomeState extends State<Home> {
                   child: ListView(padding: EdgeInsets.only(top: 10), children: [
                     (data.continues.length > 0)
                         ? HeadlineSlider(
-                            "Weitersehen",
-                            data.continues
-                                .map((ep) => getContinueSliderElement(ep))
-                                .toList(),
-                            220)
-                        : Container(height: 10,),
+                        "Weitersehen",
+                        data.continues
+                            .map((ep) => getContinueSliderElement(ep))
+                            .toList(),
+                        220)
+                        : Center(child: ThemeText("'Weitersehen' konnte nicht geladen werden!")),
                     (data.airings.length > 0)
                         ? HeadlineSlider(
-                            "Neue Folgen",
-                            data.airings
-                                .map((ep) => getAiringSliderElement(ep))
-                                .toList(),
+                        "Neue Folgen",
+                        data.airings
+                            .map((ep) => getAiringSliderElement(ep))
+                            .toList(),
                         250)
-                        : Container(height: 10,),
+                        : Center(child: ThemeText("'Neue Folgen' konnte nicht geladen werden!")),
                     (data.newshows.length > 0)
                         ? HeadlineSlider(
-                            "Neu auf Aniflix",
-                            data.newshows
-                                .map((show) => getShowSliderElement(show))
-                                .toList(),
-                            350,
-                            size: 0.4,
-                          )
-                        : Container(height: 10,),
+                      "Neu auf Aniflix",
+                      data.newshows
+                          .map((show) => getShowSliderElement(show))
+                          .toList(),
+                      350,
+                      size: 0.4,
+                    )
+                        : Center(child: ThemeText("'Neu auf Aniflix' konnte nicht geladen werden!")),
                     (data.discover.length > 0)
                         ? HeadlineSlider(
-                            "Entdecken",
-                            data.discover
-                                .map((show) => getShowSliderElement(show))
-                                .toList(),
-                            350,
-                            size: 0.4,
-                          )
-                        : Container(height: 10,),
-                    Container(height: 10,)
+                      "Entdecken",
+                      data.discover
+                          .map((show) => getShowSliderElement(show))
+                          .toList(),
+                      350,
+                      size: 0.4,
+                    )
+                        : Center(child: ThemeText("'Entdecken' konnte nicht geladen werden!"))
                   ]),
                   onRefresh: () async {
                     setState(() {

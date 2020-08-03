@@ -93,11 +93,13 @@ class AnimePlayerState extends State<AnimePlayer> {
     return Container(
       padding: EdgeInsets.all(10),
       child: getPlayer(ctx),
-      decoration: BoxDecoration(
-          border: Border.all(
-              style: BorderStyle.solid,
-              color: Theme.of(ctx).textTheme.caption.color)),
-      height: _view == 2 ? 300 : 200,
+      height: _view == 2
+          ? (((HosterParser.parser.containsKey(_stream.hoster_id))
+              ? ((HosterParser.parser[_stream.hoster_id].canDownload)
+                  ? 300
+                  : 200)
+              : 100))
+          : 100,
       width: MediaQuery.of(ctx).size.width - 50,
     );
   }

@@ -174,7 +174,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if (_stream == null) {
+            if (_stream == null && snapshot.data.user.settings != null) {
               var user = snapshot.data.user;
               for (var stream in episode.streams) {
                 if (user.settings.preferred_hoster_id == stream.hoster_id &&

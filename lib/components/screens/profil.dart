@@ -134,7 +134,11 @@ class ProfileState extends State<Profile> {
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     if (modifiedSettings == null) {
-      modifiedSettings = new UserSettings.fromObject(profile.settings);
+      if(profile.settings!=null){
+        modifiedSettings = new UserSettings.fromObject(profile.settings);
+      }else{
+        modifiedSettings = UserSettings(0,profile.id,true,true,true,true,true,null,null,null,null,null,null);
+      }
     }
     var joined = DateTime.parse(profile.created_at);
     if (aboutMe != null) {
@@ -171,7 +175,7 @@ class ProfileState extends State<Profile> {
         icon: Icons.person,
         title: ThemeText('Profil'),
         backgroundColor: Theme.of(ctx).backgroundColor));*/
-    if (data.userProfile.settings.show_friends) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
           profileData = APIManager.getUserProfileData(userID);
@@ -183,7 +187,7 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_favorites) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_favorites) {
       pages.add(Favoriten(favouritedata: data.favouritedata));
       items.add(TitledNavigationBarItem(
           icon: Icons.favorite,
@@ -191,7 +195,7 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_abos) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_abos) {
       pages.add(ProfileSubBox(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.subscriptions,
@@ -199,7 +203,7 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_watchlist) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_watchlist) {
       pages.add(Watchlist(
         watchlistdata: data.userWatchlistData,
       ));
@@ -209,7 +213,7 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_list) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_list) {
       pages.add(ProfileAnimeList(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.list,
@@ -376,7 +380,7 @@ class ProfileMainPage extends StatelessWidget {
       ),
     ];
 
-    if (profile.settings.show_favorites) {
+    if (profile.settings == null || profile.settings.show_favorites) {
       widgets.addAll([
         ThemeText("Lieblings Anime:"),
         SizedBox(

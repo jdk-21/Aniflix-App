@@ -44,7 +44,8 @@ class RegisterState extends State<Register> {
                       onPressed: () {
                         recaptchaV2Controller.show();
                       },
-                    ),FlatButton(
+                    ),
+                    FlatButton(
                       textColor: Theme.of(ctx).textTheme.caption.color,
                       child: Text("Schon einen Account?"),
                       onPressed: () {
@@ -56,26 +57,32 @@ class RegisterState extends State<Register> {
                   ],
                 ),
               ),
-              Center(
-                  child: RecaptchaV2(
-                apiKey: "6LccnrgZAAAAAKvgkI1pDqb3IRqA52iKUt49Csa2",
-                controller: recaptchaV2Controller,
-                onVerifiedError: (err) {
-                  print("onVerifiedError");
-                  print(err);
-                  recaptchaV2Controller.hide();
-                  recaptchaV2Controller.show();
-                },
-                onVerifiedSuccessfully: (token) {
-                  setState(() {
-                    print("token:");
-                    print(token);
+              ListView(children: [
+                SizedBox(
+                  height: 100,
+                ),
+                Expanded(
+                    child: Center(
+                        child: RecaptchaV2(
+                  apiKey: "6LccnrgZAAAAAKvgkI1pDqb3IRqA52iKUt49Csa2",
+                  controller: recaptchaV2Controller,
+                  onVerifiedError: (err) {
+                    print("onVerifiedError");
+                    print(err);
                     recaptchaV2Controller.hide();
-                    recaptchaV2Controller = RecaptchaV2Controller();
-                    _captchaToken = token;
-                  });
-                },
-              ))
+                    recaptchaV2Controller.show();
+                  },
+                  onVerifiedSuccessfully: (token) {
+                    setState(() {
+                      print("token:");
+                      print(token);
+                      recaptchaV2Controller.hide();
+                      recaptchaV2Controller = RecaptchaV2Controller();
+                      _captchaToken = token;
+                    });
+                  },
+                )))
+              ])
             ])
           : Padding(
               padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),

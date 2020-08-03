@@ -22,4 +22,17 @@ class CacheManager{
   static UserListData userlistdata;
   static List<Hoster> hosters;
 
+  static clearAll(){
+   CacheManager.homedata = null;
+   CacheManager.subdata = null;
+   CacheManager.animeListData = null;
+   CacheManager.userData = null;
+   CacheManager.calendardata = null;
+   CacheManager.favouritedata = null;
+   CacheManager.historydata = null;
+   CacheManager.watchlistdata = null;
+   CacheManager.userlistdata = null;
+   CacheManager.hosters = null;
+  }
+
 }

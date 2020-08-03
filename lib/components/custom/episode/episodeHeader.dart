@@ -66,16 +66,17 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
     }
 
     var user = load.user;
-    for (var stream in episode.streams) {
-      if (user.settings.preferred_hoster_id == stream.hoster_id) {
-        _hoster = _hosters.indexOf(stream.hoster.name);
-        if (stream.lang == user.settings.preferred_lang) {
-          _language = (user.settings.preferred_lang == "SUB") ? 0 : 1;
+    if(user.settings != null) {
+      for (var stream in episode.streams) {
+        if (user.settings.preferred_hoster_id == stream.hoster_id) {
+          _hoster = _hosters.indexOf(stream.hoster.name);
+          if (stream.lang == user.settings.preferred_lang) {
+            _language = (user.settings.preferred_lang == "SUB") ? 0 : 1;
+          }
+          break;
         }
-        break;
       }
     }
-
     _created(this);
   }
 
