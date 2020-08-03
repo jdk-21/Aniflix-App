@@ -57,11 +57,12 @@ class RegisterState extends State<Register> {
                   ],
                 ),
               ),
-              ListView(children: [
+              Column(children: [
                 SizedBox(
                   height: 100,
                 ),
-                Expanded(
+                Container(
+                    height: MediaQuery.of(ctx).size.height-100,
                     child: Center(
                         child: RecaptchaV2(
                   apiKey: "6LccnrgZAAAAAKvgkI1pDqb3IRqA52iKUt49Csa2",
