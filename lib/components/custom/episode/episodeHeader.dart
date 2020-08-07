@@ -112,9 +112,9 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                 : IconButton(
                     icon: Icon(
                       Icons.navigate_before,
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                     ),
-                    color: Theme.of(ctx).backgroundColor,
+                    color: Colors.transparent,
                     onPressed: () {},
                   ),
             Row(
@@ -169,11 +169,11 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                     )
                   : Icon(
                       Icons.navigate_before,
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                     ),
               color: (episode.next != "")
                   ? Theme.of(ctx).textTheme.caption.color
-                  : Theme.of(ctx).backgroundColor,
+                  : Colors.transparent,
               onPressed: (episode.next != "") ? next : () {},
             ),
           ],

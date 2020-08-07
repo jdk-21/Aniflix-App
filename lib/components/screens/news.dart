@@ -2,6 +2,7 @@ import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
 import 'package:aniflix_app/components/custom/news/FriendNotification.dart';
 import 'package:aniflix_app/components/custom/news/NewsNotification.dart';
+import 'package:aniflix_app/components/custom/news/PersonalNotification.dart';
 import 'package:aniflix_app/components/custom/news/SubNotification.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +34,19 @@ class NewsPageState extends State<NewsPage> {
     setState(() {
       newsdata.notifications.removeWhere((element) => element.id == id);
     });
+  }
+
+  onDeleteAll() async {
+    var tmp = [];
+    tmp.addAll(newsdata.notifications);
+    setState(() {
+      newsdata.notifications = [];
+    });
+    for (var notification in tmp) {
+      if (notification.deleted_at == null) {
+        await APIManager.deleteNotification(notification.id);
+      }
+    }
   }
 
   @override
@@ -70,18 +84,57 @@ class NewsPageState extends State<NewsPage> {
             fontWeight: FontWeight.bold, fontSize: 30),
       ),
     ];
+    List<PersonalNotification> personalNews = [];
     var notifications = newsdata.notifications;
     for (int y = 0; y < notifications.length; y++) {
       var actualNotification = notifications.elementAt(y);
       if (actualNotification.deleted_at == null) {
         if (actualNotification.link.contains('show')) {
-          newsList.add(SubNotification(actualNotification.id,
+          personalNews.add(SubNotification(actualNotification.id,
               actualNotification.text, actualNotification.link, onDelete, ctx));
         } else if (actualNotification.link.contains('users')) {
-          newsList.add(FriendNotification(
+          personalNews.add(FriendNotification(
               actualNotification.id, actualNotification.text, onDelete, ctx));
         }
       }
+    }
+    if (personalNews.length > 0) {
+      newsList.add(Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(
+                    width: 1,
+                    color: Theme.of(ctx).hintColor,
+                    style: BorderStyle.solid))),
+        child: FlatButton(
+          onPressed: () {
+            onDeleteAll();
+          },
+          child: ThemeText(
+            "Alle Löschen",
+            softWrap: true,
+          ),
+        ),
+      ));
+      newsList.addAll(personalNews);
+    } else {
+      newsList.add(Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(
+                    width: 1,
+                    color: Theme.of(ctx).hintColor,
+                    style: BorderStyle.solid))),
+        child: FlatButton(
+          onPressed: () {},
+          child: ThemeText(
+            "Du hast derzeit keine Benachrichtigungen!",
+            softWrap: true,
+          ),
+        ),
+      ));
     }
     newsList.add(Container(
       padding: EdgeInsets.all(5),

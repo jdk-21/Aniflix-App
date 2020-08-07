@@ -211,7 +211,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
             }
 
             if (_controller == null) {
-              _controller = AnimePlayerController(episode,_stream, view, this);
+              _controller = AnimePlayerController(episode, _stream, view, this);
             }
 
             return Column(children: <Widget>[
@@ -222,9 +222,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         cacheExtent: 1000,
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
-                          (_stream != null)
-                              ? AnimePlayer(_controller)
-                              : Container(),
                           EpisodeHeader(snapshot.data, () {
                             var info = APIManager.getEpisodeInfo(
                                 name, season, number - 1);
@@ -252,6 +249,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (state) {
                             episodeHeaderState = state;
                           }),
+                          (_stream != null)
+                              ? AnimePlayer(_controller)
+                              : Container(),
                           EpisodeBar(episode, (state) {
                             this.barState = state;
                           }),
