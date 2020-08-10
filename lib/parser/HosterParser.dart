@@ -7,9 +7,10 @@ import 'package:http/http.dart' as http;
 
 abstract class HosterParser {
   int hosterID;
+  bool canDownload;
   static Map<int, HosterParser> parser = new Map<int, HosterParser>();
 
-  HosterParser(this.hosterID) {
+  HosterParser(this.hosterID,this.canDownload) {
     parser[hosterID] = this;
   }
 

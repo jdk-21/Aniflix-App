@@ -4,6 +4,7 @@ import 'package:aniflix_app/api/objects/profile/Friend.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 import 'package:aniflix_app/api/objects/profile/UserStats.dart';
+import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
 import 'package:aniflix_app/components/screens/profileanimelist.dart';
 import 'package:aniflix_app/components/screens/profilesettings.dart';
@@ -26,6 +27,7 @@ import 'package:aniflix_app/components/screens/favoriten.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/custom/dialogs/aboutMeDialog.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class UserProfileData {
   UserProfile userProfile;
@@ -62,6 +64,8 @@ class Profile extends StatefulWidget implements Screen {
 
 class ProfileState extends State<Profile> {
   int userID;
+  int barIndex = 0;
+  bool barInit = false;
   Future<UserProfileData> profileData;
   String aboutMe;
   PageController controller;
@@ -77,11 +81,17 @@ class ProfileState extends State<Profile> {
     super.initState();
   }
 
+  setIndex(int value) {
+    setState(() {
+      barIndex = value;
+    });
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("profile_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<UserProfileData>(
         future: profileData,
         builder: (context, snapshot) {
@@ -115,10 +125,20 @@ class ProfileState extends State<Profile> {
     });
   }
 
+  updateAvatar() {
+    setState(() {
+      this.profileData = APIManager.getUserProfileData(userID);
+    });
+  }
+
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     if (modifiedSettings == null) {
-      modifiedSettings = new UserSettings.fromObject(profile.settings);
+      if(profile.settings!=null){
+        modifiedSettings = new UserSettings.fromObject(profile.settings);
+      }else{
+        modifiedSettings = UserSettings(0,profile.id,true,true,true,true,true,null,null,null,null,null,null);
+      }
     }
     var joined = DateTime.parse(profile.created_at);
     if (aboutMe != null) {
@@ -150,131 +170,168 @@ class ProfileState extends State<Profile> {
             });
       }),
     ];
-
-    if (data.userProfile.settings.show_friends) {
+    List<TitledNavigationBarItem> items = [];
+    /*items.add(TitledNavigationBarItem(
+        icon: Icons.person,
+        title: ThemeText('Profil'),
+        backgroundColor: Theme.of(ctx).backgroundColor));*/
+    if (data.userProfile.settings == null || data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
           profileData = APIManager.getUserProfileData(userID);
         });
       }));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.group,
+          title: ThemeText('Freunde'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_favorites) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_favorites) {
       pages.add(Favoriten(favouritedata: data.favouritedata));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.favorite,
+          title: ThemeText('Favoriten'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_abos) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_abos) {
       pages.add(ProfileSubBox(userID));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.subscriptions,
+          title: ThemeText('Abos'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_watchlist) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_watchlist) {
       pages.add(Watchlist(
         watchlistdata: data.userWatchlistData,
       ));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.watch_later,
+          title: ThemeText('Watchlist'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings.show_list) {
+    if (data.userProfile.settings == null || data.userProfile.settings.show_list) {
       pages.add(ProfileAnimeList(userID));
+      items.add(TitledNavigationBarItem(
+          icon: Icons.list,
+          title: ThemeText('Anime Liste'),
+          backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
     if (CacheManager.userData.id == userID) {
-      pages.add(ProfileSettings(modifiedSettings, (newData) {
+      pages.add(ProfileSettings(modifiedSettings, updateAvatar, (newData) {
         setState(() {
           this.modifiedSettings = newData;
         });
       }, () {
         updateSettings();
       }));
+      /*items.add(TitledNavigationBarItem(
+          icon: Icons.settings,
+          title: ThemeText('Einstellungen'),
+          backgroundColor: Theme.of(ctx).backgroundColor));*/
     }
-
     List<TextboxSliderElement> carouseldata = profile.groups
         .map((group) => TextboxSliderElement(group.name))
         .toList();
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Column(
           children: [
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                (profile.avatar == null)
-                    ? IconButton(
-                        iconSize: 50,
-                        icon: Icon(
-                          Icons.person,
-                          color: Theme.of(ctx).primaryIconTheme.color,
-                        ),
-                        onPressed: () {},
-                      )
-                    : IconButton(
-                        iconSize: 50,
-                        icon: new Container(
-                            decoration: new BoxDecoration(
-                                image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            "https://www2.aniflix.tv/storage/" + profile.avatar,
-                          ),
-                        ))),
-                        onPressed: () {}),
-                ThemeText(profile.name),
-                (CacheManager.userData.id == userID || isAlreadyFriend)
-                    ? Container()
-                    : IconButton(
-                        icon: Icon(Icons.person_add),
-                        onPressed: () {
-                          APIManager.addFriend(profile.id);
-                          setState(() {
-                            profileData = APIManager.getUserProfileData(userID);
-                          });
-                        },
-                        color: Theme.of(ctx).primaryIconTheme.color,
-                      ),
-              ],
-            ),
-            Column(
-              children: [
-                Row(
+                Column(
                   children: [
-                    TextboxSliderElement(
-                      "Mitglied seit " +
-                          joined.day.toString() +
-                          "." +
-                          joined.month.toString() +
-                          "." +
-                          joined.year.toString(),
-                    ),
-                    TextboxSliderElement(
-                        "Punkte: " + data.userstats.points.toString()),
+                    (profile.avatar == null)
+                        ? IconButton(
+                            iconSize: 50,
+                            icon: Icon(
+                              Icons.person,
+                              color: Theme.of(ctx).primaryIconTheme.color,
+                            ),
+                            onPressed: () {},
+                          )
+                        : IconButton(
+                            iconSize: 50,
+                            icon: new Container(
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                "https://www2.aniflix.tv/storage/" +
+                                    profile.avatar,
+                              ),
+                            ))),
+                            onPressed: () {}),
+                    ThemeText(profile.name),
+                    (CacheManager.userData.id == userID || isAlreadyFriend)
+                        ? Container()
+                        : IconButton(
+                            icon: Icon(Icons.person_add),
+                            onPressed: () {
+                              APIManager.addFriend(profile.id);
+                              setState(() {
+                                profileData =
+                                    APIManager.getUserProfileData(userID);
+                              });
+                            },
+                            color: Theme.of(ctx).primaryIconTheme.color,
+                          ),
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
+                Column(
                   children: [
-                    Container(
-                      child: TextboxCarousel(carouseldata),
-                      width: MediaQuery.of(ctx).size.width * 0.75,
+                    Row(
+                      children: [
+                        TextboxSliderElement(
+                          "Mitglied seit " +
+                              joined.day.toString() +
+                              "." +
+                              joined.month.toString() +
+                              "." +
+                              joined.year.toString(),
+                        ),
+                        TextboxSliderElement(
+                            "Punkte: " + data.userstats.points.toString()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          child: TextboxCarousel(carouseldata),
+                          width: MediaQuery.of(ctx).size.width * 0.75,
+                        )
+                      ],
                     )
                   ],
-                )
+                ),
+                Container()
               ],
             ),
-            Container()
+            TextboxSliderElement("Anime geschaut: " + data.userstats.time),
+            SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: PageView(
+                    controller: controller,
+                    children: pages,
+                    onPageChanged: (value) => setIndex(value)))
           ],
         ),
-        TextboxSliderElement("Anime geschaut: " + data.userstats.time),
-        SizedBox(
-          height: 5,
-        ),
-        Expanded(child: PageView(controller: controller, children: pages))
-      ],
-    );
+        bottomNavigationBar:
+            AniflixProfilebar(barIndex, controller, items, ctx, this));
   }
 }
 
@@ -323,7 +380,7 @@ class ProfileMainPage extends StatelessWidget {
       ),
     ];
 
-    if (profile.settings.show_favorites) {
+    if (profile.settings == null || profile.settings.show_favorites) {
       widgets.addAll([
         ThemeText("Lieblings Anime:"),
         SizedBox(
@@ -382,7 +439,7 @@ class ProfileMainPage extends StatelessWidget {
                 top: BorderSide(
                     width: 1, color: Theme.of(ctx).textTheme.caption.color))),
       ),
-      HeadlineSlider("Zuletzt gesehen:", history)
+      HeadlineSlider("Zuletzt gesehen:", history, 350)
     ]);
 
     return ListView(children: widgets);

@@ -21,7 +21,7 @@ class Settings extends StatelessWidget implements Screen {
     ThemeManager manager = ThemeManager.getInstance();
     return Container(
         key: Key("settings_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: Column(
           children: <Widget>[
             Expanded(

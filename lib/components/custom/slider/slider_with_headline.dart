@@ -7,11 +7,10 @@ import 'package:aniflix_app/components/custom/text/theme_text.dart';
 class HeadlineSlider extends StatelessWidget {
   String title;
   List<SliderElement> elements;
-  double aspectRatio;
+  double height;
   double size;
 
-  HeadlineSlider(this.title, this.elements,
-      {this.aspectRatio = 200 / 110, this.size = 0.6})
+  HeadlineSlider(this.title, this.elements, this.height, {this.size = 0.6})
       : super();
 
   @override
@@ -23,10 +22,12 @@ class HeadlineSlider extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(left: 5, bottom: 5),
               alignment: AlignmentDirectional.topStart,
-              child: ThemeText(title, fontWeight: FontWeight.bold)),
-          MediaQuery.of(ctx).orientation == Orientation.portrait?
-          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size):
-          AnimeCarousel(elements, aspectRatio: aspectRatio, size: size / 2)
+              child: ThemeText(
+                title,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              )),
+          AnimeCarousel(elements, height, size: size)
         ]));
   }
 }

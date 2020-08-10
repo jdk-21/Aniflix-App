@@ -38,7 +38,7 @@ class CommentContainer extends Container {
       hour = "0" + date.hour.toString();
     }
     return Container(
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: Column(children: [
           Column(
             children: [

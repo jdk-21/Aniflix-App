@@ -47,7 +47,7 @@ class CalendarState extends State<Calendar> {
   Widget build(BuildContext ctx) {
     if (cache == null) {
       return Container(
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         key: Key("calendar_screen"),
         child: FutureBuilder<Calendardata>(
           future: calendarData,
@@ -66,7 +66,7 @@ class CalendarState extends State<Calendar> {
       );
     } else {
       return Container(
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           key: Key("calendar_screen"),
           child: getLayout(cache, ctx));
     }
@@ -127,23 +127,23 @@ class CalendarState extends State<Calendar> {
     var list = <Widget>[];
 
     list.add(
-        (monday.length > 0) ? HeadlineSlider("Montag", monday) : Container());
+        (monday.length > 0) ? HeadlineSlider("Montag", monday, 220) : Container());
     list.add((tuesday.length > 0)
-        ? HeadlineSlider("Dienstag", tuesday)
+        ? HeadlineSlider("Dienstag", tuesday, 220)
         : Container());
     list.add((wednesday.length > 0)
-        ? HeadlineSlider("Mittwoch", wednesday)
+        ? HeadlineSlider("Mittwoch", wednesday, 220)
         : Container());
     list.add((thursday.length > 0)
-        ? HeadlineSlider("Donnerstag", thursday)
+        ? HeadlineSlider("Donnerstag", thursday, 220)
         : Container());
     list.add(
-        (friday.length > 0) ? HeadlineSlider("Freitag", friday) : Container());
+        (friday.length > 0) ? HeadlineSlider("Freitag", friday, 220) : Container());
     list.add((saturday.length > 0)
-        ? HeadlineSlider("Samstag", saturday)
+        ? HeadlineSlider("Samstag", saturday, 220)
         : Container());
     list.add(
-        (sunday.length > 0) ? HeadlineSlider("Sonntag", sunday) : Container());
+        (sunday.length > 0) ? HeadlineSlider("Sonntag", sunday, 220) : Container());
 
     var date = DateTime.now();
 
@@ -152,7 +152,7 @@ class CalendarState extends State<Calendar> {
       sortedList.addAll(list.sublist(0, date.weekday - 1));
     }
     sortedList.add((special.length > 0)
-        ? HeadlineSlider("Unregelmäßig", special)
+        ? HeadlineSlider("Unregelmäßig", special, 220)
         : Container());
     var i = 0;
     for (var k = 0; k < sortedList.length; k++) {
@@ -175,7 +175,7 @@ class CalendarState extends State<Calendar> {
     return 
     Column(children: <Widget>[
       Expanded(child: Container(
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: RefreshIndicator(
             child: ListView(
                 padding: EdgeInsets.only(top: 10), children: sortedList),

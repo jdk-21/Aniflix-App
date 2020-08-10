@@ -1,15 +1,24 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import '../SliderElement.dart';
 
-class AnimeCarousel extends CarouselSlider{
+class AnimeCarousel extends StatelessWidget {
+  List<SliderElement> data;
+  double height;
+  double size;
 
-  AnimeCarousel(List<SliderElement> data, {double size = 0.6, double aspectRatio = 200/110}):super(
-    aspectRatio: aspectRatio / size,
+  AnimeCarousel(this.data, this.height, {this.size = 0.6});
+
+  @override
+  Widget build(BuildContext ctx) {
+    return CarouselSlider(
       items: data,
-      viewportFraction: size,
-      enableInfiniteScroll: false,
-      reverse: false,
-      initialPage: (data.length > 1)? 1 : 0
-  );
-
+      options: CarouselOptions(
+          height: height,
+          viewportFraction: size,
+          enableInfiniteScroll: false,
+          reverse: false,
+          initialPage: (data.length > 1) ? 1 : 0),
+    );
+  }
 }

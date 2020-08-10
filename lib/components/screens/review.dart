@@ -63,7 +63,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("review_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<ReviewInfo>(
         future: reviewData,
         builder: (context, snapshot) {
@@ -92,7 +92,7 @@ class ReviewScreenState extends State<ReviewScreen> {
               children: <Widget>[
                 Expanded(
                     child: Container(
-                  color: Theme.of(ctx).backgroundColor,
+                  color: Colors.transparent,
                   child: ListView(
                     children: <Widget>[
                       Column(

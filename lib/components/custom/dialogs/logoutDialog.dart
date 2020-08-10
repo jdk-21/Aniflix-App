@@ -1,3 +1,4 @@
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
@@ -30,6 +31,7 @@ LogoutDialog();
             await prefs.remove("access_token");
             await prefs.remove("token_type");
             APIManager.login = null;
+            CacheManager.clearAll();
             AppState.updateLoggedIn(false);
             Navigator.of(ctx).pop();
             Navigator.of(ctx).pushNamed("login");

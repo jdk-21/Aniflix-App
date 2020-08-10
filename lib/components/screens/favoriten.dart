@@ -52,7 +52,7 @@ class FavoritenState extends State<Favoriten> {
     if (cache == null) {
       return Container(
         key: Key("favourites_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: favouriteData,
           builder: (context, snapshot) {
@@ -77,7 +77,7 @@ class FavoritenState extends State<Favoriten> {
         Expanded(
             child: Container(
           padding: EdgeInsets.all(5),
-          color: Theme.of(ctx).backgroundColor,
+          color: Colors.transparent,
           child: RefreshIndicator(
             child: ListView(
               children: getFavouritesAsWidgets(ctx, data.list),

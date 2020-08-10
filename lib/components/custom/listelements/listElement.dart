@@ -21,6 +21,6 @@ class ListElement extends Container {
                               fontSize: 35, fontWeight: FontWeight.normal),
                           child
                         ]),
-              color: Theme.of(ctx).backgroundColor,
+              color: Colors.transparent,
             ));
 }

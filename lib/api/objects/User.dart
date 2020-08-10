@@ -1,4 +1,5 @@
 import 'package:aniflix_app/api/objects/Group.dart';
+import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 
 class User {
   int id;
@@ -12,6 +13,7 @@ class User {
   String about_me;
   String access_key;
   List<Group> groups;
+  UserSettings settings;
 
   User(
       this.id,
@@ -24,7 +26,8 @@ class User {
       this.banreason,
       this.about_me,
       this.access_key,
-      this.groups);
+      this.groups,
+      this.settings);
 
   factory User.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
@@ -39,7 +42,10 @@ class User {
         json["banreason"],
         json["about_me"],
         json["access_key"],
-        Group.getGroups(json["groups"]));
+        Group.getGroups(json["groups"]),
+        (json["settings"] is List)
+            ? UserSettings.fromJsonList(json["settings"])
+            : UserSettings.fromJson(json["settings"]));
   }
 
   static List<User> getUsers(List<dynamic> json) {

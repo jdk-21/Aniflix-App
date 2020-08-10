@@ -37,7 +37,7 @@ class ProfileAnimeListState extends State<ProfileAnimeList> {
   Widget build(BuildContext ctx) {
       return Container(
         key: Key("profileanimelist_screen"),
-        color: Theme.of(ctx).backgroundColor,
+        color: Colors.transparent,
         child: FutureBuilder(
           future: profilelistdata,
           builder: (context, snapshot) {
@@ -56,7 +56,7 @@ class ProfileAnimeListState extends State<ProfileAnimeList> {
   getLayout(BuildContext ctx) {
     return Container(
                 padding: EdgeInsets.all(5),
-                color: Theme.of(ctx).backgroundColor,
+                color: Colors.transparent,
                 child: RefreshIndicator(
                     child: ListView(
                       children: getShowsAsWidgets(ctx, data.shows),

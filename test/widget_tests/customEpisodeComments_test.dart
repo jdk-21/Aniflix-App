@@ -81,7 +81,7 @@ class TestAnswerBar extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: AnswerBar(new User(1,"",null,"","","","","","","",[]), true, (value){}),
+        body: AnswerBar(new User(1,"",null,"","","","","","","",[],null), true, (value){}),
       ),
     );
   }
@@ -95,7 +95,7 @@ class TestCommentComponent extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: CommentComponent(new User(1,"",null,"","","","","","","",[]), (value){}),
+        body: CommentComponent(new User(1,"",null,"","","","","","","",[],null), (value){}),
       ),
     );
   }

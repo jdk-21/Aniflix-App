@@ -1,11 +1,12 @@
 import 'package:aniflix_app/api/objects/Hoster.dart';
+import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 
 class EpisodeHeader extends StatefulWidget {
-  EpisodeInfo episode;
+  LoadInfo episode;
   Function prev;
   Function next;
   Function(int lang, int hoster, int view) change;
@@ -19,6 +20,7 @@ class EpisodeHeader extends StatefulWidget {
 }
 
 class EpisodeHeaderState extends State<EpisodeHeader> {
+  LoadInfo load;
   EpisodeInfo episode;
   Function prev;
   Function next;
@@ -30,12 +32,13 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
   List<String> _hosters;
 
   EpisodeHeaderState(
-      this.episode, this.prev, this.next, this.change, this._created) {
+      this.load, this.prev, this.next, this.change, this._created) {
     _hosters = [];
     _view = 0;
   }
 
   void init() {
+    this.episode = this.load.episodeInfo;
     _language = 0;
     _hoster = 0;
     List<Hoster> hosters = [];
@@ -55,9 +58,23 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
         hosters.add(stream.hoster);
       }
     }
+
     for (var hoster in hosters) {
       if (!_hosters.contains(hoster.name)) {
         _hosters.add(hoster.name);
+      }
+    }
+
+    var user = load.user;
+    if(user.settings != null) {
+      for (var stream in episode.streams) {
+        if (user.settings.preferred_hoster_id == stream.hoster_id) {
+          _hoster = _hosters.indexOf(stream.hoster.name);
+          if (stream.lang == user.settings.preferred_lang) {
+            _language = (user.settings.preferred_lang == "SUB") ? 0 : 1;
+          }
+          break;
+        }
       }
     }
     _created(this);
@@ -95,9 +112,9 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                 : IconButton(
                     icon: Icon(
                       Icons.navigate_before,
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                     ),
-                    color: Theme.of(ctx).backgroundColor,
+                    color: Colors.transparent,
                     onPressed: () {},
                   ),
             Row(
@@ -152,11 +169,11 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
                     )
                   : Icon(
                       Icons.navigate_before,
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                     ),
               color: (episode.next != "")
                   ? Theme.of(ctx).textTheme.caption.color
-                  : Theme.of(ctx).backgroundColor,
+                  : Colors.transparent,
               onPressed: (episode.next != "") ? next : () {},
             ),
           ],
@@ -190,8 +207,8 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
       }
     }
     for (int l = 0; l < languages.length; l++) {
-      namelist.add(DropdownMenuItem(
-          value: l, child: ThemeText(languages.elementAt(l))));
+      namelist.add(
+          DropdownMenuItem(value: l, child: ThemeText(languages.elementAt(l))));
     }
     return namelist;
   }
@@ -208,11 +225,10 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
 
   List<DropdownMenuItem> getPlayers(BuildContext ctx) {
     var list = <DropdownMenuItem>[];
-    list.add(
-        DropdownMenuItem(value: 0, child: ThemeText("InApp Browser")));
+    list.add(DropdownMenuItem(value: 0, child: ThemeText("InApp Browser")));
     list.add(DropdownMenuItem(value: 1, child: ThemeText("Browser")));
-    list.add(DropdownMenuItem(
-        value: 2, child: ThemeText("InAppView (Unstable)")));
+    list.add(
+        DropdownMenuItem(value: 2, child: ThemeText("InAppView (Unstable)")));
     return list;
   }
 }

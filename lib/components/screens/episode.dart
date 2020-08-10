@@ -8,6 +8,7 @@ import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
 import 'package:aniflix_app/components/custom/episode/comments/commentList.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,8 +58,6 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   EpisodeBarState barState;
   EpisodeHeaderState episodeHeaderState;
   AnimePlayerController _controller;
-
-
 
   updateStream(EpisodeInfo episodeInfo, int lang, int hoster) {
     setState(() {
@@ -132,7 +131,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
   Widget build(BuildContext ctx) {
     return Container(
       key: Key("episode_screen"),
-      color: Theme.of(ctx).backgroundColor,
+      color: Colors.transparent,
       child: FutureBuilder<LoadInfo>(
         future: episodeInfo,
         builder: (context, snapshot) {
@@ -175,6 +174,17 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
+            if (_stream == null && snapshot.data.user.settings != null) {
+              var user = snapshot.data.user;
+              for (var stream in episode.streams) {
+                if (user.settings.preferred_hoster_id == stream.hoster_id &&
+                    user.settings.preferred_lang == stream.lang) {
+                  this._stream = stream;
+                  break;
+                }
+              }
+            }
+
             if (_stream == null) {
               for (var stream in episode.streams) {
                 if (_hosters[0] == stream.hoster.name &&
@@ -184,6 +194,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                 }
               }
             }
+
             if (comments == null) {
               comments = episode.comments;
               var info = episode;
@@ -199,23 +210,19 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                   itemCategory: "Episode");
             }
 
-            if(_controller == null){
-              _controller = AnimePlayerController(_stream, view);
+            if (_controller == null) {
+              _controller = AnimePlayerController(episode, _stream, view, this);
             }
 
-            return Column(
-                children: <Widget>[
+            return Column(children: <Widget>[
               Expanded(
                   child: Container(
-                      color: Theme.of(ctx).backgroundColor,
+                      color: Colors.transparent,
                       child: ListView(
                         cacheExtent: 1000,
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
-                          (_stream != null)
-                              ? AnimePlayer(_controller)
-                              : Container(),
-                          EpisodeHeader(episode, () {
+                          EpisodeHeader(snapshot.data, () {
                             var info = APIManager.getEpisodeInfo(
                                 name, season, number - 1);
                             info.then((value) {
@@ -242,6 +249,9 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           }, (state) {
                             episodeHeaderState = state;
                           }),
+                          (_stream != null)
+                              ? AnimePlayer(_controller)
+                              : Container(),
                           EpisodeBar(episode, (state) {
                             this.barState = state;
                           }),

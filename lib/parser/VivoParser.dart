@@ -2,7 +2,7 @@ import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:html/dom.dart';
 
 class VivoParser extends HosterParser{
-  VivoParser():super(4);
+  VivoParser():super(4,true);
 
   //TODO
   Future<String> onParse(Document doc) async{
