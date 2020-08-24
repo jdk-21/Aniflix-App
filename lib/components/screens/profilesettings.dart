@@ -11,23 +11,33 @@ import 'package:flutter/painting.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileSettings extends StatelessWidget implements Screen {
+class ProfileSettings extends StatefulWidget {
   UserSettings data;
   Function onUpdateAvatar;
   Function(UserSettings) onSettingsChange;
   Function onSave;
 
-  ProfileSettings(this.data,this.onUpdateAvatar, this.onSettingsChange, this.onSave) {
+  ProfileSettings(
+      this.data, this.onUpdateAvatar, this.onSettingsChange, this.onSave);
+
+  @override
+  State<StatefulWidget> createState() => ProfileSettingsState(
+      this.data, this.onUpdateAvatar, this.onSettingsChange, this.onSave);
+}
+
+class ProfileSettingsState extends State<ProfileSettings> {
+  UserSettings data;
+  Function onUpdateAvatar;
+  Function(UserSettings) onSettingsChange;
+  Function onSave;
+
+  ProfileSettingsState(
+      this.data, this.onUpdateAvatar, this.onSettingsChange, this.onSave) {
     if (CacheManager.userlistdata == null) {
       APIManager.getUserList().then((data) {
         CacheManager.userlistdata = data;
       });
     }
-  }
-
-  @override
-  getScreenName() {
-    return "profilesettings_screen";
   }
 
   final usernameController = TextEditingController();
@@ -42,10 +52,21 @@ class ProfileSettings extends StatelessWidget implements Screen {
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.all(5),
-              child: ThemeText(
-                "Settings",
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  ),
+                  SizedBox(width: 5,),
+                  ThemeText(
+                    "Settings",
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
               ),
               decoration: BoxDecoration(
                   border: Border(
@@ -129,25 +150,28 @@ class ProfileSettings extends StatelessWidget implements Screen {
                     });
                   }, ctx),
                   SizedBox(height: 5),
-                  buildButtons("Change Avatar",() async {
-                    var image = await ImagePicker().getImage(source: ImageSource.gallery);
+                  buildButtons("Change Avatar", () async {
+                    var image = await ImagePicker()
+                        .getImage(source: ImageSource.gallery);
                     var user = await APIManager.updateAvatar(image.path);
                     onUpdateAvatar();
                     CacheManager.userData.avatar = user.avatar;
                     AppState.updateState();
-                  },ctx),
+                  }, ctx),
                   SizedBox(height: 5),
-                  buildButtons("Change Background",() async {
-                    var image = await ImagePicker().getImage(source: ImageSource.gallery);
-                    var user = await APIManager.updateBackground(data.id, image.path);
+                  buildButtons("Change Background", () async {
+                    var image = await ImagePicker()
+                        .getImage(source: ImageSource.gallery);
+                    var user =
+                        await APIManager.updateBackground(data.id, image.path);
                     CacheManager.userData.settings = user.settings;
                     AppState.updateState();
-                  },ctx),
-                  buildButtons("Delete Background",() async {
+                  }, ctx),
+                  buildButtons("Delete Background", () async {
                     var user = await APIManager.deleteBackground(data.id);
                     CacheManager.userData.settings = user.settings;
                     AppState.updateState();
-                  },ctx),
+                  }, ctx),
                   SizedBox(height: 5),
                   getSettingsLayout(ctx),
                   buildButtons("Save Settings", onSave, ctx)
@@ -161,6 +185,7 @@ class ProfileSettings extends StatelessWidget implements Screen {
   Widget getSettingsLayout(BuildContext ctx) {
     return Row(
       children: [
+        SizedBox(width: (MediaQuery.of(ctx).size.width / 2) - 110),
         Column(
           children: [
             Column(
@@ -170,22 +195,37 @@ class ProfileSettings extends StatelessWidget implements Screen {
                 SettingsCheckbox("Abos Öffentlich anzeigen", (newVal) {
                   data.show_abos = newVal;
                   onSettingsChange(data);
+                  setState(() {
+                    data = data;
+                  });
                 }, value: data.show_abos),
                 SettingsCheckbox("Favoriten öffentlich anzeigen", (newVal) {
                   data.show_favorites = newVal;
                   onSettingsChange(data);
+                  setState(() {
+                    data = data;
+                  });
                 }, value: data.show_favorites),
                 SettingsCheckbox("Watchlist öffentlich anzeigen", (newVal) {
                   data.show_watchlist = newVal;
                   onSettingsChange(data);
+                  setState(() {
+                    data = data;
+                  });
                 }, value: data.show_watchlist),
                 SettingsCheckbox("Freunde öffentlich anzeigen", (newVal) {
                   data.show_friends = newVal;
                   onSettingsChange(data);
+                  setState(() {
+                    data = data;
+                  });
                 }, value: data.show_friends),
                 SettingsCheckbox("Anime Liste öffentlich anzeigen", (newVal) {
                   data.show_list = newVal;
                   onSettingsChange(data);
+                  setState(() {
+                    data = data;
+                  });
                 }, value: data.show_list),
               ],
             ),
@@ -209,6 +249,9 @@ class ProfileSettings extends StatelessWidget implements Screen {
                               onTap: () {
                                 data.preferred_hoster_id = hoster.id;
                                 onSettingsChange(data);
+                                setState(() {
+                                  data = data;
+                                });
                               },
                             ))
                         .toList(),
@@ -233,6 +276,9 @@ class ProfileSettings extends StatelessWidget implements Screen {
                         onTap: () {
                           data.preferred_lang = "SUB";
                           onSettingsChange(data);
+                          setState(() {
+                            data = data;
+                          });
                         },
                       ),
                       DropdownMenuItem<String>(
@@ -241,6 +287,9 @@ class ProfileSettings extends StatelessWidget implements Screen {
                         onTap: () {
                           data.preferred_lang = "DUB";
                           onSettingsChange(data);
+                          setState(() {
+                            data = data;
+                          });
                         },
                       )
                     ],

@@ -134,10 +134,11 @@ class ProfileState extends State<Profile> {
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     if (modifiedSettings == null) {
-      if(profile.settings!=null){
+      if (profile.settings != null) {
         modifiedSettings = new UserSettings.fromObject(profile.settings);
-      }else{
-        modifiedSettings = UserSettings(0,profile.id,true,true,true,true,true,null,null,null,null,null,null);
+      } else {
+        modifiedSettings = UserSettings(0, profile.id, true, true, true, true,
+            true, null, null, null, null, null, null);
       }
     }
     var joined = DateTime.parse(profile.created_at);
@@ -175,7 +176,8 @@ class ProfileState extends State<Profile> {
         icon: Icons.person,
         title: ThemeText('Profil'),
         backgroundColor: Theme.of(ctx).backgroundColor));*/
-    if (data.userProfile.settings == null || data.userProfile.settings.show_friends) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
           profileData = APIManager.getUserProfileData(userID);
@@ -187,7 +189,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_favorites) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_favorites) {
       pages.add(Favoriten(favouritedata: data.favouritedata));
       items.add(TitledNavigationBarItem(
           icon: Icons.favorite,
@@ -195,7 +198,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_abos) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_abos) {
       pages.add(ProfileSubBox(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.subscriptions,
@@ -203,7 +207,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_watchlist) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_watchlist) {
       pages.add(Watchlist(
         watchlistdata: data.userWatchlistData,
       ));
@@ -213,26 +218,13 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_list) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_list) {
       pages.add(ProfileAnimeList(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.list,
           title: ThemeText('Anime Liste'),
           backgroundColor: Theme.of(ctx).backgroundColor));
-    }
-
-    if (CacheManager.userData.id == userID) {
-      pages.add(ProfileSettings(modifiedSettings, updateAvatar, (newData) {
-        setState(() {
-          this.modifiedSettings = newData;
-        });
-      }, () {
-        updateSettings();
-      }));
-      /*items.add(TitledNavigationBarItem(
-          icon: Icons.settings,
-          title: ThemeText('Einstellungen'),
-          backgroundColor: Theme.of(ctx).backgroundColor));*/
     }
     List<TextboxSliderElement> carouseldata = profile.groups
         .map((group) => TextboxSliderElement(group.name))
@@ -240,6 +232,19 @@ class ProfileState extends State<Profile> {
 
     return Scaffold(
         backgroundColor: Colors.transparent,
+        floatingActionButton: (CacheManager.userData.id == userID)
+            ? FloatingActionButton(
+                heroTag: null,
+                backgroundColor: Theme.of(ctx).iconTheme.color,
+                onPressed: () {
+                  showSettings();
+                },
+                child: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+              )
+            : null,
         body: Column(
           children: [
             Row(
@@ -332,6 +337,21 @@ class ProfileState extends State<Profile> {
         ),
         bottomNavigationBar:
             AniflixProfilebar(barIndex, controller, items, ctx, this));
+  }
+
+  showSettings() {
+    Scaffold.of(context).showBottomSheet<Widget>((ctx) {
+      return Container(
+          height: MediaQuery.of(ctx).size.height / 2,
+          color: Theme.of(ctx).backgroundColor,
+          child: ProfileSettings(modifiedSettings, updateAvatar, (newData) {
+            setState(() {
+              this.modifiedSettings = newData;
+            });
+          }, () {
+            updateSettings();
+          }));
+    });
   }
 }
 
