@@ -93,6 +93,6 @@ class RatingDialogState extends State<RatingDialog>{
 
   sendData() async {
     var newAnimeData = await APIManager.getAnime(anime.url);
-    APIManager.setShowVote(newAnimeData.id, newAnimeData.ownVote.value, _rating.round());
+    APIManager.setShowVote(newAnimeData.id, newAnimeData.ownVote?.value, _rating.round());
   }
 }
