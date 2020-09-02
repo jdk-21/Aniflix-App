@@ -1,6 +1,5 @@
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:flutter/material.dart';
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -30,7 +29,6 @@ LogoutDialog();
             await SharedPreferences.getInstance();
             await prefs.remove("access_token");
             await prefs.remove("token_type");
-            APIManager.login = null;
             CacheManager.clearAll();
             AppState.updateLoggedIn(false);
             Navigator.of(ctx).pop();

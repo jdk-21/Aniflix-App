@@ -1,5 +1,5 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/requests/watchlist/WatchlistRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
@@ -7,8 +7,6 @@ import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../main.dart';
 
 class Watchlistdata {
   List<Show> shows;
@@ -41,7 +39,8 @@ class WatchlistState extends State<Watchlist> {
     if (userwatchlistdata == null) {
       external = false;
       if (CacheManager.watchlistdata == null) {
-        watchlistdata = APIManager.getWatchlist();
+        if (CacheManager.session != null)
+          watchlistdata = WatchlistRequests.getWatchlist();
       } else {
         cache = CacheManager.watchlistdata;
       }
@@ -52,6 +51,9 @@ class WatchlistState extends State<Watchlist> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     if (cache == null && !external) {
       return Container(
         key: Key("watchlist_screen"),
@@ -85,11 +87,12 @@ class WatchlistState extends State<Watchlist> {
                 color: Colors.transparent,
                 child: RefreshIndicator(
                     child: ListView(
-                      children: getWatchlistAsWidgets(ctx, (external)?userwatchlistdata.shows:data.shows),
+                      children: getWatchlistAsWidgets(ctx,
+                          (external) ? userwatchlistdata.shows : data.shows),
                     ),
                     onRefresh: () async {
                       if (!external) {
-                        APIManager.getWatchlist().then((data) {
+                        WatchlistRequests.getWatchlist().then((data) {
                           setState(() {
                             CacheManager.watchlistdata = data;
                             cache = data;
@@ -105,8 +108,8 @@ class WatchlistState extends State<Watchlist> {
     List<Widget> watchlistWidget = [
       Container(
           padding: EdgeInsets.all(5),
-          child: ThemeText("Watchlist",
-              fontSize: 30, fontWeight: FontWeight.bold))
+          child:
+              ThemeText("Watchlist", fontSize: 30, fontWeight: FontWeight.bold))
     ];
     for (var anime in watchlist) {
       watchlistWidget.add(

@@ -1,8 +1,11 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/chat/chatMessage.dart';
+import 'package:aniflix_app/api/requests/chat/ChatRequests.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/chat/chatComponent.dart';
 import 'package:aniflix_app/components/custom/chat/chatInput.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +27,11 @@ class ChatState extends State<ChatScreen> {
   List<ChatMessage> _messages;
 
   ChatState() {
-    chatdata = APIManager.getChatInfo();
+    if (CacheManager.session != null) chatdata = ChatRequests.getChatInfo();
   }
 
   addMessage(text) async {
-    var message = await APIManager.addMessage(text);
+    var message = await ChatRequests.addMessage(text);
     var analytics = AppState.analytics;
     analytics.logEvent(
         name: "send_chat_mesage", parameters: {"message_id": message.id});
@@ -39,6 +42,9 @@ class ChatState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     return Container(
       key: Key("chat_screen"),
       color: Colors.transparent,

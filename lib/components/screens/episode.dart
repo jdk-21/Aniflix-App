@@ -1,9 +1,10 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/Hoster.dart';
 import 'package:aniflix_app/api/objects/Stream.dart';
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
+import 'package:aniflix_app/api/requests/episode/EpisodeRequests.dart';
 import 'package:aniflix_app/components/custom/episode/episodeHeader.dart';
 import 'package:aniflix_app/components/custom/episode/animePlayer.dart';
 import 'package:aniflix_app/components/custom/episode/episodeBar.dart';
@@ -91,7 +92,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
       this.view = null;
       this._controller = null;
       //TODO dispose Player?
-      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
+      this.episodeInfo = EpisodeRequests.getEpisodeInfo(name, season, number);
 
       this.episodeInfo.then((episode) {
         if (episode.episodeInfo != null) {
@@ -123,7 +124,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
 
   EpisodeScreenState(this.name, this.season, this.number, this.episodeInfo) {
     if (episodeInfo == null) {
-      this.episodeInfo = APIManager.getEpisodeInfo(name, season, number);
+      this.episodeInfo = EpisodeRequests.getEpisodeInfo(name, season, number);
     }
   }
 
@@ -174,7 +175,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
               }
             }
 
-            if (_stream == null && snapshot.data.user.settings != null) {
+            if (_stream == null && snapshot.data.user != null && snapshot.data.user.settings != null) {
               var user = snapshot.data.user;
               for (var stream in episode.streams) {
                 if (user.settings.preferred_hoster_id == stream.hoster_id &&
@@ -223,7 +224,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                         padding: EdgeInsets.only(left: 5, right: 5),
                         children: <Widget>[
                           EpisodeHeader(snapshot.data, () {
-                            var info = APIManager.getEpisodeInfo(
+                            var info = EpisodeRequests.getEpisodeInfo(
                                 name, season, number - 1);
                             info.then((value) {
                               Navigator.pushNamed(context, "episode",
@@ -232,7 +233,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                       episodeInfo: info));
                             });
                           }, () {
-                            var info = APIManager.getEpisodeInfo(
+                            var info = EpisodeRequests.getEpisodeInfo(
                                 name, season, number + 1);
                             info.then((value) {
                               Navigator.pushNamed(context, "episode",
@@ -255,10 +256,10 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                           EpisodeBar(episode, (state) {
                             this.barState = state;
                           }),
-                          new CommentList(
+                          CommentList(
                               snapshot.data.user, episode, this.comments, ctx,
                               (text) {
-                            APIManager.addComment(episode.id, text)
+                                EpisodeRequests.addComment(episode.id, text)
                                 .then((comment) {
                               if (comment != null) {
                                 var analytics = AppState.analytics;
@@ -271,7 +272,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                               }
                             });
                           }, (id, text) {
-                            APIManager.addSubComment(id, text).then((comment) {
+                            EpisodeRequests.addSubComment(id, text).then((comment) {
                               if (comment != null) {
                                 var analytics = AppState.analytics;
                                 analytics.logEvent(
@@ -295,7 +296,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                       name: "episode_comment_delete",
                                       parameters: {"comment_id": id});
                                   comments.removeAt(i);
-                                  APIManager.deleteComment(id);
+                                  EpisodeRequests.deleteComment(id);
                                   break;
                                 }
                               }
@@ -313,7 +314,7 @@ class EpisodeScreenState extends State<EpisodeScreen> {
                                           name: "episode_comment_delete",
                                           parameters: {"comment_id": sub_id});
                                       comments[i].comments.removeAt(j);
-                                      APIManager.deleteComment(sub_id);
+                                      EpisodeRequests.deleteComment(sub_id);
                                       break;
                                     }
                                   }

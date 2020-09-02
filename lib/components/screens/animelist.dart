@@ -1,4 +1,5 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
+import 'package:aniflix_app/api/requests/animelist/AnimelistRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
@@ -151,7 +152,7 @@ class AnimeListState extends State<AnimeList> {
 
   AnimeListState() {
     if (CacheManager.animeListData == null) {
-      this.animeListData = APIManager.getAnimeListData();
+      this.animeListData = AnimelistRequests.getAnimeListData();
     } else {
       cache = CacheManager.animeListData;
     }

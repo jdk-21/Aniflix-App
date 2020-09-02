@@ -1,5 +1,5 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/history/historyEpisode.dart';
+import 'package:aniflix_app/api/requests/history/HistoryRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -30,7 +30,7 @@ class VerlaufState extends State<Verlauf> {
 
   VerlaufState() {
     if (CacheManager.historydata == null) {
-      historyData = APIManager.getHistory();
+      if (CacheManager.session != null) historyData = HistoryRequests.getHistory();
     } else {
       cache = CacheManager.historydata;
     }
@@ -38,6 +38,9 @@ class VerlaufState extends State<Verlauf> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     if (cache == null) {
       return Container(
         key: Key("history_screen"),
@@ -76,7 +79,7 @@ class VerlaufState extends State<Verlauf> {
                     children: getHistoryAsWidgets(ctx, history),
                   ),
                   onRefresh: () async {
-                    APIManager.getHistory().then((data) {
+                    HistoryRequests.getHistory().then((data) {
                       setState(() {
                         CacheManager.historydata = data;
                         cache = data;

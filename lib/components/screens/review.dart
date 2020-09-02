@@ -1,7 +1,9 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/anime/reviews/ReviewShow.dart';
+import 'package:aniflix_app/api/requests/anime/ReviewRequests.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/dialogs/writeReviewDialog.dart';
 import 'package:aniflix_app/components/custom/review/reviewElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -9,8 +11,6 @@ import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../main.dart';
 
 class ReviewScreen extends StatefulWidget implements Screen {
   String url;
@@ -35,7 +35,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   addNewReview(
       Review review, User user, BuildContext ctx, ReviewShow reviewInfo) async {
     var responsereview =
-        await APIManager.createReview(reviewInfo.id, review.text);
+        await ReviewRequests.createReview(reviewInfo.id, review.text);
     responsereview.user = user;
     setState(() {
       _actualReviews.insert(
@@ -56,7 +56,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   ReviewScreenState(this.url) {
-    reviewData = APIManager.getReviewInfo(url);
+    reviewData = ReviewRequests.getReviewInfo(url);
   }
 
   @override
@@ -127,13 +127,15 @@ class ReviewScreenState extends State<ReviewScreen> {
                                     style: BorderStyle.solid))),
                         height: 10,
                       ),
-                      _showButton
+                      CacheManager.session != null && _showButton
                           ? Align(
                               alignment: Alignment.center,
                               child: OutlineButton(
-                                textColor: Theme.of(ctx).textTheme.caption.color,
+                                textColor:
+                                    Theme.of(ctx).textTheme.caption.color,
                                 borderSide: BorderSide(
-                                    color: Theme.of(ctx).textTheme.caption.color),
+                                    color:
+                                        Theme.of(ctx).textTheme.caption.color),
                                 child: ThemeText("Review schreiben"),
                                 onPressed: () {
                                   showDialog(

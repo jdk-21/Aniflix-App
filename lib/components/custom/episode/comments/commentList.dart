@@ -1,3 +1,4 @@
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -35,7 +36,7 @@ class CommentList extends Container {
         ),
       ),
       expanded: Column(children: [
-        CommentComponent(_user, _onSend),
+        (CacheManager.session != null)?CommentComponent(_user, _onSend) : Container(),
         Column(
             children: commentContainers)
       ]),

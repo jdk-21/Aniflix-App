@@ -1,6 +1,8 @@
+import 'package:aniflix_app/api/requests/episode/EpisodeRequests.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/api/objects/episode/EpisodeInfo.dart';
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/custom/dialogs/reportDialog.dart';
 import 'package:aniflix_app/main.dart';
@@ -12,7 +14,8 @@ class EpisodeBar extends StatefulWidget {
   EpisodeBar(this._episode, this._created);
 
   @override
-  EpisodeBarState createState() => EpisodeBarState(this._episode, this._created);
+  EpisodeBarState createState() =>
+      EpisodeBarState(this._episode, this._created);
 }
 
 class EpisodeBarState extends State<EpisodeBar> {
@@ -26,7 +29,7 @@ class EpisodeBarState extends State<EpisodeBar> {
 
   EpisodeBarState(this._episode, this._created);
 
-  void init(){
+  void init() {
     _isReported = _episode.hasReports == 1;
 
     _numberOfDownVotes = 0;
@@ -49,9 +52,9 @@ class EpisodeBarState extends State<EpisodeBar> {
 
   @override
   void initState() {
-      init();
-      super.initState();
-    }
+    init();
+    super.initState();
+  }
 
   updateEpisode(EpisodeInfo episode) {
     setState(() {
@@ -62,14 +65,17 @@ class EpisodeBarState extends State<EpisodeBar> {
 
   report(int id, BuildContext ctx) {
     setState(() {
-      showDialog(context: ctx,builder: (BuildContext ctx){
-        return ReportDialog((text){
-          var analytics = AppState.analytics;
-          analytics.logEvent(name: "episode_report",parameters: {"episode_id": id});
-          APIManager.reportEpisode(id, text);
-          this._isReported = !_isReported;
-        });
-      });
+      showDialog(
+          context: ctx,
+          builder: (BuildContext ctx) {
+            return ReportDialog((text) {
+              var analytics = AppState.analytics;
+              analytics.logEvent(
+                  name: "episode_report", parameters: {"episode_id": id});
+              EpisodeRequests.reportEpisode(id, text);
+              this._isReported = !_isReported;
+            });
+          });
     });
   }
 
@@ -89,7 +95,9 @@ class EpisodeBarState extends State<EpisodeBar> {
                 softWrap: true,
               ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Row(
               children: <Widget>[
                 ThemeText(
@@ -98,7 +106,9 @@ class EpisodeBarState extends State<EpisodeBar> {
                         " E " +
                         _episode.number.toString(),
                     fontWeight: FontWeight.bold),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: ThemeText(
                     _episode.season.show.name,
@@ -110,7 +120,8 @@ class EpisodeBarState extends State<EpisodeBar> {
             ),
           ]),
           onPressed: () {
-            Navigator.pushNamed(context, "anime",arguments: _episode.season.show.url);
+            Navigator.pushNamed(context, "anime",
+                arguments: _episode.season.show.url);
           },
         ),
         Container(
@@ -127,20 +138,22 @@ class EpisodeBarState extends State<EpisodeBar> {
                           "." +
                           formated_date.year.toString()),
                       fontSize: 15),
-                  IconButton(
-                    padding: EdgeInsets.all(0),
-                    icon: Icon(
-                      Icons.report,
-                      color: _isReported
-                          ? Theme.of(ctx).accentIconTheme.color
-                          : Theme.of(ctx).primaryIconTheme.color,
-                    ),
-                    onPressed: () {
-                      if (!_isReported) {
-                        report(_episode.id, ctx);
-                      }
-                    },
-                  )
+                  CacheManager.session != null
+                      ? IconButton(
+                          padding: EdgeInsets.all(0),
+                          icon: Icon(
+                            Icons.report,
+                            color: _isReported
+                                ? Theme.of(ctx).accentIconTheme.color
+                                : Theme.of(ctx).primaryIconTheme.color,
+                          ),
+                          onPressed: () {
+                            if (!_isReported) {
+                              report(_episode.id, ctx);
+                            }
+                          },
+                        )
+                      : Container()
                 ],
               ),
               Row(
@@ -151,27 +164,36 @@ class EpisodeBarState extends State<EpisodeBar> {
                         icon: Icon(
                           Icons.thumb_up,
                           color: _actualVote == null ||
-                              _actualVote == possibleVotes.elementAt(2)
+                                  _actualVote == possibleVotes.elementAt(2)
                               ? Theme.of(ctx).primaryIconTheme.color
                               : Theme.of(ctx).accentIconTheme.color,
                         ),
                         onPressed: () {
-                          var vote;
-                          if (_actualVote ==
-                              possibleVotes.elementAt(0) /*null*/) {
-                            APIManager.setEpisodeVote(_episode.id, null, 1);
-                            vote = 1;
-                          } else if (_actualVote ==
-                              possibleVotes.elementAt(1) /*+*/) {
-                            APIManager.setEpisodeVote(_episode.id, 1, null);
-                          } else if (_actualVote ==
-                              possibleVotes.elementAt(2) /*-*/) {
-                            APIManager.setEpisodeVote(_episode.id, 0, 1);
-                            vote = 1;
+                          if (CacheManager.session != null) {
+                            var vote;
+                            if (_actualVote ==
+                                possibleVotes.elementAt(0) /*null*/) {
+                              EpisodeRequests.setEpisodeVote(
+                                  _episode.id, null, 1);
+                              vote = 1;
+                            } else if (_actualVote ==
+                                possibleVotes.elementAt(1) /*+*/) {
+                              EpisodeRequests.setEpisodeVote(
+                                  _episode.id, 1, null);
+                            } else if (_actualVote ==
+                                possibleVotes.elementAt(2) /*-*/) {
+                              EpisodeRequests.setEpisodeVote(_episode.id, 0, 1);
+                              vote = 1;
+                            }
+                            var analytics = AppState.analytics;
+                            analytics.logEvent(
+                                name: "episode_vote",
+                                parameters: {
+                                  "episode_id": _episode.id,
+                                  "vote_value": vote
+                                });
+                            makeUpVote();
                           }
-                          var analytics = AppState.analytics;
-                          analytics.logEvent(name: "episode_vote",parameters: {"episode_id": _episode.id,"vote_value":vote});
-                          makeUpVote();
                         },
                       ),
                       ThemeText(
@@ -186,27 +208,36 @@ class EpisodeBarState extends State<EpisodeBar> {
                         icon: Icon(
                           Icons.thumb_down,
                           color: (_actualVote == null ||
-                              _actualVote == possibleVotes.elementAt(1))
+                                  _actualVote == possibleVotes.elementAt(1))
                               ? Theme.of(ctx).primaryIconTheme.color
                               : Theme.of(ctx).accentIconTheme.color,
                         ),
                         onPressed: () {
-                          var vote;
-                          if (_actualVote ==
-                              possibleVotes.elementAt(0) /*null*/) {
-                            APIManager.setEpisodeVote(_episode.id, null, 0);
-                            vote = 0;
-                          } else if (_actualVote ==
-                              possibleVotes.elementAt(1) /*+*/) {
-                            APIManager.setEpisodeVote(_episode.id, 1, 0);
-                            vote = 0;
-                          } else if (_actualVote ==
-                              possibleVotes.elementAt(2) /*-*/) {
-                            APIManager.setEpisodeVote(_episode.id, 0, null);
+                          if (CacheManager.session != null) {
+                            var vote;
+                            if (_actualVote ==
+                                possibleVotes.elementAt(0) /*null*/) {
+                              EpisodeRequests.setEpisodeVote(
+                                  _episode.id, null, 0);
+                              vote = 0;
+                            } else if (_actualVote ==
+                                possibleVotes.elementAt(1) /*+*/) {
+                              EpisodeRequests.setEpisodeVote(_episode.id, 1, 0);
+                              vote = 0;
+                            } else if (_actualVote ==
+                                possibleVotes.elementAt(2) /*-*/) {
+                              EpisodeRequests.setEpisodeVote(
+                                  _episode.id, 0, null);
+                            }
+                            var analytics = AppState.analytics;
+                            analytics.logEvent(
+                                name: "episode_vote",
+                                parameters: {
+                                  "episode_id": _episode.id,
+                                  "vote_value": vote
+                                });
+                            makeDownVote();
                           }
-                          var analytics = AppState.analytics;
-                          analytics.logEvent(name: "episode_vote",parameters: {"episode_id": _episode.id,"vote_value":vote});
-                          makeDownVote();
                         },
                       ),
                       ThemeText(
@@ -220,7 +251,6 @@ class EpisodeBarState extends State<EpisodeBar> {
             ],
           ),
         ),
-
       ],
     );
   }

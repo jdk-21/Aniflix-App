@@ -1,9 +1,7 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/checkbox/SettingsCheckbox.dart';
-import 'package:aniflix_app/components/screens/profil.dart';
-import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +32,7 @@ class ProfileSettingsState extends State<ProfileSettings> {
   ProfileSettingsState(
       this.data, this.onUpdateAvatar, this.onSettingsChange, this.onSave) {
     if (CacheManager.userlistdata == null) {
-      APIManager.getUserList().then((data) {
+      ProfileRequests.getUserList().then((data) {
         CacheManager.userlistdata = data;
       });
     }
@@ -60,7 +58,9 @@ class ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.of(ctx).pop();
                     },
                   ),
-                  SizedBox(width: 5,),
+                  SizedBox(
+                    width: 5,
+                  ),
                   ThemeText(
                     "Settings",
                     fontSize: 30,
@@ -110,7 +110,8 @@ class ProfileSettingsState extends State<ProfileSettings> {
                           showErrorDialog(ctx,
                               "Dieser Username existiert bereits. Bitte wähle einen anderen.");
                         } else {
-                          APIManager.updateName(usernameController.value.text);
+                          ProfileRequests.updateName(
+                              usernameController.value.text);
                           CacheManager.userData.name =
                               usernameController.value.text;
                           resetTextController();
@@ -142,7 +143,7 @@ class ProfileSettingsState extends State<ProfileSettings> {
                         showErrorDialog(
                             ctx, "Das neue Passwort muss Zeichen enthalten.");
                       } else {
-                        APIManager.updatePassword(CacheManager.userData.id,
+                        ProfileRequests.updatePassword(CacheManager.userData.id,
                             passwortController.value.text);
                         resetTextController();
                         Navigator.of(ctx).pop();
@@ -153,7 +154,7 @@ class ProfileSettingsState extends State<ProfileSettings> {
                   buildButtons("Change Avatar", () async {
                     var image = await ImagePicker()
                         .getImage(source: ImageSource.gallery);
-                    var user = await APIManager.updateAvatar(image.path);
+                    var user = await ProfileRequests.updateAvatar(image.path);
                     onUpdateAvatar();
                     CacheManager.userData.avatar = user.avatar;
                     AppState.updateState();
@@ -162,13 +163,13 @@ class ProfileSettingsState extends State<ProfileSettings> {
                   buildButtons("Change Background", () async {
                     var image = await ImagePicker()
                         .getImage(source: ImageSource.gallery);
-                    var user =
-                        await APIManager.updateBackground(data.id, image.path);
+                    var user = await ProfileRequests.updateBackground(
+                        data.id, image.path);
                     CacheManager.userData.settings = user.settings;
                     AppState.updateState();
                   }, ctx),
                   buildButtons("Delete Background", () async {
-                    var user = await APIManager.deleteBackground(data.id);
+                    var user = await ProfileRequests.deleteBackground(data.id);
                     CacheManager.userData.settings = user.settings;
                     AppState.updateState();
                   }, ctx),

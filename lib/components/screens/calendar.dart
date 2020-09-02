@@ -1,11 +1,10 @@
 import 'package:aniflix_app/api/objects/calendar/CalendarDay.dart';
+import 'package:aniflix_app/api/requests/calendar/CalendarRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
-import '../../main.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
-import '../../api/APIManager.dart';
 
 class Calendardata {
   List<CalendarDay> days;
@@ -37,7 +36,7 @@ class CalendarState extends State<Calendar> {
 
   CalendarState() {
     if (CacheManager.calendardata == null) {
-      this.calendarData = APIManager.getCalendarData();
+      this.calendarData = CalendarRequest.getCalendarData();
     } else {
       this.cache = CacheManager.calendardata;
     }
@@ -180,7 +179,7 @@ class CalendarState extends State<Calendar> {
             child: ListView(
                 padding: EdgeInsets.only(top: 10), children: sortedList),
             onRefresh: () async {
-              APIManager.getCalendarData().then((data) {
+              CalendarRequest.getCalendarData().then((data) {
                 setState(() {
                   cache = data;
                   CacheManager.calendardata = data;

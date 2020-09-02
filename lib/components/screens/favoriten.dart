@@ -1,5 +1,6 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/requests/favourite/FavouriteRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/listelements/imageListElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -38,7 +39,7 @@ class FavoritenState extends State<Favoriten> {
     if (cache == null) {
       external = false;
       if (CacheManager.favouritedata == null) {
-        favouriteData = APIManager.getFavourite();
+        if (CacheManager.session != null) favouriteData = FavouriteRequests.getFavourite();
       } else {
         cache = CacheManager.favouritedata;
       }
@@ -49,6 +50,9 @@ class FavoritenState extends State<Favoriten> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     if (cache == null) {
       return Container(
         key: Key("favourites_screen"),
@@ -84,7 +88,7 @@ class FavoritenState extends State<Favoriten> {
             ),
             onRefresh: () async {
               if (!external) {
-                APIManager.getFavourite().then((data) {
+                FavouriteRequests.getFavourite().then((data) {
                   setState(() {
                     CacheManager.favouritedata = data;
                     cache = data;

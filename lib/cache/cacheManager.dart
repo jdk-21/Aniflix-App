@@ -1,3 +1,4 @@
+import 'package:aniflix_app/api/objects/Session.dart';
 import 'package:aniflix_app/api/objects/Hoster.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
 import 'package:aniflix_app/components/screens/calendar.dart';
@@ -9,8 +10,8 @@ import 'package:aniflix_app/components/screens/verlauf.dart';
 import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/screens/userlist.dart';
 
-class CacheManager{
-
+class CacheManager {
+  static Session session;
   static Homedata homedata;
   static Subdata subdata;
   static AnimeListData animeListData;
@@ -22,17 +23,17 @@ class CacheManager{
   static UserListData userlistdata;
   static List<Hoster> hosters;
 
-  static clearAll(){
-   CacheManager.homedata = null;
-   CacheManager.subdata = null;
-   CacheManager.animeListData = null;
-   CacheManager.userData = null;
-   CacheManager.calendardata = null;
-   CacheManager.favouritedata = null;
-   CacheManager.historydata = null;
-   CacheManager.watchlistdata = null;
-   CacheManager.userlistdata = null;
-   CacheManager.hosters = null;
+  static clearAll() {
+    CacheManager.session = null;
+    CacheManager.homedata = null;
+    CacheManager.subdata = null;
+    CacheManager.animeListData = null;
+    CacheManager.userData = null;
+    CacheManager.calendardata = null;
+    CacheManager.favouritedata = null;
+    CacheManager.historydata = null;
+    CacheManager.watchlistdata = null;
+    CacheManager.userlistdata = null;
+    CacheManager.hosters = null;
   }
-
 }

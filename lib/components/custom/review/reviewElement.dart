@@ -1,6 +1,7 @@
 import 'package:aniflix_app/api/objects/anime/reviews/Review.dart';
 import 'package:aniflix_app/api/objects/User.dart';
-import 'package:aniflix_app/api/APIManager.dart';
+
+import 'package:aniflix_app/api/requests/anime/ReviewRequests.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class ReviewElement extends Container {
                   softWrap: true,
                 ),
                 ReportDeleteBar((review.user_id == _user.id),(){},(){
-                  APIManager.deleteReview(review.id);
+                  ReviewRequests.deleteReview(review.id);
                   _onDelete(review.id);
                 }),
                 SizedBox(width: 10,),

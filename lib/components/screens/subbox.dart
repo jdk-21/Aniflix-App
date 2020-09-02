@@ -1,7 +1,8 @@
+import 'package:aniflix_app/api/requests/subbox/SubboxRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
+import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
-import '../../api/APIManager.dart';
 import '../../api/objects/subbox/SubEpisode.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
@@ -31,7 +32,7 @@ class SubBoxState extends State<SubBox> {
 
   SubBoxState() {
     if (CacheManager.subdata == null) {
-      data = APIManager.getSubData();
+      if (CacheManager.session != null) data = SubboxRequests.getSubData();
     } else {
       cache = CacheManager.subdata;
     }
@@ -50,6 +51,9 @@ class SubBoxState extends State<SubBox> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     if (cache == null) {
       return Container(
           color: Colors.transparent,
@@ -143,7 +147,7 @@ class SubBoxState extends State<SubBox> {
                   child: ListView(
                       padding: EdgeInsets.only(top: 10), children: days),
                   onRefresh: () async {
-                    APIManager.getSubData().then((data) {
+                    SubboxRequests.getSubData().then((data) {
                       CacheManager.subdata = data;
                       setState(() {
                         cache = data;

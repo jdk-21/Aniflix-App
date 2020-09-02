@@ -1,9 +1,10 @@
-import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/requests/user/LoginRequests.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:aniflix_app/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -76,17 +77,18 @@ class Login extends StatelessWidget implements Screen {
                         color: Theme.of(ctx).textTheme.caption.color),
                     child: ThemeText("Login"),
                     onPressed: () async {
-                      var response = await APIManager.loginRequest(
+                      var response = await LoginRequests.loginRequest(
                           emailController.value.text,
                           passwortController.value.text);
                       if (response.hasError()) {
-                        APIManager.login = null;
+                        CacheManager.session = null;
                         showErrorDialog(
                             ctx,
                             (response.error == "Unauthorized")
                                 ? "Email oder Passwort falsch!"
                                 : response.error);
                       } else {
+                        CacheManager.session = response;
                         AppState.updateLoggedIn(true);
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
@@ -96,9 +98,12 @@ class Login extends StatelessWidget implements Screen {
                             "token_type", response.token_type);
                         resetTextController();
                         analytics.logLogin();
+
                         Navigator.pushNamedAndRemoveUntil(
                             ctx, '/', (Route<dynamic> route) => false);
                         AppState.setIndex(0);
+                        ProfileRequests.getUser()
+                            .then((value) => CacheManager.userData = value);
                       }
                     },
                   )),
@@ -114,19 +119,25 @@ class Login extends StatelessWidget implements Screen {
                     resetTextController();
                   },
                 ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: FlatButton(
+                  textColor: Theme.of(ctx).textTheme.caption.color,
+                  child: ThemeText("Ohne Account weiter"),
+                  onPressed: () {
+                    //_launchURL();
+                    AppState.updateOfflineMode(true);
+                    Navigator.pushNamedAndRemoveUntil(
+                        ctx, '/', (Route<dynamic> route) => false);
+                    resetTextController();
+                    AppState.setIndex(0);
+                  },
+                ),
               )
             ])
           ])),
     );
-  }
-
-  _launchURL() async {
-    const url = 'https://www2.aniflix.tv/register';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   void resetTextController() {

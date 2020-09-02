@@ -1,5 +1,6 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/listelements/iconListElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -15,7 +16,7 @@ class FriendList extends StatelessWidget implements Screen {
 
   FriendList(int userid, Function refresh) {
     this.userid = userid;
-    this.friendlistData = APIManager.getUserFriends(userid);
+    this.friendlistData = ProfileRequests.getUserFriends(userid);
     this.refresh = refresh;
   }
 
@@ -84,7 +85,7 @@ class FriendList extends StatelessWidget implements Screen {
         Widget button = IconButton(
           icon: Icon(Icons.delete_forever),
           onPressed: () {
-            APIManager.cancelFriendRequest(friend.id);
+            ProfileRequests.cancelFriendRequest(friend.id);
             refresh();
           },
           color: Theme.of(ctx).primaryIconTheme.color,
@@ -117,12 +118,19 @@ class FriendList extends StatelessWidget implements Screen {
           child: ThemeText("Freundschaftsanfragen",
               fontSize: 30, fontWeight: FontWeight.bold)),
     ];
-    ((data.friendlist.where((element) => (element.status == null && element.friend.id == userid))).length > 0) ?
-    friendlistWidget
-        .addAll(getIncomingFriendRequestsAsWidgets(ctx, friendList)) : Container();
-    ((data.friendlist.where((element) => (element.status == null && element.user.id == userid))).length > 0) ?
-    friendlistWidget
-        .addAll(getOutgoingFriendRequestsAsWidgets(ctx, friendList)) : Container();
+    ((data.friendlist.where((element) =>
+                    (element.status == null && element.friend.id == userid)))
+                .length >
+            0)
+        ? friendlistWidget
+            .addAll(getIncomingFriendRequestsAsWidgets(ctx, friendList))
+        : Container();
+    ((data.friendlist.where((element) =>
+                (element.status == null && element.user.id == userid))).length >
+            0)
+        ? friendlistWidget
+            .addAll(getOutgoingFriendRequestsAsWidgets(ctx, friendList))
+        : Container();
     return friendlistWidget;
   }
 
@@ -142,7 +150,7 @@ class FriendList extends StatelessWidget implements Screen {
             IconButton(
               icon: Icon(Icons.check_circle_outline),
               onPressed: () async {
-                APIManager.confirmFriendRequest(friend.id);
+                ProfileRequests.confirmFriendRequest(friend.id);
                 refresh();
               },
               color: Theme.of(ctx).primaryIconTheme.color,
@@ -150,7 +158,7 @@ class FriendList extends StatelessWidget implements Screen {
             IconButton(
               icon: Icon(Icons.highlight_off),
               onPressed: () async {
-                APIManager.cancelFriendRequest(friend.id);
+                ProfileRequests.cancelFriendRequest(friend.id);
                 refresh();
               },
               color: Theme.of(ctx).primaryIconTheme.color,
@@ -158,7 +166,7 @@ class FriendList extends StatelessWidget implements Screen {
             IconButton(
               icon: Icon(Icons.block),
               onPressed: () async {
-                APIManager.blockFriendRequest(friend.id);
+                ProfileRequests.blockFriendRequest(friend.id);
                 refresh();
               },
               color: Theme.of(ctx).primaryIconTheme.color,
@@ -193,7 +201,7 @@ class FriendList extends StatelessWidget implements Screen {
         Widget button = IconButton(
           icon: Icon(Icons.highlight_off),
           onPressed: () async {
-            APIManager.cancelFriendRequest(friend.id);
+            ProfileRequests.cancelFriendRequest(friend.id);
             refresh();
           },
           color: Theme.of(ctx).primaryIconTheme.color,

@@ -1,5 +1,6 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/requests/search/SearchRequests.dart';
 import 'package:aniflix_app/components/custom/search/searchList.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
@@ -28,7 +29,7 @@ class SearchAnimeState extends State<SearchAnime> {
 
   updateSearchList(String searchText) {
     setState(() {
-      this.shows = APIManager.searchShows(searchText);
+      this.shows = SearchRequests.searchShows(searchText);
     });
   }
 

@@ -1,4 +1,5 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
+import 'package:aniflix_app/api/requests/notifications/NotificationRequests.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/news/aniflix_notification.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -18,7 +19,7 @@ class PersonalNotification extends AniflixNotification {
           ),
           IconButton(
             onPressed: () {
-              APIManager.deleteNotification(_id);
+              NotificationRequests.deleteNotification(_id);
               onDelete(_id);
             },
             icon: Icon(

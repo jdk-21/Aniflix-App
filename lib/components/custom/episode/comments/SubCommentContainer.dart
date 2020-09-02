@@ -1,7 +1,8 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/User.dart';
 import 'package:aniflix_app/api/objects/episode/Comment.dart';
 import 'package:aniflix_app/api/objects/anime/Vote.dart';
+import 'package:aniflix_app/api/requests/episode/EpisodeRequests.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -47,9 +48,11 @@ class SubCommentContainer extends StatelessWidget {
                           children: [
                             Row(children: [
                               Align(
-                                alignment: Alignment.topLeft,
-                                child: ProfileImage(_comment.user.avatar,(){Navigator.pushNamed(ctx, "profil",arguments: _comment.user.id);})
-                              ),
+                                  alignment: Alignment.topLeft,
+                                  child: ProfileImage(_comment.user.avatar, () {
+                                    Navigator.pushNamed(ctx, "profil",
+                                        arguments: _comment.user.id);
+                                  })),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -83,19 +86,24 @@ class SubCommentContainer extends StatelessWidget {
                                                       .title
                                                       .color,
                                                   fontSize: 10.0)),
-                                      ReportDeleteBar(
-                                          (_user.id == _comment.user_id), () {
-                                        showDialog(
-                                            context: ctx,
-                                            builder: (BuildContext ctx) {
-                                              return ReportDialog((text) {
-                                                APIManager.reportComment(
-                                                    _comment.id, text);
-                                              });
-                                            });
-                                      }, () {
-                                        _onSubDelete();
-                                      })
+                                      (_user != null)
+                                          ? ReportDeleteBar(
+                                              (_user.id == _comment.user_id),
+                                              () {
+                                              showDialog(
+                                                  context: ctx,
+                                                  builder: (BuildContext ctx) {
+                                                    return ReportDialog((text) {
+                                                      EpisodeRequests
+                                                          .reportComment(
+                                                              _comment.id,
+                                                              text);
+                                                    });
+                                                  });
+                                            }, () {
+                                              _onSubDelete();
+                                            })
+                                          : Container()
                                     ],
                                   ),
                                 ],
@@ -112,59 +120,60 @@ class SubCommentContainer extends StatelessWidget {
                           children: [
                             VoteBar(_comment.id, _comment.votes, _comment.voted,
                                 (prev, next) {
-                              var commentlist = episodeScreenState.comments;
-                              print("size: " + commentlist.length.toString());
-                              for (int i = 0; i < commentlist.length; i++) {
-                                print(i);
-                                for (int k = 0;
-                                    k < commentlist[i].comments.length;
-                                    k++) {
-                                  if (commentlist[i].comments[k].id ==
-                                      _comment.id) {
-                                    episodeScreenState.setState(() {
-                                      episodeScreenState
-                                          .comments[i].comments[k].voted = next;
-                                      var contained = false;
-                                      for (int j = 0;
-                                          j <
+                              if (_user != null) {
+                                var commentlist = episodeScreenState.comments;
+                                for (int i = 0; i < commentlist.length; i++) {
+                                  print(i);
+                                  for (int k = 0;
+                                      k < commentlist[i].comments.length;
+                                      k++) {
+                                    if (commentlist[i].comments[k].id ==
+                                        _comment.id) {
+                                      episodeScreenState.setState(() {
+                                        episodeScreenState.comments[i]
+                                            .comments[k].voted = next;
+                                        var contained = false;
+                                        for (int j = 0;
+                                            j <
+                                                commentlist[i]
+                                                    .comments[k]
+                                                    .votes
+                                                    .length;
+                                            j++) {
+                                          if (commentlist[i]
+                                                  .comments[k]
+                                                  .votes[j]
+                                                  .user_id ==
+                                              _user.id) {
+                                            if (next != null) {
+                                              commentlist[i]
+                                                  .comments[k]
+                                                  .votes[j]
+                                                  .value = next;
+                                            } else {
                                               commentlist[i]
                                                   .comments[k]
                                                   .votes
-                                                  .length;
-                                          j++) {
-                                        if (commentlist[i]
-                                                .comments[k]
-                                                .votes[j]
-                                                .user_id ==
-                                            _user.id) {
-                                          if (next != null) {
-                                            commentlist[i]
-                                                .comments[k]
-                                                .votes[j]
-                                                .value = next;
-                                          } else {
-                                            commentlist[i]
-                                                .comments[k]
-                                                .votes
-                                                .removeAt(j);
+                                                  .removeAt(j);
+                                            }
+                                            contained = true;
+                                            break;
                                           }
-                                          contained = true;
-                                          break;
                                         }
-                                      }
-                                      if (!contained && next != null) {
-                                        commentlist[i].comments[k].votes.add(
-                                            Vote(
-                                                0,
-                                                "Comment",
-                                                0,
-                                                _user.id,
-                                                next,
-                                                DateTime.now().toString(),
-                                                null,
-                                                null));
-                                      }
-                                    });
+                                        if (!contained && next != null) {
+                                          commentlist[i].comments[k].votes.add(
+                                              Vote(
+                                                  0,
+                                                  "Comment",
+                                                  0,
+                                                  _user.id,
+                                                  next,
+                                                  DateTime.now().toString(),
+                                                  null,
+                                                  null));
+                                        }
+                                      });
+                                    }
                                   }
                                 }
                               }

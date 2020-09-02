@@ -1,105 +1,81 @@
-import 'package:aniflix_app/api/APIManager.dart';
+import 'package:aniflix_app/api/requests/anime/AnimeRequests.dart';
+import 'package:aniflix_app/api/requests/anime/ReviewRequests.dart';
+import 'package:aniflix_app/api/requests/animelist/AnimelistRequests.dart';
+import 'package:aniflix_app/api/requests/calendar/CalendarRequests.dart';
+import 'package:aniflix_app/api/requests/chat/ChatRequests.dart';
+import 'package:aniflix_app/api/requests/episode/EpisodeRequests.dart';
+import 'package:aniflix_app/api/requests/home/HomeRequests.dart';
+import 'package:aniflix_app/api/requests/search/SearchRequests.dart';
+import 'package:aniflix_app/api/requests/subbox/SubboxRequests.dart';
+import 'package:aniflix_app/api/requests/user/LoginRequests.dart';
+import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const String name = "DommisTestUser";
 const String email = "test@test.com";
 const String pw = "test1234";
+@Timeout(const Duration(minutes: 5))
 void main() {
-
   group("Test login", () {
-    test("Test invalid Login",() async {
-      await APIManager.loginRequest(email, "wrong_pw");
-      expect(APIManager.login, isNotNull);
-      expect(APIManager.login.error, "Unauthorized");
+    test("Test invalid Login", () async {
+      var session = await LoginRequests.loginRequest(email, "wrong_pw");
+      expect(session, isNotNull);
+      expect(session.error, "Unauthorized");
     });
-    test("Test Login",() async {
-      await APIManager.loginRequest(email, pw);
-      expect(APIManager.login, isNotNull);
-      expect(APIManager.login.error, null);
+    test("Test correct Login", () async {
+      var session = await LoginRequests.loginRequest(email, pw);
+      expect(session, isNotNull);
+      expect(session.error, null);
+      CacheManager.session = session;
     });
   });
 
   group("Test get requests", () {
-    test("Test New Shows",() async {
-      var newShows = await APIManager.getNewShows();
-      expect(newShows, isNotNull);
-    });
-
     test("Test Calender", () async {
-      var calender = await APIManager.getCalendarData();
+      var calender = await CalendarRequest.getCalendarData();
       expect(calender, isNotNull);
     });
-
-    test("Test Airings", () async {
-      var airings = await APIManager.getAirings();
-      expect(airings, isNotNull);
-    });
-
-    test("Test Discover", () async {
-      var discover = await APIManager.getDiscover();
-      expect(discover, isNotNull);
-    });
   });
-
-  group("Test auth get requests", (){
+  group("Test auth get requests", () {
+    test("Test HomeData", () async {
+      var homedata = await HomeRequests.getHomeData();
+      expect(homedata, isNotNull);
+    });
     test("Test Subs", () async {
-      var subs = await APIManager.getSubData();
+      var subs = await SubboxRequests.getSubData();
       expect(subs, isNotNull);
     });
 
     test("Test Anime", () async {
-      var anime = await APIManager.getAnime("dr-stone");
+      var anime = await AnimeRequests.getAnime("dr-stone");
       expect(anime, isNotNull);
     });
 
     test("Test All Anime", () async {
-      var allAnime = await APIManager.getAllShows();
+      var allAnime = await AnimelistRequests.getAnimeListData();
       expect(allAnime, isNotNull);
     });
 
-    test("Test All Anime By Genre", () async {
-      var allAnimeGenre = await APIManager.getAllShowsByGenres();
-      expect(allAnimeGenre, isNotNull);
-    });
-
     test("Test Episode", () async {
-      var episode = await APIManager.getEpisode("dr-stone", 1, 1);
+      var episode = await EpisodeRequests.getEpisodeInfo("dr-stone", 1, 1);
       expect(episode, isNotNull);
     });
 
     test("Test Reviews", () async {
-      var reviews = await APIManager.getReviews("dr-stone");
+      var reviews = await ReviewRequests.getReviewInfo("dr-stone");
       expect(reviews, isNotNull);
     });
 
     test("Test Chat", () async {
-      var chat = await APIManager.getChatMessages();
+      var chat = await ChatRequests.getChatInfo();
       expect(chat, isNotNull);
     });
   });
 
-  group("Test auth post request", (){
+  group("Test auth post request", () {
     test("Test Search", () async {
-      var search = await APIManager.searchShows("stone");
+      var search = await SearchRequests.searchShows("stone");
       expect(search, isNotNull);
     });
-
-    /*test("Test Season Seen", () async {
-      var seasonSeen = await APIManager.setSeasonSeen(123456);
-      expect(seasonSeen, null);
-    });
-
-    test("Test Unseason Seen", () async {
-      var seasonUnSeen = await APIManager.setSeasonUnSeen(123456);
-      expect(seasonUnSeen, null);
-    });
-
-    test("Test Create Review", () async {
-      var createReview = await APIManager.createReview(123456, "test");
-      expect(createReview, null);
-    });*/
-
   });
-
-
 }

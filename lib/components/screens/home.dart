@@ -1,5 +1,6 @@
 import 'package:aniflix_app/api/objects/Episode.dart';
 import 'package:aniflix_app/api/objects/Show.dart';
+import 'package:aniflix_app/api/requests/home/HomeRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/episode.dart';
@@ -7,7 +8,6 @@ import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/material.dart';
 import '../slider/SliderElement.dart';
 import '../custom/slider/slider_with_headline.dart';
-import '../../api/APIManager.dart';
 
 class Homedata {
   List<Episode> continues;
@@ -36,7 +36,7 @@ class HomeState extends State<Home> {
 
   HomeState() {
     if (CacheManager.homedata == null) {
-      this.homedata = APIManager.getHomeData();
+      this.homedata = HomeRequests.getHomeData();
     } else {
       cache = CacheManager.homedata;
     }
@@ -79,46 +79,52 @@ class HomeState extends State<Home> {
                 color: Colors.transparent,
                 child: RefreshIndicator(
                   child: ListView(padding: EdgeInsets.only(top: 10), children: [
-                    (data.continues.length > 0)
+                    (data.continues != null && data.continues.length > 0)
                         ? HeadlineSlider(
-                        "Weitersehen",
-                        data.continues
-                            .map((ep) => getContinueSliderElement(ep))
-                            .toList(),
-                        220)
-                        : Center(child: ThemeText("'Weitersehen' konnte nicht geladen werden!")),
+                            "Weitersehen",
+                            data.continues
+                                .map((ep) => getContinueSliderElement(ep))
+                                .toList(),
+                            220)
+                        : Container(height: 1,),
                     (data.airings.length > 0)
                         ? HeadlineSlider(
-                        "Neue Folgen",
-                        data.airings
-                            .map((ep) => getAiringSliderElement(ep))
-                            .toList(),
-                        250)
-                        : Center(child: ThemeText("'Neue Folgen' konnte nicht geladen werden!")),
+                            "Neue Folgen",
+                            data.airings
+                                .map((ep) => getAiringSliderElement(ep))
+                                .toList(),
+                            250)
+                        : Center(
+                            child: ThemeText(
+                                "'Neue Folgen' konnte nicht geladen werden!")),
                     (data.newshows.length > 0)
                         ? HeadlineSlider(
-                      "Neu auf Aniflix",
-                      data.newshows
-                          .map((show) => getShowSliderElement(show))
-                          .toList(),
-                      350,
-                      size: 0.4,
-                    )
-                        : Center(child: ThemeText("'Neu auf Aniflix' konnte nicht geladen werden!")),
+                            "Neu auf Aniflix",
+                            data.newshows
+                                .map((show) => getShowSliderElement(show))
+                                .toList(),
+                            350,
+                            size: 0.4,
+                          )
+                        : Center(
+                            child: ThemeText(
+                                "'Neu auf Aniflix' konnte nicht geladen werden!")),
                     (data.discover.length > 0)
                         ? HeadlineSlider(
-                      "Entdecken",
-                      data.discover
-                          .map((show) => getShowSliderElement(show))
-                          .toList(),
-                      350,
-                      size: 0.4,
-                    )
-                        : Center(child: ThemeText("'Entdecken' konnte nicht geladen werden!"))
+                            "Entdecken",
+                            data.discover
+                                .map((show) => getShowSliderElement(show))
+                                .toList(),
+                            350,
+                            size: 0.4,
+                          )
+                        : Center(
+                            child: ThemeText(
+                                "'Entdecken' konnte nicht geladen werden!"))
                   ]),
                   onRefresh: () async {
                     setState(() {
-                      APIManager.getHomeData().then((data) {
+                      HomeRequests.getHomeData().then((data) {
                         CacheManager.homedata = data;
                         setState(() {
                           cache = data;
@@ -134,7 +140,7 @@ class HomeState extends State<Home> {
   SliderElement getContinueSliderElement(Episode episode) {
     var element = getAiringSliderElement(episode);
     element.close = () async {
-      var continues = await APIManager.hideContinue(
+      var continues = await HomeRequests.hideContinue(
         episode.season.show_id,
       );
       setState(() {

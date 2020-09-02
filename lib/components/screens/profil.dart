@@ -1,9 +1,8 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
-import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 import 'package:aniflix_app/api/objects/profile/UserStats.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
 import 'package:aniflix_app/components/screens/profileanimelist.dart';
@@ -16,7 +15,6 @@ import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
@@ -72,7 +70,7 @@ class ProfileState extends State<Profile> {
   UserSettings modifiedSettings;
 
   ProfileState(this.userID) {
-    profileData = APIManager.getUserProfileData(userID);
+    if (CacheManager.session != null) profileData = ProfileRequests.getUserProfileData(userID);
   }
 
   @override
@@ -89,6 +87,9 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     return Container(
       key: Key("profile_screen"),
       color: Colors.transparent,
@@ -118,16 +119,16 @@ class ProfileState extends State<Profile> {
   }
 
   updateSettings() async {
-    await APIManager.updateSettings(this.modifiedSettings);
+    await ProfileRequests.updateSettings(this.modifiedSettings);
     setState(() {
-      this.profileData = APIManager.getUserProfileData(userID);
+      this.profileData = ProfileRequests.getUserProfileData(userID);
       controller.jumpToPage(controller.initialPage);
     });
   }
 
   updateAvatar() {
     setState(() {
-      this.profileData = APIManager.getUserProfileData(userID);
+      this.profileData = ProfileRequests.getUserProfileData(userID);
     });
   }
 
@@ -159,7 +160,7 @@ class ProfileState extends State<Profile> {
             context: ctx,
             builder: (BuildContext context) {
               return AboutMeDialog((text) {
-                APIManager.updateAboutMe(text);
+                ProfileRequests.updateAboutMe(text);
                 setState(() {
                   if (text == null) {
                     aboutMe = "";
@@ -180,7 +181,7 @@ class ProfileState extends State<Profile> {
         data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
-          profileData = APIManager.getUserProfileData(userID);
+          profileData = ProfileRequests.getUserProfileData(userID);
         });
       }));
       items.add(TitledNavigationBarItem(
@@ -279,10 +280,10 @@ class ProfileState extends State<Profile> {
                         : IconButton(
                             icon: Icon(Icons.person_add),
                             onPressed: () {
-                              APIManager.addFriend(profile.id);
+                              ProfileRequests.addFriend(profile.id);
                               setState(() {
                                 profileData =
-                                    APIManager.getUserProfileData(userID);
+                                    ProfileRequests.getUserProfileData(userID);
                               });
                             },
                             color: Theme.of(ctx).primaryIconTheme.color,
