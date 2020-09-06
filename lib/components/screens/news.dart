@@ -1,5 +1,5 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/news/NotificationListData.dart';
+import 'package:aniflix_app/api/requests/notifications/NotificationRequests.dart';
 import 'package:aniflix_app/components/custom/news/FriendNotification.dart';
 import 'package:aniflix_app/components/custom/news/NewsNotification.dart';
 import 'package:aniflix_app/components/custom/news/PersonalNotification.dart';
@@ -27,7 +27,7 @@ class NewsPageState extends State<NewsPage> {
   NotificationListData newsdata;
 
   NewsPageState() {
-    this.news = APIManager.getNotifications();
+    this.news = NotificationRequests.getNotifications();
   }
 
   onDelete(int id) {
@@ -44,7 +44,7 @@ class NewsPageState extends State<NewsPage> {
     });
     for (var notification in tmp) {
       if (notification.deleted_at == null) {
-        await APIManager.deleteNotification(notification.id);
+        await NotificationRequests.deleteNotification(notification.id);
       }
     }
   }
@@ -78,23 +78,31 @@ class NewsPageState extends State<NewsPage> {
 
   List<Widget> getNotificationsAsList(BuildContext ctx) {
     List<Widget> newsList = [
-      Container(
-        padding: EdgeInsets.all(5),
-        child: ThemeText("Persönliche Notifications",
-            fontWeight: FontWeight.bold, fontSize: 30),
-      ),
+      newsdata.notifications != null && newsdata.notifications.length > 0
+          ? Container(
+              padding: EdgeInsets.all(5),
+              child: ThemeText("Persönliche Notifications",
+                  fontWeight: FontWeight.bold, fontSize: 30),
+            )
+          : Container(),
     ];
     List<PersonalNotification> personalNews = [];
-    var notifications = newsdata.notifications;
-    for (int y = 0; y < notifications.length; y++) {
-      var actualNotification = notifications.elementAt(y);
-      if (actualNotification.deleted_at == null) {
-        if (actualNotification.link.contains('show')) {
-          personalNews.add(SubNotification(actualNotification.id,
-              actualNotification.text, actualNotification.link, onDelete, ctx));
-        } else if (actualNotification.link.contains('users')) {
-          personalNews.add(FriendNotification(
-              actualNotification.id, actualNotification.text, onDelete, ctx));
+    if (newsdata.notifications != null) {
+      var notifications = newsdata.notifications;
+      for (int y = 0; y < notifications.length; y++) {
+        var actualNotification = notifications.elementAt(y);
+        if (actualNotification.deleted_at == null) {
+          if (actualNotification.link.contains('show')) {
+            personalNews.add(SubNotification(
+                actualNotification.id,
+                actualNotification.text,
+                actualNotification.link,
+                onDelete,
+                ctx));
+          } else if (actualNotification.link.contains('users')) {
+            personalNews.add(FriendNotification(
+                actualNotification.id, actualNotification.text, onDelete, ctx));
+          }
         }
       }
     }

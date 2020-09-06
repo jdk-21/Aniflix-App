@@ -1,9 +1,8 @@
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/Friend.dart';
-import 'package:aniflix_app/api/objects/profile/UserProfile.dart';
 import 'package:aniflix_app/api/objects/profile/UserSettings.dart';
 import 'package:aniflix_app/api/objects/profile/UserStats.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/friendlist.dart';
 import 'package:aniflix_app/components/screens/profileanimelist.dart';
@@ -16,7 +15,6 @@ import 'package:aniflix_app/components/custom/anime/animeDescription.dart';
 import 'package:aniflix_app/components/custom/slider/slider_with_headline.dart';
 import 'package:aniflix_app/components/slider/SliderElement.dart';
 import 'package:aniflix_app/components/slider/carousel/TextBoxCarousel.dart';
-import 'package:aniflix_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/api/objects/profile/UserWatchlistData.dart';
@@ -72,7 +70,7 @@ class ProfileState extends State<Profile> {
   UserSettings modifiedSettings;
 
   ProfileState(this.userID) {
-    profileData = APIManager.getUserProfileData(userID);
+    if (CacheManager.session != null) profileData = ProfileRequests.getUserProfileData(userID);
   }
 
   @override
@@ -89,6 +87,9 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     return Container(
       key: Key("profile_screen"),
       color: Colors.transparent,
@@ -118,26 +119,27 @@ class ProfileState extends State<Profile> {
   }
 
   updateSettings() async {
-    await APIManager.updateSettings(this.modifiedSettings);
+    await ProfileRequests.updateSettings(this.modifiedSettings);
     setState(() {
-      this.profileData = APIManager.getUserProfileData(userID);
+      this.profileData = ProfileRequests.getUserProfileData(userID);
       controller.jumpToPage(controller.initialPage);
     });
   }
 
   updateAvatar() {
     setState(() {
-      this.profileData = APIManager.getUserProfileData(userID);
+      this.profileData = ProfileRequests.getUserProfileData(userID);
     });
   }
 
   getLayout(UserProfileData data, BuildContext ctx) {
     var profile = data.userProfile;
     if (modifiedSettings == null) {
-      if(profile.settings!=null){
+      if (profile.settings != null) {
         modifiedSettings = new UserSettings.fromObject(profile.settings);
-      }else{
-        modifiedSettings = UserSettings(0,profile.id,true,true,true,true,true,null,null,null,null,null,null);
+      } else {
+        modifiedSettings = UserSettings(0, profile.id, true, true, true, true,
+            true, null, null, null, null, null, null);
       }
     }
     var joined = DateTime.parse(profile.created_at);
@@ -158,7 +160,7 @@ class ProfileState extends State<Profile> {
             context: ctx,
             builder: (BuildContext context) {
               return AboutMeDialog((text) {
-                APIManager.updateAboutMe(text);
+                ProfileRequests.updateAboutMe(text);
                 setState(() {
                   if (text == null) {
                     aboutMe = "";
@@ -175,10 +177,11 @@ class ProfileState extends State<Profile> {
         icon: Icons.person,
         title: ThemeText('Profil'),
         backgroundColor: Theme.of(ctx).backgroundColor));*/
-    if (data.userProfile.settings == null || data.userProfile.settings.show_friends) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_friends) {
       pages.add(FriendList(userID, () {
         setState(() {
-          profileData = APIManager.getUserProfileData(userID);
+          profileData = ProfileRequests.getUserProfileData(userID);
         });
       }));
       items.add(TitledNavigationBarItem(
@@ -187,7 +190,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_favorites) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_favorites) {
       pages.add(Favoriten(favouritedata: data.favouritedata));
       items.add(TitledNavigationBarItem(
           icon: Icons.favorite,
@@ -195,7 +199,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_abos) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_abos) {
       pages.add(ProfileSubBox(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.subscriptions,
@@ -203,7 +208,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_watchlist) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_watchlist) {
       pages.add(Watchlist(
         watchlistdata: data.userWatchlistData,
       ));
@@ -213,26 +219,13 @@ class ProfileState extends State<Profile> {
           backgroundColor: Theme.of(ctx).backgroundColor));
     }
 
-    if (data.userProfile.settings == null || data.userProfile.settings.show_list) {
+    if (data.userProfile.settings == null ||
+        data.userProfile.settings.show_list) {
       pages.add(ProfileAnimeList(userID));
       items.add(TitledNavigationBarItem(
           icon: Icons.list,
           title: ThemeText('Anime Liste'),
           backgroundColor: Theme.of(ctx).backgroundColor));
-    }
-
-    if (CacheManager.userData.id == userID) {
-      pages.add(ProfileSettings(modifiedSettings, updateAvatar, (newData) {
-        setState(() {
-          this.modifiedSettings = newData;
-        });
-      }, () {
-        updateSettings();
-      }));
-      /*items.add(TitledNavigationBarItem(
-          icon: Icons.settings,
-          title: ThemeText('Einstellungen'),
-          backgroundColor: Theme.of(ctx).backgroundColor));*/
     }
     List<TextboxSliderElement> carouseldata = profile.groups
         .map((group) => TextboxSliderElement(group.name))
@@ -240,6 +233,19 @@ class ProfileState extends State<Profile> {
 
     return Scaffold(
         backgroundColor: Colors.transparent,
+        floatingActionButton: (CacheManager.userData.id == userID)
+            ? FloatingActionButton(
+                heroTag: null,
+                backgroundColor: Theme.of(ctx).iconTheme.color,
+                onPressed: () {
+                  showSettings();
+                },
+                child: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+              )
+            : null,
         body: Column(
           children: [
             Row(
@@ -274,10 +280,10 @@ class ProfileState extends State<Profile> {
                         : IconButton(
                             icon: Icon(Icons.person_add),
                             onPressed: () {
-                              APIManager.addFriend(profile.id);
+                              ProfileRequests.addFriend(profile.id);
                               setState(() {
                                 profileData =
-                                    APIManager.getUserProfileData(userID);
+                                    ProfileRequests.getUserProfileData(userID);
                               });
                             },
                             color: Theme.of(ctx).primaryIconTheme.color,
@@ -332,6 +338,21 @@ class ProfileState extends State<Profile> {
         ),
         bottomNavigationBar:
             AniflixProfilebar(barIndex, controller, items, ctx, this));
+  }
+
+  showSettings() {
+    Scaffold.of(context).showBottomSheet<Widget>((ctx) {
+      return Container(
+          height: MediaQuery.of(ctx).size.height / 2,
+          color: Theme.of(ctx).backgroundColor,
+          child: ProfileSettings(modifiedSettings, updateAvatar, (newData) {
+            setState(() {
+              this.modifiedSettings = newData;
+            });
+          }, () {
+            updateSettings();
+          }));
+    });
   }
 }
 

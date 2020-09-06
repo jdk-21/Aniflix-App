@@ -1,5 +1,6 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/recaptcha.dart';
+import 'package:aniflix_app/api/requests/user/LoginRequests.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
 import 'package:aniflix_app/components/screens/screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,27 +63,27 @@ class RegisterState extends State<Register> {
                   height: 100,
                 ),
                 Container(
-                    height: MediaQuery.of(ctx).size.height-100,
+                    height: MediaQuery.of(ctx).size.height - 100,
                     child: Center(
                         child: RecaptchaV2(
-                  apiKey: "6LccnrgZAAAAAKvgkI1pDqb3IRqA52iKUt49Csa2",
-                  controller: recaptchaV2Controller,
-                  onVerifiedError: (err) {
-                    print("onVerifiedError");
-                    print(err);
-                    recaptchaV2Controller.hide();
-                    recaptchaV2Controller.show();
-                  },
-                  onVerifiedSuccessfully: (token) {
-                    setState(() {
-                      print("token:");
-                      print(token);
-                      recaptchaV2Controller.hide();
-                      recaptchaV2Controller = RecaptchaV2Controller();
-                      _captchaToken = token;
-                    });
-                  },
-                )))
+                      apiKey: "6LccnrgZAAAAAKvgkI1pDqb3IRqA52iKUt49Csa2",
+                      controller: recaptchaV2Controller,
+                      onVerifiedError: (err) {
+                        print("onVerifiedError");
+                        print(err);
+                        recaptchaV2Controller.hide();
+                        recaptchaV2Controller.show();
+                      },
+                      onVerifiedSuccessfully: (token) {
+                        setState(() {
+                          print("token:");
+                          print(token);
+                          recaptchaV2Controller.hide();
+                          recaptchaV2Controller = RecaptchaV2Controller();
+                          _captchaToken = token;
+                        });
+                      },
+                    )))
               ])
             ])
           : Padding(
@@ -169,7 +170,7 @@ class RegisterState extends State<Register> {
                         onPressed: () async {
                           if (passwortController.text ==
                               passwortWiederholenController.text) {
-                            var response = await APIManager.registerRequest(
+                            var response = await LoginRequests.registerRequest(
                                 emailController.text,
                                 passwortController.text,
                                 _captchaToken,

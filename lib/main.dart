@@ -1,7 +1,8 @@
-import 'package:aniflix_app/api/objects/LoginResponse.dart';
+import 'package:aniflix_app/api/objects/Session.dart';
+import 'package:aniflix_app/api/requests/hoster/HosterRequest.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
-import 'package:aniflix_app/components/navigationbars/profilebar.dart';
 import 'package:aniflix_app/components/screens/AppErrorScreen.dart';
 import 'package:aniflix_app/components/screens/HomeViewSlider.dart';
 import 'package:aniflix_app/components/screens/animelist.dart';
@@ -20,7 +21,6 @@ import 'package:aniflix_app/components/screens/watchlist.dart';
 import 'package:aniflix_app/components/screens/profil.dart';
 import 'package:aniflix_app/parser/HosterParser.dart';
 import 'package:aniflix_app/themes/themeManager.dart';
-import 'package:aniflix_app/api/APIManager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -31,7 +31,6 @@ import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import './components/appbars/customappbar.dart';
 import './components/navigationbars/mainbar.dart';
 import './components/screens/login.dart';
@@ -97,11 +96,13 @@ class AppState extends State<App> {
   static AppState _state;
   static bool _loggedIn;
   static bool _init;
+  static bool _offlineMode;
 
   AppState() {
     _loading = true;
     _loggedIn = false;
     _init = false;
+    _offlineMode = false;
     _state = this;
     analytics.logAppOpen();
     controller = PageController();
@@ -131,6 +132,12 @@ class AppState extends State<App> {
         targetingInfo: App.targetingInfo);
   }
 
+  static updateOfflineMode(bool value) {
+    _state.setState(() {
+      _offlineMode = value;
+    });
+  }
+
   static updateLoggedIn(bool value) {
     _state.setState(() {
       _loggedIn = value;
@@ -157,7 +164,7 @@ class AppState extends State<App> {
 
   checkLoginStatus() {
     setState(() {
-      _loggedIn = !(APIManager.login == null);
+      _loggedIn = !(CacheManager.session == null);
     });
   }
 
@@ -166,17 +173,24 @@ class AppState extends State<App> {
   }
 
   static checkAppStatus() {
-    APIManager.getUser()
+    ProfileRequests.getUser()
         .then((value) => _state.setState(() {
-              if (value != null) _loggedIn = true;
+              print(1);
+              if (value != null) {
+                print(2);
+                CacheManager.userData = value;
+                _loggedIn = true;
+              }
               _error = null;
               _loading = false;
             }))
         .catchError((object, trace) {
       _state.setState(() {
-        _error = object.message;
+        _error = object.toString();
         print("Error:");
         print(_error);
+        print("Trace:");
+        print(trace);
         _loading = false;
       });
     });
@@ -194,7 +208,7 @@ class AppState extends State<App> {
           _prefs = prefs;
           if (prefs.getString("access_token") != null &&
               prefs.getString("token_type") != null) {
-            APIManager.login = LoginResponse(prefs.getString("access_token"),
+            CacheManager.session = Session(prefs.getString("access_token"),
                 prefs.getString("token_type"), null);
             checkAppStatus();
           } else {
@@ -211,9 +225,9 @@ class AppState extends State<App> {
         theme: _theme,
       );
     } else if (_error == null) {
-      if (_loggedIn) {
+      if (_loggedIn || _offlineMode) {
         if (CacheManager.hosters == null) {
-          APIManager.getHoster()
+          HosterRequest.getHosters()
               .then((hosters) => CacheManager.hosters = hosters);
         }
         return MaterialApp(

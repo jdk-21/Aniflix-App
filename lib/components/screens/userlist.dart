@@ -1,5 +1,6 @@
-import 'package:aniflix_app/api/APIManager.dart';
+
 import 'package:aniflix_app/api/objects/User.dart';
+import 'package:aniflix_app/api/requests/user/ProfileRequests.dart';
 import 'package:aniflix_app/cache/cacheManager.dart';
 import 'package:aniflix_app/components/custom/listelements/iconListElement.dart';
 import 'package:aniflix_app/components/custom/text/theme_text.dart';
@@ -34,7 +35,8 @@ class UserlistState extends State<Userlist> {
 
   UserlistState() {
     if (CacheManager.userlistdata == null) {
-      userlistdata = APIManager.getUserList();
+      if (CacheManager.session != null)
+        userlistdata = ProfileRequests.getUserList();
     } else {
       cache = CacheManager.userlistdata;
     }
@@ -42,6 +44,9 @@ class UserlistState extends State<Userlist> {
 
   @override
   Widget build(BuildContext ctx) {
+    if (CacheManager.session == null) {
+      return Center(child: ThemeText("Du musst dafür eingeloggt sein!"));
+    }
     if (cache == null) {
       return Container(
         key: Key("userlist_screen"),
@@ -87,7 +92,7 @@ class UserlistState extends State<Userlist> {
               children: getUserAsWidgets(ctx, data.users),
             ),
             onRefresh: () async {
-              APIManager.getUserList().then((data) {
+              ProfileRequests.getUserList().then((data) {
                 setState(() {
                   CacheManager.userlistdata = data;
                   cache = data;
@@ -274,11 +279,28 @@ class UserlistState extends State<Userlist> {
     }
   }
 
-  addWidgetsForPage(List<Widget> userWidget, int entriesPerPage, BuildContext ctx) {
-    if(filteredUserList.length < 1){
-      userWidget.add(SizedBox(height: 10,child: Container(decoration: BoxDecoration(border: Border(top: BorderSide(width: 1, color: Theme.of(ctx).hintColor, style: BorderStyle.solid))),),),);
-      userWidget.add(ThemeText('Keine Ergebnisse für "' + filterText + '"', textAlign: TextAlign.center, fontSize: 25,));
-    }else{
+  addWidgetsForPage(
+      List<Widget> userWidget, int entriesPerPage, BuildContext ctx) {
+    if (filteredUserList.length < 1) {
+      userWidget.add(
+        SizedBox(
+          height: 10,
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    top: BorderSide(
+                        width: 1,
+                        color: Theme.of(ctx).hintColor,
+                        style: BorderStyle.solid))),
+          ),
+        ),
+      );
+      userWidget.add(ThemeText(
+        'Keine Ergebnisse für "' + filterText + '"',
+        textAlign: TextAlign.center,
+        fontSize: 25,
+      ));
+    } else {
       for (var user in filteredUserList.getRange(
           ((actualPage - 1) * entriesPerPage),
           ((actualPage * entriesPerPage) > filteredUserList.length
@@ -298,9 +320,9 @@ class UserlistState extends State<Userlist> {
 
   buildPage(List<Widget> userWidget, int entriesPerPage, List<User> userlist,
       BuildContext ctx) {
-      if (!usesFilter()) {
-        addUnfilteredUsers(userlist);
-      }
-      addWidgetsForPage(userWidget, entriesPerPage, ctx);
+    if (!usesFilter()) {
+      addUnfilteredUsers(userlist);
+    }
+    addWidgetsForPage(userWidget, entriesPerPage, ctx);
   }
 }

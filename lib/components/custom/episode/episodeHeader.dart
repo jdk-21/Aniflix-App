@@ -66,7 +66,8 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
     }
 
     var user = load.user;
-    if(user.settings != null) {
+    if(user != null){
+    if (user.settings != null) {
       for (var stream in episode.streams) {
         if (user.settings.preferred_hoster_id == stream.hoster_id) {
           _hoster = _hosters.indexOf(stream.hoster.name);
@@ -77,6 +78,7 @@ class EpisodeHeaderState extends State<EpisodeHeader> {
         }
       }
     }
+  }
     _created(this);
   }
 

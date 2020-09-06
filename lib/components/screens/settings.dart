@@ -28,7 +28,11 @@ class Settings extends StatelessWidget implements Screen {
               child: ListView(
                 children: [
                   ListElement("Profile", ctx, onTap: () {
-                    Navigator.pushNamed(ctx, "profil",arguments: CacheManager.userData.id);
+                    if (CacheManager.userData != null)
+                      Navigator.pushNamed(ctx, "profil",
+                          arguments: CacheManager.userData.id);
+                    else
+                      Navigator.pushNamed(ctx, "profil", arguments: 0);
                   }, key: Key("Profile")),
                   ListElement("Userlist", ctx, onTap: () {
                     Navigator.pushNamed(ctx, "userlist");
@@ -67,13 +71,20 @@ class Settings extends StatelessWidget implements Screen {
                                   color: Theme.of(ctx).textTheme.caption.color),
                             ),
                           ))),
-                  ListElement("Logout", ctx, onTap: () {
-                    showDialog(
-                        context: ctx,
-                        builder: (BuildContext ctx) {
-                          return LogoutDialog();
-                        });
-                  }),
+                  CacheManager.session == null
+                      ? ListElement("Login", ctx, onTap: () {
+                          CacheManager.clearAll();
+                          AppState.updateOfflineMode(false);
+                          Navigator.pushNamedAndRemoveUntil(
+                              ctx, 'login', (Route<dynamic> route) => false);
+                        })
+                      : ListElement("Logout", ctx, onTap: () {
+                          showDialog(
+                              context: ctx,
+                              builder: (BuildContext ctx) {
+                                return LogoutDialog();
+                              });
+                        }),
                 ],
               ),
             )
