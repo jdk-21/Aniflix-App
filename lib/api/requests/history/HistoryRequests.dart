@@ -7,8 +7,8 @@ import 'package:aniflix_app/components/screens/verlauf.dart';
 class HistoryRequests {
   static Future<Historydata> getHistory() async {
     List<HistoryEpisode> episodes = [];
-    var response = await AniflixRequest("show/history").get();
-
+    var response = await AniflixRequest("show/history").post();
+    
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as List;
       for (var entry in json) {
