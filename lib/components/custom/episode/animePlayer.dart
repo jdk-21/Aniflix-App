@@ -95,7 +95,8 @@ class AnimePlayerState extends State<AnimePlayer> {
       child: getPlayer(ctx),
       height: _view == 2
           ? (((HosterParser.parser.containsKey(_stream.hoster_id))
-              ? ((HosterParser.parser[_stream.hoster_id].canDownload)
+              ? ((HosterParser.parser[_stream.hoster_id].canDownload &&
+                      HosterParser.parser[_stream.hoster_id].canParse)
                   ? 300
                   : 200)
               : 100))
@@ -133,12 +134,15 @@ class AnimePlayerState extends State<AnimePlayer> {
                   children: [
                     Expanded(
                         child: InAppWebView(
-                            initialOptions: InAppWebViewGroupOptions(),
+                            initialOptions: InAppWebViewGroupOptions(
+                                crossPlatform: InAppWebViewOptions(
+                                    useOnDownloadStart: false)),
                             initialUrl: source,
                             onWebViewCreated: (controller) => setState(() {
                                   _webcontroller = controller;
                                 }))),
-                    (HosterParser.parser[_stream.hoster_id].canDownload)
+                    (HosterParser.parser[_stream.hoster_id].canDownload &&
+                            HosterParser.parser[_stream.hoster_id].canParse)
                         ? FlatButton(
                             onPressed: () {
                               RewardedVideoAd.instance.show();
@@ -160,6 +164,9 @@ class AnimePlayerState extends State<AnimePlayer> {
                   ],
                 );
                 return _inApp;
+              }
+              if (snapshot.hasError) {
+                return ThemeText(snapshot.error.toString());
               }
               return Center(child: CircularProgressIndicator());
             },
