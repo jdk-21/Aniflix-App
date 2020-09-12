@@ -10,8 +10,9 @@ class HeadlineSlider extends StatelessWidget {
   double height;
   double size;
 
-  HeadlineSlider(this.title, this.elements, this.height, {this.size = 0.6})
-      : super();
+  HeadlineSlider(this.title, this.elements, this.height, {this.size = 0.6}) {
+    elements.removeWhere((element) => element == null);
+  }
 
   @override
   Widget build(BuildContext ctx) {

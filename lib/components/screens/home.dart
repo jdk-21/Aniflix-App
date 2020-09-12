@@ -72,6 +72,7 @@ class HomeState extends State<Home> {
   }
 
   getLayout(BuildContext ctx, Homedata data) {
+    var previousID;
     return Column(
       children: <Widget>[
         Expanded(
@@ -86,13 +87,19 @@ class HomeState extends State<Home> {
                                 .map((ep) => getContinueSliderElement(ep))
                                 .toList(),
                             220)
-                        : Container(height: 1,),
+                        : Container(
+                            height: 1,
+                          ),
                     (data.airings.length > 0)
                         ? HeadlineSlider(
                             "Neue Folgen",
-                            data.airings
-                                .map((ep) => getAiringSliderElement(ep))
-                                .toList(),
+                            data.airings.map((ep) {
+                              if (previousID == null ||
+                                  previousID != ep.season.show_id) {
+                                previousID = ep.season.show_id;
+                                return getAiringSliderElement(ep);
+                              }
+                            }).toList(),
                             250)
                         : Center(
                             child: ThemeText(
